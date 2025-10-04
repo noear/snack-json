@@ -92,17 +92,25 @@ public final class Options {
     }
 
     /**
-     * 获取自定义编解码器注册表
+     * 获取解码器
      */
-    public NodeDecoder<?> getNodeDecoder(Class<?> clazz) {
+    public NodeDecoder<?> getDecoder(Class<?> clazz) {
         return _decoderRegistry.get(clazz);
     }
 
-    public NodeEncoder<?> getNodeEncoder(Class<?> clazz) {
+    /**
+     * 获取编码器
+     *
+     */
+    public NodeEncoder<?> getEncoder(Class<?> clazz) {
         return _encoderRegistry.get(clazz);
     }
 
-    public ObjectFactory<?> getObjectFactory(Class<?> clazz) {
+    /**
+     * 获取对象工厂
+     *
+     */
+    public ObjectFactory<?> getFactory(Class<?> clazz) {
         return _objectFactory.get(clazz);
     }
 
@@ -168,16 +176,22 @@ public final class Options {
         }
 
         /**
-         * 启用/禁用指定特性
+         * 启用特性
          */
         public Builder enable(Feature feature) {
             return enable(feature, true);
         }
 
+        /**
+         * 禁用特性
+         */
         public Builder disable(Feature feature) {
             return enable(feature, false);
         }
 
+        /**
+         * 启用特性
+         */
         public Builder enable(Feature feature, boolean state) {
             features.put(feature, state);
             return this;
@@ -194,7 +208,7 @@ public final class Options {
         /**
          * 注册自定义解码器
          */
-        public <T> Builder addNodeDecoder(Class<T> type, NodeDecoder<T> decoder) {
+        public <T> Builder addDecoder(Class<T> type, NodeDecoder<T> decoder) {
             decoderRegistry.put(type, decoder);
             return this;
         }
@@ -202,12 +216,12 @@ public final class Options {
         /**
          * 注册自定义编码器
          */
-        public <T> Builder addNodeEncoder(Class<T> type, NodeEncoder<T> encoder) {
+        public <T> Builder addEncoder(Class<T> type, NodeEncoder<T> encoder) {
             encoderRegistry.put(type, encoder);
             return this;
         }
 
-        public <T> Builder addObjectFactory(Class<T> type, ObjectFactory<T> factory) {
+        public <T> Builder addFactory(Class<T> type, ObjectFactory<T> factory) {
             objectFactory.put(type, factory);
             return this;
         }

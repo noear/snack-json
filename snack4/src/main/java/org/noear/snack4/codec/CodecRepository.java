@@ -58,10 +58,9 @@ public class CodecRepository {
 
     public static NodeDecoder getNodeDecoder(Options opts, Class<?> clazz) {
         // 优先使用自定义编解码器
-        NodeDecoder decoder = opts.getNodeDecoder(clazz);
+        NodeDecoder decoder = opts.getDecoder(clazz);
         if (decoder == null) {
             decoder = DECODERS.get(clazz);
-            ;
         }
 
         if (decoder == null) {
@@ -76,7 +75,7 @@ public class CodecRepository {
     }
 
     public static ObjectFactory getObjectFactory(Options opts, Class<?> clazz) {
-        ObjectFactory factory = opts.getObjectFactory(clazz);
+        ObjectFactory factory = opts.getFactory(clazz);
         if (factory != null) {
             return factory;
         }
@@ -85,7 +84,7 @@ public class CodecRepository {
     }
 
     public static NodeEncoder getNodeEncoder(Options opts, Class<?> clazz, Object value) {
-        NodeEncoder encoder = opts.getNodeEncoder(clazz);
+        NodeEncoder encoder = opts.getEncoder(clazz);
         if (encoder == null) {
             encoder = ENCODERS.get(clazz);
         }

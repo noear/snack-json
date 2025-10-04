@@ -1,6 +1,23 @@
 # snack v4.0 lab
 
-## 特性
+基于jdk8。支持：序列化反序列化、解析和转换、构建、查找、Json path 查询。
+
+```xml
+<dependency>
+  <groupId>org.noear</groupId>
+  <artifactId>snack4</artifactId>
+  <version>4.0.0-SNAPSHOT</version>
+</dependency>
+```
+
+Snack4 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
+* 强调文档树的操控和构建能力
+* 高性能`Json path`查询（兼容性和性能很赞；暂不支持多条件）
+* 顺带支持`序列化、反序列化`
+* 基于 无参构造函数 + 字段 操作实现（因注入而触发动作的风险，不会有）
+
+
+## 放几个示例
 
 支持 dom 操控
 
@@ -21,6 +38,7 @@ ONode.from(user).toBean(User.class);
 ONode.from(user).toJson();
 
 ONode.load("{}").toBean(User.class);
+ONode.load("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 ```
 
 支持 jsonpath 查询、构建、删除
@@ -42,3 +60,6 @@ JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'st
 
 schema.validate(ONode.load("{userId:'1'}")); //校验格式
 ```
+
+## 高级定制
+

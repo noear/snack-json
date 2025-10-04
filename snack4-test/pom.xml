@@ -27,6 +27,11 @@
 
         <dependency>
             <groupId>org.noear</groupId>
+            <artifactId>snack4-jsonschema</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
             <artifactId>solon-test</artifactId>
             <version>3.6.0</version>
             <scope>test</scope>
