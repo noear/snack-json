@@ -1,4 +1,4 @@
-package features.path.manual;
+package features.snack4.path.manual;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;

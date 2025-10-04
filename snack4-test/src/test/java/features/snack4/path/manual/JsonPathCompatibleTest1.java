@@ -1,8 +1,8 @@
-package features.path.manual;
+package features.snack4.path.manual;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
-import features.path.generated.JsonPathSelectComplexTest;
+import features.snack4.path.generated.JsonPathSelectComplexTest;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;

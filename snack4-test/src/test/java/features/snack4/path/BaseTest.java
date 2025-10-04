@@ -1,4 +1,4 @@
-package features.path;
+package features.snack4.path;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
