@@ -363,7 +363,7 @@ public final class ONode {
 
     public String toJson(Options opts) {
         try {
-            return JsonWriter.serialize(this, opts);
+            return JsonWriter.write(this, opts);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {

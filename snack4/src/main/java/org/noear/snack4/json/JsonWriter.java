@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonWriter {
-    public static String serialize(ONode node, Options opts) throws IOException {
+    public static String write(ONode node, Options opts) throws IOException {
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         return writer.toString();
