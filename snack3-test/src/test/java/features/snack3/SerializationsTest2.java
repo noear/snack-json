@@ -142,7 +142,7 @@ public class SerializationsTest2 {
 
     @Test
     public void test4() {
-        Properties properties = Solon.cfg().getProp("features/snack3/test1");
+        Properties properties = Solon.cfg().getProp("test1");
         PersonColl tmp = ONode.load(properties).toObject(PersonColl.class);
 
         assert tmp != null;
