@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.noear</groupId>
-    <artifactId>snack3_java</artifactId>
+    <artifactId>snack-json</artifactId>
     <version>dev</version>
     <packaging>pom</packaging>
 
     <name>_root</name>
-    <description>Java project for solon</description>
+    <description>Java project for snack</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,13 +20,6 @@
     <modules>
         <module>snack3</module>
         <module>snack3_demo</module>
+        <module>snack4-parent</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>nexus-zm</id>
-            <name>Nexus zm</name>
-            <url>http://maven.data.zm/repository/maven-public/</url>
-        </repository>
-    </repositories>
 </project>
