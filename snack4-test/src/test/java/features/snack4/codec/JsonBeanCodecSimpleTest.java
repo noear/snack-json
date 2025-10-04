@@ -2,8 +2,8 @@ package features.snack4.codec;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.ObjectDecoder;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.BeanDeserializer;
+import org.noear.snack4.codec.BeanSerializer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
@@ -28,8 +28,8 @@ public class JsonBeanCodecSimpleTest {
         bean.score = 95.5;
         bean.id = 1001L;
 
-        ONode node = ObjectEncoder.serialize(bean);
-        SimpleBean result = ObjectDecoder.deserialize(node, SimpleBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        SimpleBean result = BeanDeserializer.deserialize(node, SimpleBean.class);
 
         assertEquals(bean.name, result.name);
         assertEquals(bean.age, result.age);
@@ -49,8 +49,8 @@ public class JsonBeanCodecSimpleTest {
         bean.child = new SimpleBean();
         bean.child.name = "Bob";
 
-        ONode node = ObjectEncoder.serialize(bean);
-        NestBean result = ObjectDecoder.deserialize(node, NestBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        NestBean result = BeanDeserializer.deserialize(node, NestBean.class);
 
         assertEquals(bean.child.name, result.child.name);
     }
@@ -65,8 +65,8 @@ public class JsonBeanCodecSimpleTest {
         ListBean bean = new ListBean();
         bean.items = Arrays.asList("A", "B", "C");
 
-        ONode node = ObjectEncoder.serialize(bean);
-        ListBean result = ObjectDecoder.deserialize(node, ListBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        ListBean result = BeanDeserializer.deserialize(node, ListBean.class);
 
         assertEquals(bean.items, result.items);
     }
@@ -84,8 +84,8 @@ public class JsonBeanCodecSimpleTest {
         map.put("b", 2);
         bean.data = map;
 
-        ONode node = ObjectEncoder.serialize(bean);
-        MapBean result = ObjectDecoder.deserialize(node, MapBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        MapBean result = BeanDeserializer.deserialize(node, MapBean.class);
 
         assertEquals(bean.data, result.data);
     }
@@ -101,10 +101,10 @@ public class JsonBeanCodecSimpleTest {
         EnumBean bean = new EnumBean();
         bean.status = TestEnum.OK;
 
-        ONode node = ObjectEncoder.serialize(bean);
+        ONode node = BeanSerializer.serialize(bean);
         assertEquals("OK", node.get("status").getString());
 
-        EnumBean result = ObjectDecoder.deserialize(node, EnumBean.class);
+        EnumBean result = BeanDeserializer.deserialize(node, EnumBean.class);
         assertEquals(bean.status, result.status);
     }
 
@@ -114,10 +114,10 @@ public class JsonBeanCodecSimpleTest {
         SimpleBean bean = new SimpleBean();
         bean.name = null;
 
-        ONode node = ObjectEncoder.serialize(bean);
+        ONode node = BeanSerializer.serialize(bean);
         assertTrue(node.get("name").isNull());
 
-        SimpleBean result = ObjectDecoder.deserialize(node, SimpleBean.class);
+        SimpleBean result = BeanDeserializer.deserialize(node, SimpleBean.class);
         assertNull(result.name);
     }
 
@@ -131,8 +131,8 @@ public class JsonBeanCodecSimpleTest {
     public void testEmptyCollections() {
         EmptyCollectionBean bean = new EmptyCollectionBean();
 
-        ONode node = ObjectEncoder.serialize(bean);
-        EmptyCollectionBean result = ObjectDecoder.deserialize(node, EmptyCollectionBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        EmptyCollectionBean result = BeanDeserializer.deserialize(node, EmptyCollectionBean.class);
 
         assertTrue(result.emptyList.isEmpty());
         assertTrue(result.emptyMap.isEmpty());
@@ -153,8 +153,8 @@ public class JsonBeanCodecSimpleTest {
         bean.parentField = "parent";
         bean.childField = "child";
 
-        ONode node = ObjectEncoder.serialize(bean);
-        ChildBean result = ObjectDecoder.deserialize(node, ChildBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        ChildBean result = BeanDeserializer.deserialize(node, ChildBean.class);
 
         assertEquals(bean.parentField, result.parentField);
         assertEquals(bean.childField, result.childField);
@@ -169,7 +169,7 @@ public class JsonBeanCodecSimpleTest {
     @Test
     public void testPrimitiveDefaults() {
         ONode emptyNode = new ONode(new HashMap<>());
-        PrimitiveBean result = ObjectDecoder.deserialize(emptyNode, PrimitiveBean.class);
+        PrimitiveBean result = BeanDeserializer.deserialize(emptyNode, PrimitiveBean.class);
 
         assertEquals(0, result.intVal);
         assertFalse(result.boolVal);
@@ -185,8 +185,8 @@ public class JsonBeanCodecSimpleTest {
         GenericListBean bean = new GenericListBean();
         bean.list = Arrays.asList(new SimpleBean(), new SimpleBean());
 
-        ONode node = ObjectEncoder.serialize(bean);
-        GenericListBean result = ObjectDecoder.deserialize(node, GenericListBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        GenericListBean result = BeanDeserializer.deserialize(node, GenericListBean.class);
 
         assertEquals(2, result.list.size());
     }
@@ -200,7 +200,7 @@ public class JsonBeanCodecSimpleTest {
         map.put("extra", new ONode(123));
         ONode node = new ONode(map);
 
-        SimpleBean result = ObjectDecoder.deserialize(node, SimpleBean.class);
+        SimpleBean result = BeanDeserializer.deserialize(node, SimpleBean.class);
         assertEquals("test", result.name);
     }
 
@@ -212,7 +212,7 @@ public class JsonBeanCodecSimpleTest {
         ONode node = new ONode(map);
 
         assertThrows(RuntimeException.class, () -> {
-            ObjectDecoder.deserialize(node, SimpleBean.class);
+            BeanDeserializer.deserialize(node, SimpleBean.class);
         });
     }
 
@@ -228,7 +228,7 @@ public class JsonBeanCodecSimpleTest {
         bean.temp = "tmp";
         bean.normal = "data";
 
-        ONode node = ObjectEncoder.serialize(bean);
+        ONode node = BeanSerializer.serialize(bean);
         assertTrue(node.hasKey("temp")); // 根据实现决定是否包含
     }
 
@@ -246,8 +246,8 @@ public class JsonBeanCodecSimpleTest {
         bean.protectedField = "protected";
         bean.publicField = "public";
 
-        ONode node = ObjectEncoder.serialize(bean);
-        AccessBean result = ObjectDecoder.deserialize(node, AccessBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        AccessBean result = BeanDeserializer.deserialize(node, AccessBean.class);
 
         assertEquals(bean.privateField, result.privateField);
         assertEquals(bean.protectedField, result.protectedField);
@@ -266,8 +266,8 @@ public class JsonBeanCodecSimpleTest {
         bean.wrapper = true;
         bean.primitive = false;
 
-        ONode node = ObjectEncoder.serialize(bean);
-        BooleanBean result = ObjectDecoder.deserialize(node, BooleanBean.class);
+        ONode node = BeanSerializer.serialize(bean);
+        BooleanBean result = BeanDeserializer.deserialize(node, BooleanBean.class);
 
         assertEquals(bean.wrapper, result.wrapper);
         assertEquals(bean.primitive, result.primitive);
@@ -281,7 +281,7 @@ public class JsonBeanCodecSimpleTest {
         ONode node = new ONode(map);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            ObjectDecoder.deserialize(node, EnumBean.class); // 需要 "ERROR" 大写
+            BeanDeserializer.deserialize(node, EnumBean.class); // 需要 "ERROR" 大写
         });
     }
 
@@ -298,7 +298,7 @@ public class JsonBeanCodecSimpleTest {
         map.put("doubleVal", new ONode(456));
         ONode node = new ONode(map);
 
-        NumberBean result = ObjectDecoder.deserialize(node, NumberBean.class);
+        NumberBean result = BeanDeserializer.deserialize(node, NumberBean.class);
         assertEquals(123, result.intVal);
         assertEquals(456.0, result.doubleVal, 0.001);
     }
@@ -313,8 +313,8 @@ public class JsonBeanCodecSimpleTest {
         PolyBean bean = new PolyBean();
         bean.items = Arrays.asList("text", 123, true);
 
-        ONode node = ObjectEncoder.serialize(bean);
-        assertDoesNotThrow(() -> ObjectDecoder.deserialize(node, PolyBean.class));
+        ONode node = BeanSerializer.serialize(bean);
+        assertDoesNotThrow(() -> BeanDeserializer.deserialize(node, PolyBean.class));
     }
 
     // 测试用例 19: 循环引用检测
@@ -328,7 +328,7 @@ public class JsonBeanCodecSimpleTest {
         bean.self = bean;
 
         assertThrows(StackOverflowError.class, () -> {
-            ObjectEncoder.serialize(bean);
+            BeanSerializer.serialize(bean);
         });
     }
 
@@ -340,7 +340,7 @@ public class JsonBeanCodecSimpleTest {
         ONode node = new ONode(map);
 
         assertDoesNotThrow(() -> {
-            ObjectDecoder.deserialize(node, SimpleBean.class);
+            BeanDeserializer.deserialize(node, SimpleBean.class);
         });
     }
 }

@@ -4,14 +4,14 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.ObjectEncoder;
 
 /**
  *
  * @author noear 2025/10/3 created
  *
  */
-public class StringEncoder implements NodeEncoder<String> {
+public class StringEncoder implements ObjectEncoder<String> {
     @Override
     public ONode encode(Options opts, ONodeAttr attr, String value) {
         if (opts.isFeatureEnabled(Feature.Read_UnwrapJsonString)) {

@@ -16,8 +16,8 @@
 package org.noear.snack4.annotation;
 
 
-import org.noear.snack4.codec.NodeDecoder;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.ObjectDecoder;
+import org.noear.snack4.codec.ObjectEncoder;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -75,7 +75,7 @@ public @interface ONodeAttr {
      */
     boolean flatten() default false;
 
-    Class<? extends NodeDecoder> decoder() default NodeDecoder.class;
+    Class<? extends ObjectDecoder> decoder() default ObjectDecoder.class;
 
-    Class<? extends NodeEncoder> encoder() default NodeEncoder.class;
+    Class<? extends ObjectEncoder> encoder() default ObjectEncoder.class;
 }

@@ -3,7 +3,7 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.ObjectEncoder;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
  * @author noear 2025/10/3 created
  *
  */
-public class InetSocketAddressEncoder implements NodeEncoder<InetSocketAddress> {
+public class InetSocketAddressEncoder implements ObjectEncoder<InetSocketAddress> {
     @Override
     public ONode encode(Options opts, ONodeAttr attr, InetSocketAddress value) {
         InetAddress inetAddress = value.getAddress();

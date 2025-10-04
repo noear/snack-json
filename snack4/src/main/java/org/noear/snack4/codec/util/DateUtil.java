@@ -1,6 +1,6 @@
 package org.noear.snack4.codec.util;
 
-import org.noear.snack4.codec.DEFAULTS;
+import org.noear.snack4.Options;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -146,8 +146,8 @@ public class DateUtil {
         }
 
         if (ft != null) {
-            DateFormat df = new SimpleDateFormat(ft, DEFAULTS.DEF_LOCALE);
-            df.setTimeZone(DEFAULTS.DEF_TIME_ZONE);
+            DateFormat df = new SimpleDateFormat(ft, Options.DEF_LOCALE);
+            df.setTimeZone(Options.DEF_TIME_ZONE);
             return df.parse(val);
         } else {
             for (int i = 0; i < len; i++) {
@@ -172,7 +172,7 @@ public class DateUtil {
      * 格式化时间
      */
     public static String format(Date date, String dateFormat, TimeZone timeZone) {
-        DateFormat df = new SimpleDateFormat(dateFormat, DEFAULTS.DEF_LOCALE);
+        DateFormat df = new SimpleDateFormat(dateFormat, Options.DEF_LOCALE);
         if (timeZone != null) {
             df.setTimeZone(timeZone);
         }

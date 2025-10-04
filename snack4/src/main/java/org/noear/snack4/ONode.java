@@ -15,8 +15,8 @@
  */
 package org.noear.snack4;
 
-import org.noear.snack4.codec.ObjectDecoder;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.BeanDeserializer;
+import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.json.JsonType;
@@ -183,9 +183,9 @@ public final class ONode {
         if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
-            oNode = ObjectEncoder.serialize(value);
+            oNode = BeanSerializer.serialize(value);
         } else if (value instanceof Map) {
-            oNode = ObjectEncoder.serialize(value);
+            oNode = BeanSerializer.serialize(value);
         } else {
             oNode = new ONode(value);
         }
@@ -225,9 +225,9 @@ public final class ONode {
         if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
-            oNode = ObjectEncoder.serialize(value);
+            oNode = BeanSerializer.serialize(value);
         } else if (value instanceof Map) {
-            oNode = ObjectEncoder.serialize(value);
+            oNode = BeanSerializer.serialize(value);
         } else {
             oNode = new ONode(value);
         }
@@ -328,11 +328,11 @@ public final class ONode {
     /// /////////////
 
     public static ONode from(Object bean, Options opts) {
-        return ObjectEncoder.serialize(bean, opts);
+        return BeanSerializer.serialize(bean, opts);
     }
 
     public static ONode from(Object bean) {
-        return ObjectEncoder.serialize(bean, Options.def());
+        return BeanSerializer.serialize(bean, Options.def());
     }
 
     // 添加带 Options 的静态方法
@@ -354,7 +354,7 @@ public final class ONode {
 
 
     public <T> T toBean(Class<T> clazz, Options opts) {
-        return ObjectDecoder.deserialize(this, clazz, opts);
+        return BeanDeserializer.deserialize(this, clazz, opts);
     }
 
     public <T> T toBean(Class<T> clazz) {

@@ -2,7 +2,7 @@ package features.snack4.json.writer;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.Feature;
 import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.Options;
@@ -232,7 +232,7 @@ public class JsonWriterTest {
         node.set("name", "John");
         node.set("age", 30);
         node.set("isStudent", false);
-        node.set("grades", ObjectEncoder.serialize(new int[]{90, 85, 88}));
+        node.set("grades", BeanSerializer.serialize(new int[]{90, 85, 88}));
         StringWriter writer = new StringWriter();
         new JsonWriter(Options.def(), writer).write(node);
         assertEquals("{\"name\":\"John\",\"age\":30,\"isStudent\":false,\"grades\":[90,85,88]}", writer.toString());

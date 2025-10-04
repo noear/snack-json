@@ -3,7 +3,7 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.ObjectEncoder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +14,7 @@ import java.util.Properties;
  * @author noear 2025/10/3 created
  *
  */
-public class PropertiesEncoder implements NodeEncoder<Properties> {
+public class PropertiesEncoder implements ObjectEncoder<Properties> {
     @Override
     public ONode encode(Options opts, ONodeAttr attr, Properties properties) {
         ONode rootNode = new ONode(new LinkedHashMap<>());

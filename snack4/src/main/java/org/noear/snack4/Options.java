@@ -15,18 +15,43 @@
  */
 package org.noear.snack4;
 
-import org.noear.snack4.codec.NodeDecoder;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.ObjectDecoder;
+import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.ObjectFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 /**
  * JSON 处理选项（线程安全配置）
  */
 public final class Options {
+    /**
+     * 默认类型的key
+     */
+    public static final String DEF_TYPE_PROPERTY_NAME = "@type";
+
+    /**
+     * 默认时区
+     */
+    public static final TimeZone DEF_TIME_ZONE = TimeZone.getDefault();
+    /**
+     * 默认偏移时区
+     */
+    public static final ZoneOffset DEF_OFFSET = OffsetDateTime.now().getOffset();
+    /**
+     * 默认地区
+     */
+    public static final Locale DEF_LOCALE = Locale.getDefault();
+    /**
+     * 默认时间格式器
+     */
+    public static String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+
     /**
      * 默认选项实例
      */
@@ -37,8 +62,8 @@ public final class Options {
 
     // 通用配置
     private final DateFormat _dateFormat;
-    private final Map<Class<?>, NodeDecoder<?>> _decoderRegistry;
-    private final Map<Class<?>, NodeEncoder<?>> _encoderRegistry;
+    private final Map<Class<?>, ObjectDecoder<?>> _decoderRegistry;
+    private final Map<Class<?>, ObjectEncoder<?>> _encoderRegistry;
     private final Map<Class<?>, ObjectFactory<?>> _objectFactory;
 
     // 输入配置
@@ -94,7 +119,7 @@ public final class Options {
     /**
      * 获取解码器
      */
-    public NodeDecoder<?> getDecoder(Class<?> clazz) {
+    public ObjectDecoder<?> getDecoder(Class<?> clazz) {
         return _decoderRegistry.get(clazz);
     }
 
@@ -102,7 +127,7 @@ public final class Options {
      * 获取编码器
      *
      */
-    public NodeEncoder<?> getEncoder(Class<?> clazz) {
+    public ObjectEncoder<?> getEncoder(Class<?> clazz) {
         return _encoderRegistry.get(clazz);
     }
 
@@ -158,8 +183,8 @@ public final class Options {
 
         // 通用配置
         private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
-        private final Map<Class<?>, NodeDecoder<?>> decoderRegistry = new HashMap<>();
-        private final Map<Class<?>, NodeEncoder<?>> encoderRegistry = new HashMap<>();
+        private final Map<Class<?>, ObjectDecoder<?>> decoderRegistry = new HashMap<>();
+        private final Map<Class<?>, ObjectEncoder<?>> encoderRegistry = new HashMap<>();
         private final Map<Class<?>, ObjectFactory<?>> objectFactory = new HashMap<>();
 
         // 输入配置
@@ -208,7 +233,7 @@ public final class Options {
         /**
          * 注册自定义解码器
          */
-        public <T> Builder addDecoder(Class<T> type, NodeDecoder<T> decoder) {
+        public <T> Builder addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
             decoderRegistry.put(type, decoder);
             return this;
         }
@@ -216,7 +241,7 @@ public final class Options {
         /**
          * 注册自定义编码器
          */
-        public <T> Builder addEncoder(Class<T> type, NodeEncoder<T> encoder) {
+        public <T> Builder addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
             encoderRegistry.put(type, encoder);
             return this;
         }

@@ -21,24 +21,24 @@ import java.util.*;
  * @author noear 2025/10/3 created
  */
 public class CodecRepository {
-    private static final Map<Class<?>, NodeDecoder<?>> DECODERS = new HashMap<>();
-    private static final List<NodePatternDecoder<?>> PATTERN_DECODERS = new ArrayList<>();
+    private static final Map<Class<?>, ObjectDecoder<?>> DECODERS = new HashMap<>();
+    private static final List<ObjectPatternDecoder<?>> PATTERN_DECODERS = new ArrayList<>();
     private static final Map<Class<?>, ObjectFactory<?>> FACTORYS = new HashMap<>();
 
-    private static final Map<Class<?>, NodeEncoder<?>> ENCODERS = new HashMap<>();
-    private static final List<NodePatternEncoder<?>> PATTERN_ENCODERS = new ArrayList<>();
+    private static final Map<Class<?>, ObjectEncoder<?>> ENCODERS = new HashMap<>();
+    private static final List<ObjectPatternEncoder<?>> PATTERN_ENCODERS = new ArrayList<>();
 
-    public static void add(NodePatternDecoder decoder) {
+    public static void add(ObjectPatternDecoder decoder) {
         PATTERN_DECODERS.add(decoder);
     }
 
-    public static void add(NodePatternEncoder decoder) {
+    public static void add(ObjectPatternEncoder decoder) {
         PATTERN_ENCODERS.add(decoder);
     }
 
-    public static <T> void add(Class<T> type, NodeDecoder<T> decoder) {
-        if (decoder instanceof NodePatternDecoder<?>) {
-            PATTERN_DECODERS.add((NodePatternDecoder<?>) decoder);
+    public static <T> void add(Class<T> type, ObjectDecoder<T> decoder) {
+        if (decoder instanceof ObjectPatternDecoder<?>) {
+            PATTERN_DECODERS.add((ObjectPatternDecoder<?>) decoder);
         } else {
             DECODERS.put(type, decoder);
         }
@@ -48,23 +48,23 @@ public class CodecRepository {
         FACTORYS.put(type, factory);
     }
 
-    public static <T> void add(Class<T> type, NodeEncoder<T> encoder) {
-        if (encoder instanceof NodePatternEncoder) {
-            PATTERN_ENCODERS.add((NodePatternEncoder<T>) encoder);
+    public static <T> void add(Class<T> type, ObjectEncoder<T> encoder) {
+        if (encoder instanceof ObjectPatternEncoder) {
+            PATTERN_ENCODERS.add((ObjectPatternEncoder<T>) encoder);
         } else {
             ENCODERS.put(type, encoder);
         }
     }
 
-    public static NodeDecoder getNodeDecoder(Options opts, Class<?> clazz) {
+    public static ObjectDecoder getDecoder(Options opts, Class<?> clazz) {
         // 优先使用自定义编解码器
-        NodeDecoder decoder = opts.getDecoder(clazz);
+        ObjectDecoder decoder = opts.getDecoder(clazz);
         if (decoder == null) {
             decoder = DECODERS.get(clazz);
         }
 
         if (decoder == null) {
-            for (NodePatternDecoder decoder1 : PATTERN_DECODERS) {
+            for (ObjectPatternDecoder decoder1 : PATTERN_DECODERS) {
                 if (decoder1.canDecode(clazz)) {
                     return decoder1;
                 }
@@ -74,7 +74,7 @@ public class CodecRepository {
         return decoder;
     }
 
-    public static ObjectFactory getObjectFactory(Options opts, Class<?> clazz) {
+    public static ObjectFactory getFactory(Options opts, Class<?> clazz) {
         ObjectFactory factory = opts.getFactory(clazz);
         if (factory != null) {
             return factory;
@@ -83,14 +83,14 @@ public class CodecRepository {
         return FACTORYS.get(clazz);
     }
 
-    public static NodeEncoder getNodeEncoder(Options opts, Class<?> clazz, Object value) {
-        NodeEncoder encoder = opts.getEncoder(clazz);
+    public static ObjectEncoder getEncoder(Options opts, Class<?> clazz, Object value) {
+        ObjectEncoder encoder = opts.getEncoder(clazz);
         if (encoder == null) {
             encoder = ENCODERS.get(clazz);
         }
 
         if (encoder == null) {
-            for (NodePatternEncoder encoder1 : PATTERN_ENCODERS) {
+            for (ObjectPatternEncoder encoder1 : PATTERN_ENCODERS) {
                 if (encoder1.canEncode(value)) {
                     return encoder1;
                 }

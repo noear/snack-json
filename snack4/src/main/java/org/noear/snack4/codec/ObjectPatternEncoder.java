@@ -1,12 +1,12 @@
 package org.noear.snack4.codec;
 
 /**
- * ONode 编码（用于自定义编码）
+ * 对象模式编码器
  *
  * @author noear
- * @since 3.2
+ * @since 4.0
  * */
-public interface NodePatternEncoder<T> extends NodeEncoder<T> {
+public interface ObjectPatternEncoder<T> extends ObjectEncoder<T> {
     /**
      * 可以编码的
      */
