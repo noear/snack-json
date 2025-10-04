@@ -42,6 +42,8 @@ public class JsonReader {
         return new JsonReader(reader, opts).read();
     }
 
+    /// ///////////////
+
     private final Options opts;
     private final ParserState state;
 

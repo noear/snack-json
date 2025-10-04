@@ -32,9 +32,11 @@ public class JsonWriter {
         return writer.toString();
     }
 
-    final Options opts;
-    final Writer writer;
-    int depth = 0;
+    /// ////////////
+
+    private final Options opts;
+    private final Writer writer;
+    private int depth = 0;
 
     public JsonWriter(Options opts, Writer writer) {
         this.opts = opts != null ? opts : Options.def();
