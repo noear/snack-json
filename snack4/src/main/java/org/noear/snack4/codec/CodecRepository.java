@@ -142,7 +142,6 @@ public class CodecRepository {
     private static void initEncoders() {
         add(new _CalendarPatternEncoder());
         add(new _ClobPatternEncoder());
-        add(new _ArrayPatternEncoder());
         add(new _EnumPatternEncoder());
 
         add(ONode.class, new ONodeEncoder());

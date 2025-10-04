@@ -40,8 +40,9 @@ public class BeanSerializer {
         if (bean == null) {
             return new ONode(null);
         }
+
         try {
-            return convertBeanToNode(bean, new IdentityHashMap<>(), opts);
+            return convertValueToNode(bean, null, new IdentityHashMap<>(), opts);
         } catch (Throwable e) {
             if (e instanceof StackOverflowError) {
                 throw (StackOverflowError) e;
@@ -53,61 +54,18 @@ public class BeanSerializer {
         }
     }
 
-
-    // 对象转ONode核心逻辑
-    private static ONode convertBeanToNode(Object bean, Map<Object, Object> visited, Options opts) throws Exception {
-        if (bean == null) {
-            return new ONode(null);
-        }
-
-        if (bean instanceof ONode) {
-            return (ONode) bean;
-        }
-
-        if (bean instanceof ObjectEncoder) {
-            return ((ObjectEncoder) bean).encode(opts, null, bean);
-        }
-
-        // 优先使用自定义编解码器
-        ObjectEncoder encoder = CodecRepository.getEncoder(opts, bean.getClass(), bean);
-        if (encoder != null) {
-            return encoder.encode(opts, null, bean);
-        }
-
-        // 循环引用检测
-        if (visited.containsKey(bean)) {
-            throw new StackOverflowError("Circular reference detected: " + bean.getClass().getName());
-        }
-        visited.put(bean, null);
-
-        Class<?> clazz = bean.getClass();
-
-        if (clazz.isArray()) {
-            //数组
-            return convertArrayToNode(bean, visited, opts);
-        } else if (bean instanceof Collection) {
-            //集合
-            return convertCollectionToNode((Collection<?>) bean, visited, opts);
-        } else if (bean instanceof Map) {
-            //字典
-            return convertMapToNode((Map) bean, visited, opts);
-        } else {
-            ONode node = new ONode(new LinkedHashMap<>());
-
-            for (FieldWrapper field : ReflectionUtil.getDeclaredFields(clazz)) {
-                Object value = field.getField().get(bean);
-                ONode fieldNode = convertValueToNode(value, field.getAttr(), visited, opts);
-                node.set(field.getAliasName(), fieldNode);
-            }
-
-            return node;
-        }
-    }
-
     // 值转ONode处理
     private static ONode convertValueToNode(Object value, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
         if (value == null) {
             return new ONode(null);
+        }
+
+        if (value instanceof ONode) {
+            return (ONode) value;
+        }
+
+        if (value instanceof ObjectEncoder) {
+            return ((ObjectEncoder) value).encode(opts, null, value);
         }
 
         // 优先使用自定义编解码器
@@ -129,34 +87,49 @@ public class BeanSerializer {
         }
     }
 
+    // 对象转ONode核心逻辑
+    private static ONode convertBeanToNode(Object bean, Map<Object, Object> visited, Options opts) throws Exception {
+        // 循环引用检测
+        if (visited.containsKey(bean)) {
+            throw new StackOverflowError("Circular reference detected: " + bean.getClass().getName());
+        } else {
+            visited.put(bean, null);
+        }
+
+        ONode tmp = new ONode(new LinkedHashMap<>());
+        for (FieldWrapper field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
+            ONode fieldNode = convertValueToNode(field.getField().get(bean), field.getAttr(), visited, opts);
+            tmp.set(field.getAliasName(), fieldNode);
+        }
+        return tmp;
+    }
+
     // 处理数组类型
     private static ONode convertArrayToNode(Object array, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode arrayNode = new ONode(new ArrayList<>());
+        ONode tmp = new ONode(new ArrayList<>());
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
-            Object element = Array.get(array, i);
-            arrayNode.add(convertValueToNode(element, null, visited, opts));
+            tmp.add(convertValueToNode(Array.get(array, i), null, visited, opts));
         }
-        return arrayNode;
+        return tmp;
     }
 
     // 处理集合类型
     private static ONode convertCollectionToNode(Collection<?> collection, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode arrayNode = new ONode(new ArrayList<>());
+        ONode tmp = new ONode(new ArrayList<>());
         for (Object item : collection) {
-            arrayNode.add(convertValueToNode(item, null, visited, opts));
+            tmp.add(convertValueToNode(item, null, visited, opts));
         }
-        return arrayNode;
+        return tmp;
     }
 
     // 处理Map类型
     private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode objNode = new ONode(new LinkedHashMap<>());
+        ONode tmp = new ONode(new LinkedHashMap<>());
         for (Map.Entry<?, ?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
             ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
-            objNode.set(key, valueNode);
+            tmp.set(String.valueOf(entry.getKey()), valueNode);
         }
-        return objNode;
+        return tmp;
     }
 }
