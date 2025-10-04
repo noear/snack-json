@@ -1,7 +1,6 @@
 package org.noear.snack4.codec;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 import org.noear.snack4.codec.decode.*;
 import org.noear.snack4.codec.encode.*;
 import org.noear.snack4.codec.factory.CollectionFactory;
@@ -21,163 +20,199 @@ import java.util.*;
  * @author noear 2025/10/3 created
  */
 public class CodecRepository {
-    private static final Map<Class<?>, ObjectDecoder<?>> DECODERS = new HashMap<>();
-    private static final List<ObjectPatternDecoder<?>> PATTERN_DECODERS = new ArrayList<>();
-    private static final Map<Class<?>, ObjectFactory<?>> FACTORYS = new HashMap<>();
+    private static CodecRepository DEFAULT = new CodecRepository(null).loadDefault();
 
-    private static final Map<Class<?>, ObjectEncoder<?>> ENCODERS = new HashMap<>();
-    private static final List<ObjectPatternEncoder<?>> PATTERN_ENCODERS = new ArrayList<>();
+    private final Map<Class<?>, ObjectFactory<?>> factorys = new HashMap<>();
 
-    public static void add(ObjectPatternDecoder decoder) {
-        PATTERN_DECODERS.add(decoder);
+    private final Map<Class<?>, ObjectDecoder<?>> decoders = new HashMap<>();
+    private final List<ObjectPatternDecoder<?>> patternDecoders = new ArrayList<>();
+
+    private final Map<Class<?>, ObjectEncoder<?>> encoders = new HashMap<>();
+    private final List<ObjectPatternEncoder<?>> patternEncoders = new ArrayList<>();
+
+    private final CodecRepository parent;
+
+    private CodecRepository(CodecRepository parent) {
+        this.parent = parent;
     }
 
-    public static void add(ObjectPatternEncoder decoder) {
-        PATTERN_ENCODERS.add(decoder);
+    public static CodecRepository newInstance() {
+        return new CodecRepository(DEFAULT);
     }
 
-    public static <T> void add(Class<T> type, ObjectDecoder<T> decoder) {
+    /**
+     * 添加工厂
+     */
+    public <T> void addFactory(Class<T> type, ObjectFactory<T> factory) {
+        factorys.put(type, factory);
+    }
+
+    /**
+     * 添加解码器
+     */
+    public void addDecoder(ObjectPatternDecoder decoder) {
+        patternDecoders.add(decoder);
+    }
+
+    /**
+     * 添加解码器
+     */
+    public <T> void addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
         if (decoder instanceof ObjectPatternDecoder<?>) {
-            PATTERN_DECODERS.add((ObjectPatternDecoder<?>) decoder);
+            patternDecoders.add((ObjectPatternDecoder<?>) decoder);
         } else {
-            DECODERS.put(type, decoder);
+            decoders.put(type, decoder);
         }
     }
 
-    public static <T> void add(Class<T> type, ObjectFactory<T> factory) {
-        FACTORYS.put(type, factory);
+    /**
+     * 添加编码器
+     */
+    public void addEncoder(ObjectPatternEncoder encoder) {
+        patternEncoders.add(encoder);
     }
 
-    public static <T> void add(Class<T> type, ObjectEncoder<T> encoder) {
+    /**
+     * 添加编码器
+     */
+    public <T> void addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
         if (encoder instanceof ObjectPatternEncoder) {
-            PATTERN_ENCODERS.add((ObjectPatternEncoder<T>) encoder);
+            patternEncoders.add((ObjectPatternEncoder<T>) encoder);
         } else {
-            ENCODERS.put(type, encoder);
+            encoders.put(type, encoder);
         }
     }
 
-    public static ObjectDecoder getDecoder(Options opts, Class<?> clazz) {
-        // 优先使用自定义编解码器
-        ObjectDecoder decoder = opts.getDecoder(clazz);
-        if (decoder == null) {
-            decoder = DECODERS.get(clazz);
-        }
+    public ObjectDecoder getDecoder(Class<?> clazz) {
+        ObjectDecoder decoder = decoders.get(clazz);
 
         if (decoder == null) {
-            for (ObjectPatternDecoder decoder1 : PATTERN_DECODERS) {
+            for (ObjectPatternDecoder decoder1 : patternDecoders) {
                 if (decoder1.canDecode(clazz)) {
                     return decoder1;
                 }
+            }
+
+            if (parent != null) {
+                return parent.getDecoder(clazz);
             }
         }
 
         return decoder;
     }
 
-    public static ObjectFactory getFactory(Options opts, Class<?> clazz) {
-        ObjectFactory factory = opts.getFactory(clazz);
-        if (factory != null) {
-            return factory;
+    public ObjectFactory getFactory(Class<?> clazz) {
+        ObjectFactory factory = factorys.get(clazz);
+
+        if (factory == null) {
+            if (parent != null) {
+                return parent.getFactory(clazz);
+            }
         }
 
-        return FACTORYS.get(clazz);
+        return factory;
     }
 
-    public static ObjectEncoder getEncoder(Options opts, Class<?> clazz, Object value) {
-        ObjectEncoder encoder = opts.getEncoder(clazz);
-        if (encoder == null) {
-            encoder = ENCODERS.get(clazz);
-        }
+    public ObjectEncoder getEncoder(Object value) {
+        ObjectEncoder encoder = encoders.get(value.getClass());
 
         if (encoder == null) {
-            for (ObjectPatternEncoder encoder1 : PATTERN_ENCODERS) {
+            for (ObjectPatternEncoder encoder1 : patternEncoders) {
                 if (encoder1.canEncode(value)) {
                     return encoder1;
                 }
+            }
+
+            if (parent != null) {
+                return parent.getEncoder(value);
             }
         }
 
         return encoder;
     }
 
-    private static void initDecoders() {
-        add(new _ArrayPatternDecoder());
-        add(new _EnumPatternDecoder());
+    /// //////////////////////
 
-        add(Properties.class, new PropertiesDecoder());
-        add(InetSocketAddress.class, new InetSocketAddressDecoder());
-        add(SimpleDateFormat.class, new SimpleDateFormatDecoder());
-        add(File.class, new FileDecoder());
-        add(UUID.class, new UUIDDecoder());
-
-        add(String.class, new StringDecoder());
-        add(Date.class, new DateDecoder());
-
-        add(Boolean.class, new BooleanDecoder());
-        add(Boolean.TYPE, new BooleanDecoder());
-
-        add(Double.class, new DoubleDecoder());
-        add(Double.TYPE, new DoubleDecoder());
-
-        add(Float.class, new FloatDecoder());
-        add(Float.TYPE, new FloatDecoder());
-
-        add(Long.class, new LongDecoder());
-        add(Long.TYPE, new LongDecoder());
-
-        add(Integer.class, new IntegerDecoder());
-        add(Integer.TYPE, new IntegerDecoder());
-
-        add(Short.class, new ShortDecoder());
-        add(Short.TYPE, new ShortDecoder());
+    private void loadDefaultFactories() {
+        addFactory(Map.class, new MapFactory());
+        addFactory(List.class, new ListFactory());
+        addFactory(Set.class, new SetFactory());
+        addFactory(Collection.class, new CollectionFactory());
     }
 
-    private static void initFactories() {
-        add(Map.class, new MapFactory());
-        add(List.class, new ListFactory());
-        add(Set.class, new SetFactory());
-        add(Collection.class, new CollectionFactory());
+    private void loadDefaultDecoders() {
+        addDecoder(new _ArrayPatternDecoder());
+        addDecoder(new _EnumPatternDecoder());
+
+        addDecoder(Properties.class, new PropertiesDecoder());
+        addDecoder(InetSocketAddress.class, new InetSocketAddressDecoder());
+        addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
+        addDecoder(File.class, new FileDecoder());
+        addDecoder(UUID.class, new UUIDDecoder());
+
+        addDecoder(String.class, new StringDecoder());
+        addDecoder(Date.class, new DateDecoder());
+
+        addDecoder(Boolean.class, new BooleanDecoder());
+        addDecoder(Boolean.TYPE, new BooleanDecoder());
+
+        addDecoder(Double.class, new DoubleDecoder());
+        addDecoder(Double.TYPE, new DoubleDecoder());
+
+        addDecoder(Float.class, new FloatDecoder());
+        addDecoder(Float.TYPE, new FloatDecoder());
+
+        addDecoder(Long.class, new LongDecoder());
+        addDecoder(Long.TYPE, new LongDecoder());
+
+        addDecoder(Integer.class, new IntegerDecoder());
+        addDecoder(Integer.TYPE, new IntegerDecoder());
+
+        addDecoder(Short.class, new ShortDecoder());
+        addDecoder(Short.TYPE, new ShortDecoder());
     }
 
-    private static void initEncoders() {
-        add(new _CalendarPatternEncoder());
-        add(new _ClobPatternEncoder());
-        add(new _EnumPatternEncoder());
 
-        add(ONode.class, new ONodeEncoder());
-        add(Properties.class, new PropertiesEncoder());
-        add(InetSocketAddress.class, new InetSocketAddressEncoder());
-        add(SimpleDateFormat.class, new SimpleDateFormatEncoder());
-        add(File.class, new FileEncoder());
-        add(Calendar.class, new _CalendarPatternEncoder());
-        add(Class.class, new ClassEncoder());
-        add(Clob.class, new _ClobPatternEncoder());
-        add(Currency.class, new CurrencyEncoder());
-        add(TimeZone.class, new TimeZoneEncoder());
-        add(UUID.class, new UUIDEncoder());
+    private void loadDefaultEncoders() {
+        addEncoder(new _CalendarPatternEncoder());
+        addEncoder(new _ClobPatternEncoder());
+        addEncoder(new _EnumPatternEncoder());
 
-        add(String.class, new StringEncoder());
+        addEncoder(ONode.class, new ONodeEncoder());
+        addEncoder(Properties.class, new PropertiesEncoder());
+        addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
+        addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
+        addEncoder(File.class, new FileEncoder());
+        addEncoder(Calendar.class, new _CalendarPatternEncoder());
+        addEncoder(Class.class, new ClassEncoder());
+        addEncoder(Clob.class, new _ClobPatternEncoder());
+        addEncoder(Currency.class, new CurrencyEncoder());
+        addEncoder(TimeZone.class, new TimeZoneEncoder());
+        addEncoder(UUID.class, new UUIDEncoder());
 
-        add(Date.class, new DateEncoder());
-        add(ZonedDateTime.class, new ZonedDateTimeEncoder());
+        addEncoder(String.class, new StringEncoder());
 
-        add(OffsetDateTime.class, new OffsetDateTimeEncoder());
-        add(OffsetTime.class, new OffsetTimeEncoder());
+        addEncoder(Date.class, new DateEncoder());
+        addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
 
-        add(LocalDateTime.class, new LocalDateTimeEncoder());
-        add(LocalDate.class, new LocalDateEncoder());
-        add(LocalTime.class, new LocalTimeEncoder());
+        addEncoder(OffsetDateTime.class, new OffsetDateTimeEncoder());
+        addEncoder(OffsetTime.class, new OffsetTimeEncoder());
+
+        addEncoder(LocalDateTime.class, new LocalDateTimeEncoder());
+        addEncoder(LocalDate.class, new LocalDateEncoder());
+        addEncoder(LocalTime.class, new LocalTimeEncoder());
 
 
-        add(Boolean.class, new BooleanEncoder());
-        add(Boolean.TYPE, new BooleanEncoder());
+        addEncoder(Boolean.class, new BooleanEncoder());
+        addEncoder(Boolean.TYPE, new BooleanEncoder());
 
-        add(Number.class, new _NumberPatternEncoder());
+        addEncoder(Number.class, new _NumberPatternEncoder());
     }
 
-    static {
-        initDecoders();
-        initFactories();
-        initEncoders();
+    private CodecRepository loadDefault() {
+        loadDefaultDecoders();
+        loadDefaultFactories();
+        loadDefaultEncoders();
+        return this;
     }
 }

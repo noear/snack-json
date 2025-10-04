@@ -69,7 +69,7 @@ public class BeanSerializer {
         }
 
         // 优先使用自定义编解码器
-        ObjectEncoder<Object> codec = CodecRepository.getEncoder(opts, value.getClass(), value);
+        ObjectEncoder codec = opts.getEncoder(value);
         if (codec != null) {
             return codec.encode(opts, attr, value);
         }

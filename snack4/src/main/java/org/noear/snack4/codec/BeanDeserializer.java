@@ -76,14 +76,14 @@ public class BeanDeserializer {
         }
 
         // 优先使用自定义编解码器
-        ObjectDecoder decoder = CodecRepository.getDecoder(opts, clazz);
+        ObjectDecoder decoder = opts.getDecoder(clazz);
         if (decoder != null) {
             return decoder.decode(opts, null, node, clazz);
         }
 
         Object bean = null;
 
-        ObjectFactory factory = CodecRepository.getFactory(opts, clazz);
+        ObjectFactory factory = opts.getFactory(clazz);
         if (factory != null) {
             bean = factory.create(opts, clazz);
         }
@@ -182,7 +182,7 @@ public class BeanDeserializer {
         Class<?> clazz = (Class<?>) (type instanceof Class ? type : ((ParameterizedType) type).getRawType());
 
         // 优先使用自定义编解码器
-        ObjectDecoder decoder = CodecRepository.getDecoder(opts, clazz);
+        ObjectDecoder decoder = opts.getDecoder(clazz);
         if (decoder != null) {
             return decoder.decode(opts, attr, node, clazz);
         }

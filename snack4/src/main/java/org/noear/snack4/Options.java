@@ -15,6 +15,7 @@
  */
 package org.noear.snack4;
 
+import org.noear.snack4.codec.CodecRepository;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.ObjectFactory;
@@ -62,9 +63,7 @@ public final class Options {
 
     // 通用配置
     private final DateFormat _dateFormat;
-    private final Map<Class<?>, ObjectDecoder<?>> _decoderRegistry;
-    private final Map<Class<?>, ObjectEncoder<?>> _encoderRegistry;
-    private final Map<Class<?>, ObjectFactory<?>> _objectFactory;
+    private final CodecRepository  _codecRepository;
 
     // 输入配置
     private final int _maxDepth;
@@ -91,9 +90,7 @@ public final class Options {
 
         // 通用配置
         this._dateFormat = builder.dateFormat;
-        this._decoderRegistry = Collections.unmodifiableMap(builder.decoderRegistry);
-        this._encoderRegistry = Collections.unmodifiableMap(builder.encoderRegistry);
-        this._objectFactory = Collections.unmodifiableMap(builder.objectFactory);
+        this._codecRepository = builder.codecRepository;
 
         // 输入配置
         this._maxDepth = builder.maxDepth;
@@ -120,15 +117,15 @@ public final class Options {
      * 获取解码器
      */
     public ObjectDecoder<?> getDecoder(Class<?> clazz) {
-        return _decoderRegistry.get(clazz);
+        return _codecRepository.getDecoder(clazz);
     }
 
     /**
      * 获取编码器
      *
      */
-    public ObjectEncoder<?> getEncoder(Class<?> clazz) {
-        return _encoderRegistry.get(clazz);
+    public ObjectEncoder<?> getEncoder(Object value) {
+        return _codecRepository.getEncoder(value);
     }
 
     /**
@@ -136,7 +133,7 @@ public final class Options {
      *
      */
     public ObjectFactory<?> getFactory(Class<?> clazz) {
-        return _objectFactory.get(clazz);
+        return _codecRepository.getFactory(clazz);
     }
 
     /**
@@ -183,9 +180,7 @@ public final class Options {
 
         // 通用配置
         private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
-        private final Map<Class<?>, ObjectDecoder<?>> decoderRegistry = new HashMap<>();
-        private final Map<Class<?>, ObjectEncoder<?>> encoderRegistry = new HashMap<>();
-        private final Map<Class<?>, ObjectFactory<?>> objectFactory = new HashMap<>();
+        private final CodecRepository codecRepository = CodecRepository.newInstance();
 
         // 输入配置
         private int maxDepth = 512;
@@ -234,7 +229,7 @@ public final class Options {
          * 注册自定义解码器
          */
         public <T> Builder addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
-            decoderRegistry.put(type, decoder);
+            codecRepository.addDecoder(type, decoder);
             return this;
         }
 
@@ -242,12 +237,12 @@ public final class Options {
          * 注册自定义编码器
          */
         public <T> Builder addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
-            encoderRegistry.put(type, encoder);
+            codecRepository.addEncoder(type, encoder);
             return this;
         }
 
         public <T> Builder addFactory(Class<T> type, ObjectFactory<T> factory) {
-            objectFactory.put(type, factory);
+            codecRepository.addFactory(type, factory);
             return this;
         }
 
