@@ -33,8 +33,8 @@ import java.util.*;
  * @since 4.0
  */
 public class ObjectEncoder {
-    private static NodeEncoder getNodeEncoder(Options opts, Class<?> clazz) {
-        return CodecRepository.getNodeEncoder(opts, clazz);
+    private static NodeEncoder getNodeEncoder(Options opts, Object value) {
+        return CodecRepository.getNodeEncoder(opts, value.getClass(), value);
     }
 
     // 序列化：对象转ONode
@@ -70,8 +70,12 @@ public class ObjectEncoder {
             return (ONode) bean;
         }
 
+        if (bean instanceof NodeEncoder) {
+            return ((NodeEncoder) bean).encode(opts, null, bean);
+        }
+
         // 优先使用自定义编解码器
-        NodeEncoder encoder = getNodeEncoder(opts, bean.getClass());
+        NodeEncoder encoder = getNodeEncoder(opts, bean);
         if (encoder != null) {
             return encoder.encode(opts, null, bean);
         }
@@ -113,7 +117,7 @@ public class ObjectEncoder {
         }
 
         // 优先使用自定义编解码器
-        NodeEncoder<Object> codec = (NodeEncoder<Object>) opts.getNodeEncoder(value.getClass());
+        NodeEncoder<Object> codec = getNodeEncoder(opts, value);
         if (codec != null) {
             return codec.encode(opts, attr, value);
         }

@@ -1,4 +1,4 @@
-package features.codec;
+package features.snack4.codec;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;

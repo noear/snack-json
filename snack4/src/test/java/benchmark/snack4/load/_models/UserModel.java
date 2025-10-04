@@ -1,4 +1,4 @@
-package benchmark.load._models;
+package benchmark.snack4.load._models;
 
 public class UserModel {
     public int id;

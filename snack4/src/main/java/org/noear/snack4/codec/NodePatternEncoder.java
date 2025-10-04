@@ -10,5 +10,5 @@ public interface NodePatternEncoder<T> extends NodeEncoder<T> {
     /**
      * 可以编码的
      */
-    boolean canEncode(Class clazz);
+    boolean canEncode(Object value);
 }

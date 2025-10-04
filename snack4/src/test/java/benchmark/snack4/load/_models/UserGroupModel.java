@@ -1,4 +1,4 @@
-package benchmark.load._models;
+package benchmark.snack4.load._models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import java.util.Set;
 public class UserGroupModel {
     public long id;
     public List<UserModel> users;
-    public Map<Integer,UserModel> users2;
+    public Map<Integer, UserModel> users2;
     public Set<UserModel> users3;
     public String[] names;
     public short[] ids;

@@ -15,8 +15,8 @@ import java.sql.Clob;
  */
 public class ClobPatternEncoder implements NodePatternEncoder<Clob> {
     @Override
-    public boolean canEncode(Class clazz) {
-        return Clob.class.isAssignableFrom(clazz);
+    public boolean canEncode(Object value) {
+        return value instanceof Clob;
     }
 
     @Override

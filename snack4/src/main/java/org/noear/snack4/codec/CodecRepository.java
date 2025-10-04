@@ -62,7 +62,7 @@ public class CodecRepository {
         return FACTORYS.get(clazz);
     }
 
-    public static NodeEncoder getNodeEncoder(Options opts, Class<?> clazz) {
+    public static NodeEncoder getNodeEncoder(Options opts, Class<?> clazz, Object value) {
         NodeEncoder encoder = opts.getNodeEncoder(clazz);
         if (encoder == null) {
             encoder = ENCODERS.get(clazz);
@@ -70,7 +70,7 @@ public class CodecRepository {
 
         if (encoder == null) {
             for (NodePatternEncoder encoder1 : PATTERN_ENCODERS) {
-                if (encoder1.canEncode(clazz)) {
+                if (encoder1.canEncode(value)) {
                     return encoder1;
                 }
             }
@@ -147,20 +147,7 @@ public class CodecRepository {
         add(Boolean.class, new BooleanEncoder());
         add(Boolean.TYPE, new BooleanEncoder());
 
-        add(Double.class, new DoubleEncoder());
-        add(Double.TYPE, new DoubleEncoder());
-
-        add(Float.class, new FloatEncoder());
-        add(Float.TYPE, new FloatEncoder());
-
-        add(Long.class, new LongEncoder());
-        add(Long.TYPE, new LongEncoder());
-
-        add(Integer.class, new IntegerEncoder());
-        add(Integer.TYPE, new IntegerEncoder());
-
-        add(Short.class, new ShortEncoder());
-        add(Short.TYPE, new ShortEncoder());
+        add(Number.class, new NumberPatternEncoder());
     }
 
     static {

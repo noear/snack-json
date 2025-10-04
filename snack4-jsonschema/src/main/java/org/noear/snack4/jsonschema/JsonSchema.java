@@ -30,16 +30,28 @@ import java.util.Map;
 /**
  * JSON模式验证器，支持JSON Schema规范
  */
-public class JsonSchemaValidator {
+public class JsonSchema {
+    public static JsonSchema load(String jsonSchema) {
+        return new JsonSchema(ONode.load(jsonSchema));
+    }
+
+    public static JsonSchema from(ONode jsonSchema) {
+        return new JsonSchema(jsonSchema);
+    }
+
     private final ONode schema;
     private final Map<String, CompiledRule> compiledRules;
 
-    public JsonSchemaValidator(ONode schema) {
+    public JsonSchema(ONode schema) {
         if (!schema.isObject()) {
             throw new IllegalArgumentException("Schema must be a JSON object");
         }
         this.schema = schema;
         this.compiledRules = compileSchema(schema);
+    }
+
+    public String toJson(){
+        return schema.toJson();
     }
 
     public void validate(ONode data) throws SchemaException {

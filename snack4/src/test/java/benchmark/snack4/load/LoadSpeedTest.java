@@ -1,7 +1,7 @@
-package benchmark.load;
+package benchmark.snack4.load;
 
-import benchmark.load._models.UserGroupModel;
-import benchmark.load._models.UserModel;
+import benchmark.snack4.load._models.UserGroupModel;
+import benchmark.snack4.load._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 

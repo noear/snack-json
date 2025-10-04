@@ -1,4 +1,4 @@
-package features.json.writer;
+package features.snack4.json.writer;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;

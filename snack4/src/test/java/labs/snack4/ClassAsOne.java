@@ -1,4 +1,4 @@
-package labs;
+package labs.snack4;
 
 import java.io.IOException;
 import java.nio.file.Files;
