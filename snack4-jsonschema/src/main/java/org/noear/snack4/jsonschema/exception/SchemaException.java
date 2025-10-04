@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.exception;
+package org.noear.snack4.jsonschema.exception;
+
+import org.noear.snack4.exception.SnackException;
 
 /**
  * 模式验证异常
  */
-public class SchemaException extends RuntimeException {
+public class SchemaException extends SnackException {
     public SchemaException(String message) {
         super(message);
     }

@@ -18,8 +18,16 @@ package org.noear.snack4.exception;
 /**
  * @author noear 2025/3/16 created
  */
-public class AnnotationProcessException extends SnackException {
-    public AnnotationProcessException(String message, Throwable cause) {
+public class SnackException extends RuntimeException {
+    public SnackException(String message) {
+        super(message);
+    }
+
+    public SnackException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public SnackException(Throwable cause) {
+        super(cause);
     }
 }

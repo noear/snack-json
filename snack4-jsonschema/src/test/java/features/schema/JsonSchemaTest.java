@@ -2,7 +2,7 @@ package features.schema;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.SchemaException;
+import org.noear.snack4.jsonschema.exception.SchemaException;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.jsonschema.JsonSchema;
 
