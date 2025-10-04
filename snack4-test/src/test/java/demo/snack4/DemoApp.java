@@ -23,9 +23,6 @@ public class DemoApp {
                 .dateFormat(new SimpleDateFormat("yyyy-MM"))
                 .build();
 
-        options.getFactory()
-
-
         String json = ONode.load(null, options).toJson();
     }
 }
