@@ -23,7 +23,6 @@ import org.noear.snack4.codec.util.FieldWrapper;
 import org.noear.snack4.codec.util.ReflectionUtil;
 
 import java.lang.reflect.Array;
-import java.time.*;
 import java.util.*;
 
 /**
@@ -122,9 +121,7 @@ public class ObjectEncoder {
             return codec.encode(opts, attr, value);
         }
 
-        if (value instanceof Enum) {
-            return _EnumEncoder.getInstance().encode(opts, attr, (Enum) value);
-        } else if (value instanceof Collection) {
+        if (value instanceof Collection) {
             return convertCollectionToNode((Collection<?>) value, visited, opts);
         } else if (value instanceof Map) {
             return convertMapToNode((Map<?, ?>) value, visited, opts);

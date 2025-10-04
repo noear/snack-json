@@ -3,21 +3,24 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeEncoder;
 import org.noear.snack4.codec.NodePatternEncoder;
+import org.noear.snack4.codec.util.BeanUtil;
+
+import java.sql.Clob;
 
 /**
  *
  * @author noear 2025/10/3 created
+ *
  */
-public class NumberPatternEncoder implements NodePatternEncoder<Number> {
+public class _ClobPatternEncoder implements NodePatternEncoder<Clob> {
     @Override
     public boolean canEncode(Object value) {
-        return value instanceof Number;
+        return value instanceof Clob;
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Number value) {
-        return new ONode(value);
+    public ONode encode(Options opts, ONodeAttr attr, Clob value) {
+        return new ONode(BeanUtil.clobToString(value));
     }
 }

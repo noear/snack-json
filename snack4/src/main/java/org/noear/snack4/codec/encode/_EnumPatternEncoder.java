@@ -3,18 +3,18 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeEncoder;
+import org.noear.snack4.codec.NodePatternEncoder;
 
 /**
  *
  * @author noear 2025/10/3 created
  *
  */
-public class _EnumEncoder implements NodeEncoder<Enum> {
-    private static final _EnumEncoder instance = new _EnumEncoder();
+public class _EnumPatternEncoder implements NodePatternEncoder<Enum> {
 
-    public static _EnumEncoder getInstance() {
-        return instance;
+    @Override
+    public boolean canEncode(Object value) {
+        return value.getClass().isEnum();
     }
 
     @Override

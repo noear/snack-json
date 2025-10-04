@@ -91,12 +91,6 @@ public class ObjectDecoder {
             return decoder.decode(opts, null, node, clazz);
         }
 
-        if (clazz.isArray()) {
-            return _ArrayDecoder.instance().decode(opts, null, node, clazz);
-        } else if (clazz.isEnum()) {
-            return _EnumDecode.getInstance().decode(opts, null, node, clazz);
-        }
-
         Object bean = null;
 
         ObjectFactory factory = getObjectFactory(opts, clazz);
@@ -203,11 +197,7 @@ public class ObjectDecoder {
             return decoder.decode(opts, attr, node, clazz);
         }
 
-        if (clazz.isArray()) {
-            return _ArrayDecoder.instance().decode(opts, null, node, clazz);
-        } else if (clazz.isEnum()) {
-            return _EnumDecode.getInstance().decode(opts, null, node, clazz);
-        } else if (clazz == Object.class) {
+        if (clazz == Object.class) {
             return node.getValue();
         }
 

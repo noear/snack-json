@@ -3,7 +3,7 @@ package org.noear.snack4.codec.decode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.NodeDecoder;
+import org.noear.snack4.codec.NodePatternDecoder;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
  * @author noear 2025/10/3 created
  *
  */
-public class _EnumDecode implements NodeDecoder<Object> {
-    private static final _EnumDecode instance = new _EnumDecode();
+public class _EnumPatternDecoder implements NodePatternDecoder<Object> {
 
-    public static _EnumDecode getInstance() {
-        return instance;
+    @Override
+    public boolean canDecode(Class<?> clazz) {
+        return clazz.isEnum();
     }
 
     @Override

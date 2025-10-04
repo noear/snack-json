@@ -22,13 +22,26 @@ import java.util.*;
  */
 public class CodecRepository {
     private static final Map<Class<?>, NodeDecoder<?>> DECODERS = new HashMap<>();
+    private static final List<NodePatternDecoder<?>> PATTERN_DECODERS = new ArrayList<>();
     private static final Map<Class<?>, ObjectFactory<?>> FACTORYS = new HashMap<>();
 
     private static final Map<Class<?>, NodeEncoder<?>> ENCODERS = new HashMap<>();
     private static final List<NodePatternEncoder<?>> PATTERN_ENCODERS = new ArrayList<>();
 
+    public static void add(NodePatternDecoder decoder) {
+        PATTERN_DECODERS.add(decoder);
+    }
+
+    public static void add(NodePatternEncoder decoder) {
+        PATTERN_ENCODERS.add(decoder);
+    }
+
     public static <T> void add(Class<T> type, NodeDecoder<T> decoder) {
-        DECODERS.put(type, decoder);
+        if (decoder instanceof NodePatternDecoder<?>) {
+            PATTERN_DECODERS.add((NodePatternDecoder<?>) decoder);
+        } else {
+            DECODERS.put(type, decoder);
+        }
     }
 
     public static <T> void add(Class<T> type, ObjectFactory<T> factory) {
@@ -38,19 +51,28 @@ public class CodecRepository {
     public static <T> void add(Class<T> type, NodeEncoder<T> encoder) {
         if (encoder instanceof NodePatternEncoder) {
             PATTERN_ENCODERS.add((NodePatternEncoder<T>) encoder);
+        } else {
+            ENCODERS.put(type, encoder);
         }
-        ENCODERS.put(type, encoder);
     }
 
     public static NodeDecoder getNodeDecoder(Options opts, Class<?> clazz) {
         // 优先使用自定义编解码器
         NodeDecoder decoder = opts.getNodeDecoder(clazz);
-        if (decoder != null) {
-            return decoder;
+        if (decoder == null) {
+            decoder = DECODERS.get(clazz);
+            ;
         }
 
-        //如果没有，用默认解码库
-        return DECODERS.get(clazz);
+        if (decoder == null) {
+            for (NodePatternDecoder decoder1 : PATTERN_DECODERS) {
+                if (decoder1.canDecode(clazz)) {
+                    return decoder1;
+                }
+            }
+        }
+
+        return decoder;
     }
 
     public static ObjectFactory getObjectFactory(Options opts, Class<?> clazz) {
@@ -80,6 +102,9 @@ public class CodecRepository {
     }
 
     private static void initDecoders() {
+        add(new _ArrayPatternDecoder());
+        add(new _EnumPatternDecoder());
+
         add(Properties.class, new PropertiesDecoder());
         add(InetSocketAddress.class, new InetSocketAddressDecoder());
         add(SimpleDateFormat.class, new SimpleDateFormatDecoder());
@@ -116,17 +141,18 @@ public class CodecRepository {
     }
 
     private static void initEncoders() {
-        add(Calendar.class, new CalendarPatternEncoder());
-        add(Clob.class, new ClobPatternEncoder());
+        add(new _CalendarPatternEncoder());
+        add(new _ClobPatternEncoder());
+        add(new _ArrayPatternEncoder());
 
         add(ONode.class, new ONodeEncoder());
         add(Properties.class, new PropertiesEncoder());
         add(InetSocketAddress.class, new InetSocketAddressEncoder());
         add(SimpleDateFormat.class, new SimpleDateFormatEncoder());
         add(File.class, new FileEncoder());
-        add(Calendar.class, new CalendarPatternEncoder());
+        add(Calendar.class, new _CalendarPatternEncoder());
         add(Class.class, new ClassEncoder());
-        add(Clob.class, new ClobPatternEncoder());
+        add(Clob.class, new _ClobPatternEncoder());
         add(Currency.class, new CurrencyEncoder());
         add(TimeZone.class, new TimeZoneEncoder());
         add(UUID.class, new UUIDEncoder());
@@ -147,7 +173,7 @@ public class CodecRepository {
         add(Boolean.class, new BooleanEncoder());
         add(Boolean.TYPE, new BooleanEncoder());
 
-        add(Number.class, new NumberPatternEncoder());
+        add(Number.class, new _NumberPatternEncoder());
     }
 
     static {
