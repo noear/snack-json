@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.TimeModel;
+import demo.snack3._models.TimeModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 

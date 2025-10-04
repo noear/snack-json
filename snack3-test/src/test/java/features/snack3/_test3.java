@@ -1,7 +1,7 @@
 package features.snack3;
 
-import _models.PanOcrModel;
-import _models.ShanYunResModel;
+import demo.snack3._models.PanOcrModel;
+import demo.snack3._models.ShanYunResModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;

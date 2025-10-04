@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _model5.TypeC;
+import demo.snack3._model5.TypeC;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;
@@ -65,8 +65,8 @@ public class PropertiesTest {
     @Test
     public void test2() {
         Properties props = new Properties();
-        props.setProperty("typeA", "_model5.TypeAImpl");
-        props.setProperty("typeB", "_model5.TypeBImpl");
+        props.setProperty("typeA", "demo.snack3._model5.TypeAImpl");
+        props.setProperty("typeB", "demo.snack3._model5.TypeBImpl");
 
         TypeC typeC = ONode.loadObj(props).toObject(TypeC.class);
         assert typeC.typeA != null;

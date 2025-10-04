@@ -1,7 +1,7 @@
 package features.snack3;
 
-import demo.Book;
-import demo.enums.BookType;
+import demo.snack3.Book;
+import demo.snack3.enums.BookType;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Context;

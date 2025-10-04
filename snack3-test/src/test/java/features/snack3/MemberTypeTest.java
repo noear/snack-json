@@ -1,7 +1,7 @@
 package features.snack3;
 
-import _model3.Server;
-import _models.DateModel2;
+import demo.snack3._model3.Server;
+import demo.snack3._models.DateModel2;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 

@@ -1,7 +1,7 @@
 package features.snack3;
 
-import _models.AttrModel;
-import _models.UserModel3;
+import demo.snack3._models.AttrModel;
+import demo.snack3._models.UserModel3;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;

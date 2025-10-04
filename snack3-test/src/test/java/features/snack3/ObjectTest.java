@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.*;
+import demo.snack3._models.*;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;

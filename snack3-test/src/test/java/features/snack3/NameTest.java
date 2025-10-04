@@ -1,7 +1,7 @@
 package features.snack3;
 
-import _models.BookModel;
-import _models.BookViewModel;
+import demo.snack3._models.BookModel;
+import demo.snack3._models.BookViewModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;

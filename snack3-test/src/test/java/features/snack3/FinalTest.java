@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _model3.BSProps;
+import demo.snack3._model3.BSProps;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;

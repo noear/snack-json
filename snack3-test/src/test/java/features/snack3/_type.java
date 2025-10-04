@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.UserModel;
+import demo.snack3._models.UserModel;
 import com.alibaba.fastjson.JSON;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;

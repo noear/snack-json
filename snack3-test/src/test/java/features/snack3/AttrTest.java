@@ -1,6 +1,7 @@
 package features.snack3;
 
-import _models.UserModel2;
+import demo.snack3._models.UserModel2;
+import demo.snack3._models.NodeEncoderImpl;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 
@@ -37,11 +38,11 @@ public class AttrTest {
 
     @Test
     public void test2_1(){
-        String json = "{id:1,name:'noear',note:'test',nodeEncoder:'_models.NodeEncoderImpl'}";
+        String json = "{id:1,name:'noear',note:'test',nodeEncoder:'demo.snack3._models.NodeEncoderImpl'}";
         UserModel2 user =  ONode.deserialize(json,UserModel2.class );
 
         assert user.nodeEncoder != null;
-        assert user.nodeEncoder.getClass() == _models.NodeEncoderImpl.class;
+        assert user.nodeEncoder.getClass() == NodeEncoderImpl.class;
         assert "noear".equals(user.name);
         assert null == user.note;
     }

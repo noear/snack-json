@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.Point;
+import demo.snack3._models.Point;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 

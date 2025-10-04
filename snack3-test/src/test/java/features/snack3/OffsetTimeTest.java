@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.OffsetTimeModel;
+import demo.snack3._models.OffsetTimeModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Context;

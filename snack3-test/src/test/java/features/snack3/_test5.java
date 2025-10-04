@@ -10,8 +10,8 @@ import org.noear.snack.ONode;
 public class _test5 {
     @Test
     public void test() {
-        String poc = "{\"@type\":\"features.test5.A\"," +
-                "\"b\":{\"@type\":\"features.test5.B\",\"bList\":\"str1\"}}";
+        String poc = "{\"@type\":\"features.snack3.test5.A\"," +
+                "\"b\":{\"@type\":\"features.snack3.test5.B\",\"bList\":\"str1\"}}";
         System.out.println(poc);
         A o = ONode.deserialize(poc);
         System.out.println(o.getB().getbList().size());

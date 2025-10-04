@@ -1,8 +1,8 @@
 package features.snack3;
 
-import _models.ComplexModel;
-import _models.Person;
-import _models.Point;
+import demo.snack3._models.ComplexModel;
+import demo.snack3._models.Person;
+import demo.snack3._models.Point;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;

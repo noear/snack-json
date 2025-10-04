@@ -1,8 +1,8 @@
 package features.snack3;
 
-import _models.DateModel;
-import _models.DateModel2;
-import _models.DateModel3;
+import demo.snack3._models.DateModel;
+import demo.snack3._models.DateModel2;
+import demo.snack3._models.DateModel3;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;

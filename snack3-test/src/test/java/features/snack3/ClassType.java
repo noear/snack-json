@@ -1,8 +1,8 @@
 package features.snack3;
 
-import _model5.TypeAImpl;
-import _model5.TypeBImpl;
-import _model5.TypeC;
+import demo.snack3._model5.TypeAImpl;
+import demo.snack3._model5.TypeBImpl;
+import demo.snack3._model5.TypeC;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Feature;
@@ -21,7 +21,7 @@ public class ClassType {
        String rst = ONode.serialize(c);
        System.out.println(rst);
 
-       assert "{\"@type\":\"_model5.TypeC\",\"typeA\":{\"@type\":\"_model5.TypeAImpl\"},\"typeB\":{\"@type\":\"_model5.TypeBImpl\"}}".equals(rst);
+       assert "{\"@type\":\"demo.snack3._model5.TypeC\",\"typeA\":{\"@type\":\"demo.snack3._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack3._model5.TypeBImpl\"}}".equals(rst);
     }
 
     @Test
@@ -33,6 +33,6 @@ public class ClassType {
         String rst = ONode.load(c, Options.serialize().add(Feature.NotWriteRootClassName)).toJson();
         System.out.println(rst);
 
-        assert "{\"typeA\":{\"@type\":\"_model5.TypeAImpl\"},\"typeB\":{\"@type\":\"_model5.TypeBImpl\"}}".equals(rst);
+        assert "{\"typeA\":{\"@type\":\"demo.snack3._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack3._model5.TypeBImpl\"}}".equals(rst);
     }
 }

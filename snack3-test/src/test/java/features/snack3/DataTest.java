@@ -1,6 +1,6 @@
 package features.snack3;
 
-import _models.*;
+import demo.snack3._models.*;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 import org.noear.snack.core.Options;

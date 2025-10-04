@@ -1,7 +1,7 @@
 package features.snack3;
 
-import _models.AnnoTreeDTO;
-import _models.UserModel2;
+import demo.snack3._models.AnnoTreeDTO;
+import demo.snack3._models.UserModel2;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 

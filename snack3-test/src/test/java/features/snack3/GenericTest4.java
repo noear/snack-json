@@ -1,9 +1,9 @@
 package features.snack3;
 
-import _model6.PageInfo;
-import _model6.PageResult;
-import _model7.PageInfo2;
-import _model7.PageResult2;
+import demo.snack3._model6.PageInfo;
+import demo.snack3._model6.PageResult;
+import demo.snack3._model7.PageInfo2;
+import demo.snack3._model7.PageResult2;
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;
 
