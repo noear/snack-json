@@ -144,6 +144,7 @@ public class CodecRepository {
         add(new _CalendarPatternEncoder());
         add(new _ClobPatternEncoder());
         add(new _ArrayPatternEncoder());
+        add(new _EnumPatternEncoder());
 
         add(ONode.class, new ONodeEncoder());
         add(Properties.class, new PropertiesEncoder());

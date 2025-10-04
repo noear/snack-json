@@ -91,7 +91,7 @@ public class JsonBeanCodecSimpleTest {
     }
 
     // 测试用例 5: 枚举处理
-    public enum TestEnum { OK, ERROR }
+    public static enum TestEnum { OK, ERROR }
     public static class EnumBean {
         public TestEnum status;
     }
