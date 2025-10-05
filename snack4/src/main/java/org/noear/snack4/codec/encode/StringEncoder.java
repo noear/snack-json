@@ -20,7 +20,7 @@ public class StringEncoder implements ObjectEncoder<String> {
                 char c2 = value.charAt(value.length() - 1);
 
                 if ((c1 == '{' && c2 == '}') || (c1 == '[' && c2 == ']')) {
-                    return ONode.load(value);
+                    return ONode.fromJson(value);
                 }
             }
         }

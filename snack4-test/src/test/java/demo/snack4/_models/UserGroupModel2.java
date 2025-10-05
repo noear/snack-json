@@ -1,0 +1,27 @@
+package demo.snack4._models;
+
+import demo.snack3._models.UserModel;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * 2019.01.30
+ *
+ * @author cjl
+ */
+public class UserGroupModel2 {
+    public long id;
+    public UserModel[] users;
+    public Map<Integer,UserModel> users2;
+    public Set<UserModel> users3;
+    public String[] names;
+    public short[] ids;
+    public Integer[] iids;
+    public BigDecimal dd;
+    public Timestamp tt1;
+    public Date tt2;
+}

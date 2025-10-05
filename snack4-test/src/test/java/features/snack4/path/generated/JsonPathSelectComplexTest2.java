@@ -22,7 +22,7 @@ public class JsonPathSelectComplexTest2 {
             "        }";
 
     private ONode loadRoot() {
-        return ONode.load(BOOKS_JSON);
+        return ONode.fromJson(BOOKS_JSON);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(2, result.size());
         assertArrayEquals(new String[]{"Book A", "Book E"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(2, result.size());
         assertArrayEquals(new String[]{"Book B", "Book C"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(2, result.size());
         assertArrayEquals(new String[]{"Book B", "Book D"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(2, result.size());
         assertArrayEquals(new String[]{"Book A", "Book E"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(3, result.size());
         assertArrayEquals(new String[]{"Book C", "Book D", "Book E"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(1, result.size());
         assertArrayEquals(new String[]{"Book C"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(3, result.size());
         assertArrayEquals(new String[]{"Book A", "Book B", "Book C"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 
     @Test
@@ -198,6 +198,6 @@ public class JsonPathSelectComplexTest2 {
 
         assertEquals(1, result.size());
         assertArrayEquals(new String[]{"Book B"},
-                result.select("$[*].title").toBean(String[].class));
+                result.select("$[*].title").to(String[].class));
     }
 }

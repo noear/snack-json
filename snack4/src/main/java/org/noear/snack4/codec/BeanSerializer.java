@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.codec;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
@@ -32,17 +33,21 @@ import java.util.*;
  */
 public class BeanSerializer {
     // 序列化：对象转ONode
-    public static ONode serialize(Object bean) {
-        return serialize(bean, Options.def());
+    public static ONode serialize(Object value) {
+        return serialize(value, Options.def());
     }
 
-    public static ONode serialize(Object bean, Options opts) {
-        if (bean == null) {
+    public static ONode serialize(Object value, Options opts) {
+        if (value == null) {
             return new ONode(null);
         }
 
+        if(value instanceof ONode){
+            return (ONode)value;
+        }
+
         try {
-            return convertValueToNode(bean, null, new IdentityHashMap<>(), opts);
+            return convertValueToNode(value, null, new IdentityHashMap<>(), opts);
         } catch (Throwable e) {
             if (e instanceof StackOverflowError) {
                 throw (StackOverflowError) e;
@@ -96,7 +101,12 @@ public class BeanSerializer {
             visited.put(bean, null);
         }
 
-        ONode tmp = new ONode(new LinkedHashMap<>());
+        ONode tmp = new ONode().newObject();
+
+        if (opts.isFeatureEnabled(Feature.Write_ClassName)) {
+            tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
+        }
+
         for (FieldWrapper field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
             ONode fieldNode = convertValueToNode(field.getField().get(bean), field.getAttr(), visited, opts);
             tmp.set(field.getAliasName(), fieldNode);
@@ -106,7 +116,7 @@ public class BeanSerializer {
 
     // 处理数组类型
     private static ONode convertArrayToNode(Object array, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode(new ArrayList<>());
+        ONode tmp = new ONode().newArray();
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
             tmp.add(convertValueToNode(Array.get(array, i), null, visited, opts));
@@ -116,7 +126,7 @@ public class BeanSerializer {
 
     // 处理集合类型
     private static ONode convertCollectionToNode(Collection<?> collection, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode(new ArrayList<>());
+        ONode tmp = new ONode().newArray();
         for (Object item : collection) {
             tmp.add(convertValueToNode(item, null, visited, opts));
         }
@@ -125,7 +135,7 @@ public class BeanSerializer {
 
     // 处理Map类型
     private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode(new LinkedHashMap<>());
+        ONode tmp = new ONode().newObject();
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
             tmp.set(String.valueOf(entry.getKey()), valueNode);

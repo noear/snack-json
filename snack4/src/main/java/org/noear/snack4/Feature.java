@@ -95,13 +95,26 @@ public enum Feature {
     Read_UseDateFormat(false),
 
 
+    Read_UseGetter(false),
+    Read_UseOnlyGetter(false),
+
+
     //-----------------------------
     // 写入（序列化）
     //-----------------------------
+    Write_QuoteFieldNames(true),
+
     /**
      * 序列化时是否输出 null 值
      */
     Write_SkipNullValue(false),
+
+    Write_SerializeNulls(false),
+
+    Write_StringNullAsEmpty(false),
+
+    Write_UseSetter(false),
+    Write_UseOnlySetter(false),
 
     /**
      * 输出时使用漂亮格式（带缩进）
@@ -126,7 +139,11 @@ public enum Feature {
     /**
      * 写入类名
      */
-    Write_TypeName(false),
+    Write_ClassName(false),
+
+    Write_ArrayClassName(false),
+
+    Write_NotRootClassName(false),
 
     /**
      * 处理大数字时使用字符串模式（避免精度丢失）
@@ -137,6 +154,11 @@ public enum Feature {
      * 转义非 ASCII 字符
      */
     Write_EscapeNonAscii(false),
+    /**
+     * 使用日期格式化（默认使用时间戳）
+     */
+    Write_UseDateFormat(false),
+    Write_UseNumberString(false),
     ;
 
 
@@ -154,5 +176,16 @@ public enum Feature {
 
     public int mask() {
         return _mask;
+    }
+
+    public static int DEFAULT() {
+        int features = 0;
+        // 合并特性开关
+        for (Feature feat : Feature.values()) {
+            if (feat.enabledByDefault()) {
+                features |= feat.mask();
+            }
+        }
+        return features;
     }
 }

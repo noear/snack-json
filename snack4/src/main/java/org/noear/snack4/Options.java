@@ -20,95 +20,82 @@ import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.ObjectFactory;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
  * JSON 处理选项（线程安全配置）
  */
 public final class Options {
-    /**
-     * 默认类型的key
-     */
+    //默认类型的key
     public static final String DEF_TYPE_PROPERTY_NAME = "@type";
-
-    /**
-     * 默认时区
-     */
+    //默认时区
     public static final TimeZone DEF_TIME_ZONE = TimeZone.getDefault();
-    /**
-     * 默认偏移时区
-     */
+    //默认偏移时区
     public static final ZoneOffset DEF_OFFSET = OffsetDateTime.now().getOffset();
-    /**
-     * 默认地区
-     */
+    //默认地区
     public static final Locale DEF_LOCALE = Locale.getDefault();
-    /**
-     * 默认时间格式器
-     */
-    public static DateFormat DEF_DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
-    /**
-     * 默认选项实例
-     */
-    private static final Options DEFAULT = new Options();
+    //默认时间格式器
+    public static final DateTimeFormatter DEF_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    //默认特性
+    public static final int DEF_FEATURES = Feature.DEFAULT();
+    //黑碎选项（私有）
+    private static final Options DEF_OPTIONS = new Options();
 
     //编码仓库
-    private final CodecLib codecLib;
+    private final CodecLib codecLib = CodecLib.newInstance();
     // 特性开关（使用位掩码存储）
-    private int enabledFeatures;
+    private int features = DEF_FEATURES;
     // 时间格式
-    private  DateFormat dateFormat;
-
+    private DateTimeFormatter dateFormat = DEF_DATETIME_FORMAT;
     // 读取最大深度
-    private  int readMaxDepth;
-
+    private int readMaxDepth = 512;
     // 书写缩进
-    private  String writeIndent;
-
-
+    private String writeIndent = "  ";
+    // 类型属性名
+    private String typePropertyName = DEF_TYPE_PROPERTY_NAME;
+    // 类加载器
+    private ClassLoader classLoader;
+    // 允许安全类
     private Set<Class<?>> allowedClasses = new HashSet<>();
+    private Locale locale = DEF_LOCALE;
+
+    private TimeZone timeZone = DEF_TIME_ZONE;
 
     public void allowClass(Class<?> clazz) {
         allowedClasses.add(clazz);
-    }
-
-    public Options() {
-        // 合并特性开关
-        for (Feature feat : Feature.values()) {
-            if (feat.enabledByDefault()) {
-                enabledFeatures |= feat.mask();
-            }
-        }
-
-        // 通用配置
-        this.dateFormat = DEF_DATETIME_FORMAT;
-        this.codecLib = CodecLib.newInstance();
-
-        // 输入配置
-        this.readMaxDepth = 512;
-
-        // 输出配置
-        this.writeIndent = "  ";
     }
 
     /**
      * 是否启用指定特性
      */
     public boolean isFeatureEnabled(Feature feature) {
-        return (enabledFeatures & feature.mask()) != 0;
+        return (features & feature.mask()) != 0;
+    }
+
+    public int getFeatures() {
+        return features;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public TimeZone getTimeZone() {
+        return timeZone;
     }
 
     /**
      * 获取日期格式
      */
-    public DateFormat getDateFormat() {
+    public DateTimeFormatter getDateFormat() {
         return dateFormat;
+    }
+
+    public String getTypePropertyName() {
+        return typePropertyName;
     }
 
     /**
@@ -120,7 +107,6 @@ public final class Options {
 
     /**
      * 获取编码器
-     *
      */
     public ObjectEncoder<?> getEncoder(Object value) {
         return codecLib.getEncoder(value);
@@ -128,7 +114,6 @@ public final class Options {
 
     /**
      * 获取对象工厂
-     *
      */
     public ObjectFactory<?> getFactory(Class<?> clazz) {
         return codecLib.getFactory(clazz);
@@ -153,7 +138,7 @@ public final class Options {
      * 添加特性
      */
     public Options enableFeature(Feature feature) {
-        enabledFeatures |= feature.mask();
+        features |= feature.mask();
         return this;
     }
 
@@ -161,16 +146,33 @@ public final class Options {
      * 移除特性
      */
     public Options disableFeature(Feature feature) {
-        enabledFeatures &= ~ feature.mask();
+        features &= ~feature.mask();
         return this;
     }
-
 
     /**
      * 设置日期格式
      */
-    public Options dateFormat(DateFormat format) {
+    public Options dateFormat(DateTimeFormatter format) {
         this.dateFormat = format;
+        return this;
+    }
+
+    /**
+     * 设置日期格式
+     */
+    public Options dateFormatText(String format) {
+        this.dateFormat = DateTimeFormatter.ofPattern(format);
+        return this;
+    }
+
+    public Options locale(Locale locale) {
+        this.locale = locale;
+        return this;
+    }
+
+    public Options timeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
         return this;
     }
 
@@ -190,6 +192,10 @@ public final class Options {
         return this;
     }
 
+    /**
+     * 注册自定义工厂
+     *
+     */
     public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
         codecLib.addFactory(type, factory);
         return this;
@@ -211,18 +217,31 @@ public final class Options {
         return this;
     }
 
+    public Options classLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+        return this;
+    }
+
 
     /**
      * 获取默认选项
      */
     public static Options def() {
-        return DEFAULT;
+        return DEF_OPTIONS;
     }
 
-    public static Options of(Feature... features) {
+    public static Options enableOf(Feature... features) {
         Options tmp = new Options();
         for (Feature f : features) {
             tmp.enableFeature(f);
+        }
+        return tmp;
+    }
+
+    public static Options disableOf(Feature... features) {
+        Options tmp = new Options();
+        for (Feature f : features) {
+            tmp.disableFeature(f);
         }
         return tmp;
     }

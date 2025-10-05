@@ -5,7 +5,6 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,8 +19,8 @@ public class DemoApp {
                     return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
                 })
                 .enableFeature(Feature.Write_PrettyFormat)
-                .dateFormat(new SimpleDateFormat("yyyy-MM"));
+                .dateFormatText("yyyy-MM");
 
-        String json = ONode.load(null, options).toJson();
+        String json = ONode.fromJson(null, options).toJson();
     }
 }

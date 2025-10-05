@@ -15,7 +15,7 @@ public class SpeedJsonPathTest {
         //1000000=>225,225,232
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$..a");
         System.out.println(tmp);//打印
@@ -38,7 +38,7 @@ public class SpeedJsonPathTest {
         //1000000=>277,292,275
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$..*");
         System.out.println(tmp);//打印
@@ -61,7 +61,7 @@ public class SpeedJsonPathTest {
         //1000000=>133,137,131
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$.data.list[1,4]");
         System.out.println(tmp);//打印
@@ -84,7 +84,7 @@ public class SpeedJsonPathTest {
         //1000000=>143,145,146
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$.data.list[1:4]");
         System.out.println(tmp);//打印
@@ -107,7 +107,7 @@ public class SpeedJsonPathTest {
         //1000000=>97,100,97
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$.data.ary2[0].a");
         System.out.println(tmp);//打印
@@ -130,7 +130,7 @@ public class SpeedJsonPathTest {
         //1000000=>310,311,314
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$..ary2[0].a");
         System.out.println(tmp);//打印
@@ -153,7 +153,7 @@ public class SpeedJsonPathTest {
         //1000000=>678,674,667
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp30 = n.select("$..ary2[0].a");
         assert tmp30.size() == 1;
@@ -178,7 +178,7 @@ public class SpeedJsonPathTest {
         //1000000=>84,86,80
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         ONode tmp = n.select("$.data.ary2[1].b.c");
         assert "ddd".equals(tmp.getString());
@@ -200,7 +200,7 @@ public class SpeedJsonPathTest {
         //1000000=>173,152,155;;;239,235,237
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.fromJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
         long start = System.currentTimeMillis();
 
         ONode tmp = n.select("$.data.ary2[*].b.c");
@@ -222,7 +222,7 @@ public class SpeedJsonPathTest {
         //1000000=>580,535,532
         //
         //1.加载json
-        ONode n = ONode.load("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
+        ONode n = ONode.fromJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
         long start = System.currentTimeMillis();
 
         ONode tmp = n.select("$..b[?(@.c == 12)]");
@@ -244,7 +244,7 @@ public class SpeedJsonPathTest {
         //1000000=>279,282,285
         //
         //1.加载json
-        ONode n = ONode.load("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
+        ONode n = ONode.fromJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
         ONode tmp = n.select("$..c");
         assert tmp.size() == 3;
@@ -276,7 +276,7 @@ public class SpeedJsonPathTest {
         //1000000=>444,423,429
         //
         //1.加载json
-        ONode n = ONode.load("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
+        ONode n = ONode.fromJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
         ONode tmp = n.select("$[?(@.c =~ /.*a+/)]");
         System.out.println(tmp);

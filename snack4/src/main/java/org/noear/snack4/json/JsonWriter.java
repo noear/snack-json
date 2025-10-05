@@ -45,26 +45,26 @@ public class JsonWriter {
 
     public void write(ONode node) throws IOException {
         switch (node.getType()) {
-            case TYPE_OBJECT:
+            case Object:
                 writeObject(node.getObject());
                 break;
-            case TYPE_ARRAY:
+            case Array:
                 writeArray(node.getArray());
                 break;
-            case TYPE_STRING:
+            case String:
                 writeString(node.getString());
                 break;
-            case TYPE_NUMBER:
+            case Number:
                 if(opts.isFeatureEnabled(Feature.Write_UseBigNumberMode)) {
                     writeString(String.valueOf(node.getValue()));
                 }else {
                     writeNumber(node.getNumber());
                 }
                 break;
-            case TYPE_BOOLEAN:
+            case Boolean:
                 writer.write(node.getBoolean() ? "true" : "false");
                 break;
-            case TYPE_NULL:
+            case Null:
                 writer.write("null");
                 break;
         }
@@ -86,7 +86,7 @@ public class JsonWriter {
 
             String key = opts.isFeatureEnabled(Feature.Write_UseUnderlineStyle) ?
                     toUnderlineName(entry.getKey()) : entry.getKey();
-            writeString(key);
+            writeKey(key);
             writer.write(':');
             if (opts.isFeatureEnabled(Feature.Write_PrettyFormat)) {
                 writer.write(' ');
@@ -130,6 +130,14 @@ public class JsonWriter {
             writer.write('"' + num.toString() + '"');
         } else {
             writer.write(num.toString());
+        }
+    }
+
+    private void writeKey(String s) throws IOException {
+        if (opts.isFeatureEnabled(Feature.Write_QuoteFieldNames)) {
+            writeString(s);
+        } else {
+            writer.write(escapeString(s, opts));
         }
     }
 

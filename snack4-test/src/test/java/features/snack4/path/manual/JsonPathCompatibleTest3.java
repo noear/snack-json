@@ -27,7 +27,7 @@ public class JsonPathCompatibleTest3 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.load(json).select(jsonpathStr);
+        ONode tmp = ONode.fromJson(json).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

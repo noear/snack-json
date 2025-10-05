@@ -1,5 +1,7 @@
 package org.noear.snack4.util;
 
+import org.noear.snack4.Feature;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -22,6 +24,15 @@ public class Asserts {
      */
     public static boolean isEmpty(Collection s) {
         return s == null || s.size() == 0;
+    }
+
+    /**
+     * 检查数组是否为空
+     *
+     * @param s 集合
+     */
+    public static boolean isEmpty(Feature[] s) {
+        return s == null || s.length == 0;
     }
 
     /**

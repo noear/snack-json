@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class JsonSchema {
     public static JsonSchema load(String jsonSchema) {
-        return new JsonSchema(ONode.load(jsonSchema));
+        return new JsonSchema(ONode.fromJson(jsonSchema));
     }
 
     public static JsonSchema from(ONode jsonSchema) {
@@ -291,13 +291,13 @@ public class JsonSchema {
         if (a.getType() != b.getType()) return false;
 
         switch (a.getType()) {
-            case TYPE_NULL: return true;
-            case TYPE_BOOLEAN: return a.getBoolean() == b.getBoolean();
-            case TYPE_NUMBER:
+            case Null: return true;
+            case Boolean: return a.getBoolean() == b.getBoolean();
+            case Number:
                 return a.getNumber().doubleValue() == b.getNumber().doubleValue();
-            case TYPE_STRING:
+            case String:
                 return a.getString().equals(b.getString());
-            case TYPE_ARRAY:
+            case Array:
                 List<ONode> aArr = a.getArray();
                 List<ONode> bArr = b.getArray();
                 if (aArr.size() != bArr.size()) return false;
@@ -305,7 +305,7 @@ public class JsonSchema {
                     if (!deepEquals(aArr.get(i), bArr.get(i))) return false;
                 }
                 return true;
-            case TYPE_OBJECT:
+            case Object:
                 Map<String, ONode> aObj = a.getObject();
                 Map<String, ONode> bObj = b.getObject();
                 if (aObj.size() != bObj.size()) return false;

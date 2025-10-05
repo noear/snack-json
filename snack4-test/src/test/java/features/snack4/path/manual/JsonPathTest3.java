@@ -1,7 +1,7 @@
 package features.snack4.path.manual;//package features.query.manual;
 //
 //import org.junit.jupiter.api.Test;
-//import org.noear.snack.ONode;
+//import org.noear.snack4.ONode;
 //
 //import java.util.*;
 //
@@ -308,13 +308,13 @@ package features.snack4.path.manual;//package features.query.manual;
 //    public void test10_3() {
 //        String json = "{\"result\":[]}";
 //
-//        ONode oNode = ONode.load(json).select("$.result[*].amount.max()");
+//        ONode oNode = ONode.fromJson(json).select("$.result[*].amount.max()");
 //        System.out.println(oNode.toString());
 //
 //        assert oNode.getLong() == 0L;
 //
 //
-//        System.out.println(ONode.load(json).select("$.result[*].amount.max()").pathList());
-//        assert ONode.load(json).select("$.result[*].amount.max()").pathList().size() == 0;
+//        System.out.println(ONode.fromJson(json).select("$.result[*].amount.max()").pathList());
+//        assert ONode.fromJson(json).select("$.result[*].amount.max()").pathList().size() == 0;
 //    }
 //}

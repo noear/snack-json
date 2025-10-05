@@ -17,13 +17,17 @@ package org.noear.snack4;
 
 import org.noear.snack4.codec.BeanDeserializer;
 import org.noear.snack4.codec.BeanSerializer;
+import org.noear.snack4.codec.TypeRef;
+import org.noear.snack4.exception.SnackException;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.json.JsonType;
 import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.jsonpath.JsonPathProvider;
+import org.noear.snack4.util.Asserts;
 
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -46,7 +50,7 @@ public final class ONode {
     public transient JsonSource source;
 
     public ONode() {
-        this.type = JsonType.TYPE_NULL;
+        this.type = JsonType.Undefined;
     }
 
     public ONode(Object value) {
@@ -54,39 +58,47 @@ public final class ONode {
         this.type = JsonType.resolveType(value);
     }
 
+    public JsonType nodeType(){
+        return type;
+    }
+
     // Getters and Setters
     public boolean isNull() {
-        return type == JsonType.TYPE_NULL;
+        return type == JsonType.Null || isUndefined();
+    }
+
+    public boolean isUndefined(){
+        return type == JsonType.Undefined;
     }
 
     public boolean isNullOrEmpty() {
-        return type == JsonType.TYPE_NULL ||
-                (type == JsonType.TYPE_OBJECT && getObject().isEmpty()) ||
-                (type == JsonType.TYPE_ARRAY && getArray().isEmpty());
+        return type == JsonType.Null ||
+                (type == JsonType.Object && getObject().isEmpty()) ||
+                (type == JsonType.Array && getArray().isEmpty());
     }
 
     public boolean isBoolean() {
-        return type == JsonType.TYPE_BOOLEAN;
+        return type == JsonType.Boolean;
     }
 
     public boolean isNumber() {
-        return type == JsonType.TYPE_NUMBER;
+        return type == JsonType.Number;
     }
 
     public boolean isString() {
-        return type == JsonType.TYPE_STRING;
+        return type == JsonType.String;
     }
 
     public boolean isDate() {
-        return type == JsonType.TYPE_DATE;
+        return type == JsonType.Date;
     }
 
     public boolean isArray() {
-        return type == JsonType.TYPE_ARRAY;
+        return type == JsonType.Array;
     }
 
     public boolean isObject() {
-        return type == JsonType.TYPE_OBJECT;
+        return type == JsonType.Object;
     }
 
     public boolean isValue() {
@@ -134,7 +146,7 @@ public final class ONode {
     public ONode newObject() {
         if (value == null) {
             value = new LinkedHashMap<>();
-            type = JsonType.TYPE_OBJECT;
+            type = JsonType.Object;
         }
 
         return this;
@@ -143,9 +155,19 @@ public final class ONode {
     public ONode newArray() {
         if (value == null) {
             value = new ArrayList<>();
-            type = JsonType.TYPE_ARRAY;
+            type = JsonType.Array;
         }
 
+        return this;
+    }
+
+    /**
+     * 重命名
+     *
+     */
+    public ONode rename(String oldName, String newName) {
+        ONode tmp = remove(oldName);
+        getObject().put(newName, tmp);
         return this;
     }
 
@@ -169,13 +191,62 @@ public final class ONode {
         return getObject().computeIfAbsent(key, k -> new ONode());
     }
 
-    public void remove(String key) {
-        getObject().remove(key);
+    public ONode remove(String key) {
+        return getObject().remove(key);
     }
 
-    public void setValue(Object value) {
+    public ONode setValue(Object value) {
         this.value = value;
         this.type = JsonType.resolveType(value);
+        return this;
+    }
+
+    public ONode setValue(Number value) {
+        this.value = value;
+        this.type = JsonType.Number;
+        return this;
+    }
+
+    public ONode setValue(Boolean value) {
+        this.value = value;
+        this.type = JsonType.Boolean;
+        return this;
+    }
+
+    public ONode setValue(String value) {
+        this.value = value;
+        this.type = JsonType.String;
+        return this;
+    }
+
+    public ONode setValue(Date value) {
+        this.value = value;
+        this.type = JsonType.Date;
+        return this;
+    }
+
+    public ONode fill(Object source, Feature... features) {
+        ONode oNode = ONode.from(source, features);
+
+        this.value = oNode.value;
+        this.type = oNode.type;
+        return this;
+    }
+
+    public ONode fill(Object source, Options opts) {
+        ONode oNode = ONode.from(source, opts);
+
+        this.value = oNode.value;
+        this.type = oNode.type;
+        return this;
+    }
+
+    public ONode fillJson(String json, Feature... features) {
+        return fillJson(json, Options.enableOf(features));
+    }
+
+    public ONode fillJson(String json, Options opts) {
+        return this.fill(ONode.fromJson(json, opts), opts);
     }
 
     public ONode set(String key, Object value) {
@@ -194,7 +265,7 @@ public final class ONode {
     }
 
     private ONode set0(String key, ONode value) {
-        if (type == JsonType.TYPE_NULL) {
+        if (type == JsonType.Null) {
             newObject();
         }
 
@@ -211,12 +282,12 @@ public final class ONode {
         }
     }
 
-    public void remove(int index) {
+    public ONode remove(int index) {
         if (index < 0) {
             int pos = getArray().size() + index;
-            getArray().remove(pos);
+            return getArray().remove(pos);
         } else {
-            getArray().remove(index);
+            return getArray().remove(index);
         }
     }
 
@@ -236,6 +307,13 @@ public final class ONode {
         return this;
     }
 
+    public ONode addAll(Collection collection) {
+        for (Object o : collection) {
+            add(o);
+        }
+        return this;
+    }
+
     public ONode addNew() {
         newArray();
 
@@ -245,7 +323,7 @@ public final class ONode {
     }
 
     private ONode add0(ONode value) {
-        if (type == JsonType.TYPE_NULL) {
+        if (type == JsonType.Null) {
             newArray();
         }
 
@@ -308,6 +386,10 @@ public final class ONode {
         return jsonPathProvider.select(this, jsonpath);
     }
 
+    public boolean exists(String jsonpath) {
+        return false == select(jsonpath).isNull();
+    }
+
     /**
      * 根据 jsonpath 删除
      */
@@ -327,38 +409,103 @@ public final class ONode {
 
     /// /////////////
 
+
+    public static String toJson(Object object, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return toJson(object, Options.def());
+        } else {
+            return toJson(object, Options.enableOf(features));
+        }
+    }
+
+    public static String toJson(Object object, Options opts) {
+        return ONode.from(object, opts).toJson(opts);
+    }
+
     public static ONode from(Object bean, Options opts) {
         return BeanSerializer.serialize(bean, opts);
     }
 
-    public static ONode from(Object bean) {
-        return BeanSerializer.serialize(bean, Options.def());
+    public static ONode from(Object bean, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return BeanSerializer.serialize(bean, Options.def());
+        } else {
+            return BeanSerializer.serialize(bean, Options.enableOf(features));
+        }
     }
 
-    // 添加带 Options 的静态方法
-    public static ONode load(String json, Options opts) {
+    public static ONode fromJson(String json, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return fromJson(json, Options.def());
+        } else {
+            return fromJson(json, Options.enableOf(features));
+        }
+    }
+
+    public static ONode fromJson(String json, Options opts) {
         try {
             return new JsonReader(new StringReader(json), opts).read();
-        } catch (RuntimeException ex) {
+        } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
-            throw new RuntimeException(ex);
+            throw new SnackException(ex);
         }
     }
 
 
-    // 保持原有方法兼容性
-    public static ONode load(String json) {
-        return load(json, Options.def());
+    public static <T> T fromJson(String json, Type type, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return fromJson(json, type, Options.def());
+        } else {
+            return fromJson(json, type, Options.enableOf(features));
+        }
     }
 
-
-    public <T> T toBean(Class<T> clazz, Options opts) {
-        return BeanDeserializer.deserialize(this, clazz, opts);
+    public static <T> T fromJson(String json, Type type, Options opts) {
+        return ONode.fromJson(json, opts).to(type, opts);
     }
 
-    public <T> T toBean(Class<T> clazz) {
-        return toBean(clazz, Options.def());
+    public static <T> T fromJson(String json, TypeRef<T> type, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return fromJson(json, type, Options.def());
+        } else {
+            return fromJson(json, type, Options.enableOf(features));
+        }
+    }
+
+    public static <T> T fromJson(String json, TypeRef<T> type, Options opts) {
+        return ONode.fromJson(json, opts).to(type, opts);
+    }
+
+    /// ///////////
+
+    public <T> T to(Type type, Options opts) {
+        return BeanDeserializer.deserialize(this, type, opts);
+    }
+
+    public <T> T to(Type type, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return to(type, Options.def());
+        } else {
+            return to(type, Options.enableOf(features));
+        }
+    }
+
+    public <T> T to(TypeRef<T> typeRef, Feature... features) {
+        return to(typeRef.getType(), features);
+    }
+
+    public <T> T to(TypeRef<T> typeRef, Options opts) {
+        return to(typeRef.getType(), opts);
+    }
+
+    public <T> T to(Feature... features) {
+        return to(Object.class,  features);
+    }
+
+    public <T> T bindTo(T target){
+        //todo:...
+        return target;
     }
 
     public String toJson(Options opts) {
@@ -371,8 +518,12 @@ public final class ONode {
         }
     }
 
-    public String toJson() {
-        return toJson(Options.def());
+    public String toJson(Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return toJson(Options.def());
+        } else {
+            return toJson(Options.enableOf(features));
+        }
     }
 
     @Override

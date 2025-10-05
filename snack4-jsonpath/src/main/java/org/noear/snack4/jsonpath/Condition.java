@@ -136,7 +136,7 @@ public class Condition {
                 } else if (ch == '/') {
                     return new ONode(value);
                 } else {
-                    return ONode.load(value);
+                    return ONode.fromJson(value);
                 }
             }
         }

@@ -23,15 +23,16 @@ import java.util.Map;
  * @author noear 2025/3/16 created
  */
 public enum JsonType {
-    TYPE_NULL,
+    Undefined,
+    Null,
 
-    TYPE_BOOLEAN,
-    TYPE_NUMBER,
-    TYPE_STRING,
-    TYPE_DATE,
+    Boolean,
+    Number,
+    String,
+    Date,
 
-    TYPE_ARRAY,
-    TYPE_OBJECT,
+    Array,
+    Object,
     ;
 
     @Override
@@ -41,19 +42,19 @@ public enum JsonType {
 
     public static String getTypeName(JsonType type) {
         switch (type) {
-            case TYPE_NULL:
+            case Null:
                 return "null";
-            case TYPE_BOOLEAN:
+            case Boolean:
                 return "boolean";
-            case TYPE_NUMBER:
+            case Number:
                 return "number";
-            case TYPE_STRING:
+            case String:
                 return "string";
-            case TYPE_DATE:
+            case Date:
                 return "date";
-            case TYPE_ARRAY:
+            case Array:
                 return "array";
-            case TYPE_OBJECT:
+            case Object:
                 return "object";
             default:
                 return "unknown";
@@ -61,17 +62,17 @@ public enum JsonType {
     }
 
     public static boolean isValue(JsonType type) {
-        return type.ordinal() > TYPE_NULL.ordinal() && type.ordinal() < TYPE_ARRAY.ordinal();
+        return type.ordinal() > Null.ordinal() && type.ordinal() < Array.ordinal();
     }
 
     public static JsonType resolveType(Object value) {
-        if (value == null) return JsonType.TYPE_NULL;
-        if (value instanceof Boolean) return JsonType.TYPE_BOOLEAN;
-        if (value instanceof Number) return JsonType.TYPE_NUMBER;
-        if (value instanceof String) return JsonType.TYPE_STRING;
-        if (value instanceof Date) return JsonType.TYPE_DATE;
-        if (value instanceof List) return JsonType.TYPE_ARRAY;
-        if (value instanceof Map) return JsonType.TYPE_OBJECT;
+        if (value == null) return JsonType.Null;
+        if (value instanceof Boolean) return JsonType.Boolean;
+        if (value instanceof Number) return JsonType.Number;
+        if (value instanceof String) return JsonType.String;
+        if (value instanceof Date) return JsonType.Date;
+        if (value instanceof List) return JsonType.Array;
+        if (value instanceof Map) return JsonType.Object;
 
         throw new IllegalArgumentException("Unsupported type");
     }
