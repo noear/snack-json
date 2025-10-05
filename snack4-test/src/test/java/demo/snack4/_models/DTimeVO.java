@@ -2,7 +2,7 @@ package demo.snack4._models;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.noear.snack.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttr;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,11 +1,11 @@
 package features.snack4.composite.test1;
 
-import features.snack3.test1.enums.EnumComp;
-import features.snack3.test1.enums.EnumMulti;
-import features.snack3.test1.enums.EnumSub;
-import features.snack3.test1.enums.EnumSuper;
-import features.snack3.test1.pojo.CompC;
-import features.snack3.test1.pojo.SubB;
+import features.snack4.composite.test1.enums.EnumComp;
+import features.snack4.composite.test1.enums.EnumMulti;
+import features.snack4.composite.test1.enums.EnumSub;
+import features.snack4.composite.test1.enums.EnumSuper;
+import features.snack4.composite.test1.pojo.CompC;
+import features.snack4.composite.test1.pojo.SubB;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
@@ -36,6 +36,6 @@ public class SnackTest {
 
     System.out.println(ONode.toJson(subB));
     System.out.println("\n");
-    System.out.println(ONode.load(subB, Feature.EnumUsingName));
+    System.out.println(ONode.from(subB, Feature.Write_EnumUsingName));
   }
 }

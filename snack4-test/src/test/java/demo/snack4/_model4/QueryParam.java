@@ -1,8 +1,5 @@
 package demo.snack4._model4;
 
-import demo.snack3._model4.Param;
-import demo.snack3._model4.Sort;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;

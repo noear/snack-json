@@ -1,9 +1,7 @@
 package demo.snack4._models;
 
-import demo.snack3._models.CMap1Model;
-import demo.snack3._models.CMap2Model;
-import demo.snack3._models.UserModel;
-import org.noear.snack.ONodeType;
+
+import org.noear.snack4.json.JsonType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -23,7 +21,7 @@ public class CModel {
     public CMap2Model map2;
 
     //枚举
-    public ONodeType nodeType;
+    public JsonType nodeType;
 
     //日期
     public Date date = new Date();
@@ -41,7 +39,7 @@ public class CModel {
         map1 = new CMap1Model();
         map2 = new CMap2Model();
 
-        nodeType = ONodeType.Null;
+        nodeType = JsonType.Null;
 
         //queue = new ArrayDeque<>();
     }
@@ -58,7 +56,7 @@ public class CModel {
         map1.put(1,"1");
         map2.put("1",UserModel.class);
 
-        nodeType = ONodeType.Object;
+        nodeType = JsonType.Object;
 
         num2 = new BigInteger("1");
 

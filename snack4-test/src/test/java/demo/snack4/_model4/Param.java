@@ -1,6 +1,5 @@
 package demo.snack4._model4;
 
-import demo.snack3._model4.Term;
 import lombok.NonNull;
 
 import java.util.*;

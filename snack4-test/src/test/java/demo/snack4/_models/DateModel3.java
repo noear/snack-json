@@ -1,6 +1,6 @@
 package demo.snack4._models;
 
-import org.noear.snack.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttr;
 
 import java.util.Date;
 

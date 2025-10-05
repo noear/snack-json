@@ -58,7 +58,7 @@ public final class ONode {
         this.type = JsonType.resolveType(value);
     }
 
-    public JsonType nodeType(){
+    public JsonType nodeType() {
         return type;
     }
 
@@ -67,7 +67,7 @@ public final class ONode {
         return type == JsonType.Null || isUndefined();
     }
 
-    public boolean isUndefined(){
+    public boolean isUndefined() {
         return type == JsonType.Undefined;
     }
 
@@ -500,10 +500,10 @@ public final class ONode {
     }
 
     public <T> T to(Feature... features) {
-        return to(Object.class,  features);
+        return to(Object.class, features);
     }
 
-    public <T> T bindTo(T target){
+    public <T> T bindTo(T target) {
         //todo:...
         return target;
     }
@@ -529,5 +529,27 @@ public final class ONode {
     @Override
     public String toString() {
         return String.valueOf(value);
+    }
+
+    /// ///////////
+
+    @Deprecated
+    public ONode usePaths() {
+        return this;
+    }
+
+    @Deprecated
+    public ONode parent() {
+        return this;
+    }
+
+    @Deprecated
+    public ONode parents(int idx) {
+        return this;
+    }
+
+    @Deprecated
+    public List<String> pathList() {
+        return null;
     }
 }

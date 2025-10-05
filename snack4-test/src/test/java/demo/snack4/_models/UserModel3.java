@@ -1,12 +1,12 @@
 package demo.snack4._models;
 
-import org.noear.snack.annotation.ONodeAttr;
-import org.noear.snack.core.NodeEncoder;
+import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.ObjectEncoder;
 
 import java.util.Date;
 
 public class UserModel3 {
-    public NodeEncoder nodeEncoder;
+    public ObjectEncoder nodeEncoder;
 
     public int id;
     @ONodeAttr(ignore = true)

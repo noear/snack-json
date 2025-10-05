@@ -1,7 +1,5 @@
 package demo.snack4._models;
 
-import demo.snack3._models.UserModel;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;

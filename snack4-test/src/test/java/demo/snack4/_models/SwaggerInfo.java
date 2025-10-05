@@ -1,6 +1,5 @@
 package demo.snack4._models;
 
-import demo.snack3._models.SwaggerResource;
 import lombok.Getter;
 import lombok.Setter;
 

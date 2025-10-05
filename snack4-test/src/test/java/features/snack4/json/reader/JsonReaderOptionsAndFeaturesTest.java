@@ -78,7 +78,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowBackslashEscapingAnyCharacter() {
         String json = "{\"key\": \"\\a\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowBackslashEscapingAnyCharacter));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.enableOf(Feature.Read_AllowBackslashEscapingAnyCharacter));
         assertDoesNotThrow(() -> reader.read());
 
         //JsonReader.Options.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER //允许对任何字符进行反斜杠转义
