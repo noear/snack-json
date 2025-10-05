@@ -89,7 +89,7 @@ class JsonReaderComplexTest {
     @Test
     void testParseInvalidJsonInvalidObject() {
         String json = "{name: \"Alice\"}";
-        assertThrows(ParseException.class, () -> new JsonReader(new StringReader(json), Options.builder().disable(Feature.Read_AllowUnquotedKeys).build()).read());
+        assertThrows(ParseException.class, () -> new JsonReader(new StringReader(json), new Options().disableFeature(Feature.Read_AllowUnquotedKeys)).read());
     }
 
     @Test

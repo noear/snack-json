@@ -120,7 +120,7 @@ public class JsonWriter {
         if (opts.isFeatureEnabled(Feature.Write_PrettyFormat)) {
             writer.write('\n');
             for (int i = 0; i < depth; i++) {
-                writer.write(opts.getIndent());
+                writer.write(opts.getWriteIndent());
             }
         }
     }

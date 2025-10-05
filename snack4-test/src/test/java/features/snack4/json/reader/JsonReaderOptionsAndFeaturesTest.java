@@ -14,28 +14,28 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowComments() {
         String json = "{\"key\": \"value\"} // Comment";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.builder().enable(Feature.Read_AllowComment).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments_2() {
         String json = "// Comment\n{\"key\": \"value\"} ";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.builder().enable(Feature.Read_AllowComment).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments2() {
         String json = "{\"key\": \"value\"} /* Comment*/";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.builder().enable(Feature.Read_AllowComment).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments2_2() {
         String json = "/* Comment*/{\"key\": \"value\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.builder().enable(Feature.Read_AllowComment).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
@@ -62,7 +62,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowNumericLeadingZeros() {
         String json = "{\"key\": 00123}";
-        JsonReader reader = new JsonReader(new StringReader(json),Options.builder().enable(Feature.Read_AllowZeroLeadingNumbers).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowZeroLeadingNumbers));
         assertDoesNotThrow(() -> reader.read());
 
 
@@ -95,7 +95,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowEmptyKeys2() {
         String json = "{\"\": \"value\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.builder().enable(Feature.Read_AllowEmptyKeys).build());
+        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowEmptyKeys));
         assertDoesNotThrow(() -> reader.read());
     }
 

@@ -141,9 +141,11 @@ public enum Feature {
 
 
     private final boolean _default;
+    private final int _mask;
 
     Feature(boolean def) {
         _default = def;
+        _mask = (1 << ordinal());
     }
 
     public boolean enabledByDefault() {
@@ -151,6 +153,6 @@ public enum Feature {
     }
 
     public int mask() {
-        return (1 << ordinal());
+        return _mask;
     }
 }

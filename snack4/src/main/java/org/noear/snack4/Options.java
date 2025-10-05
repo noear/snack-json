@@ -15,7 +15,7 @@
  */
 package org.noear.snack4;
 
-import org.noear.snack4.codec.CodecRepository;
+import org.noear.snack4.codec.CodecLib;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.ObjectFactory;
@@ -50,26 +50,26 @@ public final class Options {
     /**
      * 默认时间格式器
      */
-    public static String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static DateFormat DEF_DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     /**
      * 默认选项实例
      */
-    private static final Options DEFAULT = new Builder().build();
+    private static final Options DEFAULT = new Options();
 
+    //编码仓库
+    private final CodecLib codecLib;
     // 特性开关（使用位掩码存储）
-    private final int enabledFeatures;
+    private int enabledFeatures;
+    // 时间格式
+    private  DateFormat dateFormat;
 
-    // 通用配置
-    private final DateFormat _dateFormat;
-    private final CodecRepository  _codecRepository;
+    // 读取最大深度
+    private  int readMaxDepth;
 
-    // 输入配置
-    private final int _maxDepth;
-
-    // 输出配置
-    private final String _indent;
+    // 书写缩进
+    private  String writeIndent;
 
 
     private Set<Class<?>> allowedClasses = new HashSet<>();
@@ -78,25 +78,23 @@ public final class Options {
         allowedClasses.add(clazz);
     }
 
-    private Options(Builder builder) {
+    public Options() {
         // 合并特性开关
-        int features = 0;
         for (Feature feat : Feature.values()) {
-            if (builder.features.getOrDefault(feat, feat.enabledByDefault())) {
-                features |= feat.mask();
+            if (feat.enabledByDefault()) {
+                enabledFeatures |= feat.mask();
             }
         }
-        this.enabledFeatures = features;
 
         // 通用配置
-        this._dateFormat = builder.dateFormat;
-        this._codecRepository = builder.codecRepository;
+        this.dateFormat = DEF_DATETIME_FORMAT;
+        this.codecLib = CodecLib.newInstance();
 
         // 输入配置
-        this._maxDepth = builder.maxDepth;
+        this.readMaxDepth = 512;
 
         // 输出配置
-        this._indent = builder.indent;
+        this.writeIndent = "  ";
     }
 
     /**
@@ -110,14 +108,14 @@ public final class Options {
      * 获取日期格式
      */
     public DateFormat getDateFormat() {
-        return _dateFormat;
+        return dateFormat;
     }
 
     /**
      * 获取解码器
      */
     public ObjectDecoder<?> getDecoder(Class<?> clazz) {
-        return _codecRepository.getDecoder(clazz);
+        return codecLib.getDecoder(clazz);
     }
 
     /**
@@ -125,7 +123,7 @@ public final class Options {
      *
      */
     public ObjectEncoder<?> getEncoder(Object value) {
-        return _codecRepository.getEncoder(value);
+        return codecLib.getEncoder(value);
     }
 
     /**
@@ -133,22 +131,86 @@ public final class Options {
      *
      */
     public ObjectFactory<?> getFactory(Class<?> clazz) {
-        return _codecRepository.getFactory(clazz);
+        return codecLib.getFactory(clazz);
     }
 
     /**
      * 获取最大解析深度
      */
-    public int getMaxDepth() {
-        return _maxDepth;
+    public int getReadMaxDepth() {
+        return readMaxDepth;
     }
 
     /**
      * 获取缩进字符串
      */
-    public String getIndent() {
-        return _indent;
+    public String getWriteIndent() {
+        return writeIndent;
     }
+
+
+    /**
+     * 添加特性
+     */
+    public Options enableFeature(Feature feature) {
+        enabledFeatures |= feature.mask();
+        return this;
+    }
+
+    /**
+     * 移除特性
+     */
+    public Options disableFeature(Feature feature) {
+        enabledFeatures &= ~ feature.mask();
+        return this;
+    }
+
+
+    /**
+     * 设置日期格式
+     */
+    public Options dateFormat(DateFormat format) {
+        this.dateFormat = format;
+        return this;
+    }
+
+    /**
+     * 注册自定义解码器
+     */
+    public <T> Options addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
+        codecLib.addDecoder(type, decoder);
+        return this;
+    }
+
+    /**
+     * 注册自定义编码器
+     */
+    public <T> Options addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
+        codecLib.addEncoder(type, encoder);
+        return this;
+    }
+
+    public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
+        codecLib.addFactory(type, factory);
+        return this;
+    }
+
+    /**
+     * 设置最大解析深度
+     */
+    public Options readMaxDepth(int depth) {
+        this.readMaxDepth = depth;
+        return this;
+    }
+
+    /**
+     * 设置缩进字符串
+     */
+    public Options writeIndent(String indent) {
+        this.writeIndent = indent;
+        return this;
+    }
+
 
     /**
      * 获取默认选项
@@ -158,115 +220,10 @@ public final class Options {
     }
 
     public static Options of(Feature... features) {
-        Builder tmp = new Builder();
+        Options tmp = new Options();
         for (Feature f : features) {
-            tmp.enable(f);
+            tmp.enableFeature(f);
         }
-        return tmp.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
-     * 选项建造者
-     */
-    public static class Builder {
-        private static final DateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        // 特性开关存储
-        private final EnumMap<Feature, Boolean> features = new EnumMap<>(Feature.class);
-
-        // 通用配置
-        private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
-        private final CodecRepository codecRepository = CodecRepository.newInstance();
-
-        // 输入配置
-        private int maxDepth = 512;
-
-        // 输出配置
-        private String indent = "  ";
-
-        public Builder() {
-            // 初始化默认特性
-            for (Feature feat : Feature.values()) {
-                features.put(feat, feat.enabledByDefault());
-            }
-        }
-
-        /**
-         * 启用特性
-         */
-        public Builder enable(Feature feature) {
-            return enable(feature, true);
-        }
-
-        /**
-         * 禁用特性
-         */
-        public Builder disable(Feature feature) {
-            return enable(feature, false);
-        }
-
-        /**
-         * 启用特性
-         */
-        public Builder enable(Feature feature, boolean state) {
-            features.put(feature, state);
-            return this;
-        }
-
-        /**
-         * 设置日期格式
-         */
-        public Builder dateFormat(DateFormat format) {
-            this.dateFormat = format;
-            return this;
-        }
-
-        /**
-         * 注册自定义解码器
-         */
-        public <T> Builder addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
-            codecRepository.addDecoder(type, decoder);
-            return this;
-        }
-
-        /**
-         * 注册自定义编码器
-         */
-        public <T> Builder addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
-            codecRepository.addEncoder(type, encoder);
-            return this;
-        }
-
-        public <T> Builder addFactory(Class<T> type, ObjectFactory<T> factory) {
-            codecRepository.addFactory(type, factory);
-            return this;
-        }
-
-        /**
-         * 设置最大解析深度
-         */
-        public Builder maxDepth(int depth) {
-            this.maxDepth = depth;
-            return this;
-        }
-
-        /**
-         * 设置缩进字符串
-         */
-        public Builder indent(String indent) {
-            this.indent = indent;
-            return this;
-        }
-
-        /**
-         * 构建最终选项
-         */
-        public Options build() {
-            return new Options(this);
-        }
+        return tmp;
     }
 }

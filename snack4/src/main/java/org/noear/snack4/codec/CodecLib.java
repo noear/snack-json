@@ -19,8 +19,8 @@ import java.util.*;
  *
  * @author noear 2025/10/3 created
  */
-public class CodecRepository {
-    private static CodecRepository DEFAULT = new CodecRepository(null).loadDefault();
+public class CodecLib {
+    private static CodecLib DEFAULT = new CodecLib(null).loadDefault();
 
     private final Map<Class<?>, ObjectFactory<?>> factorys = new HashMap<>();
 
@@ -30,14 +30,14 @@ public class CodecRepository {
     private final Map<Class<?>, ObjectEncoder<?>> encoders = new HashMap<>();
     private final List<ObjectPatternEncoder<?>> patternEncoders = new ArrayList<>();
 
-    private final CodecRepository parent;
+    private final CodecLib parent;
 
-    private CodecRepository(CodecRepository parent) {
+    private CodecLib(CodecLib parent) {
         this.parent = parent;
     }
 
-    public static CodecRepository newInstance() {
-        return new CodecRepository(DEFAULT);
+    public static CodecLib newInstance() {
+        return new CodecLib(DEFAULT);
     }
 
     /**
@@ -209,7 +209,7 @@ public class CodecRepository {
         addEncoder(Number.class, new _NumberPatternEncoder());
     }
 
-    private CodecRepository loadDefault() {
+    private CodecLib loadDefault() {
         loadDefaultDecoders();
         loadDefaultFactories();
         loadDefaultEncoders();

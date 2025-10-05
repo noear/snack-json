@@ -15,13 +15,12 @@ import java.util.Date;
  */
 public class DemoApp {
     public static void main(String[] args) {
-        Options options = Options.builder()
+        Options options = new Options()
                 .addEncoder(Date.class, (opts, attr, data) -> {
                     return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
                 })
-                .enable(Feature.Write_PrettyFormat)
-                .dateFormat(new SimpleDateFormat("yyyy-MM"))
-                .build();
+                .enableFeature(Feature.Write_PrettyFormat)
+                .dateFormat(new SimpleDateFormat("yyyy-MM"));
 
         String json = ONode.load(null, options).toJson();
     }
