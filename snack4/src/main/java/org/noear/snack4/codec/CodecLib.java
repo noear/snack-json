@@ -144,6 +144,7 @@ public class CodecLib {
         addDecoder(new _ArrayPatternDecoder());
         addDecoder(new _EnumPatternDecoder());
 
+        addDecoder(StackTraceElement.class, new StackTraceElementDecoder());
         addDecoder(Properties.class, new PropertiesDecoder());
         addDecoder(InetSocketAddress.class, new InetSocketAddressDecoder());
         addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
@@ -178,6 +179,7 @@ public class CodecLib {
         addEncoder(new _ClobPatternEncoder());
         addEncoder(new _EnumPatternEncoder());
 
+        addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(ONode.class, new ONodeEncoder());
         addEncoder(Properties.class, new PropertiesEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
