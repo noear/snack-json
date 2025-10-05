@@ -2,7 +2,6 @@ package features.snack4.composite;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.json.JsonType;
 
 /**
  * @author noear 2023/1/19 created
@@ -11,7 +10,7 @@ public class DomTest {
     @Test
     public void ary(){
         ONode oNode = new ONode();
-        oNode.addNew().newObject();
+        oNode.addNew().asObject();
 
         String json = oNode.toJson();
 
@@ -23,7 +22,7 @@ public class DomTest {
     @Test
     public void obj(){
         ONode oNode = new ONode();
-        oNode.getOrNew("n1").newObject();
+        oNode.getOrNew("n1").asObject();
 
         String json = oNode.toJson();
 

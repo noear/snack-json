@@ -87,7 +87,19 @@ public class JsonReader {
         if (c == '{') return parseObject();
         if (c == '[') return parseArray();
         if (c == '"' || (opts.isFeatureEnabled(Feature.Read_AllowSingleQuotes) && c == '\'')) {
-            return new ONode(parseString());
+            String str = parseString();
+
+            if (opts.isFeatureEnabled(Feature.Read_UnwrapJsonString)) {
+                if (str.length() > 1) {
+                    char c1 = str.charAt(0);
+                    char c2 = str.charAt(str.length() - 1);
+                    if ((c1 == '{' && c2 == '}') || (c1 == '[' && c2 == ']')) {
+                        return ONode.fromJson(str, opts);
+                    }
+                }
+            }
+
+            return new ONode(str);
         }
         if (c == '-' || (c >= '0' && c <= '9')) return new ONode(parseNumber());
         if (c == 't') return parseKeyword("true", true);

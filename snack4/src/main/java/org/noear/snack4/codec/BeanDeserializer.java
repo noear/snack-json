@@ -49,13 +49,57 @@ public class BeanDeserializer {
         }
 
         try {
-            return (T) convertNodeToBean(node, type, new IdentityHashMap<>(), opts);
+            return (T) convertValue(node, type, null, new IdentityHashMap<>(), opts);
         } catch (Throwable e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             }
             throw new RuntimeException(e);
         }
+    }
+
+    // 类型转换核心
+    private static Object convertValue(ONode node, Type type, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
+        if (node.isNull()) {
+            return null;
+        }
+
+        Class<?> clazz = Object.class;
+
+        // 处理泛型类型
+        if (type instanceof Class) {
+            clazz = (Class<?>) type;
+        } else if (type instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType) type;
+            Type rawType = pType.getRawType();
+
+            if (rawType instanceof Class) {
+                clazz = (Class<?>) rawType;
+
+                if (List.class.isAssignableFrom(clazz)) {
+                    return convertToList(node, pType.getActualTypeArguments()[0], visited, opts);
+                } else if (Map.class.isAssignableFrom(clazz)) {
+                    Type[] typeArgs = pType.getActualTypeArguments();
+                    return convertToMap(node, typeArgs[0], typeArgs[1], visited, opts);
+                }
+            } else if (rawType instanceof TypeVariable) {
+                clazz = Object.class;
+            }
+        }
+
+        // 优先使用自定义编解码器
+        if (clazz == Object.class) {
+            if (node.isValue()) {
+                return node.getValue();
+            } else if (node.isArray()) {
+                clazz = List.class;
+            } else if (node.isObject()) {
+                clazz = Map.class;
+            }
+        }
+
+        // 处理嵌套对象
+        return convertNodeToBean(node, clazz, visited, opts);
     }
 
     @SuppressWarnings("unchecked")
@@ -158,42 +202,6 @@ public class BeanDeserializer {
         return bean;
     }
 
-
-    // 类型转换核心
-    private static Object convertValue(ONode node, Type type, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
-        if (node.isNull()) {
-            return null;
-        }
-
-        // 处理泛型类型
-        if (type instanceof ParameterizedType) {
-            ParameterizedType pType = (ParameterizedType) type;
-            Type rawType = pType.getRawType();
-
-            if (List.class.isAssignableFrom((Class<?>) rawType)) {
-                return convertToList(node, pType.getActualTypeArguments()[0], visited, opts);
-            } else if (Map.class.isAssignableFrom((Class<?>) rawType)) {
-                Type[] typeArgs = pType.getActualTypeArguments();
-                return convertToMap(node, typeArgs[0], typeArgs[1], visited, opts);
-            }
-        }
-
-        // 处理基本类型
-        Class<?> clazz = (Class<?>) (type instanceof Class ? type : ((ParameterizedType) type).getRawType());
-
-        // 优先使用自定义编解码器
-        ObjectDecoder decoder = opts.getDecoder(clazz);
-        if (decoder != null) {
-            return decoder.decode(opts, attr, node, clazz);
-        }
-
-        if (clazz == Object.class) {
-            return node.getValue();
-        }
-
-        // 处理嵌套对象
-        return convertNodeToBean(node, clazz, visited, opts);
-    }
 
     //-- 辅助方法 --//
     // 处理List泛型

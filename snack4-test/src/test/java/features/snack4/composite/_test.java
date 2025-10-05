@@ -1,10 +1,12 @@
 package features.snack4.composite;
 
 import demo.snack4._models.UserModel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
+import org.noear.snack4.exception.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +71,7 @@ public class _test {
         double g_lat = n.get("g_lat").getDouble();
         String g_adr = n.get("g_adr").getString();
 
+
         String str2 = n.toJson();
 
         System.out.println(str);
@@ -77,12 +80,6 @@ public class _test {
         assert str.equals(str2);
     }
 
-    @Test
-    public void test2() {
-        ONode n = new ONode();//.options(opt->opt.add(Feature.StringNullAsEmpty)); //默认,null string 为 空字符
-
-        assert "".equals(n.toString());
-    }
 
     @Test
     public void test3() {
@@ -108,9 +105,9 @@ public class _test {
         ONode o = ONode.fromJson("{code:1,msg:'succeed'}", Feature.Write_ClassName);//当toJson(),会产生@type
         o.getOrNew("data").getOrNew("list").fill(list);
 
-        assert o.select("data.list").size() == 2;
+        assert o.select("$.data.list").size() == 2;
 
-        List<UserModel> list2 = o.select("data.list").to(List.class);
+        List<UserModel> list2 = o.select("$.data.list").to(List.class);
         assert list2.size() == 2;
 
         String message = o.toJson();
@@ -149,12 +146,12 @@ public class _test {
         ONode o = ONode.fromJson("{code:1,msg:'succeed'}"); //当toJson(),不会产生@type
         o.getOrNew("data").getOrNew("list").fill(list);
 
-        assert o.select("data.list").size() == 2;
+        assert o.select("$.data.list").size() == 2;
 
 
         //普通数据，转为泛型列表
         //
-        List<UserModel> list2 = o.select("data.list").to((new ArrayList<UserModel>() {
+        List<UserModel> list2 = o.select("$.data.list").to((new ArrayList<UserModel>() {
         }).getClass());
 
         assert list2.size() == list.size();
@@ -167,11 +164,7 @@ public class _test {
 
     @Test
     public void test6() {
-        ONode tmp = ONode.fromJson("{asdfasdf}");
-
-        System.out.println(tmp.toString());
-
-        assert tmp.isObject();
+        Assertions.assertThrows(ParseException.class, () -> ONode.fromJson("{asdfasdf}"));
     }
 
     @Test
@@ -298,7 +291,7 @@ public class _test {
         Map<String, String> map = new HashMap<>();
         map.put("newK1", "中国");
         map.put("newK2", "JSON");
-        oNode.select("$.k5.k51").setValue(map);
+        oNode.select("$.k5.k51").fill(map);
 
         System.err.println(oNode.toJson());
     }

@@ -18,7 +18,9 @@ package org.noear.snack4;
 import org.noear.snack4.codec.BeanDeserializer;
 import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.codec.TypeRef;
+import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.exception.TypeConvertException;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.json.JsonType;
@@ -28,6 +30,7 @@ import org.noear.snack4.util.Asserts;
 
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -130,20 +133,36 @@ public final class ONode {
     }
 
     public Date getDate() {
-        return (Date) value;
+        if (isDate()) {
+            return (Date) value;
+        } else if (isNumber()) {
+            return new Date(getNumber().longValue());
+        } else if (isString()) {
+            try {
+                return DateUtil.parse(getString());
+            } catch (ParseException ex) {
+                throw new TypeConvertException(ex);
+            }
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
     }
 
     @SuppressWarnings("unchecked")
     public List<ONode> getArray() {
+        asArray();
+
         return (List<ONode>) value;
     }
 
     @SuppressWarnings("unchecked")
     public Map<String, ONode> getObject() {
+        asObject();
+
         return (Map<String, ONode>) value;
     }
 
-    public ONode newObject() {
+    public ONode asObject() {
         if (value == null) {
             value = new LinkedHashMap<>();
             type = JsonType.Object;
@@ -152,7 +171,7 @@ public final class ONode {
         return this;
     }
 
-    public ONode newArray() {
+    public ONode asArray() {
         if (value == null) {
             value = new ArrayList<>();
             type = JsonType.Array;
@@ -172,23 +191,62 @@ public final class ONode {
     }
 
     public int getInt() {
-        return getNumber(0).intValue();
+        if (isNumber()) {
+            return getNumber(0).intValue();
+        } else if (isString()) {
+            return Integer.parseInt(getString());
+        } else if (isNull()) {
+            return 0;
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
     }
 
     public long getLong() {
-        return getNumber(0L).longValue();
+        if (isNumber()) {
+            return getNumber(0L).longValue();
+        } else if (isString()) {
+            return Long.getLong(getString());
+        } else if (isNull()) {
+            return 0L;
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
     }
 
     public double getDouble() {
-        return getNumber(0D).doubleValue();
+        if (isNumber()) {
+            return getNumber(0D).doubleValue();
+        } else if (isString()) {
+            return Double.parseDouble(getString());
+        } else if (isNull()) {
+            return 0D;
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
     }
 
     public ONode get(String key) {
-        return getObject().get(key);
+        asObject();
+
+        ONode tmp = getObject().get(key);
+        if (tmp == null) {
+            return new ONode();
+        } else {
+            return tmp;
+        }
     }
 
     public ONode getOrNew(String key) {
         return getObject().computeIfAbsent(key, k -> new ONode());
+    }
+
+    public ONode getOrNull(String key) {
+        if (isObject()) {
+            return getObject().get(key);
+        } else {
+            return null;
+        }
     }
 
     public ONode remove(String key) {
@@ -197,7 +255,7 @@ public final class ONode {
 
     public ONode setValue(Object value) {
         this.value = value;
-        this.type = JsonType.resolveType(value);
+        this.type = JsonType.resolveValueType(value);
         return this;
     }
 
@@ -266,7 +324,7 @@ public final class ONode {
 
     private ONode set0(String key, ONode value) {
         if (type == JsonType.Null) {
-            newObject();
+            asObject();
         }
 
         getObject().put(key, value);
@@ -274,12 +332,44 @@ public final class ONode {
     }
 
     public ONode get(int index) {
-        if (index < 0) {
-            int pos = getArray().size() + index;
-            return getArray().get(pos);
-        } else {
+        asArray();
+
+        if (index >= 0 && getArray().size() > index) {
             return getArray().get(index);
         }
+
+        return new ONode();
+    }
+
+    public ONode getOrNew(int index) {
+        return getOrNew(index, null);
+    }
+
+    public ONode getOrNew(int index, Consumer<ONode> thenApply) {
+        List<ONode> self = getArray();
+
+        if (self.size() > index) {
+            return self.get(index);
+        } else {
+            ONode last = null;
+            for (int i = self.size(); i <= index; i++) {
+                last = new ONode();
+                thenApply.accept(last);
+                self.add(last);
+            }
+
+            return last;
+        }
+    }
+
+    public ONode getOrNull(int index) {
+        if (isArray()) {
+            if (index >= 0 && getArray().size() > index) {
+                return getArray().get(index);
+            }
+        }
+
+        return null;
     }
 
     public ONode remove(int index) {
@@ -315,7 +405,7 @@ public final class ONode {
     }
 
     public ONode addNew() {
-        newArray();
+        asArray();
 
         ONode oNode = new ONode();
         getArray().add(oNode);
@@ -324,7 +414,7 @@ public final class ONode {
 
     private ONode add0(ONode value) {
         if (type == JsonType.Null) {
-            newArray();
+            asArray();
         }
 
         getArray().add(value);

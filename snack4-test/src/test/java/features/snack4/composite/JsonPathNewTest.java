@@ -21,7 +21,7 @@ public class JsonPathNewTest {
         System.out.println(oNode.toJson());
         //{"orders":[{"price":500},null,null,null,null,null,null,null,null,null,{"price":600}]}
 
-        oNode.select("$.orders").getArray().forEach(n->n.newObject());
+        oNode.select("$.orders").getArray().forEach(n->n.asObject());
         System.out.println(oNode.toJson());
         //{"orders":[{"price":500},{},{},{},{},{},{},{},{},{},{"price":600}]}
     }

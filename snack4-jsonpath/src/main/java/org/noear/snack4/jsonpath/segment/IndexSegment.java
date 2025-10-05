@@ -60,7 +60,7 @@ public class IndexSegment implements SegmentFunction {
         currentNodes.stream()
                 .filter(o -> {
                     if (mode == QueryMode.CREATE) {
-                        o.newObject();
+                        o.asObject();
                         return true;
                     } else {
                         return o.isObject();
@@ -83,7 +83,7 @@ public class IndexSegment implements SegmentFunction {
         currentNodes.stream()
                 .filter(o -> {
                     if (mode == QueryMode.CREATE) {
-                        o.newArray();
+                        o.asArray();
                         return true;
                     } else {
                         return o.isArray();

@@ -137,16 +137,20 @@ public final class Options {
     /**
      * 添加特性
      */
-    public Options enableFeature(Feature feature) {
-        features |= feature.mask();
+    public Options enableFeature(Feature... features) {
+        for (Feature feature : features) {
+            this.features |= feature.mask();
+        }
         return this;
     }
 
     /**
      * 移除特性
      */
-    public Options disableFeature(Feature feature) {
-        features &= ~feature.mask();
+    public Options disableFeature(Feature... features) {
+        for (Feature feature : features) {
+            this.features &= ~feature.mask();
+        }
         return this;
     }
 

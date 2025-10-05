@@ -55,10 +55,17 @@ public class JsonWriter {
                 writeString(node.getString());
                 break;
             case Number:
-                if(opts.isFeatureEnabled(Feature.Write_UseBigNumberMode)) {
+                if (opts.isFeatureEnabled(Feature.Write_UseBigNumberMode)) {
                     writeString(String.valueOf(node.getValue()));
-                }else {
+                } else {
                     writeNumber(node.getNumber());
+                }
+                break;
+            case Date:
+                if (opts.isFeatureEnabled(Feature.Write_UseDateFormat)) {
+                    writeString(opts.getDateFormat().format(node.getDate().toInstant()));
+                } else {
+                    writeNumber(node.getDate().getTime());
                 }
                 break;
             case Boolean:

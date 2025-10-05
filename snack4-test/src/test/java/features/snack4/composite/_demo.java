@@ -30,9 +30,9 @@ public class _demo {
 
         o.getOrNew("data").getOrNew("list").fill(list);
 
-        assert o.select("data.list").size() == 2;
+        assert o.select("$.data.list").size() == 2;
 
-        List<UserModel> list2 = o.select("data.list").to(List.class);
+        List<UserModel> list2 = o.select("$.data.list").to(List.class);
         assert list2.size() == 2;
 
         String message = o.toJson();
@@ -61,7 +61,7 @@ public class _demo {
     public void demo4() throws Exception {
         String tmp = "{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}";
         //1.加载json
-        Object n = ONode.fromJson(tmp);
+        Object n = ONode.fromJson(tmp, Object.class);
 
         assert n instanceof Map;
 
@@ -93,15 +93,15 @@ public class _demo {
         alias_ary.add("18812123434");
 
         ONode data = new ONode().then((d) -> {
-            d.get("platform").setValue("all");
+            d.getOrNew("platform").setValue("all");
 
-            d.get("audience").get("alias").addAll(alias_ary);
+            d.getOrNew("audience").getOrNew("alias").addAll(alias_ary);
 
-            d.get("options")
+            d.getOrNew("options")
                     .set("apns_production", false);
 
-            d.get("notification").then(n -> {
-                n.get("ios")
+            d.getOrNew("notification").then(n -> {
+                n.getOrNew("ios")
                         .set("alert", text)
                         .set("badge", 0)
                         .set("sound", "happy");
@@ -123,7 +123,7 @@ public class _demo {
 
         //exp的写法，方便获得 root 节点
         String json = new ONode().then(n -> {
-            n.fill(ONode.fromJson("{a:1,b:2}")).get("c").fill(user);
+            n.fillJson("{a:1,b:2}").getOrNew("c").fill(user);
         }).toJson();
 
         //无exp写法，需要给根安排个变量
@@ -148,7 +148,9 @@ public class _demo {
 
     @Test
     public void demo40() {
-        Options options = new Options().enableFeature(Feature.Write_UseSingleQuotes);
+        Options options = new Options()
+                .enableFeature(Feature.Write_UseSingleQuotes)
+                .disableFeature(Feature.Write_QuoteFieldNames);
 
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.fromJson(txt);
@@ -230,6 +232,6 @@ public class _demo {
         oNode.set("map", map);
         oNode.set("list", list);
 
-        oNode.get("list2").setValue(list);
+        oNode.getOrNew("list2").fill(list);
     }
 }

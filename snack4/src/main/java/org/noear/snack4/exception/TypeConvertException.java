@@ -26,4 +26,8 @@ public class TypeConvertException extends SnackException {
     public TypeConvertException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public TypeConvertException(Throwable cause) {
+        super(cause);
+    }
 }

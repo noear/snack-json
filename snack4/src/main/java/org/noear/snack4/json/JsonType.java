@@ -76,4 +76,14 @@ public enum JsonType {
 
         throw new IllegalArgumentException("Unsupported type");
     }
+
+    public static JsonType resolveValueType(Object value) {
+        if (value == null) return JsonType.Null;
+        if (value instanceof Boolean) return JsonType.Boolean;
+        if (value instanceof Number) return JsonType.Number;
+        if (value instanceof String) return JsonType.String;
+        if (value instanceof Date) return JsonType.Date;
+
+        throw new IllegalArgumentException("Unsupported value type");
+    }
 }
