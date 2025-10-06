@@ -97,6 +97,7 @@ public enum Feature {
 
     Read_UseGetter(false),
     Read_UseOnlyGetter(false),
+    Read_DisableClassName(false),
 
 
     //-----------------------------

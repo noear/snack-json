@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class JsonReader {
     public static ONode read(String json) throws IOException {
-        return read(json, Options.def());
+        return read(json, null);
     }
 
     public static ONode read(String json, Options opts) throws IOException {

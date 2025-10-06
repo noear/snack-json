@@ -129,7 +129,13 @@ public final class ONode {
     }
 
     public String getString() {
-        return (String) value;
+        if (isString()) {
+            return (String) value;
+        } else if (isNull()) {
+            return null;
+        } else {
+            return String.valueOf(value);
+        }
     }
 
     public Date getDate() {
@@ -570,7 +576,7 @@ public final class ONode {
     /// ///////////
 
     public <T> T to(Type type, Options opts) {
-        return BeanDeserializer.deserialize(this, type, opts);
+        return BeanDeserializer.deserialize(this, type, null, opts);
     }
 
     public <T> T to(Type type, Feature... features) {
@@ -594,8 +600,11 @@ public final class ONode {
     }
 
     public <T> T bindTo(T target) {
-        //todo:...
-        return target;
+        return BeanDeserializer.deserialize(this, target.getClass(), target, Options.def());
+    }
+
+    public <T> T bindTo(T target, Options opts) {
+        return BeanDeserializer.deserialize(this, target.getClass(), target, opts);
     }
 
     public String toJson(Options opts) {

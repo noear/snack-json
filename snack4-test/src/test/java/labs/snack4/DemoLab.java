@@ -14,6 +14,7 @@ public class DemoLab {
             o.addNew().set("title", "开始").set("type", "start");
             o.addNew().set("title", "结束").set("type", "end");
         });
+
     }
 
     public void case2() {

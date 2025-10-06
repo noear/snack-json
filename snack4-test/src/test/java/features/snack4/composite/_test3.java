@@ -7,6 +7,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.codec.TypeRef;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,18 @@ public class _test3 {
         oNode.get("data").set("@type", PanOcrModel.class.getName());
 
         ShanYunResModel<PanOcrModel> tmp = oNode.to(ShanYunResModel.class);
+
+        assert tmp.data instanceof PanOcrModel;
+    }
+
+    @Test
+    public void test_2() {
+        String json = "{\"reportId\":\"N4293fAVK86Jq1Mf465B\",\"statusCode\":0,\"statusMessage\":\"E_SUCCESS\",\"IP\":\"122.224.92.122\",\"data\":{\"errorCode\":2000,\"errMessage\":\"E_OCR_SUCCESS\",\"cardType\":\"PAN_FRONT\",\"panCode\":\"MEUPS2579N\",\"panName\":\"YEKKALADEVI SUBRAMANYAM\",\"dateOfBirth\":\"05/03/1988\",\"fatherName\":\"YEKKALADEVI RAGHUNANDANA RAO\"}}";
+
+
+        ONode oNode = ONode.fromJson(json);
+
+        ShanYunResModel<PanOcrModel> tmp = oNode.to(new TypeRef<ShanYunResModel<PanOcrModel>>() {});
 
         assert tmp.data instanceof PanOcrModel;
     }

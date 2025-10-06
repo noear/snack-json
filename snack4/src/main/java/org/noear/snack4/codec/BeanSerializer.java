@@ -34,7 +34,7 @@ import java.util.*;
 public class BeanSerializer {
     // 序列化：对象转ONode
     public static ONode serialize(Object value) {
-        return serialize(value, Options.def());
+        return serialize(value, null);
     }
 
     public static ONode serialize(Object value, Options opts) {
@@ -42,8 +42,12 @@ public class BeanSerializer {
             return new ONode(null);
         }
 
-        if(value instanceof ONode){
-            return (ONode)value;
+        if (value instanceof ONode) {
+            return (ONode) value;
+        }
+
+        if (opts == null) {
+            opts = Options.def();
         }
 
         try {
