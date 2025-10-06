@@ -169,7 +169,7 @@ public class DateUtil {
 
     public static Instant decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
         if (node.isDate()) {
-            return node.getDate().toInstant();
+            return Instant.ofEpochMilli(node.getDate().getTime());
         } else if (node.isNumber()) {
             return Instant.ofEpochMilli(node.getLong());
         } else if (node.isString()) {

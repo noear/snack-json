@@ -14,7 +14,7 @@ public class ExistsTest {
     public void test1() {
         ONode oNode = new ONode();
         assert oNode.select("$.user").isNull();
-        assert oNode.select("$.user").nodeType() == JsonType.Null;
+        assert oNode.select("$.user").nodeType() == JsonType.Undefined;
 
         ONode oNode2 = ONode.load("{user:1}");
         assert oNode2.select("$.user").isNull() == false;
@@ -22,7 +22,7 @@ public class ExistsTest {
 
         ONode oNode3 = ONode.load("{user:null}");
         assert oNode3.select("$.user").isNull();
-        assert oNode3.select("$.user").nodeType() != JsonType.Null;
+        assert oNode3.select("$.user").nodeType() == JsonType.Null;
     }
 
     @Test

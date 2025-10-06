@@ -156,6 +156,7 @@ public class CodecLib {
         addDecoder(TimeZone.class, new TimeZoneDecoder());
         addDecoder(Class.class, new ClassDecoder());
         addDecoder(UUID.class, new UUIDDecoder());
+        addDecoder(Duration.class, new DurationDecoder());
 
         addDecoder(URI.class, new URIDecoder());
         addDecoder(URL.class, new URLDecoder());
@@ -197,6 +198,9 @@ public class CodecLib {
 
         addDecoder(Short.class, new ShortDecoder());
         addDecoder(Short.TYPE, new ShortDecoder());
+
+        addDecoder(Byte.class, new ByteDecoder());
+        addDecoder(Byte.TYPE, new ByteDecoder());
     }
 
 
@@ -218,6 +222,7 @@ public class CodecLib {
         addEncoder(Currency.class, new CurrencyEncoder());
         addEncoder(TimeZone.class, new TimeZoneEncoder());
         addEncoder(UUID.class, new UUIDEncoder());
+        addEncoder(Duration.class, new DurationEncoder());
 
         addEncoder(URI.class, new URIEncoder());
         addEncoder(URL.class, new URLEncoder());

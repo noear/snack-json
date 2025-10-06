@@ -7,6 +7,7 @@ import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
 
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -25,7 +26,7 @@ public class _DatePatternEncoder implements ObjectPatternEncoder<Date> {
         if (attr != null) {
             if (Asserts.isNotEmpty(attr.format())) {
                 if (Asserts.isNotEmpty(attr.timezone())) {
-                    return new ONode(DateUtil.format(value, attr.format(), TimeZone.getTimeZone(attr.timezone())));
+                    return new ONode(DateUtil.format(value, attr.format(), TimeZone.getTimeZone(ZoneId.of(attr.timezone()))));
                 } else {
                     return new ONode(DateUtil.format(value, attr.format()));
                 }

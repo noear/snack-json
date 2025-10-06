@@ -26,7 +26,7 @@ public class EnumTest {
     @Test
     public void case1() {
 
-        String poc = "{\"name\":\"西游记\",\"dict\":" + BookType.CLASSICS.getCode() + ",}";
+        String poc = "{\"name\":\"西游记\",\"dict\":" + BookType.CLASSICS.getCode() + "}";
         ONode oNode = ONode.load(poc);
         //解析
         Book tmp = oNode.to(Book.class);
@@ -89,10 +89,10 @@ public class EnumTest {
         String s2 = "number";
         String s3 = "select";
         String s4 = "switcher";
-        ConfigControlType type1 = ONode.deserialize(s1, ConfigControlType.class);
-        ConfigControlType type2 = ONode.deserialize(s2, ConfigControlType.class);
-        ConfigControlType type3 = ONode.deserialize(s3, ConfigControlType.class);
-        ConfigControlType type4 = ONode.deserialize(s4, ConfigControlType.class);
+        ConfigControlType type1 = ONode.from(s1).to(ConfigControlType.class);
+        ConfigControlType type2 = ONode.from(s2).to( ConfigControlType.class);
+        ConfigControlType type3 = ONode.from(s3).to( ConfigControlType.class);
+        ConfigControlType type4 = ONode.from(s4).to( ConfigControlType.class);
         System.out.println(type1);
         System.out.println(type2);
         System.out.println(type3);

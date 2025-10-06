@@ -89,7 +89,7 @@ public class BeanDeserializer {
             } else if (Map.class.isAssignableFrom(typeWrap.getClazz())) {
                 //将 target 传递给 convertToMap
                 Type[] typeArgs = typeWrap.getActualTypeArguments();
-                return convertToMap(node, typeArgs[0], TypeWrap.from(typeArgs[1]), target, visited, opts);
+                return convertToMap(node, TypeWrap.from(typeArgs[0]), TypeWrap.from(typeArgs[1]), target, visited, opts);
             }
         }
 
@@ -201,7 +201,7 @@ public class BeanDeserializer {
     // 处理List泛型
     private static List<?> convertToList(ONode node, TypeWrap elementTypeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
         List<Object> list = null;
-        if (target instanceof List) {
+        if (target instanceof List && target != Collections.EMPTY_LIST) {
             list = (List<Object>) target;
         } else {
             list = new ArrayList<>();
@@ -221,9 +221,9 @@ public class BeanDeserializer {
     }
 
     // 处理Map泛型
-    private static Map<?, ?> convertToMap(ONode node, Type keyType, TypeWrap valueTypeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private static Map<?, ?> convertToMap(ONode node, TypeWrap keyTypeWrap, TypeWrap valueTypeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
         Map<Object, Object> map = null;
-        if (target instanceof Map) {
+        if (target instanceof Map && target != Collections.EMPTY_MAP) {
             map = (Map<Object, Object>) target;
         } else {
             map = new LinkedHashMap<>();
@@ -231,7 +231,7 @@ public class BeanDeserializer {
 
         for (Map.Entry<String, ONode> kv : node.getObject().entrySet()) {
             //Map 的值是新对象，递归调用时 target 传 null
-            Object k = convertKey(kv.getKey(), keyType);
+            Object k = convertKey(kv.getKey(), keyTypeWrap, opts);
             Object v = convertValue(kv.getValue(), valueTypeWrap, null, null, visited, opts);
             map.put(k, v);
         }
@@ -240,11 +240,20 @@ public class BeanDeserializer {
     }
 
     // Map键类型转换
-    private static Object convertKey(String key, Type keyType) {
-        if (keyType == String.class) return key;
-        if (keyType == Integer.class || keyType == int.class) return Integer.parseInt(key);
-        if (keyType == Long.class || keyType == long.class) return Long.parseLong(key);
-        throw new IllegalArgumentException("Unsupported map key type: " + keyType);
+    private static Object convertKey( String key, TypeWrap keyType, Options opts) {
+        if (keyType.getClazz() == String.class) return key;
+        if (keyType.getClazz() == Integer.class || keyType.getClazz() == int.class) return Integer.parseInt(key);
+        if (keyType.getClazz() == Long.class || keyType.getClazz() == long.class) return Long.parseLong(key);
+        if (keyType.getClazz().isEnum()) {
+            ObjectDecoder decoder = opts.getDecoder(keyType.getClazz());
+            if (decoder == null) {
+                return Enum.valueOf((Class<Enum>) keyType.getClazz(), key);
+            } else {
+                return decoder.decode(opts, null, new ONode(key), keyType.getClazz());
+            }
+        }
+
+        throw new IllegalArgumentException("Unsupported map key type: " + keyType.getClazz());
     }
 
     // 基本类型默认值
