@@ -58,7 +58,7 @@ public final class ONode {
 
     public ONode(Object value) {
         this.value = value;
-        this.type = JsonType.resolveType(value);
+        this.type = JsonType.resolveValueType(value);
     }
 
     public JsonType nodeType() {
@@ -170,7 +170,7 @@ public final class ONode {
 
     public ONode asObject() {
         if (value == null) {
-            value = new LinkedHashMap<>();
+            value = new ONodeObject();
             type = JsonType.Object;
         }
 
@@ -179,7 +179,7 @@ public final class ONode {
 
     public ONode asArray() {
         if (value == null) {
-            value = new ArrayList<>();
+            value = new ONodeArray();
             type = JsonType.Array;
         }
 
@@ -454,19 +454,14 @@ public final class ONode {
         return 1;
     }
 
-    public ONode reset(Object value) {
-        this.value = value;
-        this.type = JsonType.resolveType(value);
-        return this;
-    }
-
     public void clear() {
         if (isObject()) {
             ((Map<?, ?>) value).clear();
         } else if (isArray()) {
             ((List<?>) value).clear();
         } else {
-            reset(null);
+            this.value = null;
+            this.type = JsonType.Null;
         }
     }
 
@@ -632,8 +627,86 @@ public final class ONode {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null) {
+            return isNull();
+        }
+
+        if (isArray()) {
+            if (o instanceof ONode) {
+                ONode o1 = (ONode) o;
+                return o1.isArray() && Objects.equals(getArray(), o1.getArray());
+            } else {
+                return Objects.equals(getArray(), o);
+            }
+        }
+
+        if (isObject()) {
+            if (o instanceof ONode) {
+                ONode o1 = (ONode) o;
+                return o1.isObject() && Objects.equals(getObject(), ((ONode) o).getObject());
+            } else {
+                return Objects.equals(getObject(), o);
+            }
+        }
+
+        if (isValue()) {
+            if (o instanceof ONode) {
+                ONode o1 = (ONode) o;
+                return o1.isValue() && Objects.equals(getValue(), ((ONode) o).getValue());
+            } else {
+                return Objects.equals(getValue(), o);
+            }
+        }
+
+        //最后是null type
+        if (o instanceof ONode) {
+            return ((ONode) o).isNull(); //都是 null
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        if (isNull()) {
+            return 0;
+        } else {
+            return value.hashCode();
+        }
+    }
+
+    @Override
     public String toString() {
         return String.valueOf(value);
+    }
+
+
+    static class ONodeArray extends ArrayList<ONode> {
+        @Override
+        public int indexOf(Object o) {
+            for (int i = 0; i < size(); i++)
+                if (get(i).equals(o))
+                    return i;
+
+            return -1;
+        }
+    }
+
+    static class ONodeObject extends LinkedHashMap<String,ONode> {
+        @Override
+        public boolean containsValue(Object value) {
+            for(Map.Entry<String,ONode> e: entrySet()){
+                if(e.getValue().equals(value)){
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /// ///////////

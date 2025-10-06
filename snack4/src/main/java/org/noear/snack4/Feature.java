@@ -179,4 +179,22 @@ public enum Feature {
         }
         return features;
     }
+
+    public static int addFeature(int ref, Feature... features) {
+        for (Feature feature : features) {
+            ref |= feature.mask();
+        }
+        return ref;
+    }
+
+    public static int removeFeature(int ref, Feature... features) {
+        for (Feature feature : features) {
+            ref &= ~feature.mask();
+        }
+        return ref;
+    }
+
+    public static boolean hasFeature(int ref, Feature feature) {
+        return (ref & feature.mask()) != 0;
+    }
 }

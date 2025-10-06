@@ -25,7 +25,7 @@ public class JsonWriterComplexTest {
         }
         current.set("value", "deep");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"nested\":{\"value\":\"deep\"}}}}}}}}}}}", writer.toString());
     }
 
@@ -38,7 +38,7 @@ public class JsonWriterComplexTest {
         node.set("null", null);
         node.set("array", Arrays.asList(1, 2, 3));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"string\":\"value\",\"number\":123,\"boolean\":true,\"null\":null,\"array\":[1,2,3]}", writer.toString());
     }
 
@@ -49,7 +49,7 @@ public class JsonWriterComplexTest {
         node.set("key with spaces", "value2");
         node.set("key-with-dashes", "value3");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"key.with.dots\":\"value1\",\"key with spaces\":\"value2\",\"key-with-dashes\":\"value3\"}", writer.toString());
     }
 
@@ -59,7 +59,7 @@ public class JsonWriterComplexTest {
         node.set("", "empty");
         node.set(" ", "space");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"\":\"empty\",\" \":\"space\"}", writer.toString());
     }
 
@@ -69,7 +69,7 @@ public class JsonWriterComplexTest {
         node.set("こんにちは", "hello");
         node.set("안녕하세요", "hi");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"こんにちは\":\"hello\",\"안녕하세요\":\"hi\"}", writer.toString());
     }
 
@@ -79,7 +79,7 @@ public class JsonWriterComplexTest {
         node.set("key\"with\"quotes", "value1");
         node.set("key\\with\\backslashes", "value2");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"key\\\"with\\\"quotes\":\"value1\",\"key\\\\with\\\\backslashes\":\"value2\"}", writer.toString());
     }
 
@@ -92,7 +92,7 @@ public class JsonWriterComplexTest {
                 Arrays.asList(5, 6)
         ));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[[1,2],[3,4],[5,6]]}", writer.toString());
     }
 
@@ -106,7 +106,7 @@ public class JsonWriterComplexTest {
         ));
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"nested\":{\"array\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}}", writer.toString());
     }
 
@@ -121,7 +121,7 @@ public class JsonWriterComplexTest {
         nested.set("object", new ONode().set("nestedKey", "nestedValue"));
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"nested\":{\"array\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}],\"object\":{\"nestedKey\":\"nestedValue\"}}}", writer.toString());
     }
 
@@ -132,7 +132,7 @@ public class JsonWriterComplexTest {
             node.set("key" + i, "value" + i);
         }
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         String expected = "{" +
                 "\"key0\":\"value0\"," +
                 "\"key1\":\"value1\"," +
@@ -247,7 +247,7 @@ public class JsonWriterComplexTest {
         node.set("key4", "value\"with\"quotes");
         node.set("key5", "value\\with\\backslashes");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"key1\":\"value with spaces\",\"key2\":\"value\\nwith\\nnewlines\",\"key3\":\"value\\twith\\ttabs\",\"key4\":\"value\\\"with\\\"quotes\",\"key5\":\"value\\\\with\\\\backslashes\"}", writer.toString());
     }
 
@@ -259,7 +259,7 @@ public class JsonWriterComplexTest {
         node.set("double", 123.456);
         node.set("float", 123.456f);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"int\":123,\"long\":1234567890123456789,\"double\":123.456,\"float\":123.456}", writer.toString());
     }
 
@@ -269,7 +269,7 @@ public class JsonWriterComplexTest {
         node.set("true", true);
         node.set("false", false);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"true\":true,\"false\":false}", writer.toString());
     }
 
@@ -279,7 +279,7 @@ public class JsonWriterComplexTest {
         node.set("key1", null);
         node.set("key2", null);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"key1\":null,\"key2\":null}", writer.toString());
     }
 
@@ -290,7 +290,7 @@ public class JsonWriterComplexTest {
         node.set("key2", null);
         node.set("key3", "value3");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"key1\":\"value1\",\"key2\":null,\"key3\":\"value3\"}", writer.toString());
     }
 
@@ -299,7 +299,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", Arrays.asList(1, "two", true, null, 3.14));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[1,\"two\",true,null,3.14]}", writer.toString());
     }
 
@@ -311,7 +311,7 @@ public class JsonWriterComplexTest {
         nested.set("key2", null);
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"nested\":{\"key1\":null,\"key2\":null}}", writer.toString());
     }
 
@@ -325,7 +325,7 @@ public class JsonWriterComplexTest {
         nested.set("nested", nested2);
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"nested\":{\"key1\":null,\"nested\":{\"key2\":null}}}", writer.toString());
     }
 
@@ -334,7 +334,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", Arrays.asList(null, null, null));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[null,null,null]}", writer.toString());
     }
 
@@ -343,7 +343,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", BeanSerializer.serialize(Arrays.asList(true, false, true)));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[true,false,true]}", writer.toString());
     }
 
@@ -352,7 +352,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", Arrays.asList("one", "two", "three"));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[\"one\",\"two\",\"three\"]}", writer.toString());
     }
 
@@ -361,7 +361,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", Arrays.asList(1, 2, 3));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[1,2,3]}", writer.toString());
     }
 
@@ -370,7 +370,7 @@ public class JsonWriterComplexTest {
         ONode node = new ONode();
         node.set("array", Arrays.asList(1, 2.5, 3.14f, 4L));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"array\":[1,2.5,3.14,4]}", writer.toString());
     }
 }

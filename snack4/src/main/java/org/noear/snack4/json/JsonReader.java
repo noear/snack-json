@@ -109,7 +109,7 @@ public class JsonReader {
     }
 
     private ONode parseObject() throws IOException {
-        Map<String, ONode> map = new LinkedHashMap<>();
+        ONode map = new ONode().asObject();
         state.expect('{');
         while (true) {
             state.skipWhitespace();
@@ -127,7 +127,7 @@ public class JsonReader {
             state.skipWhitespace();
             state.expect(':');
             ONode value = parseValue();
-            map.put(key, value);
+            map.getObject().put(key, value);
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
@@ -140,7 +140,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or '}'");
             }
         }
-        return new ONode(map);
+        return map;
     }
 
     private String parseKey() throws IOException {
@@ -167,7 +167,7 @@ public class JsonReader {
     }
 
     private ONode parseArray() throws IOException {
-        ArrayList<ONode> list = new ArrayList<>();
+        ONode list = new ONode().asArray();
         state.expect('[');
         while (true) {
             state.skipWhitespace();
@@ -176,7 +176,7 @@ public class JsonReader {
                 break;
             }
 
-            list.add(parseValue());
+            list.getArray().add(parseValue());
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
@@ -189,7 +189,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or ']'");
             }
         }
-        return new ONode(list);
+        return list;
     }
 
     private String parseString() throws IOException {

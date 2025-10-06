@@ -18,7 +18,6 @@ public class UserModel3 {
     @ONodeAttr(format = "yyyyMMdd")
     public Date date;
 
-    @ONodeAttr(serializeFeatures = Feature.Write_Nulls)
     public String nullVal;
 
     @Override

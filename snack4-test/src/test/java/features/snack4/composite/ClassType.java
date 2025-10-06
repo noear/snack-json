@@ -13,26 +13,26 @@ import org.noear.snack4.Options;
  */
 public class ClassType {
     @Test
-    public void case1(){
+    public void case1() {
         TypeC c = new TypeC();
         c.typeA = new TypeAImpl();
         c.typeB = new TypeBImpl();
 
-       String rst = ONode.serialize(c, Feature.Write_ClassName);
-       System.out.println(rst);
+        String rst = ONode.serialize(c, Feature.Write_ClassName);
+        System.out.println(rst);
 
-       assert "{\"@type\":\"demo.snack3._model5.TypeC\",\"typeA\":{\"@type\":\"demo.snack3._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack3._model5.TypeBImpl\"}}".equals(rst);
+        assert "{\"@type\":\"demo.snack4._model5.TypeC\",\"typeA\":{\"@type\":\"demo.snack4._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack4._model5.TypeBImpl\"}}".equals(rst);
     }
 
     @Test
-    public void case2(){
+    public void case2() {
         TypeC c = new TypeC();
         c.typeA = new TypeAImpl();
         c.typeB = new TypeBImpl();
 
-        String rst = ONode.from(c, Options.of(Feature.Write_NotRootClassName)).serialize();
+        String rst = ONode.from(c, Options.of(Feature.Write_ClassName, Feature.Write_NotRootClassName)).serialize();
         System.out.println(rst);
 
-        assert "{\"typeA\":{\"@type\":\"demo.snack3._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack3._model5.TypeBImpl\"}}".equals(rst);
+        assert "{\"typeA\":{\"@type\":\"demo.snack4._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack4._model5.TypeBImpl\"}}".equals(rst);
     }
 }

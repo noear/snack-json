@@ -39,8 +39,8 @@ public class FieldWrap {
     private boolean deserialize = true;
     private ObjectEncoder serializeEncoder;
     private ObjectDecoder deserializeDecoder;
-    private Feature[] deserializeFeatures;
-    private Feature[] serializeFeatures;
+    private int deserializeFeaturesValue;
+    private int serializeFeaturesValue;
 
     public FieldWrap(Field field) {
         this.field = field;
@@ -63,8 +63,8 @@ public class FieldWrap {
                 deserializeDecoder = ReflectionUtil.newInstance(attr.deserializeDecoder(), e -> new AnnotationProcessException("Failed to create encoder for field: " + field.getName(), e));
             }
 
-            deserializeFeatures = attr.deserializeFeatures();
-            serializeFeatures = attr.serializeFeatures();
+            deserializeFeaturesValue = Feature.addFeature(0, attr.deserializeFeatures());
+            serializeFeaturesValue = Feature.addFeature(0, attr.serializeFeatures());
         }
 
         if (Modifier.isTransient(field.getModifiers())) {
@@ -103,6 +103,14 @@ public class FieldWrap {
 
     public boolean isDeserialize() {
         return deserialize;
+    }
+
+    public boolean hasSerializeFeature(Feature feature) {
+        return Feature.hasFeature(serializeFeaturesValue, feature);
+    }
+
+    public boolean hasDeserializeFeature(Feature feature) {
+        return Feature.hasFeature(deserializeFeaturesValue, feature);
     }
 
     public ObjectEncoder getSerializeEncoder() {

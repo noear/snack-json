@@ -168,7 +168,7 @@ public class JsonBeanCodecSimpleTest {
 
     @Test
     public void testPrimitiveDefaults() {
-        ONode emptyNode = new ONode(new HashMap<>());
+        ONode emptyNode = new ONode().asObject();
         PrimitiveBean result = BeanDeserializer.deserialize(emptyNode, PrimitiveBean.class);
 
         assertEquals(0, result.intVal);

@@ -114,6 +114,14 @@ public class BeanSerializer {
         for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
             if (field.isSerialize()) {
                 Object fieldValue = field.getField().get(bean);
+                if (fieldValue == null) {
+                    if (opts.hasFeature(Feature.Write_Nulls) == false
+                            && field.hasSerializeFeature(Feature.Write_Nulls) == false) {
+                        continue;
+                    }
+                }
+
+
                 ONode fieldNode = null;
 
                 if (field.isAsString()) {

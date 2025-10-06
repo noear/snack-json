@@ -128,7 +128,7 @@ public class DateTest {
                 "\"sqDatetime\":\"2025-07-23 08:10:54.093\",\n" +
                 "\"reportDatetime\":\"2025-07-23 08:15:31.0\",\n" +
                 "\"shDatetime\":\"2025-07-23 08:15:40\"\n" + "}";
-        Options options = Options.def();
+        Options options = Options.of();
         //添加编码器
         options.addEncoder(Date.class, (opts, attr, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
         options.addEncoder(LocalDateTime.class, (opts, attr, value) -> new ONode((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));

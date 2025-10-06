@@ -21,7 +21,7 @@ public class Coding {
     public void test0() {
         OrderModel orderModel = new OrderModel();
         orderModel.order_id = 1;
-        Options opts = Options.def();
+        Options opts = Options.of();
         //添加编码器
         opts.addEncoder(OrderModel.class, (opts1, attr, value) -> new ONode().set("id", value.order_id));
 
@@ -48,7 +48,7 @@ public class Coding {
     public void demo0() {
         String json = "";
 
-        Options opts = Options.def();
+        Options opts = Options.of();
         opts.addDecoder(LocalDateTime.class, (opts1, attr, node, clazz) -> {
             //我随手写的，具体要自己解析下格式
             return LocalDateTime.parse(node.getString());
@@ -62,7 +62,7 @@ public class Coding {
         OrderModel orderModel = new OrderModel();
         orderModel.order_id = 1;
 
-        Options options = Options.def();
+        Options options = Options.of();
         options.addEncoder(Date.class, (opts, attr, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd"))));
 
         //添加编码器

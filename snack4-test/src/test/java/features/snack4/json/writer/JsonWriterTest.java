@@ -20,7 +20,7 @@ public class JsonWriterTest {
     public void testWriteNull() throws IOException {
         ONode node = new ONode(null);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("null", writer.toString());
     }
 
@@ -28,7 +28,7 @@ public class JsonWriterTest {
     public void testWriteBooleanTrue() throws IOException {
         ONode node = new ONode(true);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("true", writer.toString());
     }
 
@@ -36,7 +36,7 @@ public class JsonWriterTest {
     public void testWriteBooleanFalse() throws IOException {
         ONode node = new ONode(false);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("false", writer.toString());
     }
 
@@ -44,7 +44,7 @@ public class JsonWriterTest {
     public void testWriteNumberInteger() throws IOException {
         ONode node = new ONode(123);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("123", writer.toString());
     }
 
@@ -52,7 +52,7 @@ public class JsonWriterTest {
     public void testWriteNumberDouble() throws IOException {
         ONode node = new ONode(123.45);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("123.45", writer.toString());
     }
 
@@ -60,15 +60,15 @@ public class JsonWriterTest {
     public void testWriteString() throws IOException {
         ONode node = new ONode("hello");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("\"hello\"", writer.toString());
     }
 
     @Test
     public void testWriteEmptyArray() throws IOException {
-        ONode node = new ONode(new ArrayList<>());
+        ONode node = new ONode().asArray();
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("[]", writer.toString());
     }
 
@@ -77,15 +77,15 @@ public class JsonWriterTest {
         ONode node = new ONode();
         node.add(1).add(2).add(3);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("[1,2,3]", writer.toString());
     }
 
     @Test
     public void testWriteEmptyObject() throws IOException {
-        ONode node = new ONode(new HashMap<>());
+        ONode node = new ONode().asObject();
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{}", writer.toString());
     }
 
@@ -95,7 +95,7 @@ public class JsonWriterTest {
         node.set("name", new ONode("John"));
         node.set("age", new ONode(30));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"name\":\"John\",\"age\":30}", writer.toString());
     }
 
@@ -106,7 +106,7 @@ public class JsonWriterTest {
         address.set("city", new ONode("New York"));
         node.set("address", address);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"address\":{\"city\":\"New York\"}}", writer.toString());
     }
 
@@ -117,7 +117,7 @@ public class JsonWriterTest {
         array.add(1).add(2).add(3);
         node.set("numbers", array);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"numbers\":[1,2,3]}", writer.toString());
     }
 
@@ -142,7 +142,7 @@ public class JsonWriterTest {
         node.set("name", new ONode("John"));
         node.set("age", new ONode(null));
 
-        Options opts = Options.def();
+        Options opts = Options.of();
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("{\"name\":\"John\"}", writer.toString());
@@ -197,7 +197,7 @@ public class JsonWriterTest {
         phones.add("123-456-7890").add("987-654-3210");
         node.set("phones", phones);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"name\":\"John\",\"address\":{\"city\":\"New York\",\"zip\":\"10001\"},\"phones\":[\"123-456-7890\",\"987-654-3210\"]}", writer.toString());
     }
 
@@ -210,7 +210,7 @@ public class JsonWriterTest {
         obj2.set("name", new ONode("Jane"));
         node.add(obj1).add(obj2);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("[{\"name\":\"John\"},{\"name\":\"Jane\"}]", writer.toString());
     }
 
@@ -223,7 +223,7 @@ public class JsonWriterTest {
         array2.add(3).add(4);
         node.add(array1).add(array2);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("[[1,2],[3,4]]", writer.toString());
     }
 
@@ -235,7 +235,7 @@ public class JsonWriterTest {
         node.set("isStudent", false);
         node.set("grades", BeanSerializer.serialize(new int[]{90, 85, 88}));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"name\":\"John\",\"age\":30,\"isStudent\":false,\"grades\":[90,85,88]}", writer.toString());
     }
 
@@ -243,7 +243,7 @@ public class JsonWriterTest {
     public void testWriteEmptyString() throws IOException {
         ONode node = new ONode("");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("\"\"", writer.toString());
     }
 
@@ -251,7 +251,7 @@ public class JsonWriterTest {
     public void testWriteZero() throws IOException {
         ONode node = new ONode(0);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("0", writer.toString());
     }
 
@@ -259,7 +259,7 @@ public class JsonWriterTest {
     public void testWriteNegativeNumber() throws IOException {
         ONode node = new ONode(-123);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("-123", writer.toString());
     }
 
@@ -267,7 +267,7 @@ public class JsonWriterTest {
     public void testWriteLargeNumber() throws IOException {
         ONode node = new ONode(1234567890123456789L);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("1234567890123456789", writer.toString());
     }
 
@@ -275,7 +275,7 @@ public class JsonWriterTest {
     public void testWriteSpecialCharactersInString() throws IOException {
         ONode node = new ONode("Hello, \"World\"!");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("\"Hello, \\\"World\\\"!\"", writer.toString());
     }
 
@@ -283,7 +283,7 @@ public class JsonWriterTest {
     public void testWriteEscapedCharacters() throws IOException {
         ONode node = new ONode("Line1\nLine2\tTab");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("\"Line1\\nLine2\\tTab\"", writer.toString());
     }
 
@@ -291,7 +291,7 @@ public class JsonWriterTest {
     public void testWriteUnicodeCharacters() throws IOException {
         ONode node = new ONode("こんにちは");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("\"こんにちは\"", writer.toString());
     }
 
@@ -309,7 +309,7 @@ public class JsonWriterTest {
         person.set("phones", phones);
         node.set("person", person);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.def(), writer).write(node);
+        new JsonWriter(Options.of(), writer).write(node);
         assertEquals("{\"person\":{\"name\":\"John\",\"address\":{\"city\":\"New York\",\"zip\":\"10001\"},\"phones\":[\"123-456-7890\",\"987-654-3210\"]}}", writer.toString());
     }
 }

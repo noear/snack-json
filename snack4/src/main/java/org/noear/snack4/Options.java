@@ -50,7 +50,7 @@ public final class Options {
     //编码仓库
     private final CodecLib codecLib = CodecLib.newInstance();
     // 特性开关（使用位掩码存储）
-    private int features = DEF_FEATURES;
+    private int featuresValue = DEF_FEATURES;
     // 时间格式
     private DateTimeFormatter dateFormat = DEF_DATETIME_FORMAT;
     // 读取最大深度
@@ -78,11 +78,11 @@ public final class Options {
      * 是否启用指定特性
      */
     public boolean hasFeature(Feature feature) {
-        return (features & feature.mask()) != 0;
+        return Feature.hasFeature(this.featuresValue, feature);
     }
 
     public int getFeatures() {
-        return features;
+        return featuresValue;
     }
 
     public Locale getLocale() {
@@ -172,9 +172,7 @@ public final class Options {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        for (Feature feature : features) {
-            this.features |= feature.mask();
-        }
+        this.featuresValue = Feature.addFeature(this.featuresValue, features);
         return this;
     }
 
@@ -186,9 +184,7 @@ public final class Options {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        for (Feature feature : features) {
-            this.features &= ~feature.mask();
-        }
+        this.featuresValue = Feature.removeFeature(this.featuresValue, features);
         return this;
     }
 
