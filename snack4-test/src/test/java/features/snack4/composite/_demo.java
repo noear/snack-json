@@ -150,7 +150,7 @@ public class _demo {
     public void demo40() {
         Options options = new Options()
                 .enableFeature(Feature.Write_UseSingleQuotes)
-                .disableFeature(Feature.Write_QuoteFieldNames);
+                .enableFeature(Feature.Write_UnquotedFieldNames);
 
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.load(txt);

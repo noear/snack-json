@@ -107,7 +107,7 @@ public class ObjectTest {
         assert a.names == null;
         System.out.println(a);
 
-        oNode = ONode.from(a, Feature.Write_SerializeNulls);
+        oNode = ONode.from(a, Feature.Write_Nulls);
         String json2 = oNode.serialize();
         System.out.println(json2);
 

@@ -86,7 +86,7 @@ public class ExistsTest {
         UserModel userModel = ONode.deserialize(str, UserModel.class);
 
         ONode load = ONode.load(str);
-        ONode load1 = ONode.from(userModel, Feature.Write_SerializeNulls);
+        ONode load1 = ONode.from(userModel, Feature.Write_Nulls);
 
 
         System.out.println(load.serialize());
@@ -114,7 +114,7 @@ public class ExistsTest {
 
 
         userModel1 = new UserModel();
-        user1 = ONode.from(userModel1, Feature.Write_SerializeNulls);
+        user1 = ONode.from(userModel1, Feature.Write_Nulls);
         System.out.println(user1.exists("$.note"));
         assert user1.exists("$.note") == true;
     }

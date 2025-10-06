@@ -67,20 +67,6 @@ public class NameTest {
         assert "noear".equals(vm2.list.get(0).bookname);
     }
 
-    @Test
-    public void test3() {
-        Options options = Options.enableOf(
-                Feature.Write_QuoteFieldNames);
-
-        String val = new ONode(options).get("name").getString();
-        System.out.println(val);
-        assert val == null;
-
-
-        String val2 = new ONode().get("name").getString();
-        System.out.println(val2);
-        assert val2 == null;
-    }
 
     @Test
     public void test4() {

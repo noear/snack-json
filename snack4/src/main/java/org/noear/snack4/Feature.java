@@ -60,10 +60,6 @@ public enum Feature {
      */
     Read_ConvertUnderlineStyle(false),
     /**
-     * 自动解析日期格式 (支持多种格式)
-     */
-    Read_AutoParseDate(true),
-    /**
      * 自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
      */
     Read_UnwrapJsonString(false),
@@ -103,14 +99,11 @@ public enum Feature {
     //-----------------------------
     // 写入（序列化）
     //-----------------------------
-    Write_QuoteFieldNames(true),
 
-    /**
-     * 序列化时是否输出 null 值
-     */
-    Write_SkipNullValue(false),
-
-    Write_SerializeNulls(false),
+    //写入 无引号字段名
+    Write_UnquotedFieldNames(false),
+    //写入 null
+    Write_Nulls(false),
 
     Write_StringNullAsEmpty(false),
 
@@ -136,6 +129,7 @@ public enum Feature {
      * 输出枚举使用名称（默认使用名称）
      */
     Write_EnumUsingName(true),
+    Write_EnumUsingToString(false),
 
     /**
      * 写入类名

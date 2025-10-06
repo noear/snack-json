@@ -18,7 +18,7 @@ public class OptionTest {
         Options options = Options.def();
         options.enableFeature(Feature.Write_UseNumberString);
         options.enableFeature(Feature.Write_UseDateFormat);
-        options.enableFeature(Feature.Write_SerializeNulls);
+        options.enableFeature(Feature.Write_Nulls);
         options.enableFeature(Feature.Write_EnumUsingName);
         options.dateFormatText("yyyy-MM-dd");
         options.timeZone(TimeZone.getTimeZone("GMT+8"));

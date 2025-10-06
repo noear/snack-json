@@ -111,7 +111,7 @@ public class Demo3 {
         User user = new User("张三", 24);
         System.out.println(ONode.from(user).serialize()); //{"name":"张三","age":24}
 
-        Options opts = Options.enableOf(Feature.Write_SerializeNulls);
+        Options opts = Options.enableOf(Feature.Write_Nulls);
         System.out.println(ONode.from(user).serialize(opts)); //{"name":"张三","age":24,"emailAddress":null}
     }
 

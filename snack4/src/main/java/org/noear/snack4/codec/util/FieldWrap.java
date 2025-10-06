@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.codec.util;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
@@ -30,13 +31,16 @@ import java.lang.reflect.Modifier;
 public class FieldWrap {
     private final Field field;
     private final ONodeAttr attr;
+
+    private String name;
+    private boolean asString;
+
     private boolean serialize = true;
     private boolean deserialize = true;
-
-    private String alias;
-    private boolean ignore;
-    private ObjectDecoder decoder;
-    private ObjectEncoder encoder;
+    private ObjectEncoder serializeEncoder;
+    private ObjectDecoder deserializeDecoder;
+    private Feature[] deserializeFeatures;
+    private Feature[] serializeFeatures;
 
     public FieldWrap(Field field) {
         this.field = field;
@@ -45,22 +49,27 @@ public class FieldWrap {
         field.setAccessible(true);
 
         if (attr != null) {
-            alias = attr.alias();
-            ignore = attr.ignore();
+            name = attr.name();
+            asString = attr.asString();
+
             serialize = attr.serialize();
             deserialize = attr.deserialize();
 
-            if (attr.decoder() != ObjectDecoder.class) {
-                decoder = ReflectionUtil.newInstance(attr.decoder(), e -> new AnnotationProcessException("Failed to create decoder for field: " + field.getName(), e));
+            if (attr.serializeEncoder().isInterface() == false) {
+                serializeEncoder = ReflectionUtil.newInstance(attr.serializeEncoder(), e -> new AnnotationProcessException("Failed to create decoder for field: " + field.getName(), e));
             }
 
-            if (attr.encoder() != ObjectEncoder.class) {
-                encoder = ReflectionUtil.newInstance(attr.encoder(), e -> new AnnotationProcessException("Failed to create encoder for field: " + field.getName(), e));
+            if (attr.deserializeDecoder().isInterface() == false) {
+                deserializeDecoder = ReflectionUtil.newInstance(attr.deserializeDecoder(), e -> new AnnotationProcessException("Failed to create encoder for field: " + field.getName(), e));
             }
+
+            deserializeFeatures = attr.deserializeFeatures();
+            serializeFeatures = attr.serializeFeatures();
         }
 
         if (Modifier.isTransient(field.getModifiers())) {
-            ignore = true;
+            serialize = false;
+            deserialize = false;
         }
     }
 
@@ -76,32 +85,31 @@ public class FieldWrap {
         return attr;
     }
 
-    public String getAliasName() {
-        if (Asserts.isEmpty(alias)) {
+    public String getName() {
+        if (Asserts.isEmpty(name)) {
             return field.getName();
         } else {
-            return alias;
+            return name;
         }
     }
 
-
-    public ObjectDecoder getDecoder() {
-        return decoder;
-    }
-
-    public ObjectEncoder getEncoder() {
-        return encoder;
-    }
-
-    public boolean isIgnore() {
-        return ignore;
+    public boolean isAsString() {
+        return asString;
     }
 
     public boolean isSerialize() {
-        return serialize && !ignore;
+        return serialize;
     }
 
     public boolean isDeserialize() {
-        return deserialize && !ignore;
+        return deserialize;
+    }
+
+    public ObjectEncoder getSerializeEncoder() {
+        return serializeEncoder;
+    }
+
+    public ObjectDecoder getDeserializeDecoder() {
+        return deserializeDecoder;
     }
 }

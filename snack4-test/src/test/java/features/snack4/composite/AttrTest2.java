@@ -46,7 +46,7 @@ public class AttrTest2 {
 
         //配置 Options 实例，添加可序列化null
         Options options = new Options();
-        options.enableFeature(Feature.Write_SerializeNulls);
+        options.enableFeature(Feature.Write_Nulls);
 
         String json = ONode.serialize(user, options);
 

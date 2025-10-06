@@ -179,7 +179,7 @@ public class BeanDeserializer {
         } else {
             for (FieldWrap field : ReflectionUtil.getDeclaredFields(typeWrap.getClazz())) {
                 if (field.isDeserialize()) {
-                    ONode fieldNode = node.get(field.getAliasName());
+                    ONode fieldNode = node.get(field.getName());
 
                     if (fieldNode != null && !fieldNode.isNull()) {
                         //深度填充：获取字段当前的值，作为递归调用的 target

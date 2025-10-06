@@ -211,7 +211,7 @@ public class _test {
 
         String txt2 = tmp.serialize(new Options()
                 .enableFeature(Feature.Write_UseSingleQuotes) //采用单引号
-                .disableFeature(Feature.Write_QuoteFieldNames));//取消字段引号
+                .enableFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
 
         assert txt.equals(txt2);
     }

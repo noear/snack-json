@@ -4,7 +4,7 @@ import org.noear.snack4.annotation.ONodeAttr;
 
 public class BookModel {
     public int id;
-    @ONodeAttr(alias = "name")
+    @ONodeAttr(name = "name")
     public String bookname;
     public String note;
 }

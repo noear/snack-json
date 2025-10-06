@@ -82,8 +82,10 @@ public class JsonWriter {
         depth++;
         boolean first = true;
         for (Map.Entry<String, ONode> entry : map.entrySet()) {
-            if (opts.isFeatureEnabled(Feature.Write_SkipNullValue) && entry.getValue().isNull()) {
-                continue;
+            if (entry.getValue().isNull()) {
+                if (opts.isFeatureEnabled(Feature.Write_Nulls) == false) {
+                    continue;
+                }
             }
 
             if (!first) {
@@ -141,10 +143,10 @@ public class JsonWriter {
     }
 
     private void writeKey(String s) throws IOException {
-        if (opts.isFeatureEnabled(Feature.Write_QuoteFieldNames)) {
-            writeString(s);
-        } else {
+        if (opts.isFeatureEnabled(Feature.Write_UnquotedFieldNames)) {
             writer.write(escapeString(s, opts));
+        } else {
+            writeString(s);
         }
     }
 

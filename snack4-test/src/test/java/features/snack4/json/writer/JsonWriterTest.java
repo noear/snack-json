@@ -141,7 +141,8 @@ public class JsonWriterTest {
         ONode node = new ONode();
         node.set("name", new ONode("John"));
         node.set("age", new ONode(null));
-        Options opts = Options.enableOf(Feature.Write_SkipNullValue);
+
+        Options opts = Options.def();
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("{\"name\":\"John\"}", writer.toString());
