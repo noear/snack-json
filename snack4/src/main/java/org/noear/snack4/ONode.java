@@ -513,7 +513,7 @@ public final class ONode {
     }
 
     public boolean exists(String jsonpath) {
-        return false == select(jsonpath).isNull();
+        return false == select(jsonpath).isUndefined();
     }
 
     /**

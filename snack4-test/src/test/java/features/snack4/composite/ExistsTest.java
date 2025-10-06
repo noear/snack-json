@@ -61,7 +61,7 @@ public class ExistsTest {
         assert oNode4.select("$[0].user.name").isUndefined();
         assert oNode4.exists("$[0].user.name") == false;
 
-        ONode oNode5 = ONode.load("[{user:{}}}]");
+        ONode oNode5 = ONode.load("[{user:{}}]");
         assert oNode5.select("$[0].user.name").isNull();
         assert oNode5.select("$[0].user.name").isUndefined();
         assert oNode5.exists("$[0].user.name") == false;
@@ -74,7 +74,7 @@ public class ExistsTest {
         assert oNode4.select("$[0].user.name.first").isUndefined();
         assert oNode4.exists("$[0].user.name.first") == false;
 
-        ONode oNode5 = ONode.load("[{user:{}}}]");
+        ONode oNode5 = ONode.load("[{user:{}}]");
         assert oNode5.select("$[0].user.name.first").isNull();
         assert oNode5.select("$[0].user.name.first").isUndefined();
         assert oNode5.exists("$[0].user.name.first") == false;
@@ -99,7 +99,7 @@ public class ExistsTest {
         assert load1.exists("$.note");
 
         assert load1.select("$.note").isNull(); //因为
-        assert load1.select("$.note").isValue();
+        assert load1.select("$.note").isValue() == false;
         load1.select("$.note").set("a1", 1);
         System.out.println(load1.toJson());
         assert load1.select("$.note").isObject();
