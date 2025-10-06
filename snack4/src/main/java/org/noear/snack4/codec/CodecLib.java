@@ -147,6 +147,7 @@ public class CodecLib {
     private void loadDefaultDecoders() {
         addDecoder(new _ArrayPatternDecoder());
         addDecoder(new _EnumPatternDecoder());
+        addDecoder(new _ThrowablePatternDecoder());
 
         addDecoder(StackTraceElement.class, new StackTraceElementDecoder());
         addDecoder(Properties.class, new PropertiesDecoder());
@@ -209,6 +210,7 @@ public class CodecLib {
         addEncoder(new _ClobPatternEncoder());
         addEncoder(new _DatePatternEncoder());
         addEncoder(new _EnumPatternEncoder());
+        addEncoder(new _ThrowablePatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(ONode.class, new ONodeEncoder());

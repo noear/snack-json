@@ -15,19 +15,19 @@ public class SerializationTest {
 
     @Test
     public void test0() throws Exception {
-        String temp = ONode.serialize("aaa", Feature.Write_ClassName);
+        String temp = ONode.serialize("aaa");
         assert "\"aaa\"".equals(temp);
 
-        temp = ONode.serialize(12, Feature.Write_ClassName);
+        temp = ONode.serialize(12);
         assert "12".equals(temp);
 
-        temp = ONode.serialize(true, Feature.Write_ClassName);
+        temp = ONode.serialize(true);
         assert "true".equals(temp);
 
-        temp = ONode.serialize((Object) null, Feature.Write_ClassName);
+        temp = ONode.serialize(null);
         assert "null".equals(temp);
 
-        temp = ONode.serialize(new Date(),  Feature.Write_ClassName);
+        temp = ONode.serialize(new Date());
         assert "null".equals(temp) == false;
 
 
@@ -52,11 +52,11 @@ public class SerializationTest {
 
             NullPointerException ex2 = ONode.deserialize(json, NullPointerException.class);
 
-            Object ex22 = ONode.deserialize(json, Object.class);
+            Object ex22 = ONode.deserialize(json);
             assert ex22 instanceof NullPointerException;
 
 
-            Object ex23 = ONode.deserialize(json, Object.class);
+            Object ex23 = ONode.deserialize(json, Feature.Read_DisableClassName);
             assert ex23 instanceof Map;
 
             ex2.printStackTrace();
@@ -95,10 +95,10 @@ public class SerializationTest {
         System.out.println(json);
         UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class);
 
-        Object group22 = ONode.deserialize(json, Object.class);
+        Object group22 = ONode.deserialize(json);
         assert group22 instanceof UserGroupModel;
 
-        Object group23 = ONode.deserialize(json, Object.class);
+        Object group23 = ONode.deserialize(json, Feature.Read_DisableClassName);
         assert group23 instanceof Map;
 
         assert group2.id == 9999;
@@ -198,8 +198,8 @@ public class SerializationTest {
         String json = ONode.serialize(order, Feature.Write_ClassName);
         System.out.println(json);
         OrderModel order2 = ONode.deserialize(json, OrderModel.class);
-        Object order22 = ONode.deserialize(json, Object.class);
-        Map order23 = ONode.deserialize(json, Object.class);
+        Object order22 = ONode.deserialize(json);
+        Map order23 = ONode.deserialize(json, Feature.Read_DisableClassName);
 
 
         assert 1111 == order2.user.id;
@@ -247,7 +247,7 @@ public class SerializationTest {
     public void test6() throws Exception {
         String tmp = "{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}";
         //1.加载json
-        Object n = ONode.load(tmp);
+        Object n = ONode.deserialize(tmp);
 
         assert n instanceof Map;
         assert ((Map) n).size() == 3;

@@ -100,7 +100,8 @@ public class BeanSerializer {
     private static ONode convertBeanToNode(Object bean, Map<Object, Object> visited, Options opts) throws Exception {
         // 循环引用检测
         if (visited.containsKey(bean)) {
-            throw new StackOverflowError("Circular reference detected: " + bean.getClass().getName());
+            return null;
+            //throw new StackOverflowError("Circular reference detected: " + bean.getClass().getName());
         } else {
             visited.put(bean, null);
         }
@@ -131,7 +132,9 @@ public class BeanSerializer {
                         fieldNode = convertValueToNode(fieldValue, field.getAttr(), visited, opts);
                     }
 
-                    tmp.set(field.getName(), fieldNode);
+                    if (fieldNode != null) {
+                        tmp.set(field.getName(), fieldNode);
+                    }
                 }
             }
         } finally {
