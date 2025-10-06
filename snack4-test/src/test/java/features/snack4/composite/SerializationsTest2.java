@@ -46,20 +46,20 @@ public class SerializationsTest2 {
     }
 
     public String buildJson() {
-        return ONode.from(buildObj()).toJson();
+        return ONode.from(buildObj()).serialize();
     }
 
     @Test
     public void test01() {
-        String tmp = ONode.toJson(buildObj(), Feature.Write_ClassName);
+        String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
         System.out.println(tmp);
     }
 
     @Test
     public void test02() {
-        String tmp = ONode.toJson(buildObj(), Feature.Write_ClassName);
+        String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
         tmp = tmp.replaceAll("UserGroupModel", "UserGroupModel2");
-        UserGroupModel2 tmp2 = ONode.fromJson(tmp, UserGroupModel2.class);
+        UserGroupModel2 tmp2 = ONode.deserialize(tmp, UserGroupModel2.class);
 
         assert tmp2.users != null;
         assert tmp2.users.length > 2;
@@ -71,7 +71,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        UserGroupModel group0 = ONode.fromJson(json0)
+        UserGroupModel group0 = ONode.load(json0)
                 .to((new TypeRef<UserGroupModel>() {
                 }));
 
@@ -83,7 +83,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        UserGroupModel group0 = ONode.fromJson(json0)
+        UserGroupModel group0 = ONode.load(json0)
                 .to(UserGroupModel.class);
 
         assert group0.id == 9999;
@@ -94,7 +94,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        List<UserModel> group0 = ONode.fromJson(json0).get("users")
+        List<UserModel> group0 = ONode.load(json0).get("users")
                 .to((new ArrayList<UserModel>() {
                 }).getClass());
 
@@ -106,7 +106,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        List<UserModel> group0 = ONode.fromJson(json0).get("users")
+        List<UserModel> group0 = ONode.load(json0).get("users")
                 .to((new TypeRef<List<UserModel>>() {
                 }).getClass());
 
@@ -126,7 +126,7 @@ public class SerializationsTest2 {
 
         ONode oNode = ONode.from(props);
 
-        System.out.println(oNode.toJson());
+        System.out.println(oNode.serialize());
 
         QueryParamEntity entity = oNode.to(QueryParamEntity.class);
 
@@ -152,7 +152,7 @@ public class SerializationsTest2 {
     @Test
     public void test5() {
         String json = "{data:{a:1,b:2}}";
-        MapModel mapModel = ONode.fromJson(json, MapModel.class);
+        MapModel mapModel = ONode.deserialize(json, MapModel.class);
 
         assert mapModel != null;
         assert mapModel.data != null;
@@ -162,7 +162,7 @@ public class SerializationsTest2 {
     @Test
     public void test6() {
         String json = "{user-name:'noear',userName:'noear'}";
-        NameModel nameModel = ONode.fromJson(json, NameModel.class);
+        NameModel nameModel = ONode.deserialize(json, NameModel.class);
         System.out.println(nameModel);
         assert "noear".equals(nameModel.getUserName());
     }
@@ -173,7 +173,7 @@ public class SerializationsTest2 {
         sModel.age = 11;
         sModel.name = "test";
 
-        String json = ONode.from(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toJson();
+        String json = ONode.from(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).serialize();
         System.out.println(json);
         assert json.contains("name") == false;
         assert json.contains("age");
@@ -183,7 +183,7 @@ public class SerializationsTest2 {
     public void test8() {
         String json = "{age:11,name:'test'}";
 
-        SModel sModel = ONode.fromJson(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).to(SModel.class);
+        SModel sModel = ONode.load(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).to(SModel.class);
         System.out.println(sModel);
 
         assert sModel.name == null;
@@ -198,11 +198,11 @@ public class SerializationsTest2 {
         sets.add("2");
         sets.add("3");
 
-        String json = ONode.toJson(sets, Feature.Write_ClassName);
+        String json = ONode.serialize(sets, Feature.Write_ClassName);
         System.out.println(json);
 
-        Set<String> sets2 = ONode.fromJson(json, Set.class);
-        System.out.println(ONode.toJson(sets2, Feature.Write_ClassName));
+        Set<String> sets2 = ONode.deserialize(json, Set.class);
+        System.out.println(ONode.serialize(sets2, Feature.Write_ClassName));
 
         assert sets2.size() == sets.size();
     }
@@ -216,11 +216,11 @@ public class SerializationsTest2 {
 
         Options options = Options.enableOf(Feature.Write_ArrayClassName);
 
-        String json = ONode.from(sets, options).toJson();
+        String json = ONode.from(sets, options).serialize();
         System.out.println(json);
 
-        Set<String> sets2 = ONode.fromJson(json, options).to();
-        System.out.println(ONode.from(sets2, options).toJson());
+        Set<String> sets2 = ONode.load(json, options).to();
+        System.out.println(ONode.from(sets2, options).serialize());
 
         assert sets2.size() == sets.size();
     }
@@ -234,7 +234,7 @@ public class SerializationsTest2 {
         tmp.setEndTime(OffsetTime.now());
         tmp.setStartTime(OffsetTime.now());
 
-        String json2 = ONode.from(tmp).toJson();
+        String json2 = ONode.from(tmp).serialize();
         System.out.println(json2);
     }
 
@@ -243,7 +243,7 @@ public class SerializationsTest2 {
         DTimeVO tmp = new DTimeVO();
 
         try {
-            String json2 = ONode.from(tmp).toJson(Feature.Write_PrettyFormat);
+            String json2 = ONode.from(tmp).serialize(Feature.Write_PrettyFormat);
             System.out.println(json2);
             assert false;
         } catch (UnsupportedTemporalTypeException e) {

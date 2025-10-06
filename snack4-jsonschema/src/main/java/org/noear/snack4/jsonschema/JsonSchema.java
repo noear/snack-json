@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class JsonSchema {
     public static JsonSchema load(String jsonSchema) {
-        return new JsonSchema(ONode.fromJson(jsonSchema));
+        return new JsonSchema(ONode.load(jsonSchema));
     }
 
     public static JsonSchema from(ONode jsonSchema) {
@@ -51,7 +51,7 @@ public class JsonSchema {
     }
 
     public String toJson(){
-        return schema.toJson();
+        return schema.serialize();
     }
 
     public void validate(ONode data) throws SchemaException {

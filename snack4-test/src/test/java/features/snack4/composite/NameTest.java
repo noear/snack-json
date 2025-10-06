@@ -22,13 +22,13 @@ public class NameTest {
         user.bookname = "noear";
         user.note = "test";
 
-        String json = ONode.toJson(user);
+        String json = ONode.serialize(user);
         System.out.println(json);
 
         assert json.contains("name");
 
 
-        BookModel user2 = ONode.fromJson(json, BookModel.class);
+        BookModel user2 = ONode.deserialize(json, BookModel.class);
         System.out.println(user2.bookname);
 
         assert "noear".equals(user2.bookname);
@@ -55,13 +55,13 @@ public class NameTest {
 
         vm.list.add(user);
 
-        String json = ONode.toJson(vm);
+        String json = ONode.serialize(vm);
         System.out.println(json);
 
         assert json.contains("name");
 
 
-        BookViewModel vm2 = ONode.fromJson(json, BookViewModel.class);
+        BookViewModel vm2 = ONode.deserialize(json, BookViewModel.class);
         System.out.println(vm2.list.get(0).bookname);
 
         assert "noear".equals(vm2.list.get(0).bookname);
@@ -87,10 +87,10 @@ public class NameTest {
         Map<String, Object> data = new HashMap<>();
         data.put("c:\\", "c:\\");
 
-        String json = ONode.toJson(data, options);
+        String json = ONode.serialize(data, options);
         System.out.println(json);
 
-        String json2 = ONode.fromJson(json).toJson();
+        String json2 = ONode.load(json).serialize();
         System.out.println(json2);
         assert json2.equals(json);
     }

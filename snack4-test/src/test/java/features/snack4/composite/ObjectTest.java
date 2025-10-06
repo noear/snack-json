@@ -31,9 +31,9 @@ public class ObjectTest {
 
         ONode c = ONode.from(a);
 
-        System.out.println(c.toJson());
+        System.out.println(c.serialize());
 
-        assert "{\"b\":{}}".equals(c.toJson());
+        assert "{\"b\":{}}".equals(c.serialize());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ObjectTest {
 
         ONode c = ONode.from(order);
 
-        System.out.println(c.toJson());
+        System.out.println(c.serialize());
 
         OrderModel order2 = c.to(OrderModel.class);
 
@@ -80,7 +80,7 @@ public class ObjectTest {
 
         ONode c = ONode.from(group);
 
-        System.out.println(c.toJson());
+        System.out.println(c.serialize());
 
         assert 1 == c.get("users").get(1).get("id").getInt();
 
@@ -101,14 +101,14 @@ public class ObjectTest {
     @Test
     public void test4() {
         String json = "{\"names\":null}";
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
         A a = oNode.to(A.class);
 
         assert a.names == null;
         System.out.println(a);
 
         oNode = ONode.from(a, Feature.Write_SerializeNulls);
-        String json2 = oNode.toJson();
+        String json2 = oNode.serialize();
         System.out.println(json2);
 
         assert json.equals(json2);

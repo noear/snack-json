@@ -45,8 +45,8 @@ public class BaseTest {
         properties.setProperty("order.item[0].user", "1");
 
         ONode node = BeanSerializer.serialize(properties);
-        System.out.println(node.toJson()); // 输出: {"order":{"item":[{"user":"1"}]}}
-        assert "{\"order\":{\"item\":[{\"user\":\"1\"}]}}".equals(node.toJson());
+        System.out.println(node.serialize()); // 输出: {"order":{"item":[{"user":"1"}]}}
+        assert "{\"order\":{\"item\":[{\"user\":\"1\"}]}}".equals(node.serialize());
 
         Properties deserializedProperties = BeanDeserializer.deserialize(node, Properties.class);
         System.out.println(deserializedProperties.getProperty("order.item[0].user")); // 输出: 1
@@ -55,7 +55,7 @@ public class BaseTest {
 
     @Test
     public void case4() {
-        ONode root = ONode.fromJson("{}");
+        ONode root = ONode.load("{}");
         JsonPath.delete(root, "$.store.book[0]");
         ONode result = JsonPath.select(root, "$.store.book[0]");
         assertTrue(result.isNull());
@@ -63,7 +63,7 @@ public class BaseTest {
 
     @Test
     public void case5() {
-        ONode root = ONode.fromJson("{}");
+        ONode root = ONode.load("{}");
         JsonPath.create(root, "$.store.newNode");
         ONode result = JsonPath.select(root, "$.store.newNode");
         assertNotNull(result);

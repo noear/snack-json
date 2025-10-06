@@ -5,7 +5,6 @@ import demo.snack4.enums.BookType;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
-import org.noear.snack4.Options;
 import org.noear.snack4.exception.SnackException;
 
 import java.util.Collections;
@@ -28,7 +27,7 @@ public class EnumTest {
     public void case1() {
 
         String poc = "{\"name\":\"西游记\",\"dict\":" + BookType.CLASSICS.getCode() + ",}";
-        ONode oNode = ONode.fromJson(poc);
+        ONode oNode = ONode.load(poc);
         //解析
         Book tmp = oNode.to(Book.class);
 
@@ -56,7 +55,7 @@ public class EnumTest {
         String json = "{name:'demo',dict:'9'}";
 
         try {
-            ONode.fromJson(json, Book.class);
+            ONode.deserialize(json, Book.class);
             assert false;
         } catch (SnackException e) {
             assert true;
@@ -69,10 +68,10 @@ public class EnumTest {
         String s2 = "'number'";
         String s3 = "'select'";
         String s4 = "'switcher'";
-        ConfigControlType type1 = ONode.fromJson(s1, ConfigControlType.class);
-        ConfigControlType type2 = ONode.fromJson(s2, ConfigControlType.class);
-        ConfigControlType type3 = ONode.fromJson(s3, ConfigControlType.class);
-        ConfigControlType type4 = ONode.fromJson(s4, ConfigControlType.class);
+        ConfigControlType type1 = ONode.deserialize(s1, ConfigControlType.class);
+        ConfigControlType type2 = ONode.deserialize(s2, ConfigControlType.class);
+        ConfigControlType type3 = ONode.deserialize(s3, ConfigControlType.class);
+        ConfigControlType type4 = ONode.deserialize(s4, ConfigControlType.class);
         System.out.println(type1);
         System.out.println(type2);
         System.out.println(type3);
@@ -90,10 +89,10 @@ public class EnumTest {
         String s2 = "number";
         String s3 = "select";
         String s4 = "switcher";
-        ConfigControlType type1 = ONode.fromJson(s1, ConfigControlType.class);
-        ConfigControlType type2 = ONode.fromJson(s2, ConfigControlType.class);
-        ConfigControlType type3 = ONode.fromJson(s3, ConfigControlType.class);
-        ConfigControlType type4 = ONode.fromJson(s4, ConfigControlType.class);
+        ConfigControlType type1 = ONode.deserialize(s1, ConfigControlType.class);
+        ConfigControlType type2 = ONode.deserialize(s2, ConfigControlType.class);
+        ConfigControlType type3 = ONode.deserialize(s3, ConfigControlType.class);
+        ConfigControlType type4 = ONode.deserialize(s4, ConfigControlType.class);
         System.out.println(type1);
         System.out.println(type2);
         System.out.println(type3);
@@ -112,10 +111,10 @@ public class EnumTest {
         String s3 = "\"select\"";
         String s4 = "\"switcher\"";
 
-        String type1 = ONode.toJson(ConfigControlType.input, Feature.Write_EnumUsingName);
-        String type2 = ONode.toJson(ConfigControlType.number, Feature.Write_EnumUsingName);
-        String type3 = ONode.toJson(ConfigControlType.select, Feature.Write_EnumUsingName);
-        String type4 = ONode.toJson(ConfigControlType.switcher, Feature.Write_EnumUsingName);
+        String type1 = ONode.serialize(ConfigControlType.input, Feature.Write_EnumUsingName);
+        String type2 = ONode.serialize(ConfigControlType.number, Feature.Write_EnumUsingName);
+        String type3 = ONode.serialize(ConfigControlType.select, Feature.Write_EnumUsingName);
+        String type4 = ONode.serialize(ConfigControlType.switcher, Feature.Write_EnumUsingName);
 
         System.out.println(type1);
         System.out.println(type2);
@@ -138,10 +137,10 @@ public class EnumTest {
         rec.map = map;
         rec.set = Collections.singleton(3);
 
-        String json = ONode.from(rec).toJson(Feature.Write_PrettyFormat);
+        String json = ONode.from(rec).serialize(Feature.Write_PrettyFormat);
 
         System.out.println(json);
-        Rec rec2 = ONode.fromJson(json, Rec.class);
+        Rec rec2 = ONode.deserialize(json, Rec.class);
 
         System.out.println(rec2.toString());
 

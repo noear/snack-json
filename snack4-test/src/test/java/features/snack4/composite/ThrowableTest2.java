@@ -13,7 +13,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test() {
-        Object tmp = ONode.fromJson(json);
+        Object tmp = ONode.load(json);
 
         assert tmp instanceof Throwable;
 
@@ -21,12 +21,12 @@ public class ThrowableTest2 {
 
         System.out.println("---------------------------");
 
-        String json2 = ONode.toJson(tmp, Feature.Write_ClassName);
+        String json2 = ONode.serialize(tmp, Feature.Write_ClassName);
 
         System.out.println(json2);
 
 
-        tmp = ONode.fromJson(json2);
+        tmp = ONode.load(json2);
 
         assert tmp instanceof Throwable;
 
@@ -36,14 +36,14 @@ public class ThrowableTest2 {
         System.out.println("---------------------------");
 
 
-        json2 = ONode.toJson(tmp, Feature.Write_ClassName);
+        json2 = ONode.serialize(tmp, Feature.Write_ClassName);
 
         System.out.println(json2);
     }
 
     @Test
     public void test1() {
-        Object tmp = ONode.fromJson(json);
+        Object tmp = ONode.load(json);
 
         assert tmp instanceof Throwable;
 
@@ -52,7 +52,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test2() {
-        Object tmp = ONode.fromJson(json, Point.class);
+        Object tmp = ONode.deserialize(json, Point.class);
 
         assert tmp instanceof Throwable;
 

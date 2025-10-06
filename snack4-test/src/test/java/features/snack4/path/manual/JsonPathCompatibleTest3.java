@@ -27,12 +27,12 @@ public class JsonPathCompatibleTest3 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.fromJson(json).select(jsonpathStr);
-        System.out.println(tmp.toJson());
+        ONode tmp = ONode.load(json).select(jsonpathStr);
+        System.out.println(tmp.serialize());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
         System.out.println(tmp2);
 
-        assert tmp.toJson().equals(tmp2.toString());
+        assert tmp.serialize().equals(tmp2.toString());
     }
 }

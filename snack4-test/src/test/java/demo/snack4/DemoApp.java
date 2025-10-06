@@ -21,6 +21,6 @@ public class DemoApp {
                 .enableFeature(Feature.Write_PrettyFormat)
                 .dateFormatText("yyyy-MM");
 
-        String json = ONode.fromJson(null, options).toJson();
+        String json = ONode.load(null, options).serialize();
     }
 }

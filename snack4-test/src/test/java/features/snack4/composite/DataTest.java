@@ -30,7 +30,7 @@ public class DataTest {
 
         ONode oNode = ONode.from(a);
 
-        System.out.println(oNode.toJson());
+        System.out.println(oNode.serialize());
 
         Object data = oNode.to();
 
@@ -52,7 +52,7 @@ public class DataTest {
 
         ONode c = ONode.from(order);
 
-        System.out.println(c.toJson());
+        System.out.println(c.serialize());
 
         Object data = c.to();
 
@@ -85,13 +85,13 @@ public class DataTest {
 //
 //        new ObjectFromer().handle(context);
 
-        String json = ONode.toJson(group, Feature.Write_ClassName);
+        String json = ONode.serialize(group, Feature.Write_ClassName);
 
         System.out.println(json);//context.node.toJson());
 
-        Object g2 = ONode.fromJson(json);
+        Object g2 = ONode.load(json);
 
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
         Object tmp = node.to(Feature.Read_DisableClassName);
 

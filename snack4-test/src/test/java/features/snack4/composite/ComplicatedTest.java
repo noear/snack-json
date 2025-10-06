@@ -30,12 +30,12 @@ public class ComplicatedTest {
         list2.add(map2);
 
         //开始序列化
-        String json = ONode.toJson(list2, Feature.Write_ClassName);
+        String json = ONode.serialize(list2, Feature.Write_ClassName);
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.fromJson(json, Object.class);
-        String json2 = ONode.toJson(obj2, Feature.Write_ClassName);
+        Object obj2 = ONode.deserialize(json, Object.class);
+        String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
         System.out.println(json2);
 
         assert obj2 instanceof List;
@@ -56,12 +56,12 @@ public class ComplicatedTest {
 
 
         //开始序列化
-        String json = ONode.toJson(map2, Feature.Write_ClassName);
+        String json = ONode.serialize(map2, Feature.Write_ClassName);
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.fromJson(json);
-        String json2 = ONode.toJson(obj2, Feature.Write_ClassName);
+        Object obj2 = ONode.load(json);
+        String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
 
         assert obj2 instanceof Map;
         assert json.equals(json2);
@@ -80,12 +80,12 @@ public class ComplicatedTest {
 
 
         //开始序列化
-        String json = ONode.toJson(map2, Feature.Write_ClassName);
+        String json = ONode.serialize(map2, Feature.Write_ClassName);
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.fromJson(json);
-        String json2 = ONode.toJson(obj2, Feature.Write_ClassName);
+        Object obj2 = ONode.load(json);
+        String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
 
         assert obj2 instanceof Map;
         assert json.equals(json2);

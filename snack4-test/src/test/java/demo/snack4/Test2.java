@@ -9,7 +9,7 @@ public class Test2 {
         String str = "";
 
         //加载json
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         //找到resultData节点
         ONode resultData = oNode.get("resultData");
@@ -23,7 +23,7 @@ public class Test2 {
 
     public void demo2(String json){
         //加载json
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         //找到resultData节点
         ONode select = oNode.get("resultData");
@@ -38,7 +38,7 @@ public class Test2 {
 
     public void demo21(String json){
         //加载json
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         //找到resultData节点
         ONode select = oNode.get("resultData");

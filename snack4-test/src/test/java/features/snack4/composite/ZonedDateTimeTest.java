@@ -4,7 +4,6 @@ import demo.snack4._models.ZonedDateTimeModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -22,7 +21,7 @@ public class ZonedDateTimeTest {
     @Test
     public void deserialize() {
         String poc = "{\"date\":\"2024-01-12T10:30:00.000+03:00\"}";
-        ONode oNode = ONode.fromJson(poc);
+        ONode oNode = ONode.load(poc);
         //解析
         ZonedDateTimeModel model = oNode.to(ZonedDateTimeModel.class);
         ZonedDateTime date = model.date;
@@ -38,6 +37,6 @@ public class ZonedDateTimeTest {
         ZonedDateTimeModel data = new ZonedDateTimeModel();
         data.date = ZonedDateTime.now();
 
-        ONode.toJson(data, Feature.Write_ClassName); //无异常就好
+        ONode.serialize(data, Feature.Write_ClassName); //无异常就好
     }
 }

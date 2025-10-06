@@ -12,7 +12,7 @@ public class GenericTest2 {
     @Test
     public void test() {
         String json = "{\"results\":[{\"uid\":\"1\"}],\"offset\":0,\"limit\":20,\"total\":0}";
-        Results<Index> deserialize = ONode.fromJson(json, new TypeRef<Results<Index>>() {
+        Results<Index> deserialize = ONode.deserialize(json, new TypeRef<Results<Index>>() {
         }.getType());
 
         System.out.println(deserialize);

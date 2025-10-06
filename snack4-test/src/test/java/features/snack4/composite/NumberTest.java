@@ -17,36 +17,36 @@ public class NumberTest {
     @Test
     public void test1() {
         String json = "{num:50123.12E25}";
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
-        System.out.println(node.toJson());
+        System.out.println(node.serialize());
         assert 50123.12E25 == node.get("num").getDouble();
     }
 
     @Test
     public void test2() {
         String json = "{num:5344.34234e3}";
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
-        System.out.println(node.toJson());
+        System.out.println(node.serialize());
         assert 5344.34234e3 == node.get("num").getDouble();
     }
 
     @Test
     public void test3() {
         String json = "{num:1.0485E+10}";
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
-        System.out.println(node.toJson());
+        System.out.println(node.serialize());
         assert 1.0485E+10 == node.get("num").getDouble();
     }
 
     @Test
     public void test4() {
         String json = "{num:1.0485E-10}";
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
-        System.out.println(node.toJson());
+        System.out.println(node.serialize());
         assert 1.0485E-10 == node.get("num").getDouble();
     }
 
@@ -55,9 +55,9 @@ public class NumberTest {
         System.out.println(0E-10);
 
         String json = "{num:0E-10}";
-        ONode node = ONode.fromJson(json);
+        ONode node = ONode.load(json);
 
-        System.out.println(node.toJson());
+        System.out.println(node.serialize());
         assert 0E-10 == node.get("num").getDouble();
     }
 
@@ -72,14 +72,14 @@ public class NumberTest {
         map.put("num22", new BigInteger("123456789112345678911234567891123456789112"));
 
         ONode node = ONode.from(map);
-        String json = node.toJson();
+        String json = node.serialize();
 
         System.out.println(json);
         assert 1.0485E-10 == node.get("num").getDouble();
         assert new BigInteger("123456789112345678911234567891123456789112").compareTo((BigInteger) node.get("num22").getValue()) == 0;
 
-        ONode node2 = ONode.fromJson(json);
-        assert json.equals(node2.toJson());
+        ONode node2 = ONode.load(json);
+        assert json.equals(node2.serialize());
     }
 
     @Test
@@ -94,15 +94,15 @@ public class NumberTest {
         mod.setNum21(new BigInteger("12345678911234567891123456789112345678911244444444444444"));
         mod.setNum22(new BigDecimal("123456789112345678911234567891123456789112.1234567891"));
 
-        String json = ONode.toJson(mod);
+        String json = ONode.serialize(mod);
         System.out.println(json);
 
-        String json2 = ONode.toJson(mod, Feature.Write_ClassName);
+        String json2 = ONode.serialize(mod, Feature.Write_ClassName);
         System.out.println(json2);
 
 
-        NumberModel obj1 = ONode.fromJson(json, NumberModel.class);
-        NumberModel obj2 = ONode.fromJson(json2, NumberModel.class);
+        NumberModel obj1 = ONode.deserialize(json, NumberModel.class);
+        NumberModel obj2 = ONode.deserialize(json2, NumberModel.class);
 
         System.out.println(obj1);
         System.out.println(obj2);
@@ -120,7 +120,7 @@ public class NumberTest {
     @Test
     public void test7() {
         String json = "{a:1}";
-        Map map = ONode.fromJson(json, Map.class);
+        Map map = ONode.deserialize(json, Map.class);
 
         assert map.get("a") instanceof Integer;
     }
@@ -136,7 +136,7 @@ public class NumberTest {
     @Test
     public void test9() {
         String json = "{\"a\":0.0000}";
-        String json2 = ONode.fromJson(json).toJson(); //Feature.StringDoubleToDecimal
+        String json2 = ONode.load(json).serialize(); //Feature.StringDoubleToDecimal
 
         assert json.equals(json2);
     }
@@ -145,12 +145,12 @@ public class NumberTest {
     @Test
     public void test10() {
         String json = "{num15_2:''}";
-        NumberModel tmp1 = ONode.fromJson(json, NumberModel.class);
+        NumberModel tmp1 = ONode.deserialize(json, NumberModel.class);
         assert tmp1.getNum15_2() == null;
 
 
         json = "{num15_2:'1'}";
-        tmp1 = ONode.fromJson(json, NumberModel.class);
+        tmp1 = ONode.deserialize(json, NumberModel.class);
         assert tmp1.getNum15_2() == 1D;
     }
 }

@@ -125,7 +125,7 @@ public class JsonPath {
      * 根据 jsonpath 查询
      */
     public static ONode select(String json, String path) {
-        return select(ONode.fromJson(json), path);
+        return select(ONode.load(json), path);
     }
 
     /**

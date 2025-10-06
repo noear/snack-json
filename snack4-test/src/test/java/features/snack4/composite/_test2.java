@@ -41,7 +41,7 @@ public class _test2 {
         Map<String,Object> data = new LinkedHashMap<>();
         data.put("model",model);
 
-        String json = ONode.toJson(data);
+        String json = ONode.serialize(data);
         String json2 = JSON.toJSONString(data,
                 SerializerFeature.BrowserCompatible,
                 SerializerFeature.DisableCircularReferenceDetect);
@@ -52,7 +52,7 @@ public class _test2 {
     private void call(String json, ComplexModel<Point> model){
         System.out.println(json);
 
-        ONode data2 = ONode.fromJson(json);
+        ONode data2 = ONode.load(json);
         ComplexModel model2 = data2.get("model").to(model.getClass());
 
         assert model2 != null;
@@ -71,7 +71,7 @@ public class _test2 {
     public void test2(){
          String json = "[{\"code\":0,\"name\":\"缺陷\",\"icon\":\"fa-bug\"},{\"code\":1,\"name\":\"改进\",\"icon\":\"fa-twitter\"},{\"code\":2,\"name\":\"需求\",\"icon\":\"fa-circle-o\"}]";
 
-         Object tmp = ONode.fromJson(json).to();
+         Object tmp = ONode.load(json).to();
 
          assert tmp instanceof List;
     }
@@ -80,7 +80,7 @@ public class _test2 {
     public void test3(){
         String json = test3_json();
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         //$.content.amount_detail.amount_units[?(@.name == "C_score")].amount
 
@@ -99,7 +99,7 @@ public class _test2 {
     public void test4(){
         String json = test4_json();
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         assert oNode != null;
     }

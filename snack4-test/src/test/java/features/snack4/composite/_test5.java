@@ -13,7 +13,7 @@ public class _test5 {
         String poc = "{\"@type\":\"features.snack4.composite.test5.A\"," +
                 "\"b\":{\"@type\":\"features.snack4.composite.test5.B\",\"bList\":\"str1\"}}";
         System.out.println(poc);
-        A o = ONode.fromJson(poc, A.class);
+        A o = ONode.deserialize(poc, A.class);
         System.out.println(o.getB().getbList().size());
         assert o.getB().getbList().size() == 1;
     }

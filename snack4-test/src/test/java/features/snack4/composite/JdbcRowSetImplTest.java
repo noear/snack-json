@@ -13,7 +13,7 @@ public class JdbcRowSetImplTest {
         //
         //不会根据 dataSourceName、autoCommit 生成 Connection 对象，并注入构造函数
         //
-        Object tmp = ONode.fromJson(json);
+        Object tmp = ONode.load(json);
 
         assert tmp != null;
         assert tmp.getClass().getName().equals("com.sun.rowset.JdbcRowSetImpl");

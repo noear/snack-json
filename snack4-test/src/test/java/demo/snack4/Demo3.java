@@ -17,10 +17,10 @@ public class Demo3 {
     @Test
     public void demo1() {
 
-        int i = ONode.fromJson("100").getInt(); //100
-        double d = ONode.fromJson("\"99.99\"").getDouble();  //99.99
-        boolean b = ONode.fromJson("true").getBoolean();     // true
-        String str = ONode.fromJson("String").getString();   // String
+        int i = ONode.load("100").getInt(); //100
+        double d = ONode.load("\"99.99\"").getDouble();  //99.99
+        boolean b = ONode.load("true").getBoolean();     // true
+        String str = ONode.load("String").getString();   // String
 
         assert i == 100;
         assert d == 99.99;
@@ -46,8 +46,8 @@ public class Demo3 {
 
     @Test
     public void demo2() {
-        String jsonNumber = ONode.from(100).toJson();       // 100
-        String jsonBoolean = ONode.from(false).toJson();    // false
+        String jsonNumber = ONode.from(100).serialize();       // 100
+        String jsonBoolean = ONode.from(false).serialize();    // false
         String jsonString = ONode.from("String").toString(); //"String"
 
         assertEquals(jsonNumber, "100");
@@ -58,9 +58,9 @@ public class Demo3 {
     @Test
     public void demo3() {
         User user = new User("张三", 24);
-        String json = ONode.from(user).toJson(); // {"name":"张三","age":24}
+        String json = ONode.from(user).serialize(); // {"name":"张三","age":24}
 
-        String json2 = ONode.from(user).toJson(Options.enableOf(Feature.Write_ClassName, Feature.Write_EscapeNonAscii)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
+        String json2 = ONode.from(user).serialize(Options.enableOf(Feature.Write_ClassName, Feature.Write_EscapeNonAscii)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
 
         System.out.println(json);
         System.out.println(json2);
@@ -69,7 +69,7 @@ public class Demo3 {
     @Test
     public void demo4() {
         String json = "{name:'张三',age:24}";
-        User user = ONode.fromJson(json).to(User.class);
+        User user = ONode.load(json).to(User.class);
 
         assert user.age == 24;
     }
@@ -77,7 +77,7 @@ public class Demo3 {
     @Test
     public void demo5() {
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
-        String[] strings = ONode.fromJson(jsonArray).to(String[].class);
+        String[] strings = ONode.load(jsonArray).to(String[].class);
 
         assert strings.length == 3;
     }
@@ -86,11 +86,11 @@ public class Demo3 {
     public void demo6() {
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
 
-        ONode ary0 		  = ONode.fromJson(jsonArray);
+        ONode ary0 		  = ONode.load(jsonArray);
         assertNotNull(ary0);
 
-        List<String> ary1 = ONode.fromJson(jsonArray).to((new ArrayList<String>(){}).getClass());
-        List<String> ary2 = ONode.fromJson(jsonArray).to((new TypeRef<List<String>>(){}).getType());
+        List<String> ary1 = ONode.load(jsonArray).to((new ArrayList<String>(){}).getClass());
+        List<String> ary2 = ONode.load(jsonArray).to((new TypeRef<List<String>>(){}).getType());
 
         assert ary1.size() == ary2.size();
     }
@@ -100,19 +100,19 @@ public class Demo3 {
         String json = "{\"name\":\"张三\",\"age\":\"24\"}";
 
         //反序列化
-        User user = ONode.fromJson(json).to(User.class);
+        User user = ONode.load(json).to(User.class);
 
         //序列化
-        ONode.from(user).toJson();
+        ONode.from(user).serialize();
     }
 
     @Test
     public void demo8() {
         User user = new User("张三", 24);
-        System.out.println(ONode.from(user).toJson()); //{"name":"张三","age":24}
+        System.out.println(ONode.from(user).serialize()); //{"name":"张三","age":24}
 
         Options opts = Options.enableOf(Feature.Write_SerializeNulls);
-        System.out.println(ONode.from(user).toJson(opts)); //{"name":"张三","age":24,"emailAddress":null}
+        System.out.println(ONode.from(user).serialize(opts)); //{"name":"张三","age":24,"emailAddress":null}
     }
 
     @Test
@@ -121,12 +121,12 @@ public class Demo3 {
 
         Options opts = Options.enableOf(Feature.Write_UseDateFormat).dateFormatText("yyyy-MM-dd");
 
-        System.out.println(ONode.from(date).toJson(opts)); //2019-12-06
+        System.out.println(ONode.from(date).serialize(opts)); //2019-12-06
     }
     @Test
     public void demo10() {
         User user = new User("name", 12, "xxx@mail.cn");
-        String json = ONode.from(user).rename("emailAddress", "email").toJson(); // {"name":"name","age":12,"email":"xxx@mail.cn"}
+        String json = ONode.from(user).rename("emailAddress", "email").serialize(); // {"name":"name","age":12,"email":"xxx@mail.cn"}
 
         System.out.println(json);
     }
@@ -159,7 +159,7 @@ public class Demo3 {
 
         System.out.println(jsonStr);
 
-        ONode o = ONode.fromJson(jsonStr);
+        ONode o = ONode.load(jsonStr);
 
 //得到所有的书
         ONode books = o.select("$.store.book");

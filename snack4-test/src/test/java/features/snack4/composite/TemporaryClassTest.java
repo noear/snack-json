@@ -30,11 +30,11 @@ public class TemporaryClassTest {
             userServices.add(tmp);
         });
 
-        String json = ONode.toJson(userServices, Feature.Write_ClassName);
+        String json = ONode.serialize(userServices, Feature.Write_ClassName);
         System.out.println(json);
 
         try {
-            Object obj = ONode.fromJson(json);
+            Object obj = ONode.load(json);
             assert false;
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,10 +61,10 @@ public class TemporaryClassTest {
             userServices.add(tmp);
         });
 
-        String json = ONode.toJson(userServices, Feature.Write_ClassName);
+        String json = ONode.serialize(userServices, Feature.Write_ClassName);
         System.out.println(json);
 
-        Object obj = ONode.fromJson(json);
+        Object obj = ONode.load(json);
         assert obj != null;
     }
 }

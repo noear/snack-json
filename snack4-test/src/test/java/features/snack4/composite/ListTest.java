@@ -15,7 +15,7 @@ public class ListTest {
         String json = "[{}]";
 
         //自定义 list 接口
-        MyList<NumberModel> list = ONode.fromJson(json).to(new TypeRef<MyList<NumberModel>>() {
+        MyList<NumberModel> list = ONode.load(json).to(new TypeRef<MyList<NumberModel>>() {
         });
 
         assert list != null;

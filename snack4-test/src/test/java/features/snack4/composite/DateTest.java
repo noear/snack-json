@@ -24,7 +24,7 @@ public class DateTest {
     @Test
     public void test2() {
         String json = "{date1:'2021-06-13T20:54:51.566Z', date2:'2021-06-13T20:54:51', date3:'2021-06-13 20:54:51', date4:'20210613205451566+0800', date5:'2021-06-13', date6:'2021-06-13T20:54:51.566+08:00', date7:'2021-06-13 20:54:51,566', date8:'2021-06-13 20:54:51.566', date9:'20:54:51'}";
-        DateModel dateModel = ONode.fromJson(json, DateModel.class);
+        DateModel dateModel = ONode.deserialize(json, DateModel.class);
 
         assert dateModel.date1.getTime() == 1623588891566L;
         assert dateModel.date2.getTime() == 1623588891000L;
@@ -42,13 +42,13 @@ public class DateTest {
     public void test3() {
         String json = "{date1:'2021-06-13T20:54:51.566Z', date2:'2021-06-13T20:54:51', date3:'2021-06-13 20:54:51', date4:'20210613205451566+0800', date5:'2021-06-13', date6:'2021-06-13T20:54:51.566+08:00', date7:'2021-06-13 20:54:51,566', date8:'2021-06-13 20:54:51.566', date9:'20:54:51', date10:'2021-06-13T20:54:51.566+08:00', date11:'2021-06-13T20:54:51.566+08:00', date12:'20:54:51.566+08:00'}";
 
-        DateModel dateModel0 = ONode.fromJson(json, DateModel.class);
-        DateModel2 dateModel = ONode.fromJson(json, DateModel2.class);
+        DateModel dateModel0 = ONode.deserialize(json, DateModel.class);
+        DateModel2 dateModel = ONode.deserialize(json, DateModel2.class);
 
-        String json2 = ONode.toJson(dateModel);
+        String json2 = ONode.serialize(dateModel);
         System.out.println(json2);
 
-        DateModel2 dateModel2 = ONode.fromJson(json2, DateModel2.class);
+        DateModel2 dateModel2 = ONode.deserialize(json2, DateModel2.class);
 
 
         assert dateModel.date1.equals(dateModel2.date1);
@@ -69,13 +69,13 @@ public class DateTest {
     public void test4() {
         String json = "{date1:1670774400000}";
 
-        DateModel dateModel0 = ONode.fromJson(json, DateModel.class);
-        DateModel2 dateModel = ONode.fromJson(json, DateModel2.class);
+        DateModel dateModel0 = ONode.deserialize(json, DateModel.class);
+        DateModel2 dateModel = ONode.deserialize(json, DateModel2.class);
 
-        String json2 = ONode.toJson(dateModel);
+        String json2 = ONode.serialize(dateModel);
         System.out.println(json2);
 
-        DateModel2 dateModel2 = ONode.fromJson(json2, DateModel2.class);
+        DateModel2 dateModel2 = ONode.deserialize(json2, DateModel2.class);
 
 
         assert dateModel.date1.equals(dateModel2.date1);
@@ -89,7 +89,7 @@ public class DateTest {
         dateModel3.date3 = dateModel3.date1;
 
 
-        String json = ONode.toJson(dateModel3);
+        String json = ONode.serialize(dateModel3);
 
         System.out.println(json);
 
@@ -132,8 +132,8 @@ public class DateTest {
         //添加编码器
         options.addEncoder(Date.class, (opts, attr, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
         options.addEncoder(LocalDateTime.class, (opts, attr, value) -> new ONode((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
-        DemoEntity rxPacsOrder = ONode.fromJson(json, options).to(DemoEntity.class);
-        String jsonText = ONode.toJson(rxPacsOrder);
+        DemoEntity rxPacsOrder = ONode.load(json, options).to(DemoEntity.class);
+        String jsonText = ONode.serialize(rxPacsOrder);
         System.out.println("1 snack添加编码器" + jsonText);
 
         assert "{\"patientName\":\"乔宪同\",\"studyDatetime\":1753229553000,\"sqDatetime\":1753229454093,\"reportDatetime\":1753229731000,\"shDatetime\":1753229740000}".equals(jsonText);

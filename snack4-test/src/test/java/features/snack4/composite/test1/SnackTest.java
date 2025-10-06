@@ -34,7 +34,7 @@ public class SnackTest {
     subB.setCompC(compC);
 
 
-    System.out.println(ONode.toJson(subB));
+    System.out.println(ONode.serialize(subB));
     System.out.println("\n");
     System.out.println(ONode.from(subB, Feature.Write_EnumUsingName));
   }

@@ -12,11 +12,11 @@ public class DomTest {
         ONode oNode = new ONode();
         oNode.addNew().asObject();
 
-        String json = oNode.toJson();
+        String json = oNode.serialize();
 
         System.out.println(json);
 
-        assert ONode.fromJson(json).get(1).isObject();
+        assert ONode.load(json).get(1).isObject();
     }
 
     @Test
@@ -24,10 +24,10 @@ public class DomTest {
         ONode oNode = new ONode();
         oNode.getOrNew("n1").asObject();
 
-        String json = oNode.toJson();
+        String json = oNode.serialize();
 
         System.out.println(json);
 
-        assert ONode.fromJson(json).get("n1").isObject();
+        assert ONode.load(json).get("n1").isObject();
     }
 }

@@ -50,16 +50,16 @@ public class Contains {
 
         assert Long.hashCode(2) == new ONode().setValue(2).hashCode();
 
-        ONode tmp = ONode.fromJson("[1,2,3,4,5]");
+        ONode tmp = ONode.load("[1,2,3,4,5]");
         assert tmp.getArray().contains(new ONode().setValue(2));
 
-        tmp = ONode.fromJson("[1,'2',3,4,5]");
+        tmp = ONode.load("[1,'2',3,4,5]");
         assert tmp.getArray().contains(new ONode().setValue("2"));
 
         long times = System.currentTimeMillis();
         Date time = new Date(times);
 
-        tmp = ONode.fromJson("[1,'2',3,4,new Date(" + times + ")]");
+        tmp = ONode.load("[1,'2',3,4,new Date(" + times + ")]");
         assert tmp.getArray().contains(new ONode().setValue(time));
     }
 
@@ -68,7 +68,7 @@ public class Contains {
 
         assert Long.hashCode(2) == new ONode().setValue(2).hashCode();
 
-        ONode tmp = ONode.fromJson("[1,2,3,4,5,true, null]");
+        ONode tmp = ONode.load("[1,2,3,4,5,true, null]");
         assert tmp.getArray().contains(2l);
 
         assert tmp.getArray().contains(2);
@@ -79,29 +79,29 @@ public class Contains {
 
         assert tmp.getArray().contains(new ONode());
 
-        tmp = ONode.fromJson("[1,'2',3,4,5]");
+        tmp = ONode.load("[1,'2',3,4,5]");
         assert tmp.getArray().contains("2");
 
         long times = System.currentTimeMillis();
         Date time = new Date(times);
 
-        tmp = ONode.fromJson("[1,'2',3,4,new Date(" + times + ")]");
+        tmp = ONode.load("[1,'2',3,4,new Date(" + times + ")]");
         assert tmp.getArray().contains(time);
     }
 
     @Test
     public void test3() {
 
-        ONode tmp = ONode.fromJson("{a:[1,2,3,4,5],b:2}");
-        ONode tmp2 = ONode.fromJson("{a:[1,2,3,4,5],b:2}");
+        ONode tmp = ONode.load("{a:[1,2,3,4,5],b:2}");
+        ONode tmp2 = ONode.load("{a:[1,2,3,4,5],b:2}");
 
         assert tmp.equals(tmp2);
 
-        ONode tmp3 = ONode.fromJson("[1,2,3,4,5]");
-        List<Integer> tmp4 = ONode.fromJson("[1,2,3,4,5]").to(List.class);
+        ONode tmp3 = ONode.load("[1,2,3,4,5]");
+        List<Integer> tmp4 = ONode.load("[1,2,3,4,5]").to(List.class);
 
-        List<Integer> tmp41 = ONode.fromJson("[1,2,3,5,4]").to(List.class);
-        List<Integer> tmp42 = ONode.fromJson("[1,2,3,4]").to(List.class);
+        List<Integer> tmp41 = ONode.load("[1,2,3,5,4]").to(List.class);
+        List<Integer> tmp42 = ONode.load("[1,2,3,4]").to(List.class);
 
         assert  tmp.getObject().containsKey("a");
         assert  tmp.getObject().containsValue(tmp3);
@@ -115,9 +115,9 @@ public class Contains {
 
     @Test
     public void test4() {
-        ONode tmp = ONode.fromJson("[1,2,{c:1,d:2,b:[4]}]");
+        ONode tmp = ONode.load("[1,2,{c:1,d:2,b:[4]}]");
 
-        ONode tmp2 = ONode.fromJson("{c:1,d:2,b:[4]}");
+        ONode tmp2 = ONode.load("{c:1,d:2,b:[4]}");
 
         assert tmp.getArray().contains(tmp2);
 

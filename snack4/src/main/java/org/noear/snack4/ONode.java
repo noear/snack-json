@@ -29,7 +29,6 @@ import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
 
 import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.*;
@@ -311,7 +310,7 @@ public final class ONode {
     }
 
     public ONode fillJson(String json, Options opts) {
-        return this.fill(ONode.fromJson(json, opts), opts);
+        return this.fill(ONode.load(json, opts), opts);
     }
 
     public ONode set(String key, Object value) {
@@ -513,18 +512,6 @@ public final class ONode {
     /// /////////////
 
 
-    public static String toJson(Object object, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return toJson(object, Options.def());
-        } else {
-            return toJson(object, Options.enableOf(features));
-        }
-    }
-
-    public static String toJson(Object object, Options opts) {
-        return ONode.from(object, opts).toJson(opts);
-    }
-
     public static ONode from(Object bean, Options opts) {
         return BeanSerializer.serialize(bean, opts);
     }
@@ -537,15 +524,15 @@ public final class ONode {
         }
     }
 
-    public static ONode fromJson(String json, Feature... features) {
+    public static ONode load(String json, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return fromJson(json, Options.def());
+            return load(json, Options.def());
         } else {
-            return fromJson(json, Options.enableOf(features));
+            return load(json, Options.enableOf(features));
         }
     }
 
-    public static ONode fromJson(String json, Options opts) {
+    public static ONode load(String json, Options opts) {
         try {
             return new JsonReader(new StringReader(json), opts).read();
         } catch (SnackException ex) {
@@ -556,28 +543,40 @@ public final class ONode {
     }
 
 
-    public static <T> T fromJson(String json, Type type, Feature... features) {
+    public static String serialize(Object object, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return fromJson(json, type, Options.def());
+            return serialize(object, Options.def());
         } else {
-            return fromJson(json, type, Options.enableOf(features));
+            return serialize(object, Options.enableOf(features));
         }
     }
 
-    public static <T> T fromJson(String json, Type type, Options opts) {
-        return ONode.fromJson(json, opts).to(type, opts);
+    public static String serialize(Object object, Options opts) {
+        return ONode.from(object, opts).serialize(opts);
     }
 
-    public static <T> T fromJson(String json, TypeRef<T> type, Feature... features) {
+    public static <T> T deserialize(String json, Type type, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return fromJson(json, type, Options.def());
+            return deserialize(json, type, Options.def());
         } else {
-            return fromJson(json, type, Options.enableOf(features));
+            return deserialize(json, type, Options.enableOf(features));
         }
     }
 
-    public static <T> T fromJson(String json, TypeRef<T> type, Options opts) {
-        return ONode.fromJson(json, opts).to(type, opts);
+    public static <T> T deserialize(String json, Type type, Options opts) {
+        return ONode.load(json, opts).to(type, opts);
+    }
+
+    public static <T> T deserialize(String json, TypeRef<T> type, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return deserialize(json, type, Options.def());
+        } else {
+            return deserialize(json, type, Options.enableOf(features));
+        }
+    }
+
+    public static <T> T deserialize(String json, TypeRef<T> type, Options opts) {
+        return ONode.load(json, opts).to(type, opts);
     }
 
     /// ///////////
@@ -614,7 +613,7 @@ public final class ONode {
         return BeanDeserializer.deserialize(this, target.getClass(), target, opts);
     }
 
-    public String toJson(Options opts) {
+    public String serialize(Options opts) {
         try {
             return JsonWriter.write(this, opts);
         } catch (RuntimeException ex) {
@@ -624,11 +623,11 @@ public final class ONode {
         }
     }
 
-    public String toJson(Feature... features) {
+    public String serialize(Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return toJson(Options.def());
+            return serialize(Options.def());
         } else {
-            return toJson(Options.enableOf(features));
+            return serialize(Options.enableOf(features));
         }
     }
 

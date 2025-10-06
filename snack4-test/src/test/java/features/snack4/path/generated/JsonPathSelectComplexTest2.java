@@ -22,7 +22,7 @@ public class JsonPathSelectComplexTest2 {
             "        }";
 
     private ONode loadRoot() {
-        return ONode.fromJson(BOOKS_JSON);
+        return ONode.load(BOOKS_JSON);
     }
 
     @Test
@@ -68,9 +68,9 @@ public class JsonPathSelectComplexTest2 {
                 "$.store.book[?((@.category == 'tech' || @.category == 'history') && @.price > 20)]");
 
         assertEquals(3, result.size());
-        assertTrue(result.select("$[*].title").toJson().contains("Book B"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book D"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book E"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book B"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book D"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book E"));
     }
 
     @Test
@@ -89,9 +89,9 @@ public class JsonPathSelectComplexTest2 {
                 "$.store.book[?((@.price < 30 && @.stock > 0) || (@.author contains 'son'))]");
 
         assertEquals(3, result.size());
-        assertTrue(result.select("$[*].title").toJson().contains("Book A"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book C"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book B"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book A"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book C"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book B"));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class JsonPathSelectComplexTest2 {
                 "$.store.book[?(!(@.category == 'fiction') && @.price < 40)]");
 
         assertEquals(2, result.size());
-        assertTrue(result.select("$[*].category").toJson().contains("fiction"));
+        assertTrue(result.select("$[*].category").serialize().contains("fiction"));
     }
 
     @Test
@@ -119,9 +119,9 @@ public class JsonPathSelectComplexTest2 {
                 "$.store.book[?(@.price > 20 || @.stock > 3 && @.category == 'tech')]");
 
         assertEquals(3, result.size());
-        assertTrue(result.select("$[*].title").toJson().contains("Book B"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book D"));
-        assertTrue(result.select("$[*].title").toJson().contains("Book E"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book B"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book D"));
+        assertTrue(result.select("$[*].title").serialize().contains("Book E"));
     }
 
     @Test

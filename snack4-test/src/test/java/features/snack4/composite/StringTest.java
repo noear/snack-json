@@ -26,22 +26,22 @@ public class StringTest {
 
         oNode.set("code", 1);
         oNode.set("name", "world");
-        oNode.set("attr", attr.toJson());
+        oNode.set("attr", attr.serialize());
 
-        String json = oNode.toJson();
+        String json = oNode.serialize();
         System.out.println(json);
 
-        String json2 = ONode.fromJson(json).toJson();
+        String json2 = ONode.load(json).serialize();
         System.out.println(json2);
 
         assert json.equals(json2);
 
-        System.out.println(ONode.fromJson(json, Feature.Read_UnwrapJsonString).toJson());
+        System.out.println(ONode.load(json, Feature.Read_UnwrapJsonString).serialize());
     }
 
     @Test
     public void test2() {
-        String tmp = ONode.toJson(UUID.randomUUID());
+        String tmp = ONode.serialize(UUID.randomUUID());
         assert tmp.contains("-");
         System.out.println(tmp);
     }
@@ -55,13 +55,13 @@ public class StringTest {
         map.put("c", "{d:'3'}");
 
 
-        String json =  ONode.from(map).toJson();
+        String json =  ONode.from(map).serialize();
         System.out.println(json);
-        assert ONode.fromJson(json).get("c").isValue();
+        assert ONode.load(json).get("c").isValue();
 
-        json =  ONode.from(map, Feature.Read_UnwrapJsonString).toJson();
+        json =  ONode.from(map, Feature.Read_UnwrapJsonString).serialize();
         System.out.println(json);
-        assert ONode.fromJson(json).get("c").isObject();
+        assert ONode.load(json).get("c").isObject();
     }
 
     @Test
@@ -81,13 +81,13 @@ public class StringTest {
         JSONObject json = (JSONObject) JSONObject.parse(str); //故意转成对象，下面用loadObj
         ONode jsonNode =  ONode.from(json, Feature.Read_UnwrapJsonString);
 
-        System.out.println(jsonNode.toJson());
+        System.out.println(jsonNode.serialize());
 
         String typeName = jsonNode.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------Feature.StringJsonToNode typeName:{}" + typeName);
 
-        String jsonStr =  ONode.from(json, Feature.Read_UnwrapJsonString).toJson();
-        ONode jsonNode2 = ONode.fromJson(jsonStr);
+        String jsonStr =  ONode.from(json, Feature.Read_UnwrapJsonString).serialize();
+        ONode jsonNode2 = ONode.load(jsonStr);
         String typeName2 = jsonNode2.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------ typeName:{}" + typeName2);
     }
@@ -95,7 +95,7 @@ public class StringTest {
     @Test
     public void test5() {
         String json = "'1a'";
-        System.out.println(ONode.fromJson(json).getString());
-        System.out.println(ONode.fromJson(json).toJson());
+        System.out.println(ONode.load(json).getString());
+        System.out.println(ONode.load(json).serialize());
     }
 }

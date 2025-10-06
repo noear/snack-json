@@ -19,7 +19,7 @@ public class AttrTest2 {
         user.name = "noear";
         user.note = "test";
 
-        String json = ONode.toJson(user);
+        String json = ONode.serialize(user);
 
         System.out.println(json);
 
@@ -48,7 +48,7 @@ public class AttrTest2 {
         Options options = new Options();
         options.enableFeature(Feature.Write_SerializeNulls);
 
-        String json = ONode.toJson(user, options);
+        String json = ONode.serialize(user, options);
 
         System.out.println(json);
 
@@ -62,7 +62,7 @@ public class AttrTest2 {
         String json = "{id:1, name:'noear', note:'test'}";
 
 
-        UserModel3 user = ONode.fromJson(json, UserModel3.class);
+        UserModel3 user = ONode.deserialize(json, UserModel3.class);
 
         System.out.println(json);
 
@@ -78,7 +78,7 @@ public class AttrTest2 {
         attrModel.traceId=2;
         attrModel.name = "noear";
 
-        String json = ONode.toJson(attrModel);
+        String json = ONode.serialize(attrModel);
 
         System.out.println(json);
 

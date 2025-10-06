@@ -17,7 +17,7 @@ public class JsonSchemaTest {
     public void case1() {
         JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
-        schema.validate(ONode.fromJson("{userId:'1'}")); //校验格式
+        schema.validate(ONode.load("{userId:'1'}")); //校验格式
     }
 
     @Test
@@ -26,7 +26,7 @@ public class JsonSchemaTest {
 
         Throwable err = null;
         try {
-            schema.validate(ONode.fromJson("{userId:1}"));//校验格式
+            schema.validate(ONode.load("{userId:1}"));//校验格式
         } catch (Throwable e) {
             e.printStackTrace();
             err = e;

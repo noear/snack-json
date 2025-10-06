@@ -94,7 +94,7 @@ public class JsonReader {
                     char c1 = str.charAt(0);
                     char c2 = str.charAt(str.length() - 1);
                     if ((c1 == '{' && c2 == '}') || (c1 == '[' && c2 == ']')) {
-                        return ONode.fromJson(str, opts);
+                        return ONode.load(str, opts);
                     }
                 }
             }

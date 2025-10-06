@@ -36,9 +36,9 @@ public class _type {
         Map map = new HashMap();
         map.put("name", ANSI_BLACK);
 
-        System.out.println(ONode.toJson(map));
-        System.out.println(ONode.toJson(map));
-        System.out.println(ONode.toJson(map, Feature.Write_ClassName));
+        System.out.println(ONode.serialize(map));
+        System.out.println(ONode.serialize(map));
+        System.out.println(ONode.serialize(map, Feature.Write_ClassName));
         System.out.println(JSON.toJSON(map));
     }
 }

@@ -48,7 +48,7 @@ public class _test {
                 "\t\"_source\": [\"post_id\"]\n" +
                 "}";
 
-        ONode tmp = ONode.fromJson(str);
+        ONode tmp = ONode.load(str);
 
         assert tmp.isObject();
     }
@@ -56,7 +56,7 @@ public class _test {
     @Test
     public void test1() {
         String str = "{\"g_udid\":\"1EFB07BFE0D98F8BF9EAF276C92C95FA4BEA3423\",\"g_imid\":\"864499040824376\",\"g_lkey\":\"d359a30a239e9e17daa8f8367ef35422\",\"g_encode\":\"1\",\"g_time\":1572511666,\"g_platform\":\"Android\",\"g_system\":\"8.1.0\",\"g_model\":\"PACM00\",\"g_brand\":\"OPPO\"}";
-        ONode n = ONode.fromJson(str);
+        ONode n = ONode.load(str);
 
         String g_lkey = n.get("g_lkey").getString();
         long g_time = n.get("g_time").getLong();
@@ -72,7 +72,7 @@ public class _test {
         String g_adr = n.get("g_adr").getString();
 
 
-        String str2 = n.toJson();
+        String str2 = n.serialize();
 
         System.out.println(str);
         System.out.println(str2);
@@ -102,7 +102,7 @@ public class _test {
         list.add(u2);
 
 
-        ONode o = ONode.fromJson("{code:1,msg:'succeed'}", Feature.Write_ClassName);//当toJson(),会产生@type
+        ONode o = ONode.load("{code:1,msg:'succeed'}", Feature.Write_ClassName);//当toJson(),会产生@type
         o.getOrNew("data").getOrNew("list").fill(list);
 
         assert o.select("$.data.list").size() == 2;
@@ -110,7 +110,7 @@ public class _test {
         List<UserModel> list2 = o.select("$.data.list").to(List.class);
         assert list2.size() == 2;
 
-        String message = o.toJson();
+        String message = o.serialize();
         System.out.println(message);
 
         assert message != null;
@@ -143,7 +143,7 @@ public class _test {
         list.add(u2);
 
 
-        ONode o = ONode.fromJson("{code:1,msg:'succeed'}"); //当toJson(),不会产生@type
+        ONode o = ONode.load("{code:1,msg:'succeed'}"); //当toJson(),不会产生@type
         o.getOrNew("data").getOrNew("list").fill(list);
 
         assert o.select("$.data.list").size() == 2;
@@ -156,7 +156,7 @@ public class _test {
 
         assert list2.size() == list.size();
 
-        String message = o.toJson();
+        String message = o.serialize();
         System.out.println(message);
 
         assert message != null;
@@ -164,7 +164,7 @@ public class _test {
 
     @Test
     public void test6() {
-        Assertions.assertThrows(ParseException.class, () -> ONode.fromJson("{asdfasdf}"));
+        Assertions.assertThrows(ParseException.class, () -> ONode.load("{asdfasdf}"));
     }
 
     @Test
@@ -183,13 +183,13 @@ public class _test {
         um.id = 1;
         um.note = "你好世界!";
 
-        String json = ONode.toJson(um);
+        String json = ONode.serialize(um);
         System.out.println(json);
 
-        String json2 = ONode.fromJson(json).toJson();
+        String json2 = ONode.load(json).serialize();
         System.out.println(json2);
 
-        UserModel um2 = ONode.fromJson(json, UserModel.class);
+        UserModel um2 = ONode.deserialize(json, UserModel.class);
 
         assert um2.name.equals(um.name);
     }
@@ -207,9 +207,9 @@ public class _test {
         // 单引号输出
         //
         String txt = "{id:1,name:'x'}";
-        ONode tmp = ONode.fromJson(txt);
+        ONode tmp = ONode.load(txt);
 
-        String txt2 = tmp.toJson(new Options()
+        String txt2 = tmp.serialize(new Options()
                 .enableFeature(Feature.Write_UseSingleQuotes) //采用单引号
                 .disableFeature(Feature.Write_QuoteFieldNames));//取消字段引号
 
@@ -225,7 +225,7 @@ public class _test {
 
     @Test
     public void test12() {
-        ONode n = ONode.fromJson("{code:1,msg:'Hello world!',data:[{a:'b',c:'d'}]}");
+        ONode n = ONode.load("{code:1,msg:'Hello world!',data:[{a:'b',c:'d'}]}");
 
         System.out.println(n.select("$.data[*].a"));
 
@@ -240,7 +240,7 @@ public class _test {
     public void test13() {
         String path = "$.definitions.Request«List«BookingNoDTO»»";
         String json = "{\"definitions\":{\"Request«List«BookingNoDTO»»\":{\"type\":\"object\",\"properties\":{\"header\":{\"description\":\"Request header对象\",\"$ref\":\"#/definitions/Request Header\"},\"model\":{\"type\":\"array\",\"description\":\"业务入参对象\",\"items\":{\"$ref\":\"#/definitions/BookingNoDTO\"}}},\"title\":\"Request«List«BookingNoDTO»»\",\"description\":\"Request对象\"}}}";
-        ONode root = ONode.fromJson(json);
+        ONode root = ONode.load(json);
         ONode sub = root.select(path);
         assert sub.isNull() == false;
     }
@@ -249,7 +249,7 @@ public class _test {
     public void test14() {
         String json = "{\"k1\":1,\"k2\":\"123\",\"k3\":\"az章\",\"k4\":[1, 2],\"k5\":{\"k51\": \"511\", \"k52\":[{\"k521\":\"e\"},{\"k521\":\"F\"}]}}";
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
         ONode oTmp = oNode.select("$.k1");
 
         if (oTmp.isValue()) {
@@ -258,41 +258,41 @@ public class _test {
             oTmp.getArray().forEach(n -> n.setValue(2));
         }
 
-        System.err.println(oNode.toJson());
+        System.err.println(oNode.serialize());
     }
 
     @Test
     public void test15() {
         String json = "{\"k1\":1,\"k2\":\"123\",\"k3\":\"az章\",\"k4\":[1, 2],\"k5\":{\"k51\": \"511\", \"k52\":[{\"k521\":\"e\"},{\"k521\":\"F\"}]}}";
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         oNode.select("$.k1").setValue(2);
 
-        System.err.println(oNode.toJson());
+        System.err.println(oNode.serialize());
     }
 
     @Test
     public void test152() {
         String json = "{\"k1\":1,\"k2\":\"123\",\"k3\":\"az章\",\"k4\":[1, 2],\"k5\":{\"k51\": \"511\", \"k52\":[{\"k521\":\"e\"},{\"k521\":\"F\"}]}}";
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         oNode.select("$.k5.k52[?(@.k521 == 'e')].k521").getArray().forEach(n -> n.setValue("ee"));
 
-        System.err.println(oNode.toJson());
+        System.err.println(oNode.serialize());
     }
 
     @Test
     public void test16() {
         String json = "{\"k1\":1,\"k2\":\"123\",\"k3\":\"az章\",\"k4\":[1, 2],\"k5\":{\"k51\": \"511\", \"k52\":[{\"k521\":\"e\"},{\"k521\":\"F\"}]}}";
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
         Map<String, String> map = new HashMap<>();
         map.put("newK1", "中国");
         map.put("newK2", "JSON");
         oNode.select("$.k5.k51").fill(map);
 
-        System.err.println(oNode.toJson());
+        System.err.println(oNode.serialize());
     }
 }

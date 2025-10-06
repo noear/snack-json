@@ -22,14 +22,14 @@ public class AttrTest3 {
         // 测试 @ONodeAttr.format 仍有有效
         LocalDateTime dateTime = LocalDateTime.parse("2025-08-08T12:34:01");
         AnnoTimeObject t = new AnnoTimeObject(dateTime);
-        String json = ONode.toJson(t, Feature.Write_ClassName);
+        String json = ONode.serialize(t, Feature.Write_ClassName);
 
         Assertions.assertTrue(json.contains("\"2025-08-08 12:34:01\""));
         Assertions.assertTrue(json.contains("\"2025/08/08\""));
         Assertions.assertTrue(json.contains("\"12:34:01\""));
 
         // 下面这行代码会报错，因为 Snack3 在反序列化时还没有 @JSONField.format 优先
-        AnnoTimeObject obj = ONode.fromJson(json, AnnoTimeObject.class);
+        AnnoTimeObject obj = ONode.deserialize(json, AnnoTimeObject.class);
         Assertions.assertEquals(obj, t);
     }
 
@@ -37,7 +37,7 @@ public class AttrTest3 {
     public void test2() {
         String json = "{\"dateTime\":\"2025-08-08 12:34:01\",\"date\":\"2025/08/08\",\"time\":\"12:34:01\"}";
 
-        AnnoTimeObject obj = ONode.fromJson(json).to(AnnoTimeObject.class);
+        AnnoTimeObject obj = ONode.load(json).to(AnnoTimeObject.class);
 
         System.out.println(obj);
         assert obj != null;

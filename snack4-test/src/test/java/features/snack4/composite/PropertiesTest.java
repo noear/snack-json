@@ -23,22 +23,22 @@ public class PropertiesTest {
         props.setProperty("user.orders[0].items[0].name", "手机");
 
         ONode oNode = ONode.from(props);
-        String json = oNode.toJson();
+        String json = oNode.serialize();
 
         assert oNode.get("debug").getBoolean();
 
         System.out.println(json);
 
-        Properties props2 = ONode.fromJson(json).to(Properties.class);
-        String json2 = ONode.from(props2).toJson();
+        Properties props2 = ONode.load(json).to(Properties.class);
+        String json2 = ONode.from(props2).serialize();
 
         System.out.println(json2);
 
         assert json.length() == json2.length();
 
         Properties props3 = new Properties();
-        ONode.fromJson(json).bindTo(props3);
-        String json3 = ONode.from(props3).toJson();
+        ONode.load(json).bindTo(props3);
+        String json3 = ONode.from(props3).serialize();
 
         System.out.println(json3);
 
@@ -55,7 +55,7 @@ public class PropertiesTest {
         props.setProperty("[1].name", "id2");
 
         ONode oNode = ONode.from(props);
-        System.out.println(oNode.toJson());
+        System.out.println(oNode.serialize());
 
         assert oNode.isArray() == true;
         assert oNode.size() == 2;
@@ -80,7 +80,7 @@ public class PropertiesTest {
         props.setProperty("type[]", "_model5.TypeAImpl");
 
         ONode tmp = ONode.from(props).get("type");
-        System.out.println(tmp.toJson());
+        System.out.println(tmp.serialize());
 
         assert tmp.isArray();
         assert tmp.size() == 1;
@@ -99,7 +99,7 @@ public class PropertiesTest {
         nameValues.put("type[]", "a");
         nameValues.put("type[]", "b");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.from(nameValues).serialize();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"server\":{\"urls\":[\"http://x.x.x\",\"http://y.y.y\"]},\"title\":\"test\",\"type\":[\"a\",\"b\"],\"user\":{\"id\":\"1\",\"name\":\"noear\",\"orders\":[{\"items\":[{\"name\":\"手机\"}]}]}}".equals(json);
@@ -113,7 +113,7 @@ public class PropertiesTest {
         nameValues.put("user[id]", "1");
         nameValues.put("user[name]", "noear");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.from(nameValues).serialize();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"title\":\"test\",\"user\":{\"id\":\"1\",\"name\":\"noear\"}}".equals(json);
@@ -127,7 +127,7 @@ public class PropertiesTest {
         nameValues.put("user['id']", "1");
         nameValues.put("user[\"name\"]", "noear");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.from(nameValues).serialize();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"title\":\"test\",\"user\":{\"name\":\"noear\",\"id\":\"1\"}}".equals(json);
@@ -136,11 +136,11 @@ public class PropertiesTest {
     @Test
     public void test7() {
         String json = "{'userName':'a'}";
-        UserModel userModel = ONode.fromJson(json, UserModel.class);
+        UserModel userModel = ONode.deserialize(json, UserModel.class);
         assert userModel.getUserName() == null;
 
 
-        userModel = ONode.fromJson(json).to(UserModel.class, Feature.Write_UseSetter);
+        userModel = ONode.load(json).to(UserModel.class, Feature.Write_UseSetter);
         assert "a".equals(userModel.getUserName());
     }
 

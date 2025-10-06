@@ -2,8 +2,6 @@ package features.snack4.composite;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Feature;
-import org.noear.snack4.Options;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -21,85 +19,85 @@ public class JsonTest {
      */
     @Test
     public void test11() throws IOException {
-       ONode c =  ONode.fromJson("\"xxx\"");
+       ONode c =  ONode.load("\"xxx\"");
         assert "xxx".equals(c.getString());
 
-        c = ONode.fromJson("'xxx'");
+        c = ONode.load("'xxx'");
         assert "xxx".equals(c.getString());
 
-        c = ONode.fromJson( "true");
+        c = ONode.load( "true");
         assert c.getBoolean();
 
-        c = ONode.fromJson("false");
+        c = ONode.load("false");
         assert c.getBoolean() == false;
 
-        c = ONode.fromJson("123");
+        c = ONode.load("123");
         assert 123 == c.getInt();
 
-        c = ONode.fromJson("null");
+        c = ONode.load("null");
         assert c.isNull();
 
-        c = ONode.fromJson("NaN");
+        c = ONode.load("NaN");
         assert c.isNull();
 
-        c = ONode.fromJson( "undefined");
+        c = ONode.load( "undefined");
         assert c.isNull();
 
         long times = System.currentTimeMillis();
-        c = ONode.fromJson("new Date(" + times + ") ");
+        c = ONode.load("new Date(" + times + ") ");
         assert c.getDate().getTime() == times;
 
     }
 
     @Test
     public void test21() throws IOException {
-        ONode c = ONode.fromJson("{'a':'b','c':{'d':'e'},'f':{'g':\"h\"},'i':[{'j':'k','l':'m'},'n']}");
+        ONode c = ONode.load("{'a':'b','c':{'d':'e'},'f':{'g':\"h\"},'i':[{'j':'k','l':'m'},'n']}");
 
         assert "m".equals(c.get("i").get(0).get("l").getString());
         assert "n".equals(c.get("i").get(1).getString());
 
-        assert "{\"a\":\"b\",\"c\":{\"d\":\"e\"},\"f\":{\"g\":\"h\"},\"i\":[{\"j\":\"k\",\"l\":\"m\"},\"n\"]}".equals(c.toJson());
+        assert "{\"a\":\"b\",\"c\":{\"d\":\"e\"},\"f\":{\"g\":\"h\"},\"i\":[{\"j\":\"k\",\"l\":\"m\"},\"n\"]}".equals(c.serialize());
     }
 
     @Test
     public void test22() throws IOException {
-        ONode c = ONode.fromJson("{a:\"b\"}");
+        ONode c = ONode.load("{a:\"b\"}");
 
         assert "b".equals(c.get("a").getString());
 
-        assert "{\"a\":\"b\"}".equals(c.toJson());
+        assert "{\"a\":\"b\"}".equals(c.serialize());
     }
 
     @Test
     public void test23() throws IOException {
-       ONode c = ONode.fromJson("{a:{b:{c:{d:{e:'f'}}}}}");
+       ONode c = ONode.load("{a:{b:{c:{d:{e:'f'}}}}}");
 
         assert "f".equals(c.get("a").get("b").get("c").get("d").get("e").getString());
 
-        assert "{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":\"f\"}}}}}".equals(c.toJson());
+        assert "{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":\"f\"}}}}}".equals(c.serialize());
     }
 
     @Test
     public void test24() throws IOException {
         String json = "[[[],[]],[[]],[],[{},{},null]]";
 
-        ONode c = ONode.fromJson(json);
+        ONode c = ONode.load(json);
 
-        assert json.equals(c.toJson());
+        assert json.equals(c.serialize());
     }
 
     @Test
     public void test25() throws IOException {
-        ONode c= ONode.fromJson( "[{a:'b'},{c:'d'},[{e:'f'}]]");
+        ONode c= ONode.load( "[{a:'b'},{c:'d'},[{e:'f'}]]");
 
         assert "f".equals(c.get(2).get(0).get("e").getString());
 
-        assert "[{\"a\":\"b\"},{\"c\":\"d\"},[{\"e\":\"f\"}]]".equals(c.toJson());
+        assert "[{\"a\":\"b\"},{\"c\":\"d\"},[{\"e\":\"f\"}]]".equals(c.serialize());
     }
 
     @Test
     public void test26() throws IOException {
-        ONode c = ONode.fromJson("[123,123.45,'123.45','2019-01-02T03:04:05',true,false]");
+        ONode c = ONode.load("[123,123.45,'123.45','2019-01-02T03:04:05',true,false]");
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -110,7 +108,7 @@ public class JsonTest {
         assert c.get(4).getBoolean();
         assert !c.get(5).getBoolean();
 
-        assert "[123,123.45,\"123.45\",\"2019-01-02T03:04:05\",true,false]".equals(c.toJson());
+        assert "[123,123.45,\"123.45\",\"2019-01-02T03:04:05\",true,false]".equals(c.serialize());
     }
 
     /**
@@ -118,11 +116,11 @@ public class JsonTest {
      */
     @Test
     public void test27() throws IOException {
-        ONode c = ONode.fromJson( "{\"a\":\"\\t\"}");
+        ONode c = ONode.load( "{\"a\":\"\\t\"}");
 
         assert "\t".equals(c.get("a").getString());
 
-        assert "{\"a\":\"\\t\"}".equals(c.toJson());
+        assert "{\"a\":\"\\t\"}".equals(c.serialize());
 
     }
 
@@ -133,7 +131,7 @@ public class JsonTest {
         Throwable err = null;
 
         try {
-           ONode c = ONode.fromJson("{{\"aaa\":\"111\",\"bbb\":\"222\"}");
+           ONode c = ONode.load("{{\"aaa\":\"111\",\"bbb\":\"222\"}");
         } catch (Throwable e) {
             err = e;
             e.printStackTrace();
@@ -147,7 +145,7 @@ public class JsonTest {
         Throwable err = null;
 
         try {
-            ONode c = ONode.fromJson("[\"\"aaa\",\"bbb\",\"ccc\"]");
+            ONode c = ONode.load("[\"\"aaa\",\"bbb\",\"ccc\"]");
         } catch (Throwable e) {
             err = e;
             e.printStackTrace();

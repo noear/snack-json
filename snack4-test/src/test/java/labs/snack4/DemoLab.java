@@ -20,9 +20,9 @@ public class DemoLab {
     public void case2() {
         String store = "{}";
         ONode.from(store).select("$..book[?(@.tags contains 'war')]").to(Book.class);
-        ONode.fromJson(store).select("$.store.book.count()");
+        ONode.load(store).select("$.store.book.count()");
 
-        ONode.from(store).create("$.store.book[0].category").toJson();
+        ONode.from(store).create("$.store.book[0].category").serialize();
 
         ONode.from(store).delete("$..book[-1]");
     }
@@ -34,7 +34,7 @@ public class DemoLab {
         ONode obj = new ONode();
         obj.create(jsonpath);
 
-        System.out.println(obj.toJson());
+        System.out.println(obj.serialize());
     }
 
     static class Book {

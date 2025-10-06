@@ -18,10 +18,10 @@ public class ThrowableTest {
         Throwable err = (Throwable)test01_exc();
         err.printStackTrace();
 
-        String tmp_json = ONode.toJson(err, Feature.Write_ClassName);
+        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.fromJson(tmp_json, Throwable.class);
+        Throwable err2 = ONode.deserialize(tmp_json, Throwable.class);
         err2.printStackTrace();
     }
 
@@ -31,10 +31,10 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp);
         err.printStackTrace();
 
-        String tmp_json = ONode.toJson(err, Feature.Write_ClassName);
+        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.fromJson(tmp_json, Throwable.class);
+        Throwable err2 = ONode.deserialize(tmp_json, Throwable.class);
         err2.printStackTrace();
     }
 
@@ -45,10 +45,10 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp2);
         err.printStackTrace();
 
-        String tmp_json = ONode.toJson(err, Feature.Write_ClassName);
+        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.fromJson(tmp_json, Throwable.class);
+        Throwable err2 = ONode.deserialize(tmp_json, Throwable.class);
         err2.printStackTrace();
     }
 }

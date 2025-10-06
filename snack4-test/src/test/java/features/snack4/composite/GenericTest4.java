@@ -19,7 +19,7 @@ public class GenericTest4 {
 
         System.out.println(page.getClass());
 
-        String temp = ONode.toJson(page);
+        String temp = ONode.serialize(page);
 
         assert temp != null;
     }
@@ -28,7 +28,7 @@ public class GenericTest4 {
     public void case1_2() {
         String json ="{code:1,data:{rows:[]}}";
 
-        PageResult<Map<String, Object>> page = ONode.fromJson(json, new PageResult<Map<String, Object>>(){}.getClass());
+        PageResult<Map<String, Object>> page = ONode.deserialize(json, new PageResult<Map<String, Object>>(){}.getClass());
 
         assert page != null;
         assert page.getData() != null;
@@ -39,7 +39,7 @@ public class GenericTest4 {
     public void case1_3() {
         String json ="{code:1,data:{rows:['1']}}";
 
-        PageResult<Integer> page = ONode.fromJson(json, new PageResult<Integer>(){}.getClass());
+        PageResult<Integer> page = ONode.deserialize(json, new PageResult<Integer>(){}.getClass());
 
         assert page != null;
         assert page.getData() != null;
@@ -52,7 +52,7 @@ public class GenericTest4 {
     public void case2() {
         PageResult2<Map<String, Object>> page = new PageResult2<>();
 
-        String temp = ONode.toJson(page);
+        String temp = ONode.serialize(page);
 
         assert temp != null;
     }
@@ -61,7 +61,7 @@ public class GenericTest4 {
     public void case2_2() {
         String json ="{code:1,data:{rows:[]}}";
 
-        PageResult2<Map<String, Object>> page = ONode.fromJson(json, new PageResult2<Map<String, Object>>(){}.getClass());
+        PageResult2<Map<String, Object>> page = ONode.deserialize(json, new PageResult2<Map<String, Object>>(){}.getClass());
 
         assert page != null;
         assert page.getData() != null;
@@ -72,7 +72,7 @@ public class GenericTest4 {
     public void case2_3() {
         String json ="{code:1,data:{rows:['1']}}";
 
-        PageResult2<Integer> page = ONode.fromJson(json, new PageResult2<Integer>(){}.getClass());
+        PageResult2<Integer> page = ONode.deserialize(json, new PageResult2<Integer>(){}.getClass());
 
         assert page != null;
         assert page.getData() != null;

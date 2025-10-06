@@ -15,27 +15,27 @@ public class SerializationTest {
 
     @Test
     public void test0() throws Exception {
-        String temp = ONode.toJson("aaa", Feature.Write_ClassName);
+        String temp = ONode.serialize("aaa", Feature.Write_ClassName);
         assert "\"aaa\"".equals(temp);
 
-        temp = ONode.toJson(12, Feature.Write_ClassName);
+        temp = ONode.serialize(12, Feature.Write_ClassName);
         assert "12".equals(temp);
 
-        temp = ONode.toJson(true, Feature.Write_ClassName);
+        temp = ONode.serialize(true, Feature.Write_ClassName);
         assert "true".equals(temp);
 
-        temp = ONode.toJson((Object) null, Feature.Write_ClassName);
+        temp = ONode.serialize((Object) null, Feature.Write_ClassName);
         assert "null".equals(temp);
 
-        temp = ONode.toJson(new Date(),  Feature.Write_ClassName);
+        temp = ONode.serialize(new Date(),  Feature.Write_ClassName);
         assert "null".equals(temp) == false;
 
 
         String tm2 = "{a:'http:\\/\\/raas.dev.zmapi.cn'}";
 
-        ONode tm3 = ONode.fromJson(tm2);
+        ONode tm3 = ONode.load(tm2);
 
-        tm3.toJson().equals("{\"a\":\"http://raas.dev.zmapi.cn\"}");
+        tm3.serialize().equals("{\"a\":\"http://raas.dev.zmapi.cn\"}");
     }
 
     @Test
@@ -46,17 +46,17 @@ public class SerializationTest {
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            String json = ONode.toJson(ex, Feature.Write_ClassName);
+            String json = ONode.serialize(ex, Feature.Write_ClassName);
 
             System.out.println(json);
 
-            NullPointerException ex2 = ONode.fromJson(json, NullPointerException.class);
+            NullPointerException ex2 = ONode.deserialize(json, NullPointerException.class);
 
-            Object ex22 = ONode.fromJson(json, Object.class);
+            Object ex22 = ONode.deserialize(json, Object.class);
             assert ex22 instanceof NullPointerException;
 
 
-            Object ex23 = ONode.fromJson(json, Object.class);
+            Object ex23 = ONode.deserialize(json, Object.class);
             assert ex23 instanceof Map;
 
             ex2.printStackTrace();
@@ -91,14 +91,14 @@ public class SerializationTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.toJson(group, Feature.Write_ClassName);
+        String json = ONode.serialize(group, Feature.Write_ClassName);
         System.out.println(json);
-        UserGroupModel group2 = ONode.fromJson(json, UserGroupModel.class);
+        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class);
 
-        Object group22 = ONode.fromJson(json, Object.class);
+        Object group22 = ONode.deserialize(json, Object.class);
         assert group22 instanceof UserGroupModel;
 
-        Object group23 = ONode.fromJson(json, Object.class);
+        Object group23 = ONode.deserialize(json, Object.class);
         assert group23 instanceof Map;
 
         assert group2.id == 9999;
@@ -131,18 +131,18 @@ public class SerializationTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.toJson(group);//产生的json，没有@type
+        String json = ONode.serialize(group);//产生的json，没有@type
         System.out.println(json);
-        UserGroupModel group2 = ONode.fromJson(json, UserGroupModel.class);
+        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class);
 
-        Object group22 = ONode.fromJson(json, (new UserGroupModel() {
+        Object group22 = ONode.deserialize(json, (new UserGroupModel() {
         }).getClass());
         assert group22 instanceof UserGroupModel;
 
-        Object group23 = ONode.fromJson(json, LinkedHashMap.class);
+        Object group23 = ONode.deserialize(json, LinkedHashMap.class);
         assert group23 instanceof Map;
 
-        Object group24 = ONode.fromJson(json, Object.class);
+        Object group24 = ONode.deserialize(json, Object.class);
         assert group24 instanceof Map;
 
         assert group2.id == 9999;
@@ -167,15 +167,15 @@ public class SerializationTest {
         obj.put("list", list);
 
 
-        String json = ONode.toJson(obj, Feature.Write_ClassName);
+        String json = ONode.serialize(obj, Feature.Write_ClassName);
         System.out.println(json);
-        Map<String, Object> obj2 = ONode.fromJson(json, LinkedHashMap.class);
+        Map<String, Object> obj2 = ONode.deserialize(json, LinkedHashMap.class);
         assert obj2 instanceof LinkedHashMap;
 
-        Map<String, Object> obj22 = ONode.fromJson(json, Object.class);
+        Map<String, Object> obj22 = ONode.deserialize(json, Object.class);
         assert obj22 instanceof HashMap;
 
-        Map<String, Object> obj23 = ONode.fromJson(json, Object.class);
+        Map<String, Object> obj23 = ONode.deserialize(json, Object.class);
         assert obj23 instanceof Map;
 
         assert obj2.size() == 1;
@@ -195,11 +195,11 @@ public class SerializationTest {
         order.order_num = "ddddd";
 
 
-        String json = ONode.toJson(order, Feature.Write_ClassName);
+        String json = ONode.serialize(order, Feature.Write_ClassName);
         System.out.println(json);
-        OrderModel order2 = ONode.fromJson(json, OrderModel.class);
-        Object order22 = ONode.fromJson(json, Object.class);
-        Map order23 = ONode.fromJson(json, Object.class);
+        OrderModel order2 = ONode.deserialize(json, OrderModel.class);
+        Object order22 = ONode.deserialize(json, Object.class);
+        Map order23 = ONode.deserialize(json, Object.class);
 
 
         assert 1111 == order2.user.id;
@@ -209,10 +209,10 @@ public class SerializationTest {
     public void test5() throws Exception {
         CModel obj = new CModel();
 
-        String json = ONode.toJson(obj, Feature.Write_ClassName);
+        String json = ONode.serialize(obj, Feature.Write_ClassName);
         System.out.println(json);
 
-        CModel obj2 = ONode.fromJson(json, CModel.class);
+        CModel obj2 = ONode.deserialize(json, CModel.class);
 
         assert obj2.list == null;
     }
@@ -222,10 +222,10 @@ public class SerializationTest {
         CModel obj = new CModel();
         obj.init();
 
-        String json = ONode.toJson(obj,  Feature.Write_ClassName);
+        String json = ONode.serialize(obj,  Feature.Write_ClassName);
         System.out.println(json);
 
-        CModel obj2 = ONode.fromJson(json, CModel.class);
+        CModel obj2 = ONode.deserialize(json, CModel.class);
 
         assert obj2.list.size() == obj.list.size();
     }
@@ -235,10 +235,10 @@ public class SerializationTest {
         CModel obj = new CModel();
         obj.build();
 
-        String json = ONode.toJson(obj, Feature.Write_ClassName);
+        String json = ONode.serialize(obj, Feature.Write_ClassName);
         System.out.println(json);
 
-        CModel obj2 = ONode.fromJson(json, CModel.class);
+        CModel obj2 = ONode.deserialize(json, CModel.class);
 
         assert obj2.list.size() == obj.list.size();
     }
@@ -247,7 +247,7 @@ public class SerializationTest {
     public void test6() throws Exception {
         String tmp = "{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}";
         //1.加载json
-        Object n = ONode.fromJson(tmp);
+        Object n = ONode.load(tmp);
 
         assert n instanceof Map;
         assert ((Map) n).size() == 3;
@@ -256,20 +256,20 @@ public class SerializationTest {
     @Test
     public void test7() throws Exception {
         String json = ResourceUtil.getResourceAsString("ResultTree.json");
-        ResultTree rst = ONode.fromJson(json, ResultTree.class);
+        ResultTree rst = ONode.deserialize(json, ResultTree.class);
 
         System.out.println(rst);
         assert rst != null;
 
-        String json2 = ONode.toJson(rst);
+        String json2 = ONode.serialize(rst);
         assert json2 != null;
     }
 
     @Test
     public void test8() {
-        String json = ONode.toJson("好人");
+        String json = ONode.serialize("好人");
         System.out.println(json);
-        String str = ONode.fromJson(json, String.class);
+        String str = ONode.deserialize(json, String.class);
         System.out.println(str);
 
         assert "好人".equals(str);
@@ -287,7 +287,7 @@ public class SerializationTest {
 
     @Test
     public void test9() {
-        String json = ONode.toJson(new BigDecimal("0.1"),  Feature.Write_ClassName);
+        String json = ONode.serialize(new BigDecimal("0.1"),  Feature.Write_ClassName);
         System.out.println(json);
     }
 }

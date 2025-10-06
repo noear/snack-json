@@ -165,7 +165,7 @@ public class JsonPathTest3 {
                 "    }\n" +
                 "}";
 
-        ONode o = ONode.fromJson(jsonStr);
+        ONode o = ONode.load(jsonStr);
 
         //得到所有的书
         ONode books = o.select("$.store.book");
@@ -222,33 +222,33 @@ public class JsonPathTest3 {
     public void testx2() {
         String json = "{\"school\":[{\"name\":\"清华\",\"grade\":[{\"class\":\"二\",\"manSum\":12},{\"class\":\"一班\",\"manSum\":12}]},{\"name\":\"北大\",\"grade\":[{\"class\":\"二\",\"manSum\":12},{\"class\":\"一班\",\"manSum\":12}]}]}";
 
-        ONode oNode = ONode.fromJson(json);
+        ONode oNode = ONode.load(json);
 
         ONode oNode1 = null;
 
         oNode1 = oNode.select("$.school[?(@.name == '清华')]");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
 
         oNode1 = oNode.select("$.school[?(@.name == '清华')].grade[0]");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
         assert oNode1.get(0).get("class").getString().equals("二");
         System.out.println(oNode.usePaths().select("$.school[?(@.name == '清华')].grade[0]"));
         assert oNode.usePaths().select("$.school[?(@.name == '清华')].grade[0]").pathList().size() == 1;
 
 
         oNode1 = oNode.select("$.school[?(@.name == '清华')].grade[0][?(@.class == '一班')]");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
         assert oNode1.size() == 0;
 
         oNode1 = oNode.select("$.school[?(@.name == '清华')].grade[0][?(@.class == '一班')].manSum");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
         assert oNode1.size() == 0;
 
         oNode1 = oNode.select("$.school[?(@.name == '清华')].grade[0][?(@.class == '一班')].manSum.sum()");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
         assert oNode1.isNull();
 
         oNode1 = oNode.select("$..manSum.sum()");
-        System.out.println(oNode1.toJson());
+        System.out.println(oNode1.serialize());
     }
 }

@@ -25,7 +25,7 @@ public class Coding {
         //添加编码器
         opts.addEncoder(OrderModel.class, (opts1, attr, value) -> new ONode().set("id", value.order_id));
 
-        String json = ONode.from(orderModel, opts).toJson();
+        String json = ONode.from(orderModel, opts).serialize();
         System.out.println(json);
         assert json.contains("1");
 
@@ -36,11 +36,11 @@ public class Coding {
             return tmp;
         });
 
-        OrderModel rst = ONode.fromJson(json).to(OrderModel.class);
+        OrderModel rst = ONode.load(json).to(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 0;
 
-        rst = ONode.fromJson(json, opts).to(OrderModel.class);
+        rst = ONode.load(json, opts).to(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 1;
     }
@@ -54,7 +54,7 @@ public class Coding {
             return LocalDateTime.parse(node.getString());
         });
 
-        OrderModel tmp = ONode.fromJson(json, opts).to(OrderModel.class);
+        OrderModel tmp = ONode.load(json, opts).to(OrderModel.class);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class Coding {
         options.addEncoder(OrderModel.class, (opts, attr, value) -> new ONode().set("user", new ONode().set("uid", "1001")).set("order_time", null));
 
 
-        String json = ONode.from(orderModel, options).toJson();
+        String json = ONode.from(orderModel, options).serialize();
         System.out.println(json);
         assert json.contains("1001");
 
@@ -105,11 +105,11 @@ public class Coding {
             }
         });
 
-        OrderModel rst = ONode.fromJson(json).to(OrderModel.class);
+        OrderModel rst = ONode.load(json).to(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 0;
 
-        rst = ONode.fromJson(json, options).to(OrderModel.class);
+        rst = ONode.load(json, options).to(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 1001;
     }
