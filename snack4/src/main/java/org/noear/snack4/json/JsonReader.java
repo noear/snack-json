@@ -106,6 +106,8 @@ public class JsonReader {
         if (c == 't') return parseKeyword("true", true);
         if (c == 'f') return parseKeyword("false", false);
         if (c == 'n') return parseKeyword("null", null);
+        if (c == 'N') return parseKeyword("NaN", null);
+        if (c == 'u') return parseKeyword("undefined", null);
         throw state.error("Unexpected character: " + c);
     }
 

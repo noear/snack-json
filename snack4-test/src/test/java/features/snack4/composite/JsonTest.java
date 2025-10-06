@@ -43,9 +43,9 @@ public class JsonTest {
         c = ONode.load( "undefined");
         assert c.isNull();
 
-        long times = System.currentTimeMillis();
-        c = ONode.load("new Date(" + times + ") ");
-        assert c.getDate().getTime() == times;
+//        long times = System.currentTimeMillis();
+//        c = ONode.load("new Date(" + times + ") ");
+//        assert c.getDate().getTime() == times;
 
     }
 

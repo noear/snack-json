@@ -550,6 +550,14 @@ public final class ONode {
         return ONode.from(object, opts).toJson(opts);
     }
 
+    public static <T> T deserialize(String json, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return deserialize(json, Object.class, Options.def());
+        } else {
+            return deserialize(json, Object.class, Options.of(features));
+        }
+    }
+
     public static <T> T deserialize(String json, Type type, Feature... features) {
         if (Asserts.isEmpty(features)) {
             return deserialize(json, type, Options.def());
