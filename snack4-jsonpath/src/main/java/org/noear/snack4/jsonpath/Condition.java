@@ -160,11 +160,11 @@ public class Condition {
             }
 
             if (current.isObject()) {
-                current = current.get(key);
+                current = current.getOrNull(key);
             } else if (current.isArray()) {
                 try {
                     int index = Integer.parseInt(key);
-                    current = current.get(index);
+                    current = current.getOrNull(index);
                 } catch (NumberFormatException e) {
                     return null;
                 }

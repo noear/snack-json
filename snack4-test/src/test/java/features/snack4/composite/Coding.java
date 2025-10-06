@@ -109,7 +109,7 @@ public class Coding {
         System.out.println(rst);
         assert rst.user.id == 0;
 
-        rst = ONode.load(json, options).to(OrderModel.class);
+        rst = ONode.load(json).to(OrderModel.class, options);
         System.out.println(rst);
         assert rst.user.id == 1001;
     }

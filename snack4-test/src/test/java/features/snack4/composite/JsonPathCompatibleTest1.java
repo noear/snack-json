@@ -37,7 +37,7 @@ public class JsonPathCompatibleTest1 {
         assert tmp.size() == 5;
 
         ONode tmp2 = ONode.load(json).select("$..*[?(@.treePath)]");
-        System.out.println(tmp2);
+        System.out.println(tmp2.toJson());
         assert tmp2.isArray();
         assert tmp2.size() == 5;
     }

@@ -8,9 +8,9 @@ import org.noear.snack4.ONode;
  */
 public class DomTest {
     @Test
-    public void ary(){
+    public void ary() {
         ONode oNode = new ONode();
-        oNode.addNew().asObject();
+        oNode.getOrNew(2, n -> n.asObject());
 
         String json = oNode.toJson();
 
