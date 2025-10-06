@@ -26,7 +26,7 @@ public class JsonPathTest2 {
 
         ONode t4 = n.select("$..author");
         System.out.println(t4);
-        assert t3.serialize().equals(t4.serialize());
+        assert t3.toJson().equals(t4.toJson());
 
         ONode t5 = n.select("$.store.*");
         System.out.println(t5);
@@ -162,7 +162,7 @@ public class JsonPathTest2 {
 
         ONode rst = oNode.select("$.data.records[?(@.name == '测试节点1')]");
 
-        System.out.println(rst.serialize());
+        System.out.println(rst.toJson());
 
         assert rst.isArray();
         assert rst.size() == 1;
@@ -173,7 +173,7 @@ public class JsonPathTest2 {
         ONode oNode = ONode.load("{\"data\":{\"title\":{\"updatedTime\":1648799928406,\"schemaType\":\"i\",\"name\":\"testName\"}}}");
         ONode rst = oNode.select("$..title[?(@.name == 'testName')].schemaType");
 
-        System.out.println(rst.serialize());
+        System.out.println(rst.toJson());
     }
 
     @Test
@@ -181,6 +181,6 @@ public class JsonPathTest2 {
         ONode oNode = ONode.load("{\"data\":[{\"name\":false,\"value\":1},{\"name\":false,\"value\":2},{\"name\":false,\"value\":3},{\"name\":false,\"value\":4}]}");
         ONode rst = oNode.select("$..data[?(@.value == 1)].name");
 
-        System.out.println(rst.serialize());
+        System.out.println(rst.toJson());
     }
 }

@@ -17,9 +17,9 @@ public class EscapeTest {
         String json = "{\"a\":\"\1\"}";
 
         ONode node = ONode.load(json);
-        String json2 = node.serialize();
+        String json2 = node.toJson();
         String json2Val = node.get("a").getString();
-        String json2Val2 = node.get("a").serialize();
+        String json2Val2 = node.get("a").toJson();
 
         System.out.println(node);
         System.out.println(json2);
@@ -44,7 +44,7 @@ public class EscapeTest {
 
         assert " \0\1\2\3\4\5\6\7".equals(c.get("a").getString());
 
-        assert "{\"a\":\" \\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\"}".equals(c.serialize());
+        assert "{\"a\":\" \\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\"}".equals(c.toJson());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class EscapeTest {
 
         assert " \0\1\2\3\4\5\6\7".equals(c.get("a").getString());
 
-        assert "{\"a\":\" \\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\"}".equals(c.serialize());
+        assert "{\"a\":\" \\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\"}".equals(c.toJson());
 
     }
 
@@ -63,7 +63,7 @@ public class EscapeTest {
 
         assert " \u000f\u0012".equals(c.get("a").getString());
 
-        assert "{\"a\":\" \\u000f\\u0012\"}".equalsIgnoreCase(c.serialize());
+        assert "{\"a\":\" \\u000f\\u0012\"}".equalsIgnoreCase(c.toJson());
     }
 
 
@@ -76,7 +76,7 @@ public class EscapeTest {
 
         assert "'的\t\n".equals(c.get("a").getString());
 
-        assert "{\"a\":\"'的\\t\\n\"}".equals(c.serialize());
+        assert "{\"a\":\"'的\\t\\n\"}".equals(c.toJson());
     }
 
     /**
@@ -88,6 +88,6 @@ public class EscapeTest {
 
         assert "'👌\t\n".equals(c.get("a").getString());
 
-        assert "{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}".equalsIgnoreCase(c.serialize());
+        assert "{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}".equalsIgnoreCase(c.toJson());
     }
 }

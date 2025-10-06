@@ -35,7 +35,7 @@ public class SerializationTest {
 
         ONode tm3 = ONode.load(tm2);
 
-        tm3.serialize().equals("{\"a\":\"http://raas.dev.zmapi.cn\"}");
+        tm3.toJson().equals("{\"a\":\"http://raas.dev.zmapi.cn\"}");
     }
 
     @Test

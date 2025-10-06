@@ -46,7 +46,7 @@ public class SerializationsTest2 {
     }
 
     public String buildJson() {
-        return ONode.from(buildObj()).serialize();
+        return ONode.from(buildObj()).toJson();
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SerializationsTest2 {
 
         ONode oNode = ONode.from(props);
 
-        System.out.println(oNode.serialize());
+        System.out.println(oNode.toJson());
 
         QueryParamEntity entity = oNode.to(QueryParamEntity.class);
 
@@ -173,7 +173,7 @@ public class SerializationsTest2 {
         sModel.age = 11;
         sModel.name = "test";
 
-        String json = ONode.from(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).serialize();
+        String json = ONode.from(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toJson();
         System.out.println(json);
         assert json.contains("name") == false;
         assert json.contains("age");
@@ -216,11 +216,11 @@ public class SerializationsTest2 {
 
         Options options = Options.of(Feature.Write_ArrayClassName);
 
-        String json = ONode.from(sets, options).serialize();
+        String json = ONode.from(sets, options).toJson();
         System.out.println(json);
 
         Set<String> sets2 = ONode.load(json, options).to();
-        System.out.println(ONode.from(sets2, options).serialize());
+        System.out.println(ONode.from(sets2, options).toJson());
 
         assert sets2.size() == sets.size();
     }
@@ -234,7 +234,7 @@ public class SerializationsTest2 {
         tmp.setEndTime(OffsetTime.now());
         tmp.setStartTime(OffsetTime.now());
 
-        String json2 = ONode.from(tmp).serialize();
+        String json2 = ONode.from(tmp).toJson();
         System.out.println(json2);
     }
 
@@ -243,7 +243,7 @@ public class SerializationsTest2 {
         DTimeVO tmp = new DTimeVO();
 
         try {
-            String json2 = ONode.from(tmp).serialize(Feature.Write_PrettyFormat);
+            String json2 = ONode.from(tmp).toJson(Feature.Write_PrettyFormat);
             System.out.println(json2);
             assert false;
         } catch (UnsupportedTemporalTypeException e) {

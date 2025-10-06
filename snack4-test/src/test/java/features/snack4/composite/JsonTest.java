@@ -56,7 +56,7 @@ public class JsonTest {
         assert "m".equals(c.get("i").get(0).get("l").getString());
         assert "n".equals(c.get("i").get(1).getString());
 
-        assert "{\"a\":\"b\",\"c\":{\"d\":\"e\"},\"f\":{\"g\":\"h\"},\"i\":[{\"j\":\"k\",\"l\":\"m\"},\"n\"]}".equals(c.serialize());
+        assert "{\"a\":\"b\",\"c\":{\"d\":\"e\"},\"f\":{\"g\":\"h\"},\"i\":[{\"j\":\"k\",\"l\":\"m\"},\"n\"]}".equals(c.toJson());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class JsonTest {
 
         assert "b".equals(c.get("a").getString());
 
-        assert "{\"a\":\"b\"}".equals(c.serialize());
+        assert "{\"a\":\"b\"}".equals(c.toJson());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class JsonTest {
 
         assert "f".equals(c.get("a").get("b").get("c").get("d").get("e").getString());
 
-        assert "{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":\"f\"}}}}}".equals(c.serialize());
+        assert "{\"a\":{\"b\":{\"c\":{\"d\":{\"e\":\"f\"}}}}}".equals(c.toJson());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class JsonTest {
 
         ONode c = ONode.load(json);
 
-        assert json.equals(c.serialize());
+        assert json.equals(c.toJson());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class JsonTest {
 
         assert "f".equals(c.get(2).get(0).get("e").getString());
 
-        assert "[{\"a\":\"b\"},{\"c\":\"d\"},[{\"e\":\"f\"}]]".equals(c.serialize());
+        assert "[{\"a\":\"b\"},{\"c\":\"d\"},[{\"e\":\"f\"}]]".equals(c.toJson());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class JsonTest {
         assert c.get(4).getBoolean();
         assert !c.get(5).getBoolean();
 
-        assert "[123,123.45,\"123.45\",\"2019-01-02T03:04:05\",true,false]".equals(c.serialize());
+        assert "[123,123.45,\"123.45\",\"2019-01-02T03:04:05\",true,false]".equals(c.toJson());
     }
 
     /**
@@ -120,7 +120,7 @@ public class JsonTest {
 
         assert "\t".equals(c.get("a").getString());
 
-        assert "{\"a\":\"\\t\"}".equals(c.serialize());
+        assert "{\"a\":\"\\t\"}".equals(c.toJson());
 
     }
 

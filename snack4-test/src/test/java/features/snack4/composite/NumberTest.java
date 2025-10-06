@@ -19,7 +19,7 @@ public class NumberTest {
         String json = "{num:50123.12E25}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert 50123.12E25 == node.get("num").getDouble();
     }
 
@@ -28,7 +28,7 @@ public class NumberTest {
         String json = "{num:5344.34234e3}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert 5344.34234e3 == node.get("num").getDouble();
     }
 
@@ -37,7 +37,7 @@ public class NumberTest {
         String json = "{num:1.0485E+10}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert 1.0485E+10 == node.get("num").getDouble();
     }
 
@@ -46,7 +46,7 @@ public class NumberTest {
         String json = "{num:1.0485E-10}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert 1.0485E-10 == node.get("num").getDouble();
     }
 
@@ -57,7 +57,7 @@ public class NumberTest {
         String json = "{num:0E-10}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert 0E-10 == node.get("num").getDouble();
     }
 
@@ -72,14 +72,14 @@ public class NumberTest {
         map.put("num22", new BigInteger("123456789112345678911234567891123456789112"));
 
         ONode node = ONode.from(map);
-        String json = node.serialize();
+        String json = node.toJson();
 
         System.out.println(json);
         assert 1.0485E-10 == node.get("num").getDouble();
         assert new BigInteger("123456789112345678911234567891123456789112").compareTo((BigInteger) node.get("num22").getValue()) == 0;
 
         ONode node2 = ONode.load(json);
-        assert json.equals(node2.serialize());
+        assert json.equals(node2.toJson());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class NumberTest {
     @Test
     public void test9() {
         String json = "{\"a\":0.0000}";
-        String json2 = ONode.load(json).serialize(); //Feature.StringDoubleToDecimal
+        String json2 = ONode.load(json).toJson(); //Feature.StringDoubleToDecimal
 
         assert json.equals(json2);
     }

@@ -128,11 +128,11 @@ public class JsonPathCompatibleTest2 {
         System.out.println("::::" + hint);
 
         ONode tmp = ONode.load(json).select(jsonpathStr);
-        System.out.println(tmp.serialize());
+        System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
         System.out.println(tmp2);
 
-        assert tmp.serialize().equals(tmp2.toString());
+        assert tmp.toJson().equals(tmp2.toString());
     }
 }

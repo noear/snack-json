@@ -11,7 +11,7 @@ public class _test4 {
     public void testONodeToJson() {
         String jsonSomeFieldValueContainBackslash = "{\"abc\":\"\\abc\"}";
         ONode oNode = ONode.load(jsonSomeFieldValueContainBackslash);
-        String toJson = oNode.serialize();//new Options().disableFeature(Feature.Write_EscapeNonAscii));
+        String toJson = oNode.toJson();//new Options().disableFeature(Feature.Write_EscapeNonAscii));
 
         System.out.println(jsonSomeFieldValueContainBackslash);
         System.out.println(toJson);
@@ -379,7 +379,7 @@ public class _test4 {
         //System.out.println(s);
         //System.out.println("\n\n\n\n\n");
         ONode oNode = ONode.load(s);
-        System.out.println(oNode.serialize());
+        System.out.println(oNode.toJson());
         System.out.println("start_member_id:"+oNode.get("DataMap").get("start_member_id").getString());
         assert oNode.get("field0063").isNull();
         assert oNode.get("DataMap").get("start_member_id").getLong() == -8325008841882316909L;

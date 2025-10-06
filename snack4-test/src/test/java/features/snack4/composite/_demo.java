@@ -35,7 +35,7 @@ public class _demo {
         List<UserModel> list2 = o.select("$.data.list").to(List.class);
         assert list2.size() == 2;
 
-        String message = o.serialize();
+        String message = o.toJson();
         System.out.println(message);
 
         assert message != null;
@@ -75,7 +75,7 @@ public class _demo {
         user.name = "x";
 
         //demo1::序列化
-        String json = ONode.from(user).serialize();
+        String json = ONode.from(user).toJson();
 
         //demo2::反序列化
         UserModel user2 = ONode.load(json).to(UserModel.class);
@@ -108,7 +108,7 @@ public class _demo {
             });
         });
 
-        String message = data.serialize();
+        String message = data.toJson();
 
         System.out.println(message);
 
@@ -124,7 +124,7 @@ public class _demo {
         //exp的写法，方便获得 root 节点
         String json = new ONode().then(n -> {
             n.fillJson("{a:1,b:2}").getOrNew("c").fill(user);
-        }).serialize();
+        }).toJson();
 
         //无exp写法，需要给根安排个变量
 //        ONode root = ONode.fromJson("{a:1,b:2}");
@@ -136,7 +136,7 @@ public class _demo {
          * */
 
         assert json != null;
-        Assertions.assertEquals(ONode.load("{a:1,b:2,c:{id:1,name:\"x\",note:null}}").serialize(), json);
+        Assertions.assertEquals(ONode.load("{a:1,b:2,c:{id:1,name:\"x\",note:null}}").toJson(), json);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class _demo {
         //去掉QuoteFieldNames特性，添加UseSingleQuotes特性
         //
 
-        String txt2 = tmp.serialize(options);
+        String txt2 = tmp.toJson(options);
 
         System.out.println(txt2);
 

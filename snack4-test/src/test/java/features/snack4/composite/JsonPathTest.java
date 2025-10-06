@@ -47,7 +47,7 @@ public class JsonPathTest {
         ONode ary2_a2 = n.usePaths().select("data.ary2[*].b.c");
         assert ary2_a2.size() == 1;
         assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(2));
-        assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(1).serialize());
+        assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(1).toJson());
 
         ONode ary2_b = n.select("..b");
 
@@ -149,7 +149,7 @@ public class JsonPathTest {
 //        assert  t5.getInt()==2;
 
         ONode t60 = n.select("$..b");
-        System.out.println(t60.serialize());
+        System.out.println(t60.toJson());
 
         ONode t6 = n.select("$..list[-1]");
         assert  t6.get(0).getInt()==5;

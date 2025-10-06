@@ -48,7 +48,7 @@ public class _test3 {
 
         ONode tmp = oNode.select(jsonPath);
 
-        System.out.print(tmp.serialize());
+        System.out.print(tmp.toJson());
     }
 
     @Test
@@ -69,8 +69,8 @@ public class _test3 {
 
         ONode tmp = oNode.select("$.fromBranch[$.keyword]");
 
-        System.out.print(tmp.serialize());
-        assert "{\"a\":\"a\"}".equals(tmp.serialize());
+        System.out.print(tmp.toJson());
+        assert "{\"a\":\"a\"}".equals(tmp.toJson());
     }
 
     @Test

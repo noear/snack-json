@@ -72,12 +72,12 @@ public class LoadSpeedTest {
 
         obj.put("list", list);
 
-        String tmp = ONode.from(obj).serialize();
+        String tmp = ONode.from(obj).toJson();
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            ONode.from(obj).serialize();
+            ONode.from(obj).toJson();
             //String json = context.node.toJson();
         }
         long times = System.currentTimeMillis() - start;
@@ -113,12 +113,12 @@ public class LoadSpeedTest {
             group.ids[i] = i;
         }
 
-        String tmp = ONode.from(group).serialize();
+        String tmp = ONode.from(group).toJson();
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.from(group).serialize();
+            ONode.from(group).toJson();
         }
         long times = System.currentTimeMillis() - start;
 
@@ -155,7 +155,7 @@ public class LoadSpeedTest {
             group.ids[i] = i;
         }
 
-        String json =ONode.from(group).serialize();
+        String json =ONode.from(group).toJson();
         System.out.println(json);
 
         ONode.load(json).to(UserGroupModel.class);
@@ -198,7 +198,7 @@ public class LoadSpeedTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.from(group).serialize();
+        String json = ONode.from(group).toJson();
         System.out.println(json);
 
         ONode.load(json).to(Object.class);
@@ -242,7 +242,7 @@ public class LoadSpeedTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.from(group).serialize();
+        String json = ONode.from(group).toJson();
         System.out.println(json);
 
         ONode tmp = ONode.load(json);
@@ -287,7 +287,7 @@ public class LoadSpeedTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.from(group).serialize();
+        String json = ONode.from(group).toJson();
         System.out.println(json);
 
         ONode tmp = ONode.load(json);
@@ -326,7 +326,7 @@ public class LoadSpeedTest {
         obj.put("list", list);
 
 
-        String json = ONode.from(obj).serialize();
+        String json = ONode.from(obj).toJson();
         System.out.println(json);
 
         ONode.load(json).to(obj.getClass());
@@ -363,7 +363,7 @@ public class LoadSpeedTest {
         obj.put("list", list);
 
 
-        String json = ONode.from(obj).serialize();
+        String json = ONode.from(obj).toJson();
         System.out.println(json);
 
 
@@ -398,7 +398,7 @@ public class LoadSpeedTest {
         obj.put("list", list);
 
 
-        String json = ONode.from(obj).serialize();
+        String json = ONode.from(obj).toJson();
         System.out.println(json);
         ONode n = ONode.load(json);
 

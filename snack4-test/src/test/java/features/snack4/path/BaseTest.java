@@ -45,8 +45,8 @@ public class BaseTest {
         properties.setProperty("order.item[0].user", "1");
 
         ONode node = BeanSerializer.serialize(properties);
-        System.out.println(node.serialize()); // 输出: {"order":{"item":[{"user":"1"}]}}
-        assert "{\"order\":{\"item\":[{\"user\":\"1\"}]}}".equals(node.serialize());
+        System.out.println(node.toJson()); // 输出: {"order":{"item":[{"user":"1"}]}}
+        assert "{\"order\":{\"item\":[{\"user\":\"1\"}]}}".equals(node.toJson());
 
         Properties deserializedProperties = BeanDeserializer.deserialize(node, Properties.class);
         System.out.println(deserializedProperties.getProperty("order.item[0].user")); // 输出: 1

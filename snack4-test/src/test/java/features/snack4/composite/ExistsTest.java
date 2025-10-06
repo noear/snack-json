@@ -89,19 +89,19 @@ public class ExistsTest {
         ONode load1 = ONode.from(userModel, Feature.Write_Nulls);
 
 
-        System.out.println(load.serialize());
+        System.out.println(load.toJson());
         System.out.println(load.exists("$.note"));
         assert load.exists("$.note");
 
 
-        System.out.println(load1.serialize());
+        System.out.println(load1.toJson());
         System.out.println(load1.exists("$.note"));
         assert load1.exists("$.note");
 
         assert load1.select("$.note").isNull(); //因为
         assert load1.select("$.note").isValue();
         load1.select("$.note").set("a1", 1);
-        System.out.println(load1.serialize());
+        System.out.println(load1.toJson());
         assert load1.select("$.note").isObject();
     }
 

@@ -75,7 +75,7 @@ public class GenericTest {
                 "\t}\n" +
                 "}";
 
-        String json2 = ONode.load(json).serialize();
+        String json2 = ONode.load(json).toJson();
         System.out.println(json2);
 
         Result<House> result = JSON.parseObject(json, new TypeReference<Result<House>>() {

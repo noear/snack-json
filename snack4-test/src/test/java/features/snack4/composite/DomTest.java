@@ -12,7 +12,7 @@ public class DomTest {
         ONode oNode = new ONode();
         oNode.addNew().asObject();
 
-        String json = oNode.serialize();
+        String json = oNode.toJson();
 
         System.out.println(json);
 
@@ -24,7 +24,7 @@ public class DomTest {
         ONode oNode = new ONode();
         oNode.getOrNew("n1").asObject();
 
-        String json = oNode.serialize();
+        String json = oNode.toJson();
 
         System.out.println(json);
 

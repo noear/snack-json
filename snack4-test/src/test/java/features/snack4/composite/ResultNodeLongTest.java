@@ -22,7 +22,7 @@ public class ResultNodeLongTest {
         options.addEncoder(Long.class, (opts, attr, value) ->  new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);
-        String json = oNode2.serialize();
+        String json = oNode2.toJson();
         System.out.println(json);
         assert json.contains("\"12\"") == false;
     }
@@ -37,7 +37,7 @@ public class ResultNodeLongTest {
         options.addEncoder(Long.class, (opts, attr, value) -> new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);
-        String json = oNode2.serialize();
+        String json = oNode2.toJson();
         System.out.println(json);
         assert json.contains("\"12\"");
     }

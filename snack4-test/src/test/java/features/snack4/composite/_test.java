@@ -72,7 +72,7 @@ public class _test {
         String g_adr = n.get("g_adr").getString();
 
 
-        String str2 = n.serialize();
+        String str2 = n.toJson();
 
         System.out.println(str);
         System.out.println(str2);
@@ -110,7 +110,7 @@ public class _test {
         List<UserModel> list2 = o.select("$.data.list").to(List.class);
         assert list2.size() == 2;
 
-        String message = o.serialize();
+        String message = o.toJson();
         System.out.println(message);
 
         assert message != null;
@@ -156,7 +156,7 @@ public class _test {
 
         assert list2.size() == list.size();
 
-        String message = o.serialize();
+        String message = o.toJson();
         System.out.println(message);
 
         assert message != null;
@@ -186,7 +186,7 @@ public class _test {
         String json = ONode.serialize(um);
         System.out.println(json);
 
-        String json2 = ONode.load(json).serialize();
+        String json2 = ONode.load(json).toJson();
         System.out.println(json2);
 
         UserModel um2 = ONode.deserialize(json, UserModel.class);
@@ -209,7 +209,7 @@ public class _test {
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.load(txt);
 
-        String txt2 = tmp.serialize(Options.of()
+        String txt2 = tmp.toJson(Options.of()
                 .addFeature(Feature.Write_UseSingleQuotes) //采用单引号
                 .addFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
 
@@ -258,7 +258,7 @@ public class _test {
             oTmp.getArray().forEach(n -> n.setValue(2));
         }
 
-        System.err.println(oNode.serialize());
+        System.err.println(oNode.toJson());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class _test {
 
         oNode.select("$.k1").setValue(2);
 
-        System.err.println(oNode.serialize());
+        System.err.println(oNode.toJson());
     }
 
     @Test
@@ -280,7 +280,7 @@ public class _test {
 
         oNode.select("$.k5.k52[?(@.k521 == 'e')].k521").getArray().forEach(n -> n.setValue("ee"));
 
-        System.err.println(oNode.serialize());
+        System.err.println(oNode.toJson());
     }
 
     @Test
@@ -293,6 +293,6 @@ public class _test {
         map.put("newK2", "JSON");
         oNode.select("$.k5.k51").fill(map);
 
-        System.err.println(oNode.serialize());
+        System.err.println(oNode.toJson());
     }
 }

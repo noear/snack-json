@@ -19,7 +19,7 @@ public class _test_base {
 
         o.set("user", map);
 
-        String tmp = o.serialize();
+        String tmp = o.toJson();
 
         System.out.println(tmp);
 
@@ -36,7 +36,7 @@ public class _test_base {
 
         o.add(map);
 
-        String tmp = o.serialize();
+        String tmp = o.toJson();
 
         System.out.println(tmp);
 
@@ -57,7 +57,7 @@ public class _test_base {
 
         o.add(list);
 
-        String tmp = o.serialize();
+        String tmp = o.toJson();
 
         System.out.println(tmp);
 
@@ -82,7 +82,7 @@ public class _test_base {
 
         o.add(map2);
 
-        String tmp = o.serialize();
+        String tmp = o.toJson();
 
         System.out.println(tmp);
 
@@ -96,6 +96,6 @@ public class _test_base {
         ONode node = ONode.load(json);
         node.set("value", a);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
     }
 }

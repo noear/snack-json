@@ -547,7 +547,7 @@ public final class ONode {
     }
 
     public static String serialize(Object object, Options opts) {
-        return ONode.from(object, opts).serialize(opts);
+        return ONode.from(object, opts).toJson(opts);
     }
 
     public static <T> T deserialize(String json, Type type, Feature... features) {
@@ -608,7 +608,7 @@ public final class ONode {
         return BeanDeserializer.deserialize(this, target.getClass(), target, opts);
     }
 
-    public String serialize(Options opts) {
+    public String toJson(Options opts) {
         try {
             return JsonWriter.write(this, opts);
         } catch (RuntimeException ex) {
@@ -618,11 +618,11 @@ public final class ONode {
         }
     }
 
-    public String serialize(Feature... features) {
+    public String toJson(Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return serialize(Options.def());
+            return toJson(Options.def());
         } else {
-            return serialize(Options.of(features));
+            return toJson(Options.of(features));
         }
     }
 

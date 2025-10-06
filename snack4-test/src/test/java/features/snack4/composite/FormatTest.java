@@ -31,7 +31,7 @@ public class FormatTest {
         order.orderList.add("111");
         order.orderList.add("222");
 
-        String json =  ONode.from(order).serialize(Feature.Write_PrettyFormat);
+        String json =  ONode.from(order).toJson(Feature.Write_PrettyFormat);
 
         System.out.println(json);
 
@@ -73,7 +73,7 @@ public class FormatTest {
         list.add("aaaa");
         list.add(user);
 
-        String json =  ONode.from(list).serialize(Feature.Write_PrettyFormat);
+        String json =  ONode.from(list).toJson(Feature.Write_PrettyFormat);
 
         System.out.println(json);
 

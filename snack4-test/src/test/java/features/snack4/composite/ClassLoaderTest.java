@@ -19,7 +19,7 @@ public class ClassLoaderTest {
         options.classLoader(data.getClass().getClassLoader());
 
         //序列化
-        String json = ONode.from(data, options).serialize();
+        String json = ONode.from(data, options).toJson();
 
         //反序列化
         data = ONode.load(json, options).to();

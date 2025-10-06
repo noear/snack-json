@@ -55,7 +55,7 @@ public class TestFlat {
         assertEquals(childDto2.getAge2(), 54);
         assertEquals(childDto2.getResult2(), false);
 
-        String str = ONode.from(dto).serialize();
+        String str = ONode.from(dto).toJson();
         assertEquals(str, json);
     }
 }

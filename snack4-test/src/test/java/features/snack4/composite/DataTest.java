@@ -30,7 +30,7 @@ public class DataTest {
 
         ONode oNode = ONode.from(a);
 
-        System.out.println(oNode.serialize());
+        System.out.println(oNode.toJson());
 
         Object data = oNode.to();
 
@@ -52,7 +52,7 @@ public class DataTest {
 
         ONode c = ONode.from(order);
 
-        System.out.println(c.serialize());
+        System.out.println(c.toJson());
 
         Object data = c.to();
 

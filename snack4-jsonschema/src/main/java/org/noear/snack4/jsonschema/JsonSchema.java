@@ -51,7 +51,7 @@ public class JsonSchema {
     }
 
     public String toJson(){
-        return schema.serialize();
+        return schema.toJson();
     }
 
     public void validate(ONode data) throws SchemaException {

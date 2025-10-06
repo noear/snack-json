@@ -13,7 +13,7 @@ public class NullTest {
         String json = "{num:null}";
         ONode node = ONode.load(json);
 
-        System.out.println(node.serialize());
+        System.out.println(node.toJson());
         assert node.get("num").isNull();
 
         Object tmp = node.to(Feature.Write_Nulls);

@@ -26,17 +26,17 @@ public class StringTest {
 
         oNode.set("code", 1);
         oNode.set("name", "world");
-        oNode.set("attr", attr.serialize());
+        oNode.set("attr", attr.toJson());
 
-        String json = oNode.serialize();
+        String json = oNode.toJson();
         System.out.println(json);
 
-        String json2 = ONode.load(json).serialize();
+        String json2 = ONode.load(json).toJson();
         System.out.println(json2);
 
         assert json.equals(json2);
 
-        System.out.println(ONode.load(json, Feature.Read_UnwrapJsonString).serialize());
+        System.out.println(ONode.load(json, Feature.Read_UnwrapJsonString).toJson());
     }
 
     @Test
@@ -55,11 +55,11 @@ public class StringTest {
         map.put("c", "{d:'3'}");
 
 
-        String json =  ONode.from(map).serialize();
+        String json =  ONode.from(map).toJson();
         System.out.println(json);
         assert ONode.load(json).get("c").isValue();
 
-        json =  ONode.from(map, Feature.Read_UnwrapJsonString).serialize();
+        json =  ONode.from(map, Feature.Read_UnwrapJsonString).toJson();
         System.out.println(json);
         assert ONode.load(json).get("c").isObject();
     }
@@ -81,12 +81,12 @@ public class StringTest {
         JSONObject json = (JSONObject) JSONObject.parse(str); //故意转成对象，下面用loadObj
         ONode jsonNode =  ONode.from(json, Feature.Read_UnwrapJsonString);
 
-        System.out.println(jsonNode.serialize());
+        System.out.println(jsonNode.toJson());
 
         String typeName = jsonNode.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------Feature.StringJsonToNode typeName:{}" + typeName);
 
-        String jsonStr =  ONode.from(json, Feature.Read_UnwrapJsonString).serialize();
+        String jsonStr =  ONode.from(json, Feature.Read_UnwrapJsonString).toJson();
         ONode jsonNode2 = ONode.load(jsonStr);
         String typeName2 = jsonNode2.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------ typeName:{}" + typeName2);
@@ -96,6 +96,6 @@ public class StringTest {
     public void test5() {
         String json = "'1a'";
         System.out.println(ONode.load(json).getString());
-        System.out.println(ONode.load(json).serialize());
+        System.out.println(ONode.load(json).toJson());
     }
 }

@@ -31,7 +31,7 @@ public class BuildTest {
             });
         });
 
-        String message = data.serialize();
+        String message = data.toJson();
 
         assert message != null && message.length() > 0;
         System.out.println(message);

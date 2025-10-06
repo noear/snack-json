@@ -137,7 +137,7 @@ public class EnumTest {
         rec.map = map;
         rec.set = Collections.singleton(3);
 
-        String json = ONode.from(rec).serialize(Feature.Write_PrettyFormat);
+        String json = ONode.from(rec).toJson(Feature.Write_PrettyFormat);
 
         System.out.println(json);
         Rec rec2 = ONode.deserialize(json, Rec.class);
