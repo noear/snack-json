@@ -22,7 +22,7 @@ public class JsonPathTest {
 
         //4.获取一个数组
         //List<Integer> list = n.get("data").get("list").to(List.class);
-        List<Integer> list = n.select("data.list").to(List.class);
+        List<Integer> list = n.select("$.data.list").to(List.class);
         assert list.size() == 5;
 
 
