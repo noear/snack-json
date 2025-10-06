@@ -16,10 +16,10 @@ public class OptionTest {
     @Test
     public void case1() throws Exception {
         Options options = Options.def();
-        options.enableFeature(Feature.Write_UseNumberString);
-        options.enableFeature(Feature.Write_UseDateFormat);
-        options.enableFeature(Feature.Write_Nulls);
-        options.enableFeature(Feature.Write_EnumUsingName);
+        options.addFeature(Feature.Write_UseNumberString);
+        options.addFeature(Feature.Write_UseDateFormat);
+        options.addFeature(Feature.Write_Nulls);
+        options.addFeature(Feature.Write_EnumUsingName);
         options.dateFormatText("yyyy-MM-dd");
         options.timeZone(TimeZone.getTimeZone("GMT+8"));
         options.addDecoder(BigDecimal.class, (opts, attr, node, clazz) -> null);

@@ -14,28 +14,28 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowComments() {
         String json = "{\"key\": \"value\"} // Comment";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments_2() {
         String json = "// Comment\n{\"key\": \"value\"} ";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments2() {
         String json = "{\"key\": \"value\"} /* Comment*/";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
     @Test
     void testAllowComments2_2() {
         String json = "/* Comment*/{\"key\": \"value\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowComment));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowComment));
         assertDoesNotThrow(() -> reader.read());
     }
 
@@ -62,7 +62,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowNumericLeadingZeros() {
         String json = "{\"key\": 00123}";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowZeroLeadingNumbers));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowZeroLeadingNumbers));
         assertDoesNotThrow(() -> reader.read());
 
 
@@ -78,7 +78,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowBackslashEscapingAnyCharacter() {
         String json = "{\"key\": \"\\a\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), Options.enableOf(Feature.Read_AllowBackslashEscapingAnyCharacter));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowBackslashEscapingAnyCharacter));
         assertDoesNotThrow(() -> reader.read());
 
         //JsonReader.Options.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER //允许对任何字符进行反斜杠转义
@@ -95,7 +95,7 @@ class JsonReaderOptionsAndFeaturesTest {
     @Test
     void testAllowEmptyKeys2() {
         String json = "{\"\": \"value\"}";
-        JsonReader reader = new JsonReader(new StringReader(json), new Options().enableFeature(Feature.Read_AllowEmptyKeys));
+        JsonReader reader = new JsonReader(new StringReader(json), Options.of(Feature.Read_AllowEmptyKeys));
         assertDoesNotThrow(() -> reader.read());
     }
 

@@ -148,9 +148,9 @@ public class _demo {
 
     @Test
     public void demo40() {
-        Options options = new Options()
-                .enableFeature(Feature.Write_UseSingleQuotes)
-                .enableFeature(Feature.Write_UnquotedFieldNames);
+        Options options = Options.of()
+                .addFeature(Feature.Write_UseSingleQuotes)
+                .addFeature(Feature.Write_UnquotedFieldNames);
 
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.load(txt);
@@ -172,9 +172,9 @@ public class _demo {
         String txt = "{id:1,name:'x', data:'[1,2,3,4,5]'}";
         assert ONode.load(txt).get("data").isValue();
 
-        assert ONode.load(txt, Options.enableOf(Feature.Read_UnwrapJsonString)).get("data").isArray();
+        assert ONode.load(txt, Options.of(Feature.Read_UnwrapJsonString)).get("data").isArray();
 
-        assert ONode.load(txt, Options.enableOf(Feature.Read_UnwrapJsonString)).get("data").size() == 5;
+        assert ONode.load(txt, Options.of(Feature.Read_UnwrapJsonString)).get("data").size() == 5;
     }
 
     @Test

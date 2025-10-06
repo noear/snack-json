@@ -34,11 +34,11 @@ public enum Feature {
     /**
      * 允许单引号字符串
      */
-    Read_AllowSingleQuotes(true),
+    Read_DisableSingleQuotes(false),
     /**
      * 允许未用引号包裹的键名
      */
-    Read_AllowUnquotedKeys(true),
+    Read_DisableUnquotedKeys(false),
     /**
      * 允许未空的键名
      */
@@ -70,10 +70,6 @@ public enum Feature {
      */
     Read_AllowBackslashEscapingAnyCharacter(false),
 
-    /**
-     * 允许属性值省略引号 (自动推导类型)
-     */
-    Read_AllowAutoType(false),
 
     /**
      * 处理大数字时使用字符串模式（避免精度丢失）

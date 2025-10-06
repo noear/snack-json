@@ -30,7 +30,7 @@ public class ClassType {
         c.typeA = new TypeAImpl();
         c.typeB = new TypeBImpl();
 
-        String rst = ONode.from(c, Options.enableOf(Feature.Write_NotRootClassName)).serialize();
+        String rst = ONode.from(c, Options.of(Feature.Write_NotRootClassName)).serialize();
         System.out.println(rst);
 
         assert "{\"typeA\":{\"@type\":\"demo.snack3._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack3._model5.TypeBImpl\"}}".equals(rst);

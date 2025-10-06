@@ -42,8 +42,10 @@ public final class Options {
     public static final DateTimeFormatter DEF_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     //默认特性
     public static final int DEF_FEATURES = Feature.DEFAULT();
-    //黑碎选项（私有）
-    private static final Options DEF_OPTIONS = new Options();
+
+    //默认选项（私有）
+    private static final Options DEF_OPTIONS = new Options(true);
+    private static final String DEF_UNSUPPORTED_HINT = "Read-only mode does not support modification.";
 
     //编码仓库
     private final CodecLib codecLib = CodecLib.newInstance();
@@ -65,14 +67,17 @@ public final class Options {
 
     private TimeZone timeZone = DEF_TIME_ZONE;
 
-    public void allowClass(Class<?> clazz) {
-        allowedClasses.add(clazz);
+    private final boolean readonly;
+
+    private Options(boolean readonly) {
+        this.readonly = readonly;
     }
+
 
     /**
      * 是否启用指定特性
      */
-    public boolean isFeatureEnabled(Feature feature) {
+    public boolean hasFeature(Feature feature) {
         return (features & feature.mask()) != 0;
     }
 
@@ -136,7 +141,8 @@ public final class Options {
 
     /**
      * 加载类
-     * */
+     *
+     */
     public Class<?> loadClass(String className) {
         try {
             if (classLoader == null) {
@@ -149,10 +155,23 @@ public final class Options {
         }
     }
 
+
+    public void addAllowClass(Class<?> clazz) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        allowedClasses.add(clazz);
+    }
+
     /**
      * 添加特性
      */
-    public Options enableFeature(Feature... features) {
+    public Options addFeature(Feature... features) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         for (Feature feature : features) {
             this.features |= feature.mask();
         }
@@ -162,7 +181,11 @@ public final class Options {
     /**
      * 移除特性
      */
-    public Options disableFeature(Feature... features) {
+    public Options removeFeature(Feature... features) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         for (Feature feature : features) {
             this.features &= ~feature.mask();
         }
@@ -173,6 +196,10 @@ public final class Options {
      * 设置日期格式
      */
     public Options dateFormat(DateTimeFormatter format) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.dateFormat = format;
         return this;
     }
@@ -181,16 +208,28 @@ public final class Options {
      * 设置日期格式
      */
     public Options dateFormatText(String format) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.dateFormat = DateTimeFormatter.ofPattern(format);
         return this;
     }
 
     public Options locale(Locale locale) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.locale = locale;
         return this;
     }
 
     public Options timeZone(TimeZone timeZone) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.timeZone = timeZone;
         return this;
     }
@@ -199,6 +238,10 @@ public final class Options {
      * 注册自定义解码器
      */
     public <T> Options addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         codecLib.addDecoder(type, decoder);
         return this;
     }
@@ -207,6 +250,10 @@ public final class Options {
      * 注册自定义编码器
      */
     public <T> Options addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         codecLib.addEncoder(type, encoder);
         return this;
     }
@@ -216,6 +263,10 @@ public final class Options {
      *
      */
     public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         codecLib.addFactory(type, factory);
         return this;
     }
@@ -224,6 +275,10 @@ public final class Options {
      * 设置最大解析深度
      */
     public Options readMaxDepth(int depth) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.readMaxDepth = depth;
         return this;
     }
@@ -232,11 +287,19 @@ public final class Options {
      * 设置缩进字符串
      */
     public Options writeIndent(String indent) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.writeIndent = indent;
         return this;
     }
 
     public Options classLoader(ClassLoader classLoader) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
         this.classLoader = classLoader;
         return this;
     }
@@ -249,18 +312,10 @@ public final class Options {
         return DEF_OPTIONS;
     }
 
-    public static Options enableOf(Feature... features) {
-        Options tmp = new Options();
+    public static Options of(Feature... features) {
+        Options tmp = new Options(false);
         for (Feature f : features) {
-            tmp.enableFeature(f);
-        }
-        return tmp;
-    }
-
-    public static Options disableOf(Feature... features) {
-        Options tmp = new Options();
-        for (Feature f : features) {
-            tmp.disableFeature(f);
+            tmp.addFeature(f);
         }
         return tmp;
     }

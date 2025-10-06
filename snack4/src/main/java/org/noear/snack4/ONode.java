@@ -306,7 +306,7 @@ public final class ONode {
     }
 
     public ONode fillJson(String json, Feature... features) {
-        return fillJson(json, Options.enableOf(features));
+        return fillJson(json, Options.of(features));
     }
 
     public ONode fillJson(String json, Options opts) {
@@ -520,7 +520,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return BeanSerializer.serialize(bean, Options.def());
         } else {
-            return BeanSerializer.serialize(bean, Options.enableOf(features));
+            return BeanSerializer.serialize(bean, Options.of(features));
         }
     }
 
@@ -528,7 +528,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return load(json, Options.def());
         } else {
-            return load(json, Options.enableOf(features));
+            return load(json, Options.of(features));
         }
     }
 
@@ -547,7 +547,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return serialize(object, Options.def());
         } else {
-            return serialize(object, Options.enableOf(features));
+            return serialize(object, Options.of(features));
         }
     }
 
@@ -559,7 +559,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return deserialize(json, type, Options.def());
         } else {
-            return deserialize(json, type, Options.enableOf(features));
+            return deserialize(json, type, Options.of(features));
         }
     }
 
@@ -571,7 +571,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return deserialize(json, type, Options.def());
         } else {
-            return deserialize(json, type, Options.enableOf(features));
+            return deserialize(json, type, Options.of(features));
         }
     }
 
@@ -589,7 +589,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return to(type, Options.def());
         } else {
-            return to(type, Options.enableOf(features));
+            return to(type, Options.of(features));
         }
     }
 
@@ -627,7 +627,7 @@ public final class ONode {
         if (Asserts.isEmpty(features)) {
             return serialize(Options.def());
         } else {
-            return serialize(Options.enableOf(features));
+            return serialize(Options.of(features));
         }
     }
 

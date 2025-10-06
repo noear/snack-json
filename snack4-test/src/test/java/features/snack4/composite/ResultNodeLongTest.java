@@ -18,7 +18,7 @@ public class ResultNodeLongTest {
         oNode.set("num", 12L);
         Result result = Result.succeed(oNode);
 
-        Options options = new Options();
+        Options options = Options.of();
         options.addEncoder(Long.class, (opts, attr, value) ->  new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);
@@ -33,7 +33,7 @@ public class ResultNodeLongTest {
         oNode.put("num", 12L);
         Result result = Result.succeed(oNode);
 
-        Options options = new Options();
+        Options options = Options.of();
         options.addEncoder(Long.class, (opts, attr, value) -> new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);

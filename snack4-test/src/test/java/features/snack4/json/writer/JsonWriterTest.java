@@ -126,7 +126,7 @@ public class JsonWriterTest {
         ONode node = new ONode();
         node.set("name", "John");
         node.set("age", 30);
-        Options opts = Options.enableOf(Feature.Write_PrettyFormat);
+        Options opts = Options.of(Feature.Write_PrettyFormat);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
 
@@ -151,7 +151,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteUseSingleQuotes() throws IOException {
         ONode node = new ONode("hello");
-        Options opts = Options.enableOf(Feature.Write_UseSingleQuotes);
+        Options opts = Options.of(Feature.Write_UseSingleQuotes);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("'hello'", writer.toString());
@@ -161,7 +161,7 @@ public class JsonWriterTest {
     public void testWriteUseUnderlineStyle() throws IOException {
         ONode node = new ONode();
         node.set("firstName", new ONode("John"));
-        Options opts = Options.enableOf(Feature.Write_UseUnderlineStyle);
+        Options opts = Options.of(Feature.Write_UseUnderlineStyle);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("{\"first_name\":\"John\"}", writer.toString());
@@ -170,7 +170,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteEscapeNonAscii() throws IOException {
         ONode node = new ONode("こんにちは");
-        Options opts = Options.enableOf(Feature.Write_EscapeNonAscii);
+        Options opts = Options.of(Feature.Write_EscapeNonAscii);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("\"\\u3053\\u3093\\u306b\\u3061\\u306f\"", writer.toString());
@@ -179,7 +179,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteBigNumberMode() throws IOException {
         ONode node = new ONode(1234567890123456789L);
-        Options opts = Options.enableOf(Feature.Write_UseBigNumberMode);
+        Options opts = Options.of(Feature.Write_UseBigNumberMode);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("\"1234567890123456789\"", writer.toString());

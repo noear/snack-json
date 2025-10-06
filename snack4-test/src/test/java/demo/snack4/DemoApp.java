@@ -14,11 +14,11 @@ import java.util.Date;
  */
 public class DemoApp {
     public static void main(String[] args) {
-        Options options = new Options()
+        Options options =  Options.of()
                 .addEncoder(Date.class, (opts, attr, data) -> {
                     return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
                 })
-                .enableFeature(Feature.Write_PrettyFormat)
+                .addFeature(Feature.Write_PrettyFormat)
                 .dateFormatText("yyyy-MM");
 
         String json = ONode.load(null, options).serialize();

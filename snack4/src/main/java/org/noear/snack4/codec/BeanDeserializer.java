@@ -312,7 +312,7 @@ public class BeanDeserializer {
         //
         ONode o = oRef;
         String typeStr = null;
-        if (opts.isFeatureEnabled(Feature.Read_DisableClassName) == false) {
+        if (opts.hasFeature(Feature.Read_DisableClassName) == false) {
             if (o.isObject()) {
                 ONode n1 = o.getObject().get(opts.getTypePropertyName());
                 if (n1 != null) {

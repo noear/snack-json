@@ -60,7 +60,7 @@ public class Demo3 {
         User user = new User("张三", 24);
         String json = ONode.from(user).serialize(); // {"name":"张三","age":24}
 
-        String json2 = ONode.from(user).serialize(Options.enableOf(Feature.Write_ClassName, Feature.Write_EscapeNonAscii)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
+        String json2 = ONode.from(user).serialize(Options.of(Feature.Write_ClassName, Feature.Write_EscapeNonAscii)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
 
         System.out.println(json);
         System.out.println(json2);
@@ -111,7 +111,7 @@ public class Demo3 {
         User user = new User("张三", 24);
         System.out.println(ONode.from(user).serialize()); //{"name":"张三","age":24}
 
-        Options opts = Options.enableOf(Feature.Write_Nulls);
+        Options opts = Options.of(Feature.Write_Nulls);
         System.out.println(ONode.from(user).serialize(opts)); //{"name":"张三","age":24,"emailAddress":null}
     }
 
@@ -119,7 +119,7 @@ public class Demo3 {
     public void demo9() {
         Date date = new Date();
 
-        Options opts = Options.enableOf(Feature.Write_UseDateFormat).dateFormatText("yyyy-MM-dd");
+        Options opts = Options.of(Feature.Write_UseDateFormat).dateFormatText("yyyy-MM-dd");
 
         System.out.println(ONode.from(date).serialize(opts)); //2019-12-06
     }

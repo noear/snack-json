@@ -81,5 +81,5 @@ public class NameTest {
         assert json2.equals(json);
     }
 
-    private static final Options options = Options.enableOf(Feature.Write_EnumUsingName);
+    private static final Options options = Options.of(Feature.Write_EnumUsingName);
 }

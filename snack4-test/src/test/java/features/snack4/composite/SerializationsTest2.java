@@ -214,7 +214,7 @@ public class SerializationsTest2 {
         sets.add("2");
         sets.add("3");
 
-        Options options = Options.enableOf(Feature.Write_ArrayClassName);
+        Options options = Options.of(Feature.Write_ArrayClassName);
 
         String json = ONode.from(sets, options).serialize();
         System.out.println(json);

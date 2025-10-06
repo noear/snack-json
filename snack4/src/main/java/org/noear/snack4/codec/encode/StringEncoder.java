@@ -14,7 +14,7 @@ import org.noear.snack4.codec.ObjectEncoder;
 public class StringEncoder implements ObjectEncoder<String> {
     @Override
     public ONode encode(Options opts, ONodeAttr attr, String value) {
-        if (opts.isFeatureEnabled(Feature.Read_UnwrapJsonString)) {
+        if (opts.hasFeature(Feature.Read_UnwrapJsonString)) {
             if (value.length() > 1) {
                 char c1 = value.charAt(0);
                 char c2 = value.charAt(value.length() - 1);

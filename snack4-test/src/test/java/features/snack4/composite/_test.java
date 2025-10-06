@@ -209,16 +209,16 @@ public class _test {
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.load(txt);
 
-        String txt2 = tmp.serialize(new Options()
-                .enableFeature(Feature.Write_UseSingleQuotes) //采用单引号
-                .enableFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
+        String txt2 = tmp.serialize(Options.of()
+                .addFeature(Feature.Write_UseSingleQuotes) //采用单引号
+                .addFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
 
         assert txt.equals(txt2);
     }
 
     @Test
     public void test11() {
-        ONode tmp = ONode.from("46qh", Options.disableOf(Feature.Read_EscapeNonAscii));
+        ONode tmp = ONode.from("46qh");
 
         assert "46qh".equals(tmp.getString());
     }

@@ -107,7 +107,7 @@ public class BeanSerializer {
 
         ONode tmp = new ONode().asObject();
 
-        if (opts.isFeatureEnabled(Feature.Write_ClassName)) {
+        if (opts.hasFeature(Feature.Write_ClassName)) {
             tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
         }
 

@@ -29,7 +29,7 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
             return new ONode(o);
         } else {
 
-            if (opts.isFeatureEnabled(Feature.Write_EnumUsingName)) {
+            if (opts.hasFeature(Feature.Write_EnumUsingName)) {
                 return new ONode(value.name());
             } else {
                 return new ONode(value.ordinal());

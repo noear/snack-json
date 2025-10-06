@@ -62,7 +62,7 @@ public class JsonReader {
             ONode node = parseValue();
             state.skipWhitespace();
 
-            if (opts.isFeatureEnabled(Feature.Read_AllowComment)) {
+            if (opts.hasFeature(Feature.Read_AllowComment)) {
                 state.skipComments();
             }
 
@@ -78,7 +78,7 @@ public class JsonReader {
     private ONode parseValue() throws IOException {
         state.skipWhitespace();
 
-        if (opts.isFeatureEnabled(Feature.Read_AllowComment)) {
+        if (opts.hasFeature(Feature.Read_AllowComment)) {
             state.skipComments();
         }
 
@@ -86,10 +86,10 @@ public class JsonReader {
 
         if (c == '{') return parseObject();
         if (c == '[') return parseArray();
-        if (c == '"' || (opts.isFeatureEnabled(Feature.Read_AllowSingleQuotes) && c == '\'')) {
+        if (c == '"' || (opts.hasFeature(Feature.Read_DisableSingleQuotes) == false && c == '\'')) {
             String str = parseString();
 
-            if (opts.isFeatureEnabled(Feature.Read_UnwrapJsonString)) {
+            if (opts.hasFeature(Feature.Read_UnwrapJsonString)) {
                 if (str.length() > 1) {
                     char c1 = str.charAt(0);
                     char c2 = str.charAt(str.length() - 1);
@@ -120,7 +120,7 @@ public class JsonReader {
 
             String key = parseKey();
 
-            if (key.isEmpty() && opts.isFeatureEnabled(Feature.Read_AllowEmptyKeys) == false) {
+            if (key.isEmpty() && opts.hasFeature(Feature.Read_AllowEmptyKeys) == false) {
                 throw new ParseException("Empty key is not allowed");
             }
 
@@ -144,7 +144,7 @@ public class JsonReader {
     }
 
     private String parseKey() throws IOException {
-        if (opts.isFeatureEnabled(Feature.Read_AllowUnquotedKeys)) {
+        if (opts.hasFeature(Feature.Read_DisableUnquotedKeys) == false) {
             char c = state.peekChar();
             if (c != '"' && c != '\'') {
                 return parseUnquotedString();
@@ -194,7 +194,7 @@ public class JsonReader {
 
     private String parseString() throws IOException {
         char quoteChar = state.nextChar();
-        if (quoteChar != '"' && !(opts.isFeatureEnabled(Feature.Read_AllowSingleQuotes) && quoteChar == '\'')) {
+        if (quoteChar != '"' && !(opts.hasFeature(Feature.Read_DisableSingleQuotes) == false && quoteChar == '\'')) {
             throw state.error("Expected string to start with a quote");
         }
 
@@ -238,7 +238,7 @@ public class JsonReader {
                         sb.append((char) Integer.parseInt(new String(hex), 16));
                         break;
                     default:
-                        if (opts.isFeatureEnabled(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
+                        if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
                             sb.append("\\").append(c);
                         } else {
                             throw state.error("Invalid escape character: \\" + c);
@@ -263,7 +263,7 @@ public class JsonReader {
         }
 
         // 解析整数部分
-        if (opts.isFeatureEnabled(Feature.Read_AllowZeroLeadingNumbers) == false) {
+        if (opts.hasFeature(Feature.Read_AllowZeroLeadingNumbers) == false) {
             if (state.peekChar() == '0') {
                 sb.append(state.nextChar());
                 if (isDigit(state.peekChar())) {
@@ -319,13 +319,13 @@ public class JsonReader {
                 return Long.parseLong(numStr);
             } else {
                 if (numStr.indexOf('.') >= 0 || numStr.indexOf('e') >= 0 || numStr.indexOf('E') >= 0) {
-                    if (numStr.length() > 19 || opts.isFeatureEnabled(Feature.Read_UseBigNumberMode)) {
+                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigNumberMode)) {
                         return new BigDecimal(numStr);
                     } else {
                         return Double.parseDouble(numStr);
                     }
                 } else {
-                    if (numStr.length() > 19 || opts.isFeatureEnabled(Feature.Read_UseBigNumberMode)) {
+                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigNumberMode)) {
                         return new BigInteger(numStr);
                     } else {
                         long longVal = Long.parseLong(numStr);
