@@ -107,32 +107,37 @@ public class BeanSerializer {
 
         ONode tmp = new ONode().asObject();
 
-        if (opts.hasFeature(Feature.Write_ClassName)) {
-            tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
-        }
-
-        for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
-            if (field.isSerialize()) {
-                Object fieldValue = field.getField().get(bean);
-                if (fieldValue == null) {
-                    if (opts.hasFeature(Feature.Write_Nulls) == false
-                            && field.hasSerializeFeature(Feature.Write_Nulls) == false) {
-                        continue;
-                    }
-                }
-
-
-                ONode fieldNode = null;
-
-                if (field.isAsString()) {
-                    fieldNode = new ONode(String.valueOf(fieldValue));
-                } else {
-                    fieldNode = convertValueToNode(fieldValue, field.getAttr(), visited, opts);
-                }
-
-                tmp.set(field.getName(), fieldNode);
+        try {
+            if (opts.hasFeature(Feature.Write_ClassName)) {
+                tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
             }
+
+            for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
+                if (field.isSerialize()) {
+                    Object fieldValue = field.getField().get(bean);
+                    if (fieldValue == null) {
+                        if (opts.hasFeature(Feature.Write_Nulls) == false
+                                && field.hasSerializeFeature(Feature.Write_Nulls) == false) {
+                            continue;
+                        }
+                    }
+
+
+                    ONode fieldNode = null;
+
+                    if (field.isAsString()) {
+                        fieldNode = new ONode(String.valueOf(fieldValue));
+                    } else {
+                        fieldNode = convertValueToNode(fieldValue, field.getAttr(), visited, opts);
+                    }
+
+                    tmp.set(field.getName(), fieldNode);
+                }
+            }
+        } finally {
+            visited.remove(bean);
         }
+
         return tmp;
     }
 

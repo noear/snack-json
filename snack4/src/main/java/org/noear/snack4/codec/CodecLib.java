@@ -9,7 +9,11 @@ import org.noear.snack4.codec.factory.MapFactory;
 import org.noear.snack4.codec.factory.SetFactory;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URL;
 import java.sql.Clob;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -149,7 +153,11 @@ public class CodecLib {
         addDecoder(InetSocketAddress.class, new InetSocketAddressDecoder());
         addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
         addDecoder(File.class, new FileDecoder());
+        addDecoder(TimeZone.class, new TimeZoneDecoder());
         addDecoder(UUID.class, new UUIDDecoder());
+
+        addDecoder(URI.class, new URIDecoder());
+        addDecoder(URL.class, new URLDecoder());
 
         addDecoder(String.class, new StringDecoder());
 
@@ -164,8 +172,15 @@ public class CodecLib {
 
         addDecoder(ZonedDateTime.class, new ZonedDateTimeDecoder());
 
+        addDecoder(java.sql.Date.class, new SqlDateDecoder());
+        addDecoder(java.sql.Time.class, new SqlTimeDecoder());
+        addDecoder(java.sql.Timestamp.class, new SqlTimestampDecoder());
+
         addDecoder(Boolean.class, new BooleanDecoder());
         addDecoder(Boolean.TYPE, new BooleanDecoder());
+
+        addDecoder(BigDecimal.class, new BigDecimalDecoder());
+        addDecoder(BigInteger.class, new BigIntegerDecoder());
 
         addDecoder(Double.class, new DoubleDecoder());
         addDecoder(Double.TYPE, new DoubleDecoder());
@@ -187,6 +202,7 @@ public class CodecLib {
     private void loadDefaultEncoders() {
         addEncoder(new _CalendarPatternEncoder());
         addEncoder(new _ClobPatternEncoder());
+        addEncoder(new _DatePatternEncoder());
         addEncoder(new _EnumPatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
@@ -202,9 +218,11 @@ public class CodecLib {
         addEncoder(TimeZone.class, new TimeZoneEncoder());
         addEncoder(UUID.class, new UUIDEncoder());
 
+        addEncoder(URI.class, new URIEncoder());
+        addEncoder(URL.class, new URLEncoder());
+
         addEncoder(String.class, new StringEncoder());
 
-        addEncoder(Date.class, new DateEncoder());
 
         addEncoder(LocalDateTime.class, new LocalDateTimeEncoder());
         addEncoder(LocalDate.class, new LocalDateEncoder());
