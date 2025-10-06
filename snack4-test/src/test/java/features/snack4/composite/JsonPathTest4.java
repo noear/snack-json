@@ -198,14 +198,14 @@ public class JsonPathTest4 {
     public void test9() {
         String json = "{\"request1\":{\"result\":[{\"relTickers\":[{\"tickerId\":1},{\"tickerId\":1.1}],\"accountId\":400006},{\"relTickers\":[{\"tickerId\":2},{\"tickerId\":2.2}]},{\"relTickers\":[{\"tickerId\":3}]},{\"relTickers\":[{\"tickerId\":4}]},{\"relTickers\":[{\"tickerId\":5}]},{\"relTickers\":[{\"tickerId\":6}]}]}}\n";
 
-        String jsonpathStr1 = "request1..tickerId.first()";
-        String jsonpathStr1_b = "request1..tickerId.last()";
+        String jsonpathStr1 = "$.request1..tickerId.first()";
+        String jsonpathStr1_b = "$.request1..tickerId.last()";
 
-        String jsonpathStr2 = "request1.result[*].relTickers.tickerId.first()";
-        String jsonpathStr2_b = "request1.result[*].relTickers.tickerId.last()";
+        String jsonpathStr2 = "$.request1.result[*].relTickers[*].tickerId.first()";
+        String jsonpathStr2_b = "$.request1.result[*].relTickers[*].tickerId.last()";
 
-        String jsonpathStr3 = "request1.result[*].relTickers.first().tickerId";
-        String jsonpathStr3_b = "request1.result[*].relTickers.last().tickerId";
+        String jsonpathStr3 = "$.request1.result[*].relTickers.first()[0].tickerId";
+        String jsonpathStr3_b = "$.request1.result[*].relTickers.last()[0].tickerId";
 
 
         assert_do("1", json, jsonpathStr1);
@@ -214,7 +214,7 @@ public class JsonPathTest4 {
         assert_do("1", json, jsonpathStr2);
         assert_do("6", json, jsonpathStr2_b);
 
-        System.out.println(ONode.load(json).select("request1.result[*].relTickers.first()"));
+        System.out.println(ONode.load(json).select("$.request1.result[*].relTickers.first()"));
 
         assert_do("1", json, jsonpathStr3);
         assert_do("6", json, jsonpathStr3_b);
@@ -222,10 +222,10 @@ public class JsonPathTest4 {
 
     private void assert_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
-        Object tmp = ONode.load(json).select(jsonpathStr);
-        System.out.println(tmp);
+        ONode tmp = ONode.load(json).select(jsonpathStr);
+        System.out.println(tmp.toJson());
 
-        assert tmp.toString().equals(hint.toString());
+        assert tmp.toJson().equals(hint.toString());
     }
 
     @Test
