@@ -1,4 +1,4 @@
-package benchmark.query;
+package benchmark.snack4.path;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
