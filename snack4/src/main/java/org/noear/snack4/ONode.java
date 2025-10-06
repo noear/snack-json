@@ -75,9 +75,10 @@ public final class ONode {
     }
 
     public boolean isNullOrEmpty() {
-        return type == JsonType.Null ||
-                (type == JsonType.Object && getObject().isEmpty()) ||
-                (type == JsonType.Array && getArray().isEmpty());
+        return isNull() ||
+                (isObject() && Asserts.isEmpty(getObject())) ||
+                (isArray() && Asserts.isEmpty(getArray())) ||
+                (isString() && Asserts.isEmpty(getString()));
     }
 
     public boolean isBoolean() {

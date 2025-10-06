@@ -73,7 +73,7 @@ public class MultiIndexSegment implements SegmentFunction {
             } else if (keys != null) {
                 for (String k : keys) {
                     if (n.isObject()) {
-                        ONode p = n.get(k);
+                        ONode p = n.getOrNull(k);
                         if (p != null) {
                             result.add(p);
                         }
@@ -86,7 +86,7 @@ public class MultiIndexSegment implements SegmentFunction {
                         if (idx < 0 || idx >= n.size()) {
                             throw new PathResolutionException("Index out of bounds: " + idx);
                         }
-                        ONode node = n.get(idx);
+                        ONode node = n.getOrNull(idx);
                         node.source = new JsonSource(n, null, idx);
                         result.add(node);
                     }

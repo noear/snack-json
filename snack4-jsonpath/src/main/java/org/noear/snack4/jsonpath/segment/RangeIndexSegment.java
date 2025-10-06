@@ -78,7 +78,7 @@ public class RangeIndexSegment implements SegmentFunction {
                 if (step > 0) {
                     int i = bounds.getLower();
                     while (i < bounds.getUpper()) {
-                        ONode node = arr.get(i);
+                        ONode node = arr.getOrNull(i);
                         node.source = new JsonSource(arr, null, i);
                         result.add(node);
                         i += step;
@@ -86,7 +86,7 @@ public class RangeIndexSegment implements SegmentFunction {
                 } else {
                     int i = bounds.getUpper();
                     while (bounds.getLower() < i) {
-                        ONode node = arr.get(i);
+                        ONode node = arr.getOrNull(i);
                         node.source = new JsonSource(arr, null, i);
                         result.add(node);
                         i += step;

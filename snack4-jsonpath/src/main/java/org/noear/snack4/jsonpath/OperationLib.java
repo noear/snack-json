@@ -144,7 +144,7 @@ public class OperationLib {
 
         // 类型判断逻辑
         if (condition.getRight().startsWith("'")) {
-            return compareString(condition.getOp(), leftNode.getString(), rightNode.getString());
+            return compareString(condition.getOp(), leftNode, rightNode);
         } else {
             if (leftNode.getType() == rightNode.getType()) {
                 if (leftNode.isNumber()) {
@@ -161,20 +161,20 @@ public class OperationLib {
     /// ///////////////
 
 
-    private static boolean compareString(String op, String a, String b) {
+    private static boolean compareString(String op, ONode a, ONode b) {
         switch (op) {
             case "==":
-                return Objects.equals(a, b);
+                return a.getType() == b.getType() && Objects.equals(a.getString(), b.getString());
             case "!=":
-                return !Objects.equals(a, b);
+                return a.getType() != b.getType() || !Objects.equals(a.getString(), b.getString());
             case ">":
-                return Objects.compare(a, b, String::compareTo) > 0;
+                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) > 0;
             case "<":
-                return Objects.compare(a, b, String::compareTo) < 0;
+                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) < 0;
             case ">=":
-                return Objects.compare(a, b, String::compareTo) >= 0;
+                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) >= 0;
             case "<=":
-                return Objects.compare(a, b, String::compareTo) <= 0;
+                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) <= 0;
 
             default:
                 throw new PathResolutionException("Unsupported operator for string: " + op);

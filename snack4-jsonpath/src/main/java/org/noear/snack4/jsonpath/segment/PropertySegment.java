@@ -55,7 +55,7 @@ public class PropertySegment implements SegmentFunction {
         }
 
         if (node.isObject()) {
-            ONode child = node.get(key);
+            ONode child = node.getOrNull(key);
 
             if (child == null) {
                 if (mode == QueryMode.CREATE) {

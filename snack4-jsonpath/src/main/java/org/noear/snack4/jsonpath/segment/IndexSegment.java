@@ -71,7 +71,7 @@ public class IndexSegment implements SegmentFunction {
                         obj.getOrNew(key);
                     }
 
-                    ONode rst = obj.get(key);
+                    ONode rst = obj.getOrNull(key);
                     rst.source = new JsonSource(obj, key, 0);
 
                     return rst;
@@ -106,7 +106,7 @@ public class IndexSegment implements SegmentFunction {
                         throw new PathResolutionException("Index out of bounds: " + idx);
                     }
 
-                    ONode rst = arr.get(idx);
+                    ONode rst = arr.getOrNull(idx);
                     rst.source = new JsonSource(arr, null, idx);
 
                     return rst;
