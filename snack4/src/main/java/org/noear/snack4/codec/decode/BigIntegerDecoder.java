@@ -15,6 +15,12 @@ import java.math.BigInteger;
 public class BigIntegerDecoder implements ObjectDecoder<BigInteger> {
     @Override
     public BigInteger decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+        if (node.isNumber()) {
+            if (node.getValue() instanceof BigInteger) {
+                return (BigInteger) node.getValue();
+            }
+        }
+
         return new BigInteger(node.getString());
     }
 }

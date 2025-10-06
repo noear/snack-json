@@ -154,6 +154,7 @@ public class CodecLib {
         addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
         addDecoder(File.class, new FileDecoder());
         addDecoder(TimeZone.class, new TimeZoneDecoder());
+        addDecoder(Class.class, new ClassDecoder());
         addDecoder(UUID.class, new UUIDDecoder());
 
         addDecoder(URI.class, new URIDecoder());

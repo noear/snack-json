@@ -15,6 +15,12 @@ import java.math.BigDecimal;
 public class BigDecimalDecoder implements ObjectDecoder<BigDecimal> {
     @Override
     public BigDecimal decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+        if (node.isNumber()) {
+            if (node.getValue() instanceof BigDecimal) {
+                return (BigDecimal) node.getValue();
+            }
+        }
+
         return new BigDecimal(node.getString());
     }
 }
