@@ -152,7 +152,17 @@ public class CodecLib {
         addDecoder(UUID.class, new UUIDDecoder());
 
         addDecoder(String.class, new StringDecoder());
+
         addDecoder(Date.class, new DateDecoder());
+
+        addDecoder(LocalTime.class, new LocalTimeDecoder());
+        addDecoder(LocalDateTime.class, new LocalDateTimeDecoder());
+        addDecoder(LocalDate.class, new LocalDateDecoder());
+
+        addDecoder(OffsetDateTime.class, new OffsetDateTimeDecoder());
+        addDecoder(OffsetTime.class, new OffsetTimeDecoder());
+
+        addDecoder(ZonedDateTime.class, new ZonedDateTimeDecoder());
 
         addDecoder(Boolean.class, new BooleanDecoder());
         addDecoder(Boolean.TYPE, new BooleanDecoder());
@@ -195,15 +205,15 @@ public class CodecLib {
         addEncoder(String.class, new StringEncoder());
 
         addEncoder(Date.class, new DateEncoder());
-        addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
-
-        addEncoder(OffsetDateTime.class, new OffsetDateTimeEncoder());
-        addEncoder(OffsetTime.class, new OffsetTimeEncoder());
 
         addEncoder(LocalDateTime.class, new LocalDateTimeEncoder());
         addEncoder(LocalDate.class, new LocalDateEncoder());
         addEncoder(LocalTime.class, new LocalTimeEncoder());
 
+        addEncoder(OffsetDateTime.class, new OffsetDateTimeEncoder());
+        addEncoder(OffsetTime.class, new OffsetTimeEncoder());
+
+        addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
 
         addEncoder(Boolean.class, new BooleanEncoder());
         addEncoder(Boolean.TYPE, new BooleanEncoder());

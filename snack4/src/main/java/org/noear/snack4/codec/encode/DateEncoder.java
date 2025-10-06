@@ -8,6 +8,7 @@ import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  *
@@ -18,7 +19,11 @@ public class DateEncoder implements ObjectEncoder<Date> {
     public ONode encode(Options opts, ONodeAttr attr, Date value) {
         if (attr != null) {
             if (Asserts.isNotEmpty(attr.format())) {
-                return new ONode(DateUtil.format(value, attr.format()));
+                if (Asserts.isNotEmpty(attr.timezone())) {
+                    return new ONode(DateUtil.format(value, attr.format(), TimeZone.getTimeZone(attr.timezone())));
+                } else {
+                    return new ONode(DateUtil.format(value, attr.format()));
+                }
             }
         }
 

@@ -1,10 +1,17 @@
 package org.noear.snack4.codec.util;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
+import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.exception.TypeConvertException;
+import org.noear.snack4.util.Asserts;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -157,6 +164,33 @@ public class DateUtil {
             }
 
             return new Date(Long.parseLong(val));
+        }
+    }
+
+    public static Instant decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+        if (node.isDate()) {
+            return node.getDate().toInstant();
+        } else if (node.isNumber()) {
+            return Instant.ofEpochMilli(node.getLong());
+        } else if (node.isString()) {
+            if (attr != null) {
+                if (Asserts.isNotEmpty(attr.format())) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(attr.format());
+                    if (Asserts.isNotEmpty(attr.timezone())) {
+                        formatter.withZone(ZoneId.of(attr.timezone()));
+                    }
+
+                    return Instant.from(formatter.parse(node.getString()));
+                }
+            }
+
+            try {
+                return DateUtil.parse(node.getString()).toInstant();
+            } catch (Exception ex) {
+                throw new TypeConvertException("Cannot be converted to " + clazz.getSimpleName() + ": " + node, ex);
+            }
+        } else {
+            throw new TypeConvertException("Cannot be converted to " + clazz.getSimpleName() + ": " + node);
         }
     }
 

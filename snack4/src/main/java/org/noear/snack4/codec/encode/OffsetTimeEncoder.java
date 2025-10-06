@@ -4,10 +4,12 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.util.Asserts;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -17,6 +19,13 @@ import java.util.Date;
 public class OffsetTimeEncoder implements ObjectEncoder<OffsetTime> {
     @Override
     public ONode encode(Options opts, ONodeAttr attr, OffsetTime value) {
+        if (attr != null) {
+            if (Asserts.isNotEmpty(attr.format())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(attr.format());
+                return new ONode(formatter.format(value));
+            }
+        }
+
         Instant instant = value.atDate(LocalDate.of(1970, 1, 1)).toInstant();
         return new ONode(Date.from(instant));
     }
