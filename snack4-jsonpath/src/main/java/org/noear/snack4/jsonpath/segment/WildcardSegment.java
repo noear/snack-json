@@ -24,6 +24,7 @@ import org.noear.snack4.jsonpath.SegmentFunction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 处理通配符 * （子级偏平化）
@@ -46,22 +47,30 @@ public class WildcardSegment implements SegmentFunction {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {
-            Collection<ONode> childs = null;
+            List<ONode> childs = new ArrayList<>();
 
             if (n.isArray()) {
-                childs = n.getArray();
+                int idx= 0;
+                for (ONode n1 : n.getArray()) {
+                    if (n1.source == null) {
+                        n1.source = new JsonSource(n, null, idx);
+                    }
+
+                    childs.add(n1);
+                    idx++;
+                }
             } else if (n.isObject()) {
-                childs = n.getObject().values();
+                for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
+                    ONode n1 = entry.getValue();
+                    if(n1.source == null) {
+                        n1.source = new JsonSource(n, entry.getKey(), 0);
+                    }
+
+                    childs.add(n1);
+                }
             }
 
-            if (childs != null) {
-                if (mode == QueryMode.DELETE) {
-                    JsonSource source = new JsonSource(n, "*", 0);
-                    for (ONode child : childs) {
-                        child.source = source;
-                    }
-                }
-
+            if (childs.size() > 0) {
                 result.addAll(childs);
             }
         }

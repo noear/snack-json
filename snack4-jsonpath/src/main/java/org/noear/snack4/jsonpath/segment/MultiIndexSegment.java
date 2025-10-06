@@ -64,18 +64,35 @@ public class MultiIndexSegment implements SegmentFunction {
         for (ONode n : currentNodes) {
             if (isAll) {
                 if (n.isArray()) {
-                    result.addAll(n.getArray());
+                    int idx = 0;
+                    for(ONode n1 : n.getArray()) {
+                        if(n1.source == null) {
+                            n1.source = new JsonSource(n, null, idx);
+                        }
+
+                        result.add(n1);
+                        idx++;
+                    }
                 } else if (n.isObject()) {
                     for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
-                        result.add(entry.getValue());
+                        ONode n1 =  entry.getValue();
+                        if(n1.source == null) {
+                            n1.source = new JsonSource(n, entry.getKey(), 0);
+                        }
+
+                        result.add(n1);
                     }
                 }
             } else if (keys != null) {
                 for (String k : keys) {
                     if (n.isObject()) {
-                        ONode p = n.getOrNull(k);
-                        if (p != null) {
-                            result.add(p);
+                        ONode n1 = n.getOrNull(k);
+                        if (n1 != null) {
+                            if(n1.source == null) {
+                                n1.source = new JsonSource(n, k, 0);
+                            }
+
+                            result.add(n1);
                         }
                     }
                 }
@@ -86,9 +103,12 @@ public class MultiIndexSegment implements SegmentFunction {
                         if (idx < 0 || idx >= n.size()) {
                             throw new PathResolutionException("Index out of bounds: " + idx);
                         }
-                        ONode node = n.getOrNull(idx);
-                        node.source = new JsonSource(n, null, idx);
-                        result.add(node);
+                        ONode n1 = n.getOrNull(idx);
+                        if(n1.source == null) {
+                            n1.source = new JsonSource(n, null, idx);
+                        }
+
+                        result.add(n1);
                     }
                 }
             }

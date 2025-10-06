@@ -732,16 +732,67 @@ public final class ONode {
 
     @Deprecated
     public ONode parent() {
-        return this;
+        if (source == null) {
+            return null;
+        } else {
+            return source.parent;
+        }
     }
 
     @Deprecated
-    public ONode parents(int idx) {
-        return this;
+    public ONode parents(int depth) {
+        if (source == null) {
+            return null;
+        } else {
+            ONode tmp = this;
+            while (depth > 0) {
+                if (tmp == null) {
+                    break;
+                } else {
+                    tmp = tmp.parent();
+                }
+
+                depth--;
+            }
+
+            return tmp;
+        }
     }
 
     @Deprecated
     public List<String> pathList() {
-        return null;
+        List<String> paths = new ArrayList<>();
+        extractPath(paths, this);
+        return paths;
+    }
+
+    public String path() {
+        if (source == null) {
+            return null;
+        } else {
+            String pp = source.parent.path();
+            if (pp == null) {
+                return "[" + source.key + "]";
+            } else {
+                return pp + "[" + source.key + "]";
+            }
+        }
+    }
+
+    public static void extractPath(List<String> paths, ONode oNode) {
+        String path = oNode.path();
+        if (path != null) {
+            paths.add(path);
+        }
+
+        if (oNode.isArray()) {
+            for (int i = 0; i < oNode.getArray().size(); i++) {
+                extractPath(paths, oNode.get(i));
+            }
+        } else if (oNode.isObject()) {
+            for (Map.Entry<String, ONode> kv : oNode.getObject().entrySet()) {
+                extractPath(paths, kv.getValue());
+            }
+        }
     }
 }

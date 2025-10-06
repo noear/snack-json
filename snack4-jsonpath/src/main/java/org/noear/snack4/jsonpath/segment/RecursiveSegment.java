@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -43,14 +44,25 @@ public class RecursiveSegment implements SegmentFunction {
 
     private void collectRecursive(ONode node, List<ONode> results) {
         if (node.isArray()) {
+            int idx = 0;
             for (ONode n1 : node.getArray()) {
+                if(n1.source == null) {
+                    n1.source = new JsonSource(node, null, idx);
+                }
+
                 results.add(n1);
                 collectRecursive(n1, results);
+                idx++;
             }
         } else if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                results.add(entry.getValue());
-                collectRecursive(entry.getValue(), results);
+                ONode n1 = entry.getValue();
+                if(n1.source == null) {
+                    n1.source = new JsonSource(node, entry.getKey(), 0);
+                }
+
+                results.add(n1);
+                collectRecursive(n1, results);
             }
         }
     }

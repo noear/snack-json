@@ -55,21 +55,23 @@ public class PropertySegment implements SegmentFunction {
         }
 
         if (node.isObject()) {
-            ONode child = node.getOrNull(key);
+            ONode n1 = node.getOrNull(key);
 
-            if (child == null) {
+            if (n1 == null) {
                 if (mode == QueryMode.CREATE) {
-                    child = new ONode();
-                    node.set(key, child);
+                    n1 = new ONode();
+                    node.set(key, n1);
                 } else if (false) {
                     throw new PathResolutionException("Missing key '" + key + "'");
                 }
-            } else {
-                child.source = new JsonSource(node, key, 0);
             }
 
-            if (child != null) {
-                result.add(child);
+            if (n1 != null) {
+                if (n1.source == null) {
+                    n1.source = new JsonSource(node, key, 0);
+                }
+
+                result.add(n1);
             }
         }
     }

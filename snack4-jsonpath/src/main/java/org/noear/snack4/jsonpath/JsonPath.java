@@ -89,16 +89,16 @@ public class JsonPath {
         }
 
         if (currentNodes.size() == 1) {
-            for (ONode n : currentNodes) {
-                if (n.source != null) {
-                    if (n.source.key != null) {
-                        if ("*".equals(n.source.key)) {
-                            n.source.parent.clear();
+            for (ONode n1 : currentNodes) {
+                if (n1.source != null) {
+                    if (n1.source.key != null) {
+                        if ("*".equals(n1.source.key)) {
+                            n1.source.parent.clear();
                         } else {
-                            n.source.parent.remove(n.source.key);
+                            n1.source.parent.remove(n1.source.key);
                         }
                     } else {
-                        n.source.parent.remove(n.source.index);
+                        n1.source.parent.remove(n1.source.index);
                     }
                 }
             }

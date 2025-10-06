@@ -71,10 +71,12 @@ public class IndexSegment implements SegmentFunction {
                         obj.getOrNew(key);
                     }
 
-                    ONode rst = obj.getOrNull(key);
-                    rst.source = new JsonSource(obj, key, 0);
+                    ONode n1 = obj.getOrNull(key);
+                    if(n1.source == null) {
+                        n1.source = new JsonSource(obj, key, 0);
+                    }
 
-                    return rst;
+                    return n1;
                 })
                 .forEach(result::add);
     }
@@ -106,10 +108,12 @@ public class IndexSegment implements SegmentFunction {
                         throw new PathResolutionException("Index out of bounds: " + idx);
                     }
 
-                    ONode rst = arr.getOrNull(idx);
-                    rst.source = new JsonSource(arr, null, idx);
+                    ONode n1 = arr.getOrNull(idx);
+                    if(n1.source == null) {
+                        n1.source = new JsonSource(arr, null, idx);
+                    }
 
-                    return rst;
+                    return n1;
                 })
                 .forEach(result::add);
     }
