@@ -93,7 +93,7 @@ public class DataTest {
 
         ONode node = ONode.fromJson(json);
 
-        Object tmp = node.to();
+        Object tmp = node.to(Feature.Read_DisableClassName);
 
         assert (tmp instanceof Map);
 

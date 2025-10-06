@@ -34,8 +34,9 @@ public class ComplicatedTest {
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.fromJson(json);
+        Object obj2 = ONode.fromJson(json, Object.class);
         String json2 = ONode.toJson(obj2, Feature.Write_ClassName);
+        System.out.println(json2);
 
         assert obj2 instanceof List;
         assert json.equals(json2);
