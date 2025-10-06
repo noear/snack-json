@@ -19,6 +19,7 @@ import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.exception.AnnotationProcessException;
+import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -29,6 +30,8 @@ import java.lang.reflect.Modifier;
 public class FieldWrap {
     private final Field field;
     private final ONodeAttr attr;
+    private boolean serialize = true;
+    private boolean deserialize = true;
 
     private String alias;
     private boolean ignore;
@@ -44,9 +47,16 @@ public class FieldWrap {
         if (attr != null) {
             alias = attr.alias();
             ignore = attr.ignore();
+            serialize = attr.serialize();
+            deserialize = attr.deserialize();
 
-            decoder = ReflectionUtil.newInstance(attr.decoder(), e -> new AnnotationProcessException("Failed to create decoder for field: " + field.getName(), e));
-            encoder = ReflectionUtil.newInstance(attr.encoder(), e -> new AnnotationProcessException("Failed to create encoder for field: " + field.getName(), e));
+            if (attr.decoder() != ObjectDecoder.class) {
+                decoder = ReflectionUtil.newInstance(attr.decoder(), e -> new AnnotationProcessException("Failed to create decoder for field: " + field.getName(), e));
+            }
+
+            if (attr.encoder() != ObjectEncoder.class) {
+                encoder = ReflectionUtil.newInstance(attr.encoder(), e -> new AnnotationProcessException("Failed to create encoder for field: " + field.getName(), e));
+            }
         }
 
         if (Modifier.isTransient(field.getModifiers())) {
@@ -67,7 +77,7 @@ public class FieldWrap {
     }
 
     public String getAliasName() {
-        if (alias == null) {
+        if (Asserts.isEmpty(alias)) {
             return field.getName();
         } else {
             return alias;
@@ -85,5 +95,13 @@ public class FieldWrap {
 
     public boolean isIgnore() {
         return ignore;
+    }
+
+    public boolean isSerialize() {
+        return serialize && !ignore;
+    }
+
+    public boolean isDeserialize() {
+        return deserialize && !ignore;
     }
 }

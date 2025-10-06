@@ -29,6 +29,7 @@ import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
 
 import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.*;
@@ -315,14 +316,20 @@ public final class ONode {
 
     public ONode set(String key, Object value) {
         ONode oNode;
-        if (value instanceof ONode) {
+        if (value == null) {
+            oNode = new ONode(null);
+        } else if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
             oNode = BeanSerializer.serialize(value);
         } else if (value instanceof Map) {
             oNode = BeanSerializer.serialize(value);
         } else {
-            oNode = new ONode(value);
+            if (value.getClass().isArray()) {
+                oNode = new ONode().addAll(Arrays.asList((Object[]) value));
+            } else {
+                oNode = new ONode(value);
+            }
         }
 
         return set0(key, oNode);

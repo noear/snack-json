@@ -112,8 +112,10 @@ public class BeanSerializer {
         }
 
         for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
-            ONode fieldNode = convertValueToNode(field.getField().get(bean), field.getAttr(), visited, opts);
-            tmp.set(field.getAliasName(), fieldNode);
+            if(field.isSerialize()) {
+                ONode fieldNode = convertValueToNode(field.getField().get(bean), field.getAttr(), visited, opts);
+                tmp.set(field.getAliasName(), fieldNode);
+            }
         }
         return tmp;
     }

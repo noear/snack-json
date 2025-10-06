@@ -1,9 +1,8 @@
 package org.noear.snack4.codec.util;
 
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import org.noear.snack4.util.Asserts;
+
+import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +20,7 @@ public class TypeWrap {
 
     private Type type;
     private Class<?> clazz = Object.class;
+    private Constructor<?> constructor;
 
     public TypeWrap(Type type) {
         if (type instanceof Class<?>) {
@@ -55,17 +55,24 @@ public class TypeWrap {
                 clazz = (Class<?>) tmp;
             }
         }
+
+        if (clazz != Object.class) {
+            for (Constructor c1 : clazz.getDeclaredConstructors()) {
+                if (constructor == null) {
+                    constructor = c1;
+                } else if (constructor.getParameterCount() > c1.getParameterCount()) {
+                    constructor = c1;
+                }
+            }
+        }
+    }
+
+    public Constructor<?> getConstructor() {
+       return constructor;
     }
 
     public Class<?> getClazz() {
         return clazz;
-    }
-
-    public void setClazz(Class<?> clazz) {
-        if (this.clazz != clazz) {
-            this.clazz = clazz;
-            this.type = clazz;
-        }
     }
 
     public Type getType() {

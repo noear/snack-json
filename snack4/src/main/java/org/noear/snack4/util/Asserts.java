@@ -31,7 +31,7 @@ public class Asserts {
      *
      * @param s 集合
      */
-    public static boolean isEmpty(Feature[] s) {
+    public static boolean isEmpty(Object[] s) {
         return s == null || s.length == 0;
     }
 

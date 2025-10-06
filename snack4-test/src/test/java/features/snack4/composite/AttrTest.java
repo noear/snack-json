@@ -3,6 +3,7 @@ package features.snack4.composite;
 import demo.snack4._models.NodeEncoderImpl;
 import demo.snack4._models.UserModel2;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 import java.util.Date;
@@ -32,13 +33,14 @@ public class AttrTest {
         String json = "{id:1,name:'noear',note:'test',nodeEncoder:{}}";
         UserModel2 user =  ONode.fromJson(json,UserModel2.class );
 
+        System.out.println(user);
         assert "noear".equals(user.name);
         assert null == user.note;
     }
 
     @Test
     public void test2_1(){
-        String json = "{id:1,name:'noear',note:'test',nodeEncoder:'demo.snack3._models.NodeEncoderImpl'}";
+        String json = "{id:1,name:'noear',note:'test',nodeEncoder:'demo.snack4._models.NodeEncoderImpl'}";
         UserModel2 user =  ONode.fromJson(json,UserModel2.class );
 
         assert user.nodeEncoder != null;
