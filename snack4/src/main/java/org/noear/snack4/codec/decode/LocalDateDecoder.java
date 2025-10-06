@@ -5,8 +5,10 @@ import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.util.DateUtil;
+import org.noear.snack4.util.Asserts;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 /**
  *
@@ -15,6 +17,11 @@ import java.time.LocalDate;
 public class LocalDateDecoder implements ObjectDecoder<LocalDate> {
     @Override
     public LocalDate decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return LocalDate.from(DateUtil.decode(opts, attr, node, clazz));
+        ZoneId zoneId = opts.getTimeZone().toZoneId();
+        if (attr != null && Asserts.isNotEmpty(attr.timezone())) {
+            zoneId = ZoneId.of(attr.timezone());
+        }
+
+        return DateUtil.decode(opts, attr, node, clazz).atZone(zoneId).toLocalDate();
     }
 }
