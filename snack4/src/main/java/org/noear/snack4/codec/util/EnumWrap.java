@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Enum 包装器
  */
-public class EnumWrapper {
+public class EnumWrap {
     protected final Map<String, Enum> enumMap = new HashMap<>();
     protected final Map<String, Enum> enumCustomMap = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class EnumWrapper {
         return enumClass;
     }
 
-    public EnumWrapper(Class<?> enumClass) {
+    public EnumWrap(Class<?> enumClass) {
         this.enumClass = enumClass;
         this.enumOrdinal = (Enum[]) enumClass.getEnumConstants();
         if(null == this.enumOrdinal){

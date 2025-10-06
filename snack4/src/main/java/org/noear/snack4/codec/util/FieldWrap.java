@@ -26,7 +26,7 @@ import java.lang.reflect.Modifier;
 /**
  * @author noear 2025/3/16 created
  */
-public class FieldWrapper {
+public class FieldWrap {
     private final Field field;
     private final ONodeAttr attr;
 
@@ -35,7 +35,7 @@ public class FieldWrapper {
     private ObjectDecoder decoder;
     private ObjectEncoder encoder;
 
-    public FieldWrapper(Field field) {
+    public FieldWrap(Field field) {
         this.field = field;
         this.attr = field.getAnnotation(ONodeAttr.class);
 
@@ -56,6 +56,10 @@ public class FieldWrapper {
 
     public Field getField() {
         return field;
+    }
+
+    public TypeWrap getTypeWrap() {
+        return new TypeWrap(field.getGenericType());
     }
 
     public ONodeAttr getAttr() {

@@ -19,7 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.util.FieldWrapper;
+import org.noear.snack4.codec.util.FieldWrap;
 import org.noear.snack4.codec.util.ReflectionUtil;
 
 import java.lang.reflect.Array;
@@ -111,7 +111,7 @@ public class BeanSerializer {
             tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
         }
 
-        for (FieldWrapper field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
+        for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
             ONode fieldNode = convertValueToNode(field.getField().get(bean), field.getAttr(), visited, opts);
             tmp.set(field.getAliasName(), fieldNode);
         }

@@ -38,13 +38,13 @@ public class TypeUtil {
     }
 
 
-    private static Map<String, EnumWrapper> enumCached = new ConcurrentHashMap<>();
+    private static Map<String, EnumWrap> enumCached = new ConcurrentHashMap<>();
 
-    public static EnumWrapper createEnum(Class<?> clz) {
+    public static EnumWrap createEnum(Class<?> clz) {
         String key = clz.getName();
-        EnumWrapper val = enumCached.get(key);
+        EnumWrap val = enumCached.get(key);
         if (val == null) {
-            val = new EnumWrapper(clz);
+            val = new EnumWrap(clz);
             enumCached.put(key, val);
         }
 

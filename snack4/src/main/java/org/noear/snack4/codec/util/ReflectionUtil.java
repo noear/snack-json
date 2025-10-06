@@ -26,16 +26,16 @@ import java.util.function.Function;
 
 public class ReflectionUtil {
     // 带缓存的字段获取
-    private static final Map<Class<?>, Collection<FieldWrapper>> FIELD_CACHE = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Collection<FieldWrap>> FIELD_CACHE = new ConcurrentHashMap<>();
 
-    public static Collection<FieldWrapper> getDeclaredFields(Class<?> clazz) {
+    public static Collection<FieldWrap> getDeclaredFields(Class<?> clazz) {
         return FIELD_CACHE.computeIfAbsent(clazz, k -> {
-            Map<String, FieldWrapper> fields = new LinkedHashMap<>();
+            Map<String, FieldWrap> fields = new LinkedHashMap<>();
             Class<?> current = clazz;
             while (current != null) {
                 for (Field field : current.getDeclaredFields()) {
                     field.setAccessible(true);
-                    fields.put(field.getName(), new FieldWrapper(field));
+                    fields.put(field.getName(), new FieldWrap(field));
                 }
                 current = current.getSuperclass();
             }
