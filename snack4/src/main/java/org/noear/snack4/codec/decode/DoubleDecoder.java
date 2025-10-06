@@ -13,6 +13,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class DoubleDecoder implements ObjectDecoder<Double> {
     @Override
     public Double decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return node.getNumber().doubleValue();
+        return node.getDouble(clazz.isPrimitive() ? 0D : null);
     }
 }

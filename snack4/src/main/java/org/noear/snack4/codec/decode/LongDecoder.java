@@ -12,6 +12,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class LongDecoder implements ObjectDecoder<Long> {
     @Override
     public Long decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return node.getNumber().longValue();
+        return node.getLong(clazz.isPrimitive() ? 0L : null);
     }
 }

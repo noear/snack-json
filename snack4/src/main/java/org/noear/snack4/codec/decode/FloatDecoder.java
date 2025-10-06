@@ -12,6 +12,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class FloatDecoder implements ObjectDecoder<Float> {
     @Override
     public Float decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return node.getNumber().floatValue();
+        return node.getFloat(clazz.isPrimitive() ? 0F : null);
     }
 }

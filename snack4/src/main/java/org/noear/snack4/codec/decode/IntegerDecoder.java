@@ -12,6 +12,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class IntegerDecoder implements ObjectDecoder<Integer> {
     @Override
     public Integer decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return node.getNumber().intValue();
+        return node.getInt(clazz.isPrimitive() ? 0 : null);
     }
 }

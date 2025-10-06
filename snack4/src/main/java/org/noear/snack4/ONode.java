@@ -197,37 +197,65 @@ public final class ONode {
         return this;
     }
 
-    public int getInt() {
+    public Integer getInt() {
+        return getInt(0);
+    }
+
+    public Integer getInt(Integer def) {
         if (isNumber()) {
-            return getNumber(0).intValue();
+            return getNumber().intValue();
+        } else if (isNullOrEmpty()) {
+            return def;
         } else if (isString()) {
             return Integer.parseInt(getString());
-        } else if (isNull()) {
-            return 0;
         } else {
             throw new TypeConvertException("Not supported for automatic conversion");
         }
     }
 
-    public long getLong() {
+    public Long getLong() {
+        return getLong(0L);
+    }
+
+    public Long getLong(Long def) {
         if (isNumber()) {
-            return getNumber(0L).longValue();
+            return getNumber().longValue();
+        } else if (isNullOrEmpty()) {
+            return def;
         } else if (isString()) {
             return Long.getLong(getString());
-        } else if (isNull()) {
-            return 0L;
         } else {
             throw new TypeConvertException("Not supported for automatic conversion");
         }
     }
 
-    public double getDouble() {
+    public Float getFloat() {
+        return getFloat(0F);
+    }
+
+    public Float getFloat(Float def) {
         if (isNumber()) {
-            return getNumber(0D).doubleValue();
+            return getNumber().floatValue();
+        } else if (isNullOrEmpty()) {
+            return def;
+        } else if (isString()) {
+            return Float.parseFloat(getString());
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
+    }
+
+    public Double getDouble() {
+        return getDouble(0D);
+    }
+
+    public Double getDouble(Double def) {
+        if (isNumber()) {
+            return getNumber().doubleValue();
+        } else if (isNullOrEmpty()) {
+            return def;
         } else if (isString()) {
             return Double.parseDouble(getString());
-        } else if (isNull()) {
-            return 0D;
         } else {
             throw new TypeConvertException("Not supported for automatic conversion");
         }
