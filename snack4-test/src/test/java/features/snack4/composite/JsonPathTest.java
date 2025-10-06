@@ -28,30 +28,30 @@ public class JsonPathTest {
 
 
         //int mi = n.get("data").get("list").get(0).getInt();
-        int mi = n.select("data.list[-1]").getInt();
+        int mi = n.select("$.data.list[-1]").getInt();
 
-        List<Integer> list2 = n.select("data.list[2,4]").to(List.class);
-        List<Integer> list3 = n.select("data.list[2:4]").to(List.class);
+        List<Integer> list2 = n.select("$.data.list[2,4]").to(List.class);
+        List<Integer> list3 = n.select("$.data.list[2:4]").to(List.class);
         assert list2.size() == 2;
         assert list3.size() == 2;
 
 
-        List<Integer> list22 = n.usePaths().select("data.list[2,4]").to(List.class);
-        List<Integer> list32 = n.usePaths().select("data.list[2:4]").to(List.class);
+        List<Integer> list22 = n.usePaths().select("$.data.list[2,4]").to(List.class);
+        List<Integer> list32 = n.usePaths().select("$.data.list[2:4]").to(List.class);
         assert list22.size() == 2;
         assert list32.size() == 2;
 
-        ONode ary2_a = n.select("data.ary2[*].b.c");
+        ONode ary2_a = n.select("$.data.ary2[*].b.c");
         assert ary2_a.size() == 1;
 
-        ONode ary2_a2 = n.usePaths().select("data.ary2[*].b.c");
+        ONode ary2_a2 = n.usePaths().select("$.data.ary2[*].b.c");
         assert ary2_a2.size() == 1;
         assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(2));
         assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(1).toJson());
 
-        ONode ary2_b = n.select("..b");
+        ONode ary2_b = n.select("$...b");
 
-        ONode ary2_c = n.select("data..b.c");
+        ONode ary2_c = n.select("$.data..b.c");
 
 
         assert list.size() == 5;
@@ -121,11 +121,13 @@ public class JsonPathTest {
         ONode ary2_c = n.select("$..*[1]");
         assert ary2_c.size() ==2;
 
-        ONode ary2_d = n.select("$.*.list[0][0]");
-        assert ary2_d.isValue();
+        ONode ary2_d = n.select("$.*.list[0]");
+        assert ary2_d.isArray();
+        assert ary2_d.size() == 1;
 
         ONode ary2_e = n.select("$..list[0][0]");
-        assert ary2_e.isValue();
+        assert ary2_e.isArray();
+        assert ary2_e.size() == 0;
     }
 
     @Test

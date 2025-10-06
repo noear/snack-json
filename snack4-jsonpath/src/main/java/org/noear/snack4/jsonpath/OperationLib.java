@@ -37,6 +37,7 @@ public class OperationLib {
         register("endsWith", OperationLib::endsWith);
         register("contains", OperationLib::contains);
         register("in", OperationLib::in);
+        register("nin", OperationLib::nin);
         register("=~", OperationLib::matches);
 
         register("==", OperationLib::compare);
@@ -118,8 +119,20 @@ public class OperationLib {
             return false;
         }
 
-        boolean found = rightNode.getArray().stream().anyMatch(v -> isValueMatch(leftNode, v));
-        return found;
+        boolean rst = rightNode.getArray().stream().anyMatch(v -> isValueMatch(leftNode, v));
+        return rst;
+    }
+
+    private static boolean nin(ONode node, Condition condition, ONode root) {
+        ONode leftNode = condition.getLeftNode(node, root);
+
+        ONode rightNode = condition.getRightNode(node, root);
+        if (rightNode == null && rightNode.isArray() == false) {
+            return false;
+        }
+
+        boolean rst = rightNode.getArray().stream().noneMatch(v -> isValueMatch(leftNode, v));
+        return rst;
     }
 
     public static boolean matches(ONode node, Condition condition, ONode root) {
