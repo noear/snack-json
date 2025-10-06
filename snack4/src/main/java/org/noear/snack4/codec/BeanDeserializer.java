@@ -67,6 +67,11 @@ public class BeanDeserializer {
             return null;
         }
 
+        // 优先使用自定义编解码器
+        //提前找到@type类型，便于自定义解码器定位
+        if (node.isObject() || node.isArray()) {
+            typeWrap.setClazz(getTypeByNode(opts, node, typeWrap.getClazz()));
+        }
 
         // 处理泛型类型
         if (typeWrap.getType() instanceof ParameterizedType) {
@@ -79,12 +84,6 @@ public class BeanDeserializer {
                 Type[] typeArgs = typeWrap.getActualTypeArguments();
                 return convertToMap(node, typeArgs[0], TypeWrap.from(typeArgs[1]), target, visited, opts);
             }
-        }
-
-        // 优先使用自定义编解码器
-        //提前找到@type类型，便于自定义解码器定位
-        if (node.isObject()) {
-            typeWrap.setClazz(getTypeByNode(opts, node, typeWrap.getClazz()));
         }
 
         // 处理嵌套对象 //将 target 传递给 convertNodeToBean

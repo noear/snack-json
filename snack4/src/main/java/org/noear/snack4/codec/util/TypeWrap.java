@@ -62,7 +62,10 @@ public class TypeWrap {
     }
 
     public void setClazz(Class<?> clazz) {
-        this.clazz = clazz;
+        if (this.clazz != clazz) {
+            this.clazz = clazz;
+            this.type = clazz;
+        }
     }
 
     public Type getType() {

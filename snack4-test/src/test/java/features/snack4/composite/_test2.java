@@ -71,7 +71,7 @@ public class _test2 {
     public void test2(){
          String json = "[{\"code\":0,\"name\":\"缺陷\",\"icon\":\"fa-bug\"},{\"code\":1,\"name\":\"改进\",\"icon\":\"fa-twitter\"},{\"code\":2,\"name\":\"需求\",\"icon\":\"fa-circle-o\"}]";
 
-         Object tmp = ONode.fromJson(json).to(Object.class);
+         Object tmp = ONode.fromJson(json).to();
 
          assert tmp instanceof List;
     }
