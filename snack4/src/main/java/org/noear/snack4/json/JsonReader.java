@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JsonReader {
@@ -109,7 +110,7 @@ public class JsonReader {
     }
 
     private ONode parseObject() throws IOException {
-        ONode map = new ONode().asObject();
+        Map<String, ONode> map = new LinkedHashMap<>();
         state.expect('{');
         while (true) {
             state.skipWhitespace();
@@ -127,7 +128,7 @@ public class JsonReader {
             state.skipWhitespace();
             state.expect(':');
             ONode value = parseValue();
-            map.getObject().put(key, value);
+            map.put(key, value);
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
@@ -140,7 +141,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or '}'");
             }
         }
-        return map;
+        return new ONode(map);
     }
 
     private String parseKey() throws IOException {
@@ -167,7 +168,7 @@ public class JsonReader {
     }
 
     private ONode parseArray() throws IOException {
-        ONode list = new ONode().asArray();
+        List<ONode> list = new ArrayList<>();
         state.expect('[');
         while (true) {
             state.skipWhitespace();
@@ -176,7 +177,7 @@ public class JsonReader {
                 break;
             }
 
-            list.getArray().add(parseValue());
+            list.add(parseValue());
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
@@ -189,7 +190,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or ']'");
             }
         }
-        return list;
+        return new ONode(list);
     }
 
     private String parseString() throws IOException {

@@ -58,7 +58,7 @@ public final class ONode {
 
     public ONode(Object value) {
         this.value = value;
-        this.type = JsonType.resolveValueType(value);
+        this.type = JsonType.resolveType(value);
     }
 
     public JsonType nodeType() {
@@ -170,7 +170,7 @@ public final class ONode {
 
     public ONode asObject() {
         if (value == null) {
-            value = new ONodeObject();
+            value = new LinkedHashMap<String, ONode>();
             type = JsonType.Object;
         }
 
@@ -179,7 +179,7 @@ public final class ONode {
 
     public ONode asArray() {
         if (value == null) {
-            value = new ONodeArray();
+            value = new ArrayList<ONode>();
             type = JsonType.Array;
         }
 
@@ -685,29 +685,6 @@ public final class ONode {
         return String.valueOf(value);
     }
 
-
-    static class ONodeArray extends ArrayList<ONode> {
-        @Override
-        public int indexOf(Object o) {
-            for (int i = 0; i < size(); i++)
-                if (get(i).equals(o))
-                    return i;
-
-            return -1;
-        }
-    }
-
-    static class ONodeObject extends LinkedHashMap<String,ONode> {
-        @Override
-        public boolean containsValue(Object value) {
-            for(Map.Entry<String,ONode> e: entrySet()){
-                if(e.getValue().equals(value)){
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
     /// ///////////
 
