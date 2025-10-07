@@ -103,14 +103,14 @@ public class Contains {
         List<Integer> tmp41 = ONode.load("[1,2,3,5,4]").to(List.class);
         List<Integer> tmp42 = ONode.load("[1,2,3,4]").to(List.class);
 
-        assert  tmp.getObject().containsKey("a");
-        assert  tmp.getObject().containsValue(tmp3);
-        assert  tmp.getObject().containsValue(tmp4);
+        assert  tmp.hasKey("a");
+        assert  tmp.hasValue(tmp3);
+        assert  tmp.hasValue(tmp4);
 
-        assert  tmp.getObject().containsValue(tmp41) == false;
-        assert  tmp.getObject().containsValue(tmp42) == false;
+        assert  tmp.hasValue(tmp41) == false;
+        assert  tmp.hasValue(tmp42) == false;
 
-        assert  tmp.getObject().containsValue(2);
+        assert  tmp.hasValue(2);
     }
 
     @Test

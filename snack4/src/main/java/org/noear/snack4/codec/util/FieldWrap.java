@@ -25,6 +25,8 @@ import org.noear.snack4.util.Asserts;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * @author noear 2025/3/16 created
@@ -51,7 +53,7 @@ public class FieldWrap {
     public FieldWrap(TypeWrap owner, Field field) {
         this.owner = owner;
         this.field = field;
-        this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), owner.getGenericInfo()));
+        this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), getGenericInfo(owner, field)));
         this.attr = field.getAnnotation(ONodeAttr.class);
 
         field.setAccessible(true);
@@ -82,6 +84,15 @@ public class FieldWrap {
 
         _setter = doFindSetter(field.getDeclaringClass(), field);
         _getter = doFindGetter(field.getDeclaringClass(), field);
+    }
+
+    private static Map<String, Type> getGenericInfo(TypeWrap owner, Field field) {
+        if (field.getDeclaringClass() == owner.getType()) {
+            return owner.getGenericInfo();
+        } else {
+            Type superType = GenericUtil.reviewType(owner.getType().getGenericSuperclass(), owner.getGenericInfo());
+            return getGenericInfo(TypeWrap.from(superType), field);
+        }
     }
 
 

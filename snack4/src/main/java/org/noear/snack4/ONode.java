@@ -488,6 +488,28 @@ public final class ONode {
         return isObject() && getObject().containsKey(key);
     }
 
+    public boolean hasValue(Object value) {
+        if (isObject()) {
+            for (ONode n : getObject().values()) {
+                if (n.equals(value)) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (isArray()) {
+            for (ONode n : getArray()) {
+                if (n.equals(value)) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (isValue()) {
+            return getValue().equals(value);
+        } else {
+            return false;
+        }
+    }
+
     /// /////////////
 
     /**
