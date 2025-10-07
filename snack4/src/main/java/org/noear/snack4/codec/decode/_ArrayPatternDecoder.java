@@ -6,6 +6,7 @@ import org.noear.snack4.codec.ObjectPatternDecoder;
 import org.noear.snack4.exception.TypeConvertException;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
 
 /**
  *
@@ -21,7 +22,12 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
 
     @Override
     public Object decode(DecodeContext ctx, ONode node) {
-        Class<?> itemType = ctx.getType().getComponentType();
+        Class<?> itemType = null;
+        if(ctx.getGenericType() instanceof GenericArrayType){
+            itemType = (Class<?>) ((GenericArrayType)ctx.getGenericType()).getGenericComponentType();
+        } else {
+            itemType = ctx.getType().getComponentType();
+        }
 
         if (node.isArray()) {
             Object array = Array.newInstance(itemType, node.size());

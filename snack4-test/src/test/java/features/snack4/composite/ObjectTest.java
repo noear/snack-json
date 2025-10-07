@@ -108,7 +108,7 @@ public class ObjectTest {
         System.out.println(a);
 
         oNode = ONode.from(a, Feature.Write_Nulls);
-        String json2 = oNode.toJson();
+        String json2 = oNode.toJson(Feature.Write_Nulls);
         System.out.println(json2);
 
         assert json.equals(json2);

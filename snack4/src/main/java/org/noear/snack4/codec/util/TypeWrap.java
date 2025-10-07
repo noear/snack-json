@@ -44,11 +44,7 @@ public class TypeWrap {
                 type = (Class<?>) tmp;
             }
         } else if (isGenericArrayType()) {
-            Type tmp = getGenericArrayType().getGenericComponentType();
-
-            if (tmp instanceof Class) {
-                type = (Class<?>) tmp;
-            }
+            type = Object[].class;
         } else if (isTypeVariable()) {
             Type tmp = getTypeVariable().getBounds()[0];
 

@@ -70,7 +70,7 @@ public class BeanDeserializer {
 
         // 优先使用自定义编解码器
         //提前找到@type类型，便于自定义解码器定位
-        typeWrap = getTypeByNode(opts, node, typeWrap);
+        typeWrap = confirmNodeType(opts, node, typeWrap);
 
         // 优先使用自定义编解码器
         ObjectDecoder decoder = opts.getDecoder(typeWrap.getType());
@@ -138,11 +138,11 @@ public class BeanDeserializer {
         return target;
     }
 
-    private static Object convertToObject(ONode node, TypeWrap targetTypeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private static Object convertToObject(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
         boolean useSetter = opts.hasFeature(Feature.Write_UseSetter);
 
-        for (FieldWrap field : ClassWrap.from(targetTypeWrap).getFieldWraps()) {
+        for (FieldWrap field : ClassWrap.from(typeWrap).getFieldWraps()) {
             if (useOnlySetter && field.hasSetter() == false) {
                 continue;
             }
@@ -309,7 +309,11 @@ public class BeanDeserializer {
         return argsV;
     }
 
-    private static TypeWrap getTypeByNode(Options opts, ONode oRef, TypeWrap def) {
+    /**
+     * 确认节点类型
+     *
+     */
+    private static TypeWrap confirmNodeType(Options opts, ONode oRef, TypeWrap def) {
         TypeWrap type0 = getTypeByNode0(opts, oRef, def);
 
         if (Throwable.class.isAssignableFrom(type0.getType())) {
