@@ -11,5 +11,5 @@ import org.noear.snack4.annotation.ONodeAttr;
  * @since 4.0
  */
 public interface ObjectDecoder<T> {
-    T decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz);
+    T decode(DecodeContext<T> ctx, ONode node);
 }

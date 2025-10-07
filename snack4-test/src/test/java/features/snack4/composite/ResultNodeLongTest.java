@@ -19,7 +19,7 @@ public class ResultNodeLongTest {
         Result result = Result.succeed(oNode);
 
         Options options = Options.of();
-        options.addEncoder(Long.class, (opts, attr, value) ->  new ONode(String.valueOf(value)));
+        options.addEncoder(Long.class, (ctx, value) ->  new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);
         String json = oNode2.toJson();
@@ -34,7 +34,7 @@ public class ResultNodeLongTest {
         Result result = Result.succeed(oNode);
 
         Options options = Options.of();
-        options.addEncoder(Long.class, (opts, attr, value) -> new ONode(String.valueOf(value)));
+        options.addEncoder(Long.class, (ctx, value) -> new ONode(String.valueOf(value)));
 
         ONode oNode2 =  ONode.from(result, options);
         String json = oNode2.toJson();

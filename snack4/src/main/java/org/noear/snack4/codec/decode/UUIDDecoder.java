@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 
 import java.util.UUID;
@@ -13,7 +12,7 @@ import java.util.UUID;
  */
 public class UUIDDecoder implements ObjectDecoder<UUID> {
     @Override
-    public UUID decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public UUID decode(DecodeContext ctx, ONode node) {
         return UUID.fromString(node.getString());
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.util.DateUtil;
 
@@ -23,14 +24,14 @@ public class Coding {
         orderModel.order_id = 1;
         Options opts = Options.of();
         //添加编码器
-        opts.addEncoder(OrderModel.class, (opts1, attr, value) -> new ONode().set("id", value.order_id));
+        opts.addEncoder(OrderModel.class, (ctx, value) -> new ONode().set("id", value.order_id));
 
         String json = ONode.from(orderModel, opts).toJson();
         System.out.println(json);
         assert json.contains("1");
 
         //添加解码器
-        opts.addDecoder(OrderModel.class, (opts2, attr, node, clazz) -> {
+        opts.addDecoder(OrderModel.class, (ctx, node) -> {
             OrderModel tmp = new OrderModel();
             tmp.order_id = node.get("id").getInt();
             return tmp;
@@ -49,7 +50,7 @@ public class Coding {
         String json = "";
 
         Options opts = Options.of();
-        opts.addDecoder(LocalDateTime.class, (opts1, attr, node, clazz) -> {
+        opts.addDecoder(LocalDateTime.class, (ctx, node) -> {
             //我随手写的，具体要自己解析下格式
             return LocalDateTime.parse(node.getString());
         });
@@ -63,10 +64,10 @@ public class Coding {
         orderModel.order_id = 1;
 
         Options options = Options.of();
-        options.addEncoder(Date.class, (opts, attr, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd"))));
+        options.addEncoder(Date.class, (ctx, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd"))));
 
         //添加编码器
-        options.addEncoder(OrderModel.class, (opts, attr, value) -> new ONode().set("user", new ONode().set("uid", "1001")).set("order_time", null));
+        options.addEncoder(OrderModel.class, (ctx, value) -> new ONode().set("user", new ONode().set("uid", "1001")).set("order_time", null));
 
 
         String json = ONode.from(orderModel, options).toJson();
@@ -74,7 +75,7 @@ public class Coding {
         assert json.contains("1001");
 
         //添加解码器
-        options.addDecoder(Date.class, (opts, attr, node, clazz) -> {
+        options.addDecoder(Date.class, (ctx, node) -> {
             if (node.isNull()) {
                 return new Date();
             } else {
@@ -84,7 +85,7 @@ public class Coding {
 
 
         //添加解码器
-        options.addDecoder(LocalTime.class, (opts, attr, node, clazz) -> {
+        options.addDecoder(LocalTime.class, (ctx, node) -> {
             if (node.isNull()) {
                 return LocalTime.now();
             } else {
@@ -96,13 +97,10 @@ public class Coding {
         });
 
         //添加解码器
-        options.addDecoder(UserModel.class, new ObjectDecoder<UserModel>() {
-            @Override
-            public UserModel decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-                UserModel tmp = new UserModel();
-                tmp.id = node.get("uid").getInt();
-                return tmp;
-            }
+        options.addDecoder(UserModel.class, (ctx, node) -> {
+            UserModel tmp = new UserModel();
+            tmp.id = node.get("uid").getInt();
+            return tmp;
         });
 
         OrderModel rst = ONode.load(json).to(OrderModel.class);

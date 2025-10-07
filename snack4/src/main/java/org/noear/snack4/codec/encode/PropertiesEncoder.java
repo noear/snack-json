@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.Properties;
  */
 public class PropertiesEncoder implements ObjectEncoder<Properties> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Properties properties) {
+    public ONode encode(EncodeContext ctx, Properties properties) {
         ONode rootNode = new ONode(new LinkedHashMap<>());
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);

@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
 import org.noear.snack4.exception.TypeConvertException;
 
@@ -21,8 +20,8 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
     }
 
     @Override
-    public Object decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        Class<?> itemType = clazz.getComponentType();
+    public Object decode(DecodeContext ctx, ONode node) {
+        Class<?> itemType = ctx.getType().getComponentType();
 
         if (node.isArray()) {
             Object array = Array.newInstance(itemType, node.size());

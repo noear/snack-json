@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.util.TimeZone;
@@ -14,7 +13,7 @@ import java.util.TimeZone;
  */
 public class TimeZoneEncoder implements ObjectEncoder<TimeZone> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, TimeZone value) {
+    public ONode encode(EncodeContext ctx, TimeZone value) {
         return new ONode(value.getID());
     }
 }

@@ -1,6 +1,7 @@
 package features.snack4.composite;
 
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 import java.io.IOException;
@@ -131,7 +132,7 @@ public class JsonTest {
         Throwable err = null;
 
         try {
-           ONode c = ONode.load("{{\"aaa\":\"111\",\"bbb\":\"222\"}");
+            ONode.load("{{\"aaa\":\"111\",\"bbb\":\"222\"}", Feature.Read_DisableUnquotedKeys);
         } catch (Throwable e) {
             err = e;
             e.printStackTrace();

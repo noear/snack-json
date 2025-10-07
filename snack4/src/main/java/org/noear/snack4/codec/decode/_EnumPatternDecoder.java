@@ -1,15 +1,11 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
 import org.noear.snack4.codec.util.EnumWrap;
 import org.noear.snack4.codec.util.TypeUtil;
 import org.noear.snack4.exception.SnackException;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -24,8 +20,8 @@ public class _EnumPatternDecoder implements ObjectPatternDecoder<Object> {
     }
 
     @Override
-    public Object decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        EnumWrap ew = TypeUtil.createEnum(clazz);
+    public Object decode(DecodeContext ctx, ONode node) {
+        EnumWrap ew = TypeUtil.createEnum(ctx.getType());
 
         //尝试自定义获取
         String valString = node.getString();

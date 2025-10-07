@@ -15,7 +15,7 @@ import java.util.Date;
 public class DemoApp {
     public static void main(String[] args) {
         Options options =  Options.of()
-                .addEncoder(Date.class, (opts, attr, data) -> {
+                .addEncoder(Date.class, (ctx, data) -> {
                     return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
                 })
                 .addFeature(Feature.Write_PrettyFormat)

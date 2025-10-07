@@ -114,7 +114,15 @@ public final class ONode {
     }
 
     public Boolean getBoolean() {
-        return (Boolean) value;
+        if (isBoolean()) {
+            return (Boolean) value;
+        } else if (isString()) {
+            return Boolean.parseBoolean((String) value);
+        } else if (isNumber()) {
+            return getNumber().longValue() > 0;
+        } else {
+            throw new TypeConvertException("Not supported for automatic conversion");
+        }
     }
 
     public Number getNumber() {

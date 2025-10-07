@@ -78,23 +78,10 @@ public class BeanDeserializer {
         // 优先使用自定义编解码器
         ObjectDecoder decoder = opts.getDecoder(typeWrap.getType());
         if (decoder != null) {
-            return decoder.decode(opts, null, node, typeWrap.getType());
+            return decoder.decode(new DecodeContext(opts, attr, target, typeWrap), node);
         }
 
-        // 处理泛型类型
-        if (typeWrap.getGenericType() instanceof ParameterizedType) {
-            if (List.class.isAssignableFrom(typeWrap.getType())) {
-                //将 target 传递给 convertToList
-                Type[] typeArgs = typeWrap.getActualTypeArguments();
-                return convertToList(node, TypeWrap.from(typeArgs[0]), target, visited, opts);
-            } else if (Map.class.isAssignableFrom(typeWrap.getType())) {
-                //将 target 传递给 convertToMap
-                Type[] typeArgs = typeWrap.getActualTypeArguments();
-                return convertToMap(node, TypeWrap.from(typeArgs[0]), TypeWrap.from(typeArgs[1]), target, visited, opts);
-            }
-        }
-
-        if(node.isValue()) {
+        if (node.isValue()) {
             if (typeWrap.getType().isInterface()) {
                 if (node.isString() && node.getString().indexOf('.') > 0) {
                     Class<?> clz = opts.loadClass(node.getString());
@@ -102,28 +89,20 @@ public class BeanDeserializer {
                 }
             }
 
-            if(((Collection.class.isAssignableFrom(typeWrap.getType()) || typeWrap.getType().isArray()) && node.isString()) == false) {
+            if (((Collection.class.isAssignableFrom(typeWrap.getType()) || typeWrap.getType().isArray()) && node.isString()) == false) {
                 return node.getValue();
             }
 
         }
 
-        // 处理嵌套对象
-        return convertNodeToBean(node, typeWrap, target, visited, opts);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Object convertNodeToBean(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
-        Object bean = target;
-
-        if (bean == null) {
+        if (target == null) {
             // 如果没有传入 target，则执行原有的创建新对象的逻辑
             ObjectFactory factory = opts.getFactory(typeWrap.getType());
             if (factory != null) {
-                bean = factory.create(opts, typeWrap.getType());
+                target = factory.create(opts, typeWrap.getType());
             }
 
-            if (bean == null) {
+            if (target == null) {
                 if (typeWrap.getType().isInterface()) {
                     if (node.isNullOrEmpty()) {
                         return null;
@@ -138,22 +117,22 @@ public class BeanDeserializer {
                 }
 
                 if (constructor.getParameterCount() == 0) {
-                    bean = constructor.newInstance();
+                    target = constructor.newInstance();
                 } else {
                     Object[] args = getConstructorArguments(constructor, node, visited, opts);
-                    bean = constructor.newInstance(args);
+                    target = constructor.newInstance(args);
                 }
             }
         }
 
-        if (bean instanceof Map) {
+        if (target instanceof Map) {
             if (node.isObject()) {
                 Type valueType = Object.class;
                 if (typeWrap.isParameterizedType()) {
                     valueType = typeWrap.getActualTypeArguments()[1];
                 }
 
-                Map map = (Map) bean;
+                Map map = (Map) target;
 
                 for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
                     //填充 Map 时，值为新创建的，所以 target 传 null
@@ -162,14 +141,14 @@ public class BeanDeserializer {
             } else {
                 throw new IllegalArgumentException("The type of node " + node.getType() + " cannot be converted to map.");
             }
-        } else if (bean instanceof Collection) {
+        } else if (target instanceof Collection) {
             Type elementType = Object.class;
             if (typeWrap.isParameterizedType()) {
                 elementType = typeWrap.getActualTypeArguments()[0];
             }
 
             if (node.isArray()) {
-                Collection coll = (Collection) bean;
+                Collection coll = (Collection) target;
 
                 for (ONode n1 : node.getArray()) {
                     //填充集合时，元素为新创建的，所以 target 传 null
@@ -181,7 +160,7 @@ public class BeanDeserializer {
             } else if (node.isString()) {
                 // string 支持自动转数组
                 String[] strArray = node.toString().split(",");
-                Collection coll = (Collection) bean;
+                Collection coll = (Collection) target;
 
                 for (String str : strArray) {
                     Object item = convertValue(new ONode(str), TypeWrap.from(elementType), null, null, visited, opts);
@@ -193,33 +172,41 @@ public class BeanDeserializer {
                 throw new IllegalArgumentException("The type of node " + node.getType() + " cannot be converted to collection.");
             }
         } else {
-            boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
-            boolean useSetter = opts.hasFeature(Feature.Write_UseSetter);
+            // 处理嵌套对象
+            return convertNodeToBean(node, typeWrap, target, visited, opts);
+        }
 
-            for (FieldWrap field : ClassWrap.from(typeWrap).getFieldWraps()) {
-                if (useOnlySetter && field.hasSetter() == false) {
-                    continue;
-                }
+        return target;
+    }
 
-                if (field.isDeserialize()) {
-                    ONode fieldNode = node.get(field.getName());
+    @SuppressWarnings("unchecked")
+    private static Object convertNodeToBean(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+        boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
+        boolean useSetter = opts.hasFeature(Feature.Write_UseSetter);
 
-                    if (fieldNode != null && !fieldNode.isNull()) {
-                        //深度填充：获取字段当前的值，作为递归调用的 target
-                        Object existingFieldValue = field.getValue(bean, false);
-                        Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
+        for (FieldWrap field : ClassWrap.from(typeWrap).getFieldWraps()) {
+            if (useOnlySetter && field.hasSetter() == false) {
+                continue;
+            }
 
-                        if (field.isFinal() == false) {
-                            field.setValue(bean, value, useOnlySetter || useSetter);
-                        }
-                    } else {
-                        setPrimitiveDefault(field.getField(), bean);
+            if (field.isDeserialize()) {
+                ONode fieldNode = node.get(field.getName());
+
+                if (fieldNode != null && !fieldNode.isNull()) {
+                    //深度填充：获取字段当前的值，作为递归调用的 target
+                    Object existingFieldValue = field.getValue(target, false);
+                    Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
+
+                    if (field.isFinal() == false) {
+                        field.setValue(target, value, useOnlySetter || useSetter);
                     }
+                } else {
+                    setPrimitiveDefault(field.getField(), target);
                 }
             }
         }
 
-        return bean;
+        return target;
     }
 
 
@@ -266,7 +253,7 @@ public class BeanDeserializer {
     }
 
     // Map键类型转换
-    private static Object convertKey( String key, TypeWrap keyType, Options opts) {
+    private static Object convertKey(String key, TypeWrap keyType, Options opts) {
         if (keyType.getType() == String.class) return key;
         if (keyType.getType() == Integer.class || keyType.getType() == int.class) return Integer.parseInt(key);
         if (keyType.getType() == Long.class || keyType.getType() == long.class) return Long.parseLong(key);
@@ -275,7 +262,7 @@ public class BeanDeserializer {
             if (decoder == null) {
                 return Enum.valueOf((Class<Enum>) keyType.getType(), key);
             } else {
-                return decoder.decode(opts, null, new ONode(key), keyType.getType());
+                return decoder.decode(new DecodeContext(opts, null, null, keyType), new ONode(key));
             }
         }
 
@@ -297,7 +284,7 @@ public class BeanDeserializer {
         else if (type == char.class) field.setChar(bean, '\u0000');
     }
 
-    private static Object[] getConstructorArguments(Constructor constructor, ONode node, Map<Object,Object> visited, Options opts) throws Exception {
+    private static Object[] getConstructorArguments(Constructor constructor, ONode node, Map<Object, Object> visited, Options opts) throws Exception {
         //只有带参数的构造函（像 java record, kotlin data）
         Set<String> excNames = new LinkedHashSet<>();
         Parameter[] argsP = constructor.getParameters();
@@ -317,7 +304,7 @@ public class BeanDeserializer {
         }
 
         //移除已使用的节点
-        for(String excName : excNames) {
+        for (String excName : excNames) {
             node.remove(excName);
         }
 

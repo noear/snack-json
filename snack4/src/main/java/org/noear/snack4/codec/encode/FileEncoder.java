@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.io.File;
@@ -13,7 +12,7 @@ import java.io.File;
  */
 public class FileEncoder implements ObjectEncoder<File> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, File value) {
+    public ONode encode(EncodeContext ctx, File value) {
         return new ONode(value.getPath());
     }
 }

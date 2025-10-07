@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 /**
@@ -12,7 +11,7 @@ import org.noear.snack4.codec.ObjectEncoder;
  */
 public class BooleanEncoder implements ObjectEncoder<Boolean> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Boolean value) {
+    public ONode encode(EncodeContext ctx, Boolean value) {
         return new ONode(value);
     }
 }

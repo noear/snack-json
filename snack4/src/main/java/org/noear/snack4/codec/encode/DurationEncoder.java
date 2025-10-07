@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.time.Duration;
@@ -14,7 +13,7 @@ import java.time.Duration;
  */
 public class DurationEncoder implements ObjectEncoder<Duration> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Duration value) {
+    public ONode encode(EncodeContext ctx, Duration value) {
         return new ONode(value.toString());
     }
 }

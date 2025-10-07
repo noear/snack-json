@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.net.URI;
@@ -15,7 +14,7 @@ import java.net.URL;
  */
 public class URLEncoder implements ObjectEncoder<URL> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, URL value) {
+    public ONode encode(EncodeContext ctx, URL value) {
         return new ONode(value.toString());
     }
 }

@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 
 
@@ -12,7 +11,7 @@ import org.noear.snack4.codec.ObjectDecoder;
  */
 public class DoubleDecoder implements ObjectDecoder<Double> {
     @Override
-    public Double decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
-        return node.getDouble(clazz.isPrimitive() ? 0D : null);
+    public Double decode(DecodeContext ctx, ONode node) {
+        return node.getDouble(ctx.getType().isPrimitive() ? 0D : null);
     }
 }

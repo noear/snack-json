@@ -2,8 +2,7 @@ package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.codec.util.EnumWrap;
 import org.noear.snack4.codec.util.TypeUtil;
@@ -20,7 +19,7 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Enum value) {
+    public ONode encode(EncodeContext ctx, Enum value) {
         EnumWrap ew = TypeUtil.createEnum(value.getClass());
         Object o = ew.getCustomValue(value);
 
@@ -29,7 +28,7 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
             return new ONode(o);
         } else {
 
-            if (opts.hasFeature(Feature.Write_EnumUsingName)) {
+            if (ctx.getOpts().hasFeature(Feature.Write_EnumUsingName)) {
                 return new ONode(value.name());
             } else {
                 return new ONode(value.ordinal());

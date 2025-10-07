@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
@@ -22,13 +21,13 @@ public class _DatePatternEncoder implements ObjectPatternEncoder<Date> {
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Date value) {
-        if (attr != null) {
-            if (Asserts.isNotEmpty(attr.format())) {
-                if (Asserts.isNotEmpty(attr.timezone())) {
-                    return new ONode(DateUtil.format(value, attr.format(), TimeZone.getTimeZone(ZoneId.of(attr.timezone()))));
+    public ONode encode(EncodeContext ctx, Date value) {
+        if (ctx.getAttr() != null) {
+            if (Asserts.isNotEmpty(ctx.getAttr().format())) {
+                if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
+                    return new ONode(DateUtil.format(value, ctx.getAttr().format(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone()))));
                 } else {
-                    return new ONode(DateUtil.format(value, attr.format()));
+                    return new ONode(DateUtil.format(value, ctx.getAttr().format()));
                 }
             }
         }

@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 
 /**
@@ -11,7 +10,7 @@ import org.noear.snack4.codec.ObjectDecoder;
  */
 public class StackTraceElementDecoder implements ObjectDecoder<StackTraceElement> {
     @Override
-    public StackTraceElement decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public StackTraceElement decode(DecodeContext ctx, ONode node) {
         return new StackTraceElement(
                 node.get("className").getString(),
                 node.get("methodName").getString(),

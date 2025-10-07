@@ -3,6 +3,7 @@ package org.noear.snack4.codec.util;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.exception.TypeConvertException;
 import org.noear.snack4.util.Asserts;
 
@@ -167,17 +168,26 @@ public class DateUtil {
         }
     }
 
-    public static Instant decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public static ZoneId zoneIdOf(DecodeContext ctx){
+        ZoneId zoneId = ctx.getOpts().getTimeZone().toZoneId();
+        if (ctx.getAttr() != null && Asserts.isNotEmpty(ctx.getAttr().timezone())) {
+            zoneId = ZoneId.of(ctx.getAttr().timezone());
+        }
+
+        return zoneId;
+    }
+
+    public static Instant decode(DecodeContext ctx, ONode node) {
         if (node.isDate()) {
             return Instant.ofEpochMilli(node.getDate().getTime());
         } else if (node.isNumber()) {
             return Instant.ofEpochMilli(node.getLong());
         } else if (node.isString()) {
-            if (attr != null) {
-                if (Asserts.isNotEmpty(attr.format())) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(attr.format());
-                    if (Asserts.isNotEmpty(attr.timezone())) {
-                        formatter.withZone(ZoneId.of(attr.timezone()));
+            if (ctx.getAttr() != null) {
+                if (Asserts.isNotEmpty(ctx.getAttr().format())) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
+                    if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
+                        formatter.withZone(ZoneId.of(ctx.getAttr().timezone()));
                     }
 
                     return Instant.from(formatter.parse(node.getString()));
@@ -187,10 +197,10 @@ public class DateUtil {
             try {
                 return DateUtil.parse(node.getString()).toInstant();
             } catch (Exception ex) {
-                throw new TypeConvertException("Cannot be converted to " + clazz.getSimpleName() + ": " + node, ex);
+                throw new TypeConvertException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node, ex);
             }
         } else {
-            throw new TypeConvertException("Cannot be converted to " + clazz.getSimpleName() + ": " + node);
+            throw new TypeConvertException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node);
         }
     }
 

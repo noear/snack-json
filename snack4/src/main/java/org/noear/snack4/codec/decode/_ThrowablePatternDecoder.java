@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
 
 /**
@@ -17,14 +16,14 @@ public class _ThrowablePatternDecoder implements ObjectPatternDecoder<Throwable>
     }
 
     @Override
-    public Throwable decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public Throwable decode(DecodeContext ctx, ONode node) {
         String message = node.get("message").getString();
 
         try {
             if (message == null) {
-                return (Throwable) clazz.getDeclaredConstructor().newInstance();
+                return (Throwable) ctx.getType().getDeclaredConstructor().newInstance();
             } else {
-                return (Throwable) clazz.getDeclaredConstructor(String.class).newInstance(message);
+                return (Throwable) ctx.getType().getDeclaredConstructor(String.class).newInstance(message);
             }
         } catch (Exception ex) {
             return null;

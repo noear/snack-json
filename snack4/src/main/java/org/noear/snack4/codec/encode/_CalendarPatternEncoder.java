@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 
 import java.util.Calendar;
@@ -19,7 +18,7 @@ public class _CalendarPatternEncoder implements ObjectPatternEncoder<Calendar> {
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Calendar value) {
+    public ONode encode(EncodeContext ctx, Calendar value) {
         return new ONode(value.getTime());
     }
 }

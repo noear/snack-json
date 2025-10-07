@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 
 import java.math.BigDecimal;
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
  */
 public class BigDecimalDecoder implements ObjectDecoder<BigDecimal> {
     @Override
-    public BigDecimal decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public BigDecimal decode(DecodeContext ctx, ONode node) {
         if (node.isNumber()) {
             if (node.getValue() instanceof BigDecimal) {
                 return (BigDecimal) node.getValue();

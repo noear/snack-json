@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 
 /**
@@ -11,7 +10,7 @@ import org.noear.snack4.codec.ObjectEncoder;
  */
 public class StackTraceElementEncoder implements ObjectEncoder<StackTraceElement> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, StackTraceElement value) {
+    public ONode encode(EncodeContext ctx, StackTraceElement value) {
         ONode tmp = new ONode();
 
         tmp.set("className", value.getClassName());

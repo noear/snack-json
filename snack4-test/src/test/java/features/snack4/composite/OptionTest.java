@@ -22,8 +22,8 @@ public class OptionTest {
         options.addFeature(Feature.Write_EnumUsingName);
         options.dateFormatText("yyyy-MM-dd");
         options.timeZone(TimeZone.getTimeZone("GMT+8"));
-        options.addDecoder(BigDecimal.class, (opts, attr, node, clazz) -> null);
-        options.addEncoder(BigDecimal.class, (opts, attr, value) -> new ONode());
+        options.addDecoder(BigDecimal.class, (ctx, node) -> null);
+        options.addEncoder(BigDecimal.class, (ctx, value) -> new ONode());
 
         ONode oNode = ONode.load("{}", options);
 

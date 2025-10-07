@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.exception.TypeConvertException;
 
@@ -15,7 +14,7 @@ import java.text.SimpleDateFormat;
  */
 public class SimpleDateFormatDecoder implements ObjectDecoder<SimpleDateFormat> {
     @Override
-    public SimpleDateFormat decode(Options opts, ONodeAttr attr, ONode node, Class<?> clazz) {
+    public SimpleDateFormat decode(DecodeContext ctx, ONode node) {
         if (node.isString()) {
             return new SimpleDateFormat(node.getString());
         } else if (node.isObject()) {

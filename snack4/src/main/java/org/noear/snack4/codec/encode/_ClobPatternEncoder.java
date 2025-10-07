@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.codec.util.BeanUtil;
 
@@ -20,7 +19,7 @@ public class _ClobPatternEncoder implements ObjectPatternEncoder<Clob> {
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Clob value) {
+    public ONode encode(EncodeContext ctx, Clob value) {
         return new ONode(BeanUtil.clobToString(value));
     }
 }

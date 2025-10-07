@@ -2,8 +2,7 @@ package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 
 /**
@@ -18,10 +17,10 @@ public class _ThrowablePatternEncoder implements ObjectPatternEncoder<Throwable>
     }
 
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, Throwable value) {
+    public ONode encode(EncodeContext ctx, Throwable value) {
         ONode node = new ONode();
-        if (opts.hasFeature(Feature.Write_ClassName)) {
-            node.set(opts.getTypePropertyName(), value.getClass().getName());
+        if (ctx.getOpts().hasFeature(Feature.Write_ClassName)) {
+            node.set(ctx.getOpts().getTypePropertyName(), value.getClass().getName());
         }
 
         return node.set("message", value.getMessage());

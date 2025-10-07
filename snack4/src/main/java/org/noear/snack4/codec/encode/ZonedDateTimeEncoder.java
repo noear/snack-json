@@ -1,8 +1,7 @@
 package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.util.Asserts;
 
@@ -17,10 +16,10 @@ import java.util.Date;
  */
 public class ZonedDateTimeEncoder implements ObjectEncoder<ZonedDateTime> {
     @Override
-    public ONode encode(Options opts, ONodeAttr attr, ZonedDateTime value) {
-        if (attr != null) {
-            if (Asserts.isNotEmpty(attr.format())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(attr.format());
+    public ONode encode(EncodeContext ctx, ZonedDateTime value) {
+        if (ctx.getAttr() != null) {
+            if (Asserts.isNotEmpty(ctx.getAttr().format())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
                 return new ONode(formatter.format(value));
             }
         }
