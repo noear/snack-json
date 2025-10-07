@@ -38,7 +38,9 @@ public class FieldWrap {
     private final ONodeAttr attr;
 
     private String name;
+    private boolean readOnly;
     private boolean asString;
+    private boolean flat;
 
     private Method _setter;
     private Method _getter;
@@ -55,12 +57,14 @@ public class FieldWrap {
         this.field = field;
         this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), getGenericInfo(owner, field)));
         this.attr = field.getAnnotation(ONodeAttr.class);
+        this.readOnly = Modifier.isFinal(field.getModifiers());
 
         field.setAccessible(true);
 
         if (attr != null) {
             name = attr.name();
             asString = attr.asString();
+            flat = attr.flat();
 
             serialize = attr.serialize();
             deserialize = attr.deserialize();
@@ -145,12 +149,16 @@ public class FieldWrap {
     }
 
 
-    public boolean isFinal() {
-        return Modifier.isFinal(field.getModifiers());
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
     public boolean isAsString() {
         return asString;
+    }
+
+    public boolean isFlat() {
+        return flat;
     }
 
     public boolean hasSetter() {

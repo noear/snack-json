@@ -147,7 +147,13 @@ public class BeanSerializer {
                     }
 
                     if (fieldNode != null) {
-                        tmp.set(field.getName(), fieldNode);
+                        if (field.isFlat()) {
+                            if (fieldNode.isObject()) {
+                                tmp.setAll(fieldNode.getObject());
+                            }
+                        } else {
+                            tmp.set(field.getName(), fieldNode);
+                        }
                     }
                 }
             }

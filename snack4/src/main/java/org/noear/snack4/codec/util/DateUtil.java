@@ -39,7 +39,8 @@ public class DateUtil {
     public static final String FORMAT_16_a = "yyyy-MM-dd HH:mm";
     public static final String FORMAT_16_b = "yyyy/MM/dd HH:mm";
     public static final String FORMAT_16_c = "yyyy.MM.dd HH:mm";
-    public static final String FORMAT_14 = "yyyyMMddHHmmss";
+    public static final String FORMAT_14_a = "yyyyMMddHHmmss";
+    public static final String FORMAT_14_b = "HH:mm:ssXXX";//XXX: +08:00
     public static final String FORMAT_12 = "HH:mm:ss.SSS";
     public static final String FORMAT_10_a = "yyyy-MM-dd";
     public static final String FORMAT_10_b = "yyyy/MM/dd";
@@ -113,7 +114,11 @@ public class DateUtil {
                 ft = FORMAT_16_a;
             }
         } else if (len == 14) {
-            ft = FORMAT_14;
+            if(val.charAt(2) == ':'){
+                ft = FORMAT_14_b;
+            }else {
+                ft = FORMAT_14_a;
+            }
         } else if (len == 12 && val.charAt(2) == ':') {
             ft = FORMAT_12;
         } else if (len == 10) {

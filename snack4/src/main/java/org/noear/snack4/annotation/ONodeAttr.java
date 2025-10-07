@@ -54,7 +54,7 @@ public @interface ONodeAttr {
     /**
      * 扁平化
      */
-    boolean flatten() default false;
+    boolean flat() default false;
 
     /**
      * 是否序列化

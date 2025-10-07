@@ -326,6 +326,14 @@ public final class ONode {
         return this.fill(ONode.load(json, opts), opts);
     }
 
+    public ONode setAll(Map<?,?> map) {
+        for (Map.Entry entry : map.entrySet()) {
+            set(String.valueOf(entry.getKey()), entry.getValue());
+        }
+
+        return this;
+    }
+
     public ONode set(String key, Object value) {
         ONode oNode;
         if (value == null) {

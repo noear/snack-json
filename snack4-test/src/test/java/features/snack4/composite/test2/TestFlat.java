@@ -30,9 +30,9 @@ public class TestFlat {
     @Data
     public static class TestFlatDto {
         private String name;
-        @ONodeAttr(flatten = true)
+        @ONodeAttr(flat = true)
         private TestFlatChildDto child;
-        @ONodeAttr(flatten = true)
+        @ONodeAttr(flat = true)
         private final TestFlatChildDto2 child2 = new TestFlatChildDto2();
 
     }
@@ -56,6 +56,7 @@ public class TestFlat {
         assertEquals(childDto2.getResult2(), false);
 
         String str = ONode.from(dto).toJson();
+        System.out.println(str);
         assertEquals(str, json);
     }
 }

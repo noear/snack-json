@@ -148,14 +148,14 @@ public class BeanDeserializer {
             }
 
             if (field.isDeserialize()) {
-                ONode fieldNode = node.get(field.getName());
+                ONode fieldNode = (field.isFlat() ? node : node.get(field.getName()));
 
                 if (fieldNode != null && !fieldNode.isNull()) {
                     //深度填充：获取字段当前的值，作为递归调用的 target
                     Object existingFieldValue = field.getValue(target, false);
                     Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
 
-                    if (field.isFinal() == false) {
+                    if (field.isReadOnly() == false) {
                         field.setValue(target, value, useOnlySetter || useSetter);
                     }
                 } else {
