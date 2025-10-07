@@ -1,6 +1,7 @@
 package features.snack4.composite;
 
 import demo.snack4._models.NumberModel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
@@ -136,9 +137,9 @@ public class NumberTest {
     @Test
     public void test9() {
         String json = "{\"a\":0.0000}";
-        String json2 = ONode.load(json).toJson(); //Feature.StringDoubleToDecimal
+        String json2 = ONode.load(json, Feature.Read_UseBigNumberMode).toJson();
 
-        assert json.equals(json2);
+        Assertions.assertEquals(json, json2);
     }
 
 
@@ -146,11 +147,11 @@ public class NumberTest {
     public void test10() {
         String json = "{num15_2:''}";
         NumberModel tmp1 = ONode.deserialize(json, NumberModel.class);
-        assert tmp1.getNum15_2() == null;
+        Assertions.assertNull(tmp1.getNum15_2());
 
 
         json = "{num15_2:'1'}";
         tmp1 = ONode.deserialize(json, NumberModel.class);
-        assert tmp1.getNum15_2() == 1D;
+        Assertions.assertEquals(1D, tmp1.getNum15_2());
     }
 }

@@ -1,8 +1,12 @@
 package features.snack4.path.manual;
 
 import com.jayway.jsonpath.JsonPath;
+import features.snack4.composite.JsonPathTest3;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -26,6 +30,26 @@ public class JsonPathCompatibleTest4 {
         compatible_do("1", json, "$.*.list[0]");
         compatible_do("2", json, "$.*.list[0][0]");
         compatible_do("3", json, "$..list[0][0]");
+    }
+
+    @Test
+    public void case3(){
+        List<JsonPathTest3.Entity> entities = new ArrayList<JsonPathTest3.Entity>();
+        entities.add(new JsonPathTest3.Entity(1001, "ljw2083"));
+        entities.add(new JsonPathTest3.Entity(1002, "wenshao"));
+        entities.add(new JsonPathTest3.Entity(1003, "yakolee"));
+        entities.add(new JsonPathTest3.Entity(1004, null));
+        String json = ONode.from(entities).toJson();
+
+        compatible_do("1", json, "$[?(@.id in [1001,1002])]");
+    }
+
+    @Test
+    public void case4(){
+        JsonPathTest3.Entity entity = new JsonPathTest3.Entity(1001, "ljw2083");
+        String json = ONode.from(entity).toJson();
+
+        compatible_do("1", json, "$[?(@.id == 1001)]");
     }
 
     private void compatible_do(String hint, String json, String jsonpathStr) {

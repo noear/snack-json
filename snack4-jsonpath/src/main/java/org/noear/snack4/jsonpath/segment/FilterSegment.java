@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.Expression;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -46,9 +47,9 @@ public class FilterSegment implements SegmentFunction {
         if (this.flattened) {
             //已经偏平化
             List<ONode> result = new ArrayList<>();
-            for (ONode n : currentNodes) {
-                if (expression.test(n, context.root)) {
-                    result.add(n);
+            for (ONode n1 : currentNodes) {
+                if (expression.test(n1, context.root)) {
+                    result.add(n1);
                 }
             }
             return result;
@@ -67,8 +68,14 @@ public class FilterSegment implements SegmentFunction {
     // 新增递归展开方法
     private void flattenResolve(ONode node, Context context, List<ONode> result) {
         if (node.isArray()) {
+            int idx = 0;
             for (ONode n1 : node.getArray()) {
+                if(n1.source == null) {
+                    n1.source = new JsonSource(node, null, idx);
+                }
+
                 flattenResolve(n1, context, result);
+                idx++;
             }
         } else if (node.isNull() == false) {
             if (expression.test(node, context.root)) {

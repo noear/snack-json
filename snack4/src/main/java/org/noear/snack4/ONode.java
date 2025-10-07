@@ -294,30 +294,6 @@ public final class ONode {
         return this;
     }
 
-    public ONode setValue(Number value) {
-        this.value = value;
-        this.type = JsonType.Number;
-        return this;
-    }
-
-    public ONode setValue(Boolean value) {
-        this.value = value;
-        this.type = JsonType.Boolean;
-        return this;
-    }
-
-    public ONode setValue(String value) {
-        this.value = value;
-        this.type = JsonType.String;
-        return this;
-    }
-
-    public ONode setValue(Date value) {
-        this.value = value;
-        this.type = JsonType.Date;
-        return this;
-    }
-
     public ONode fill(Object source, Feature... features) {
         ONode oNode = ONode.from(source, features);
 
@@ -770,11 +746,13 @@ public final class ONode {
         if (source == null) {
             return null;
         } else {
+            Object pk = (source.key == null ? source.index : source.key);
             String pp = source.parent.path();
+
             if (pp == null) {
-                return "[" + source.key + "]";
+                return "$[" + pk + "]";
             } else {
-                return pp + "[" + source.key + "]";
+                return pp + "[" + pk + "]";
             }
         }
     }
@@ -786,8 +764,8 @@ public final class ONode {
         }
 
         if (oNode.isArray()) {
-            for (int i = 0; i < oNode.getArray().size(); i++) {
-                extractPath(paths, oNode.get(i));
+            for (ONode n1 : oNode.getArray()) {
+                extractPath(paths, n1);
             }
         } else if (oNode.isObject()) {
             for (Map.Entry<String, ONode> kv : oNode.getObject().entrySet()) {

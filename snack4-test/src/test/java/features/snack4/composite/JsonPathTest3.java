@@ -46,11 +46,11 @@ public class JsonPathTest3 {
         entities.add(new Entity("ljw2083"));
         ONode n = ONode.from(entities);
 
-        List<String> names = n.select("$.name").to(List.class);
+        List<String> names = n.select("$..name").to(List.class);
         assert names.size() == 2;
 
-        System.out.println(n.usePaths().select("$.name"));
-        assert n.usePaths().select("$.name").pathList().size() == 2;
+        System.out.println(n.usePaths().select("$..name"));
+        assert n.usePaths().select("$..name").pathList().size() == 2;
     }
 
     @Test
@@ -95,11 +95,11 @@ public class JsonPathTest3 {
         entities.add(new Entity(1004, null));
         ONode n = ONode.from(entities);
 
-        ONode rst = n.select("$[?($.id in [1001,1002])]");
+        ONode rst = n.select("$[?(@.id in [1001,1002])]");
         assert rst.size() == 2;
 
-        System.out.println(n.usePaths().select("$[?($.id in [1001,1002])]"));
-        assert n.usePaths().select("$[?($.id in [1001,1002])]").pathList().size() == 2;
+        System.out.println(n.usePaths().select("$[?(@.id in [1001,1002])]"));
+        assert n.usePaths().select("$[?(@.id in [1001,1002])]").pathList().size() == 2;
     }
 
     @Test
@@ -107,13 +107,13 @@ public class JsonPathTest3 {
         Entity entity = new Entity(1001, "ljw2083");
         ONode n = ONode.from(entity);
 
-        assert n.select("$[?(id == 1001)]").isObject();
-        assert n.select("$[?(id == 1002)]").isNull();
+        assert n.select("$[?(@.id == 1001)].first()").isObject();
+        assert n.select("$[?(@.id == 1002)].first()").isNull();
 
         n.select("$").set("id", 123456);
         assert n.get("id").getInt() == 123456;
 
-        n.get("value").add(1).add(2).add(3);
+        n.get("value").setValue(null).add(1).add(2).add(3);
         assert n.get("value").size() == 3;
     }
 
