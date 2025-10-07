@@ -15,9 +15,10 @@ public class TypeWrap {
         return cached.computeIfAbsent(type, t -> new TypeWrap(t));
     }
 
+    private final Type genericType;
+    private final Map<String, Type> genericInfo;
 
     private Class<?> type = Object.class;
-    private Type genericType;
     private Constructor<?> constructor;
 
     public TypeWrap(Type genericType) {
@@ -30,7 +31,9 @@ public class TypeWrap {
             }
         }
 
-        this.genericType = genericType;
+
+        this.genericInfo = GenericUtil.getGenericInfo(genericType);
+        this.genericType = GenericUtil.reviewType(genericType, this.genericInfo);
 
         if (genericType instanceof Class<?>) {
             type = (Class<?>) genericType;
@@ -75,6 +78,10 @@ public class TypeWrap {
 
     public Type getGenericType() {
         return genericType;
+    }
+
+    public Map<String, Type> getGenericInfo() {
+        return genericInfo;
     }
 
     public boolean isInterface(){

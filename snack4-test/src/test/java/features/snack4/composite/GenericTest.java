@@ -80,7 +80,8 @@ public class GenericTest {
 
         Result<House> result = JSON.parseObject(json, new TypeReference<Result<House>>() {
         });
-        //Result<House> result = JSONUtil.parseObj
+        assert result.getData().getContent().size() == 1;
+        assert result.getData().getContent().get(0).getClass() == House.class;
 
 
         Result<House> result1 = ONode.deserialize(json, new Result<House>() {

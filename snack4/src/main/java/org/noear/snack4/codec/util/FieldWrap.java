@@ -51,7 +51,7 @@ public class FieldWrap {
     public FieldWrap(TypeWrap owner, Field field) {
         this.owner = owner;
         this.field = field;
-        this.fieldTypeWrap = TypeWrap.from(field.getGenericType());
+        this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), owner.getGenericInfo()));
         this.attr = field.getAnnotation(ONodeAttr.class);
 
         field.setAccessible(true);
