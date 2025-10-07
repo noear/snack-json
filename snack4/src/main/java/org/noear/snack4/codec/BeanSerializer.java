@@ -52,7 +52,13 @@ public class BeanSerializer {
         }
 
         try {
-            return convertValueToNode(value, null, new IdentityHashMap<>(), opts);
+            ONode oNode = convertValueToNode(value, null, new IdentityHashMap<>(), opts);
+
+            if (oNode.isObject() && opts.hasFeature(Feature.Write_NotRootClassName)) {
+                oNode.remove(opts.getTypePropertyName());
+            }
+
+            return oNode;
         } catch (Throwable e) {
             if (e instanceof StackOverflowError) {
                 throw (StackOverflowError) e;
