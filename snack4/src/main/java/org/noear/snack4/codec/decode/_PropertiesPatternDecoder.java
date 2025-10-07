@@ -2,7 +2,8 @@ package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.DecodeContext;
-import org.noear.snack4.codec.ObjectDecoder;
+import org.noear.snack4.codec.ObjectPatternDecoder;
+import org.noear.snack4.codec.util.ClassUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,17 @@ import java.util.Properties;
  *
  * @author noear 2025/10/3 created
  */
-public class PropertiesDecoder implements ObjectDecoder<Properties> {
+public class _PropertiesPatternDecoder implements ObjectPatternDecoder<Properties> {
+    @Override
+    public boolean canDecode(Class<?> clazz) {
+        return Properties.class.isAssignableFrom(clazz);
+    }
+
     @Override
     public Properties decode(DecodeContext<Properties> ctx, ONode node) {
         Properties properties = ctx.getTarget();
-        if(properties == null) {
-            properties = new Properties();
+        if (properties == null) {
+            properties = (Properties) ClassUtil.newInstance(ctx.getType());
         }
 
         flattenNodeToProperties(node, properties, "");

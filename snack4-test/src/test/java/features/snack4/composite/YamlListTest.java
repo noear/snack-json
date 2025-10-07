@@ -2,6 +2,7 @@ package features.snack4.composite;
 
 import demo.snack4._models.SwaggerInfo;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.ONode;
 import org.noear.solon.Utils;
 import org.noear.solon.core.Props;
 
@@ -12,7 +13,7 @@ public class YamlListTest {
     @Test
     public void test() {
         Props props = new Props(Utils.loadProperties("app.yml"));
-        SwaggerInfo swaggerInfo = props.getBean("swagger", SwaggerInfo.class);
+        SwaggerInfo swaggerInfo = ONode.from(props.getProp("swagger")).to(SwaggerInfo.class);
 
         assert swaggerInfo.getResources() != null;
         assert swaggerInfo.getResources().size() == 2;

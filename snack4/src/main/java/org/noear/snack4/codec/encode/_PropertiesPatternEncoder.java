@@ -2,7 +2,7 @@ package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.util.Asserts;
 
 import java.util.*;
@@ -12,7 +12,12 @@ import java.util.*;
  * @author noear 2025/10/3 created
  *
  */
-public class PropertiesEncoder implements ObjectEncoder<Properties> {
+public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Properties> {
+    @Override
+    public boolean canEncode(Object value) {
+        return value instanceof Properties;
+    }
+
     @Override
     public ONode encode(EncodeContext ctx, Properties properties) {
         ONode rootNode = new ONode();
