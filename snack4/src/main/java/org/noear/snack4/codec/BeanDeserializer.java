@@ -82,10 +82,15 @@ public class BeanDeserializer {
         }
 
         if (node.isValue()) {
-            if (typeWrap.getType().isInterface()) {
+            if (typeWrap.getType().isInterface() || Modifier.isAbstract(typeWrap.getType().getModifiers())) {
                 if (node.isString() && node.getString().indexOf('.') > 0) {
                     Class<?> clz = opts.loadClass(node.getString());
-                    return ClassUtil.newInstance(clz);
+
+                    if (clz == null) {
+                        return null;
+                    } else {
+                        return ClassUtil.newInstance(clz);
+                    }
                 }
             }
 

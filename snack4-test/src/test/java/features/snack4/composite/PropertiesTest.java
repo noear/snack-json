@@ -64,8 +64,8 @@ public class PropertiesTest {
     @Test
     public void test2() {
         Properties props = new Properties();
-        props.setProperty("typeA", "demo.snack3._model5.TypeAImpl");
-        props.setProperty("typeB", "demo.snack3._model5.TypeBImpl");
+        props.setProperty("typeA", "demo.snack4._model5.TypeAImpl");
+        props.setProperty("typeB", "demo.snack4._model5.TypeBImpl");
 
         TypeC typeC = ONode.from(props).to(TypeC.class);
         assert typeC.typeA != null;
@@ -96,8 +96,8 @@ public class PropertiesTest {
         nameValues.put("server.urls[0]", "http://x.x.x");
         nameValues.put("server.urls[1]", "http://y.y.y");
         nameValues.put("user.orders[0].items[0].name", "手机");
-        nameValues.put("type[]", "a");
-        nameValues.put("type[]", "b");
+        nameValues.put("type[0]", "a");
+        nameValues.put("type[1]", "b");
 
         String json = ONode.from(nameValues).toJson();
         System.out.println(json);

@@ -14,10 +14,13 @@ import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.sql.Clob;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  *
@@ -165,6 +168,10 @@ public class CodecLib {
         addDecoder(String.class, new StringDecoder());
 
         addDecoder(Date.class, new DateDecoder());
+        addDecoder(Charset.class, new CharsetDecoder());
+
+        addDecoder(LongAdder.class, new LongAdderDecoder());
+        addDecoder(DoubleAdder.class, new DoubleAdderDecoder());
 
         addDecoder(LocalTime.class, new LocalTimeDecoder());
         addDecoder(LocalDateTime.class, new LocalDateTimeDecoder());
@@ -230,7 +237,10 @@ public class CodecLib {
         addEncoder(URL.class, new URLEncoder());
 
         addEncoder(String.class, new StringEncoder());
+        addEncoder(Charset.class, new CharsetEncoder());
 
+        addEncoder(LongAdder.class, new LongAdderEncoder());
+        addEncoder(DoubleAdder.class, new DoubleAdderEncoder());
 
         addEncoder(LocalDateTime.class, new LocalDateTimeEncoder());
         addEncoder(LocalDate.class, new LocalDateEncoder());

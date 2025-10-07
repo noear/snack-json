@@ -183,18 +183,19 @@ public class DateUtil {
         } else if (node.isNumber()) {
             return Instant.ofEpochMilli(node.getLong());
         } else if (node.isString()) {
-            if (ctx.getAttr() != null) {
-                if (Asserts.isNotEmpty(ctx.getAttr().format())) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                    if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
-                        formatter.withZone(ZoneId.of(ctx.getAttr().timezone()));
-                    }
-
-                    return Instant.from(formatter.parse(node.getString()));
-                }
-            }
-
             try {
+                if (ctx.getAttr() != null) {
+                    if (Asserts.isNotEmpty(ctx.getAttr().format())) {
+                        SimpleDateFormat formatter = new SimpleDateFormat(ctx.getAttr().format());
+                        if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
+                            formatter.setTimeZone(TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone())));
+                        }
+
+                        return Instant.ofEpochMilli(formatter.parse(node.getString()).getTime());
+                    }
+                }
+
+
                 return DateUtil.parse(node.getString()).toInstant();
             } catch (Exception ex) {
                 throw new TypeConvertException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node, ex);
