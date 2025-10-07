@@ -15,6 +15,10 @@ import java.time.ZoneId;
 public class OffsetTimeDecoder implements ObjectDecoder<OffsetTime> {
     @Override
     public OffsetTime decode(DecodeContext ctx, ONode node) {
+        if(node.isNullOrEmpty()){
+            return null;
+        }
+
         ZoneId zoneId = DateUtil.zoneIdOf(ctx);
 
         return DateUtil.decode(ctx, node).atZone(zoneId).toOffsetDateTime().toOffsetTime();

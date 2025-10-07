@@ -15,6 +15,10 @@ import java.time.ZoneId;
 public class LocalDateTimeDecoder implements ObjectDecoder<LocalDateTime> {
     @Override
     public LocalDateTime decode(DecodeContext ctx, ONode node) {
+        if(node.isNullOrEmpty()){
+            return null;
+        }
+
         ZoneId zoneId = DateUtil.zoneIdOf(ctx);
 
         return DateUtil.decode(ctx, node).atZone(zoneId).toLocalDateTime();

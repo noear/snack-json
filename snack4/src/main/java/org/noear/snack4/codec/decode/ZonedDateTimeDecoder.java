@@ -16,6 +16,10 @@ import java.time.ZonedDateTime;
 public class ZonedDateTimeDecoder implements ObjectDecoder<ZonedDateTime> {
     @Override
     public ZonedDateTime decode(DecodeContext ctx, ONode node) {
+        if(node.isNullOrEmpty()){
+            return null;
+        }
+
         ZoneId zoneId = DateUtil.zoneIdOf(ctx);
 
         return DateUtil.decode(ctx, node).atZone(zoneId);

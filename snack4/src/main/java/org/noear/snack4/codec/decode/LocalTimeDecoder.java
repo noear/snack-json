@@ -16,6 +16,10 @@ public class LocalTimeDecoder implements ObjectDecoder<LocalTime> {
 
     @Override
     public LocalTime decode(DecodeContext ctx, ONode node) {
+        if(node.isNullOrEmpty()){
+            return null;
+        }
+
         ZoneId zoneId = DateUtil.zoneIdOf(ctx);
 
         return DateUtil.decode(ctx, node).atZone(zoneId).toLocalTime();
