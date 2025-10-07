@@ -52,6 +52,17 @@ public class JsonPathCompatibleTest4 {
         compatible_do("1", json, "$[?(@.id == 1001)]");
     }
 
+    @Test
+    public void case5(){
+        String json = "{\"school\":[{\"name\":\"清华\",\"grade\":[{\"class\":\"二\",\"manSum\":12},{\"class\":\"一班\",\"manSum\":12}]},{\"name\":\"北大\",\"grade\":[{\"class\":\"二\",\"manSum\":12},{\"class\":\"一班\",\"manSum\":12}]}]}";
+
+        compatible_do("1", json, "$.school[?(@.name == '清华')]");
+        compatible_do("2", json, "$.school[?(@.name == '清华')].grade[1]");
+        compatible_do("3", json, "$.school[?(@.name == '清华')].grade[1][?(@.class == '一班')]");
+        compatible_do("4", json, "$.school[?(@.name == '清华')].grade[1][?(@.class == '一班')].manSum");
+        //compatible_do("5", json, "$.school[?(@.name == '清华')].grade[1][?(@.class == '一班')].manSum.sum()"); //jayway 会出错
+    }
+
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 

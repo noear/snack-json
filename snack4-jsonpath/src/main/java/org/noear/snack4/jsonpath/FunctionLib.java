@@ -73,6 +73,10 @@ public class FunctionLib {
     /// /////////////////
 
     static ONode sum(List<ONode> nodes) {
+        if(nodes.isEmpty()){
+            return new  ONode();
+        }
+
         DoubleStream stream = nodes.stream()
                 .flatMap(n -> flatten(n)) // 使用统一的展开方法
                 .filter(ONode::isNumber)
@@ -83,16 +87,28 @@ public class FunctionLib {
 
 
     static ONode min(List<ONode> nodes) {
+        if(nodes.isEmpty()){
+            return new  ONode();
+        }
+
         OptionalDouble min = collectNumbers(nodes).min();
         return min.isPresent() ? new ONode(min.getAsDouble()) : new ONode(null);
     }
 
     static ONode max(List<ONode> nodes) {
+        if(nodes.isEmpty()){
+            return new  ONode();
+        }
+
         OptionalDouble max = collectNumbers(nodes).max();
         return max.isPresent() ? new ONode(max.getAsDouble()) : new ONode(null);
     }
 
     static ONode avg(List<ONode> nodes) {
+        if(nodes.isEmpty()){
+            return new  ONode();
+        }
+
         DoubleSummaryStatistics stats = collectNumbers(nodes).summaryStatistics();
         return stats.getCount() > 0 ?
                 new ONode(stats.getAverage()) :
@@ -100,15 +116,19 @@ public class FunctionLib {
     }
 
     static ONode first(List<ONode> nodes) {
-        return nodes.isEmpty() ?
-                new ONode(null) :
-                nodes.get(0);
+        if (nodes.isEmpty()) {
+            return new ONode();
+        }
+
+        return nodes.get(0);
     }
 
     static ONode last(List<ONode> nodes) {
-        return nodes.isEmpty() ?
-                new ONode(null) :
-                nodes.get(nodes.size() - 1);
+        if (nodes.isEmpty()) {
+            return new ONode();
+        }
+
+        return nodes.get(nodes.size() - 1);
     }
 
     static ONode keys(List<ONode> nodes) {
