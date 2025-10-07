@@ -19,9 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.util.ClassWrap;
-import org.noear.snack4.codec.util.FieldWrap;
-import org.noear.snack4.codec.util.TypeWrap;
+import org.noear.snack4.codec.util.*;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -125,38 +123,52 @@ public class BeanSerializer {
 
             ClassWrap classWrap = ClassWrap.from(TypeWrap.from(bean.getClass()));
 
-            for (Map.Entry<String,FieldWrap> entry : classWrap.getFieldWraps().entrySet()) {
-                FieldWrap field = entry.getValue();
-                if(useOnlyGetter && field.hasGetter() == false) {
+            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
+                PropertyWrap propertyWrap = entry.getValue();
+                final Property property;
+
+                if (useOnlyGetter) {
+                    if (propertyWrap.getGetterWrap() != null) {
+                        property = propertyWrap.getGetterWrap();
+                    } else {
+                        continue;
+                    }
+                } else {
+                    if (useGetter && propertyWrap.getGetterWrap() != null) {
+                        property = propertyWrap.getGetterWrap();
+                    } else {
+                        property = propertyWrap.getFieldWrap();
+                    }
+                }
+
+                if(property.isSerialize() == false) {
                     continue;
                 }
 
-                if (field.isSerialize()) {
-                    Object fieldValue = field.getValue(bean, useGetter);
-                    if (fieldValue == null) {
-                        if (opts.hasFeature(Feature.Write_Nulls) == false
-                                && field.hasSerializeFeature(Feature.Write_Nulls) == false) {
-                            continue;
-                        }
+                Object propertyValue = property.getValue(bean);
+
+                if (propertyValue == null) {
+                    if (opts.hasFeature(Feature.Write_Nulls) == false
+                            && property.hasSerializeFeature(Feature.Write_Nulls) == false) {
+                        continue;
                     }
+                }
 
+                ONode propertyNode = null;
 
-                    ONode fieldNode = null;
+                if (property.isAsString()) {
+                    propertyNode = new ONode(String.valueOf(propertyValue));
+                } else {
+                    propertyNode = convertValueToNode(propertyValue, property.getAttr(), visited, opts);
+                }
 
-                    if (field.isAsString()) {
-                        fieldNode = new ONode(String.valueOf(fieldValue));
+                if (propertyNode != null) {
+                    if (property.isFlat()) {
+                        if (propertyNode.isObject()) {
+                            tmp.setAll(propertyNode.getObject());
+                        }
                     } else {
-                        fieldNode = convertValueToNode(fieldValue, field.getAttr(), visited, opts);
-                    }
-
-                    if (fieldNode != null) {
-                        if (field.isFlat()) {
-                            if (fieldNode.isObject()) {
-                                tmp.setAll(fieldNode.getObject());
-                            }
-                        } else {
-                            tmp.set(field.getName(), fieldNode);
-                        }
+                        tmp.set(property.getName(), propertyNode);
                     }
                 }
             }

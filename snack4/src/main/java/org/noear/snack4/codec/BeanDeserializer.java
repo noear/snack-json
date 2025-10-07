@@ -142,57 +142,44 @@ public class BeanDeserializer {
         ClassWrap classWrap = ClassWrap.from(typeWrap);
 
         if (useOnlySetter) {
-            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
-                PropertyWrap property = entry.getValue();
-
-                if(property.isReadOnly() == false) {
-                    setValueForMethod(node, property, target, visited, opts);
+            //只能用 setter
+            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+                PropertyWrap propertyWrap = classWrap.getPropertyWrap(entry.getKey());
+                if (propertyWrap != null) {
+                    if (propertyWrap.getSetterWrap() != null) {
+                        Property  property = propertyWrap.getSetterWrap();
+                        setValueForProperty(node, property, target, visited, opts);
+                    }
                 }
             }
         } else {
-            for (Map.Entry<String, FieldWrap> entry : classWrap.getFieldWraps().entrySet()) {
-                FieldWrap field = entry.getValue();
-                if (useOnlySetter && field.hasSetter() == false) {
-                    continue;
+            //允许用 setter
+            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
+                PropertyWrap propertyWrap = entry.getValue();
+                final Property property;
+                if (useSetter && propertyWrap.getSetterWrap() != null) {
+                    property = propertyWrap.getSetterWrap();
+                } else {
+                    property = propertyWrap.getFieldWrap();
                 }
 
-                setValueForField(node, field, target, useSetter, visited, opts);
+                setValueForProperty(node, property, target, visited, opts);
             }
         }
 
         return target;
     }
 
-    private static void setValueForField(ONode node, FieldWrap field, Object target, boolean useSetter, Map<Object, Object> visited, Options opts) throws Exception {
-        if (field.isDeserialize()) {
-            ONode fieldNode = (field.isFlat() ? node : node.get(field.getName()));
+    private static void setValueForProperty(ONode node, Property property, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+        if (property.isDeserialize()) {
+            ONode fieldNode = (property.isFlat() ? node : node.get(property.getName()));
 
             if (fieldNode != null && !fieldNode.isNull()) {
                 //深度填充：获取字段当前的值，作为递归调用的 target
-                Object existingFieldValue = field.getValue(target, false);
-                Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
+                Object existingFieldValue = property.getValue(target);
+                Object value = convertValue(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
 
-                if (field.isReadOnly() == false) {
-                    field.setValue(target, value, useSetter);
-                }
-            } else {
-                setPrimitiveDefault(field.getField(), target);
-            }
-        }
-    }
-
-    private static void setValueForMethod(ONode node, PropertyWrap property, Object target, Map<Object, Object> visited, Options opts) throws Exception{
-        if (property.isDeserialize()) {
-            ONode propertyNode = (property.isFlat() ? node : node.get(property.getName()));
-
-            if (propertyNode != null && !propertyNode.isNull()) {
-                //深度填充：获取字段当前的值，作为递归调用的 target
-                Object existingFieldValue = null;//property.getValue(target);
-                Object value = convertValue(propertyNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
-
-                property.setValue(target,value);
-            } else {
-                //setPrimitiveDefault(field.getField(), target);
+                property.setValue(target, value);
             }
         }
     }
@@ -298,18 +285,18 @@ public class BeanDeserializer {
     }
 
     // 基本类型默认值
-    private static void setPrimitiveDefault(Field field, Object bean) throws IllegalAccessException {
-        Class<?> type = field.getType();
+    private static void setPrimitiveDefault(Property property, Object bean) throws Exception {
+        Class<?> type = property.getTypeWrap().getType();
         if (!type.isPrimitive()) return;
 
-        if (type == int.class) field.setInt(bean, 0);
-        else if (type == long.class) field.setLong(bean, 0L);
-        else if (type == boolean.class) field.setBoolean(bean, false);
-        else if (type == double.class) field.setDouble(bean, 0.0);
-        else if (type == float.class) field.setFloat(bean, 0.0f);
-        else if (type == short.class) field.setShort(bean, (short) 0);
-        else if (type == byte.class) field.setByte(bean, (byte) 0);
-        else if (type == char.class) field.setChar(bean, '\u0000');
+        if (type == int.class) property.setValue(bean, 0);
+        else if (type == long.class) property.setValue(bean, 0L);
+        else if (type == boolean.class) property.setValue(bean, false);
+        else if (type == double.class) property.setValue(bean, 0.0);
+        else if (type == float.class) property.setValue(bean, 0.0f);
+        else if (type == short.class) property.setValue(bean, (short) 0);
+        else if (type == byte.class) property.setValue(bean, (byte) 0);
+        else if (type == char.class) property.setValue(bean, '\u0000');
     }
 
     private static Object[] getConstructorArguments(Constructor constructor, ONode node, Map<Object, Object> visited, Options opts) throws Exception {

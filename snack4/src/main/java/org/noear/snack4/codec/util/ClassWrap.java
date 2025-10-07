@@ -21,62 +21,67 @@ public class ClassWrap {
     }
 
     private final TypeWrap typeWrap;
-    private final Map<String, FieldWrap> fieldWraps;
-    private final Map<String, PropertyWrap> propertyWraps;
+    private final Map<String, PropertyWrap> propertyWraps = new LinkedHashMap<>();
 
     private ClassWrap(TypeWrap typeWrap) {
         this.typeWrap = typeWrap;
-
-        this.fieldWraps = getDeclaredFields(typeWrap);
-        this.propertyWraps = getDeclaredPropertys(typeWrap);
+        loadDeclaredFields();
+        loadDeclaredPropertys();
     }
 
     public TypeWrap getTypeWrap() {
         return typeWrap;
     }
 
-    public Map<String, FieldWrap> getFieldWraps() {
-        return fieldWraps;
-    }
-
     public Map<String, PropertyWrap> getPropertyWraps() {
         return propertyWraps;
     }
 
-    private static Map<String, FieldWrap> getDeclaredFields(TypeWrap typeWrap) {
-        Map<String, FieldWrap> fields = new LinkedHashMap<>();
+    public PropertyWrap getPropertyWrap(String propertyName) {
+        return propertyWraps.get(propertyName);
+    }
+
+    private void loadDeclaredFields() {
         Class<?> current = typeWrap.getType();
+
         while (current != null) {
             for (Field f : current.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())) {
                     continue;
                 }
 
-                fields.put(f.getName(), new FieldWrap(typeWrap, f));
+                FieldWrap fieldWrap = new FieldWrap(typeWrap, f);
+
+                propertyWraps.computeIfAbsent(fieldWrap.getName(), k -> new PropertyWrap(k))
+                        .setFieldWrap(fieldWrap);
             }
             current = current.getSuperclass();
         }
-        return fields;
     }
 
-    public static Map<String, PropertyWrap> getDeclaredPropertys(TypeWrap typeWrap) {
-        Map<String, PropertyWrap> methods = new LinkedHashMap<>();
+    private void loadDeclaredPropertys() {
         for (Method m : typeWrap.getType().getMethods()) {
+            if(m.getDeclaringClass() == Object.class){
+                continue;
+            }
+
             if (m.getName().length() > 3) {
                 if (m.getReturnType() == void.class && m.getParameterCount() == 1) {
                     //setter
                     if (m.getName().startsWith("set")) {
-                        methods.put(m.getName(), new PropertyWrap(typeWrap, m));
+                        PropertyMethodWrap setterWrap = new PropertyMethodWrap(typeWrap, m);
+                        propertyWraps.computeIfAbsent(setterWrap.getName(), k -> new PropertyWrap(k))
+                                .setSetterWrap(setterWrap);
                     }
                 } else if (m.getReturnType() != void.class && m.getParameterCount() == 0) {
                     //getter
                     if (m.getName().startsWith("get")) {
-                        methods.put(m.getName(), new PropertyWrap(typeWrap, m));
+                        PropertyMethodWrap getterWrap = new PropertyMethodWrap(typeWrap, m);
+                        propertyWraps.computeIfAbsent(getterWrap.getName(), k -> new PropertyWrap(k))
+                                .setGetterWrap(getterWrap);
                     }
                 }
             }
         }
-
-        return methods;
     }
 }
