@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * @author noear 2025/3/16 created
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface ONodeAttr {
     /**
      * 别名

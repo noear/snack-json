@@ -53,13 +53,15 @@ public class FieldWrap {
     private int serializeFeaturesValue;
 
     public FieldWrap(TypeWrap owner, Field field) {
+        if (field.isAccessible() == false) {
+            field.setAccessible(true);
+        }
+
         this.owner = owner;
         this.field = field;
         this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), getGenericInfo(owner, field)));
         this.attr = field.getAnnotation(ONodeAttr.class);
         this.readOnly = Modifier.isFinal(field.getModifiers());
-
-        field.setAccessible(true);
 
         if (attr != null) {
             name = attr.name();

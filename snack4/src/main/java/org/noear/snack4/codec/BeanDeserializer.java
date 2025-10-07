@@ -19,10 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.util.ClassWrap;
-import org.noear.snack4.codec.util.FieldWrap;
-import org.noear.snack4.codec.util.ClassUtil;
-import org.noear.snack4.codec.util.TypeWrap;
+import org.noear.snack4.codec.util.*;
 import org.noear.snack4.exception.ReflectionException;
 import org.noear.snack4.exception.SnackException;
 import org.noear.snack4.util.Asserts;
@@ -140,31 +137,64 @@ public class BeanDeserializer {
 
     private static Object convertToObject(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
-        boolean useSetter = opts.hasFeature(Feature.Write_UseSetter);
+        boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_UseSetter);
 
-        for (FieldWrap field : ClassWrap.from(typeWrap).getFieldWraps()) {
-            if (useOnlySetter && field.hasSetter() == false) {
-                continue;
-            }
+        ClassWrap classWrap = ClassWrap.from(typeWrap);
 
-            if (field.isDeserialize()) {
-                ONode fieldNode = (field.isFlat() ? node : node.get(field.getName()));
+        if (useOnlySetter) {
+            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
+                PropertyWrap property = entry.getValue();
 
-                if (fieldNode != null && !fieldNode.isNull()) {
-                    //深度填充：获取字段当前的值，作为递归调用的 target
-                    Object existingFieldValue = field.getValue(target, false);
-                    Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
-
-                    if (field.isReadOnly() == false) {
-                        field.setValue(target, value, useOnlySetter || useSetter);
-                    }
-                } else {
-                    setPrimitiveDefault(field.getField(), target);
+                if(property.isReadOnly() == false) {
+                    setValueForMethod(node, property, target, visited, opts);
                 }
+            }
+        } else {
+            for (Map.Entry<String, FieldWrap> entry : classWrap.getFieldWraps().entrySet()) {
+                FieldWrap field = entry.getValue();
+                if (useOnlySetter && field.hasSetter() == false) {
+                    continue;
+                }
+
+                setValueForField(node, field, target, useSetter, visited, opts);
             }
         }
 
         return target;
+    }
+
+    private static void setValueForField(ONode node, FieldWrap field, Object target, boolean useSetter, Map<Object, Object> visited, Options opts) throws Exception {
+        if (field.isDeserialize()) {
+            ONode fieldNode = (field.isFlat() ? node : node.get(field.getName()));
+
+            if (fieldNode != null && !fieldNode.isNull()) {
+                //深度填充：获取字段当前的值，作为递归调用的 target
+                Object existingFieldValue = field.getValue(target, false);
+                Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
+
+                if (field.isReadOnly() == false) {
+                    field.setValue(target, value, useSetter);
+                }
+            } else {
+                setPrimitiveDefault(field.getField(), target);
+            }
+        }
+    }
+
+    private static void setValueForMethod(ONode node, PropertyWrap property, Object target, Map<Object, Object> visited, Options opts) throws Exception{
+        if (property.isDeserialize()) {
+            ONode propertyNode = (property.isFlat() ? node : node.get(property.getName()));
+
+            if (propertyNode != null && !propertyNode.isNull()) {
+                //深度填充：获取字段当前的值，作为递归调用的 target
+                Object existingFieldValue = null;//property.getValue(target);
+                Object value = convertValue(propertyNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
+
+                property.setValue(target,value);
+            } else {
+                //setPrimitiveDefault(field.getField(), target);
+            }
+        }
     }
 
 

@@ -121,15 +121,18 @@ public class BeanSerializer {
             }
 
             boolean useOnlyGetter = opts.hasFeature(Feature.Read_UseOnlyGetter);
-            boolean useGetter = opts.hasFeature(Feature.Read_UseGetter);
+            boolean useGetter = useOnlyGetter || opts.hasFeature(Feature.Read_UseGetter);
 
-            for (FieldWrap field : ClassWrap.from(TypeWrap.from(bean.getClass())).getFieldWraps()) {
+            ClassWrap classWrap = ClassWrap.from(TypeWrap.from(bean.getClass()));
+
+            for (Map.Entry<String,FieldWrap> entry : classWrap.getFieldWraps().entrySet()) {
+                FieldWrap field = entry.getValue();
                 if(useOnlyGetter && field.hasGetter() == false) {
                     continue;
                 }
 
                 if (field.isSerialize()) {
-                    Object fieldValue = field.getValue(bean, useOnlyGetter || useGetter);
+                    Object fieldValue = field.getValue(bean, useGetter);
                     if (fieldValue == null) {
                         if (opts.hasFeature(Feature.Write_Nulls) == false
                                 && field.hasSerializeFeature(Feature.Write_Nulls) == false) {

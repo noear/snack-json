@@ -1,9 +1,9 @@
 package org.noear.snack4.codec.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,36 +21,62 @@ public class ClassWrap {
     }
 
     private final TypeWrap typeWrap;
-    private final Collection<FieldWrap> fieldWraps;
+    private final Map<String, FieldWrap> fieldWraps;
+    private final Map<String, PropertyWrap> propertyWraps;
 
     private ClassWrap(TypeWrap typeWrap) {
         this.typeWrap = typeWrap;
 
         this.fieldWraps = getDeclaredFields(typeWrap);
+        this.propertyWraps = getDeclaredPropertys(typeWrap);
     }
 
     public TypeWrap getTypeWrap() {
         return typeWrap;
     }
 
-    public Collection<FieldWrap> getFieldWraps() {
+    public Map<String, FieldWrap> getFieldWraps() {
         return fieldWraps;
     }
 
-    private static Collection<FieldWrap> getDeclaredFields(TypeWrap typeWrap) {
+    public Map<String, PropertyWrap> getPropertyWraps() {
+        return propertyWraps;
+    }
+
+    private static Map<String, FieldWrap> getDeclaredFields(TypeWrap typeWrap) {
         Map<String, FieldWrap> fields = new LinkedHashMap<>();
         Class<?> current = typeWrap.getType();
         while (current != null) {
-            for (Field field : current.getDeclaredFields()) {
-                if (Modifier.isStatic(field.getModifiers())) {
+            for (Field f : current.getDeclaredFields()) {
+                if (Modifier.isStatic(f.getModifiers())) {
                     continue;
                 }
 
-                field.setAccessible(true);
-                fields.put(field.getName(), new FieldWrap(typeWrap, field));
+                fields.put(f.getName(), new FieldWrap(typeWrap, f));
             }
             current = current.getSuperclass();
         }
-        return fields.values();
+        return fields;
+    }
+
+    public static Map<String, PropertyWrap> getDeclaredPropertys(TypeWrap typeWrap) {
+        Map<String, PropertyWrap> methods = new LinkedHashMap<>();
+        for (Method m : typeWrap.getType().getMethods()) {
+            if (m.getName().length() > 3) {
+                if (m.getReturnType() == void.class && m.getParameterCount() == 1) {
+                    //setter
+                    if (m.getName().startsWith("set")) {
+                        methods.put(m.getName(), new PropertyWrap(typeWrap, m));
+                    }
+                } else if (m.getReturnType() != void.class && m.getParameterCount() == 0) {
+                    //getter
+                    if (m.getName().startsWith("get")) {
+                        methods.put(m.getName(), new PropertyWrap(typeWrap, m));
+                    }
+                }
+            }
+        }
+
+        return methods;
     }
 }
