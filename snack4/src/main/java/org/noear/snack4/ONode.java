@@ -379,7 +379,9 @@ public final class ONode {
             ONode last = null;
             for (int i = self.size(); i <= index; i++) {
                 last = new ONode();
-                thenApply.accept(last);
+                if(thenApply != null) {
+                    thenApply.accept(last);
+                }
                 self.add(last);
             }
 

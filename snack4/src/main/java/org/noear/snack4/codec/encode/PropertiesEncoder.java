@@ -3,10 +3,9 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.util.Asserts;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Properties;
+import java.util.*;
 
 /**
  *
@@ -16,45 +15,93 @@ import java.util.Properties;
 public class PropertiesEncoder implements ObjectEncoder<Properties> {
     @Override
     public ONode encode(EncodeContext ctx, Properties properties) {
-        ONode rootNode = new ONode(new LinkedHashMap<>());
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            setNestedValue(rootNode, key, value);
+        ONode rootNode = new ONode();
+
+        //对key排序，确保数组有序
+        List<String> keyVector = new ArrayList<>();
+        properties.keySet().forEach(k -> {
+            if (k instanceof String) {
+                keyVector.add((String) k);
+            }
+        });
+        Collections.sort(keyVector);
+
+        //确定类型
+        if (keyVector.get(0).startsWith("[")) {
+            rootNode.asArray();
+        } else {
+            rootNode.asObject();
         }
+
+        for (String key : keyVector) {
+            String val = properties.getProperty(key);
+
+            setNestedValue(rootNode, key, val);
+        }
+
+
         return rootNode;
     }
 
     // 设置嵌套值
     private static void setNestedValue(ONode node, String key, String value) {
-        String[] parts = key.split("\\.");
-        ONode current = node;
-        for (int i = 0; i < parts.length; i++) {
-            String part = parts[i];
-            if (i == parts.length - 1) {
-                current.set(part, new ONode(value));
-            } else {
-                if (part.endsWith("]")) {
-                    // 处理数组
-                    String arrayName = part.substring(0, part.indexOf('['));
-                    int index = Integer.parseInt(part.substring(part.indexOf('[') + 1, part.indexOf(']')));
-                    ONode arrayNode = current.get(arrayName);
-                    if (arrayNode == null || arrayNode.isNull()) {
-                        arrayNode = new ONode(new ArrayList<>());
-                        current.set(arrayName, arrayNode);
+        /**
+         *  ("title", "test");
+         *  ("debug", "true");
+         *  ("user.id", "1");
+         *  ("user.name", "noear");
+         *  ("server.urls[0]", "http://x.x.x");
+         *  ("server.urls[1]", "http://y.y.y");
+         *  ("user.orders[0].items[0].name", "手机");
+         *  ("type[]", "a");
+         *  ("type[]", "b");
+         * */
+        String[] keySegments = key.split("\\.");
+        ONode n1 = node;
+
+        for (int i = 0; i < keySegments.length; i++) {
+            String p1 = keySegments[i];
+
+            if (p1.endsWith("]")) {
+                String tmp = p1.substring(p1.lastIndexOf('[') + 1, p1.length() - 1);//?=$[?]
+                p1 = p1.substring(0, p1.lastIndexOf('[')); //?=?[$]
+
+                if (tmp.length() > 0) {
+                    if (Asserts.isInteger(tmp)) {
+                        //[1]
+                        int idx = Integer.parseInt(tmp);
+
+                        if (p1.length() > 0) {
+                            n1 = n1.getOrNew(p1).getOrNew(idx);
+                        } else {
+                            n1 = n1.getOrNew(idx);
+                        }
+                    } else {
+                        if (tmp.length() > 2 && (tmp.indexOf('\'') == 0 || tmp.indexOf('"') == 0)) {
+                            tmp = tmp.substring(1, tmp.length() - 1);
+                        }
+
+                        //[a]
+                        if (p1.length() > 0) {
+                            n1 = n1.getOrNew(p1).getOrNew(tmp);
+                        } else {
+                            n1 = n1.getOrNew(tmp);
+                        }
                     }
-                    while (arrayNode.getArray().size() <= index) {
-                        arrayNode.add(new ONode(new LinkedHashMap<>()));
-                    }
-                    current = arrayNode.get(index);
                 } else {
-                    ONode nextNode = current.get(part);
-                    if (nextNode == null || nextNode.isNull()) {
-                        nextNode = new ONode(new LinkedHashMap<>());
-                        current.set(part, nextNode);
+                    //[]
+                    if (p1.length() > 0) {
+                        n1 = n1.getOrNew(p1).addNew();
+                    } else {
+                        n1 = n1.addNew();
                     }
-                    current = nextNode;
                 }
+
+            } else {
+                n1 = n1.getOrNew(p1);
             }
         }
+
+        n1.setValue(value);
     }
 }
