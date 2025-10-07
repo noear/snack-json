@@ -19,8 +19,9 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.util.ClassWrap;
 import org.noear.snack4.codec.util.FieldWrap;
-import org.noear.snack4.codec.util.ReflectionUtil;
+import org.noear.snack4.codec.util.TypeWrap;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -113,9 +114,16 @@ public class BeanSerializer {
                 tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
             }
 
-            for (FieldWrap field : ReflectionUtil.getDeclaredFields(bean.getClass())) {
+            boolean useOnlyGetter = opts.hasFeature(Feature.Read_UseOnlyGetter);
+            boolean useGetter = opts.hasFeature(Feature.Read_UseGetter);
+
+            for (FieldWrap field : ClassWrap.from(TypeWrap.from(bean.getClass())).getFieldWraps()) {
+                if(useOnlyGetter && field.hasGetter() == false) {
+                    continue;
+                }
+
                 if (field.isSerialize()) {
-                    Object fieldValue = field.getField().get(bean);
+                    Object fieldValue = field.getValue(bean, useOnlyGetter || useGetter);
                     if (fieldValue == null) {
                         if (opts.hasFeature(Feature.Write_Nulls) == false
                                 && field.hasSerializeFeature(Feature.Write_Nulls) == false) {

@@ -107,8 +107,7 @@ public class SerializationsTest2 {
 
         System.out.println(json0);
         List<UserModel> group0 = ONode.load(json0).get("users")
-                .to((new TypeRef<List<UserModel>>() {
-                }).getClass());
+                .to((new TypeRef<List<UserModel>>() {}));
 
         assert group0.size() == 5;
     }
@@ -187,7 +186,7 @@ public class SerializationsTest2 {
     public void test8() {
         String json = "{age:11,name:'test'}";
 
-        SModel sModel = ONode.load(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).to(SModel.class);
+        SModel sModel = ONode.load(json).to(SModel.class, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter);
         System.out.println(sModel);
 
         assert sModel.name == null;
@@ -218,13 +217,11 @@ public class SerializationsTest2 {
         sets.add("2");
         sets.add("3");
 
-        Options options = Options.of(Feature.Write_ArrayClassName);
-
-        String json = ONode.from(sets, options).toJson();
+        String json = ONode.from(sets).toJson();
         System.out.println(json);
 
-        Set<String> sets2 = ONode.load(json, options).to();
-        System.out.println(ONode.from(sets2, options).toJson());
+        Set<String> sets2 = ONode.load(json).to(Set.class);
+        System.out.println(ONode.from(sets2).toJson());
 
         assert sets2.size() == sets.size();
     }

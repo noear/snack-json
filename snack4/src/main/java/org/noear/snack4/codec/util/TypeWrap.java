@@ -1,7 +1,5 @@
 package org.noear.snack4.codec.util;
 
-import org.noear.snack4.util.Asserts;
-
 import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,46 +16,46 @@ public class TypeWrap {
     }
 
 
-    private Type type;
-    private Class<?> clazz = Object.class;
+    private Class<?> type = Object.class;
+    private Type genericType;
     private Constructor<?> constructor;
 
-    public TypeWrap(Type type) {
-        if (type instanceof Class<?>) {
-            if (type instanceof Class) {
-                Class<?> clazz = (Class<?>) type;
+    public TypeWrap(Type genericType) {
+        if (genericType instanceof Class<?>) {
+            if (genericType instanceof Class) {
+                Class<?> clazz = (Class<?>) genericType;
                 if (clazz.isAnonymousClass()) {
-                    type = clazz.getGenericSuperclass();
+                    genericType = clazz.getGenericSuperclass();
                 }
             }
         }
 
-        this.type = type;
+        this.genericType = genericType;
 
-        if (type instanceof Class<?>) {
-            clazz = (Class<?>) type;
+        if (genericType instanceof Class<?>) {
+            type = (Class<?>) genericType;
         } else if (isParameterizedType()) {
             Type tmp = getParameterizedType().getRawType();
 
             if (tmp instanceof Class) {
-                clazz = (Class<?>) tmp;
+                type = (Class<?>) tmp;
             }
         } else if (isGenericArrayType()) {
             Type tmp = getGenericArrayType().getGenericComponentType();
 
             if (tmp instanceof Class) {
-                clazz = (Class<?>) tmp;
+                type = (Class<?>) tmp;
             }
         } else if (isTypeVariable()) {
             Type tmp = getTypeVariable().getBounds()[0];
 
             if (tmp instanceof Class) {
-                clazz = (Class<?>) tmp;
+                type = (Class<?>) tmp;
             }
         }
 
-        if (clazz != Object.class) {
-            for (Constructor c1 : clazz.getDeclaredConstructors()) {
+        if (type != Object.class) {
+            for (Constructor c1 : type.getDeclaredConstructors()) {
                 if (constructor == null) {
                     constructor = c1;
                 } else if (constructor.getParameterCount() > c1.getParameterCount()) {
@@ -71,32 +69,32 @@ public class TypeWrap {
        return constructor;
     }
 
-    public Class<?> getClazz() {
-        return clazz;
-    }
-
-    public Type getType() {
+    public Class<?> getType() {
         return type;
     }
 
+    public Type getGenericType() {
+        return genericType;
+    }
+
     public boolean isInterface(){
-        return clazz.isInterface();
+        return type.isInterface();
     }
 
     public boolean isArray(){
-        return clazz.isArray();
+        return type.isArray();
     }
 
     public boolean isEnum(){
-        return clazz.isEnum();
+        return type.isEnum();
     }
 
     public boolean isParameterizedType() {
-        return type instanceof ParameterizedType;
+        return genericType instanceof ParameterizedType;
     }
 
     public ParameterizedType getParameterizedType() {
-        return (ParameterizedType) type;
+        return (ParameterizedType) genericType;
     }
 
     public Type[] getActualTypeArguments() {
@@ -104,23 +102,23 @@ public class TypeWrap {
     }
 
     public boolean isGenericArrayType() {
-        return type instanceof GenericArrayType;
+        return genericType instanceof GenericArrayType;
     }
 
     public GenericArrayType getGenericArrayType() {
-        return (GenericArrayType) type;
+        return (GenericArrayType) genericType;
     }
 
     public boolean isTypeVariable() {
-        return type instanceof TypeVariable;
+        return genericType instanceof TypeVariable;
     }
 
     public TypeVariable getTypeVariable() {
-        return (TypeVariable) type;
+        return (TypeVariable) genericType;
     }
 
     @Override
     public String toString() {
-        return type.toString();
+        return genericType.toString();
     }
 }
