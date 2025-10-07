@@ -36,6 +36,12 @@
             <artifactId>solon-lib</artifactId>
             <version>3.6.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.noear</groupId>
+                    <artifactId>solon-config-plus</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
