@@ -147,7 +147,7 @@ public class BeanDeserializer {
                 PropertyWrap propertyWrap = classWrap.getPropertyWrap(entry.getKey());
                 if (propertyWrap != null) {
                     if (propertyWrap.getSetterWrap() != null) {
-                        Property  property = propertyWrap.getSetterWrap();
+                        Property property = propertyWrap.getSetterWrap();
                         setValueForProperty(node, property, target, visited, opts);
                     }
                 }
@@ -282,21 +282,6 @@ public class BeanDeserializer {
         }
 
         throw new IllegalArgumentException("Unsupported map key type: " + keyType.getType());
-    }
-
-    // 基本类型默认值
-    private static void setPrimitiveDefault(Property property, Object bean) throws Exception {
-        Class<?> type = property.getTypeWrap().getType();
-        if (!type.isPrimitive()) return;
-
-        if (type == int.class) property.setValue(bean, 0);
-        else if (type == long.class) property.setValue(bean, 0L);
-        else if (type == boolean.class) property.setValue(bean, false);
-        else if (type == double.class) property.setValue(bean, 0.0);
-        else if (type == float.class) property.setValue(bean, 0.0f);
-        else if (type == short.class) property.setValue(bean, (short) 0);
-        else if (type == byte.class) property.setValue(bean, (byte) 0);
-        else if (type == char.class) property.setValue(bean, '\u0000');
     }
 
     private static Object[] getConstructorArguments(Constructor constructor, ONode node, Map<Object, Object> visited, Options opts) throws Exception {
