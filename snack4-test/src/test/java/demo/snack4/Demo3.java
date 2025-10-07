@@ -119,7 +119,7 @@ public class Demo3 {
     public void demo9() {
         Date date = new Date();
 
-        Options opts = Options.of(Feature.Write_UseDateFormat).dateFormatText("yyyy-MM-dd");
+        Options opts = Options.of(Feature.Write_UseDateFormat).dateFormat("yyyy-MM-dd");
 
         System.out.println(ONode.from(date).toJson(opts)); //2019-12-06
     }

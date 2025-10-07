@@ -23,7 +23,6 @@ import org.noear.snack4.exception.SnackException;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -39,7 +38,7 @@ public final class Options {
     //默认地区
     public static final Locale DEF_LOCALE = Locale.getDefault();
     //默认时间格式器
-    public static final DateTimeFormatter DEF_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     //默认特性
     public static final int DEF_FEATURES = Feature.DEFAULT();
 
@@ -52,7 +51,7 @@ public final class Options {
     // 特性开关（使用位掩码存储）
     private int featuresValue = DEF_FEATURES;
     // 时间格式
-    private DateTimeFormatter dateFormat = DEF_DATETIME_FORMAT;
+    private String dateFormat = DEF_DATETIME_FORMAT;
     // 读取最大深度
     private int readMaxDepth = 512;
     // 书写缩进
@@ -96,7 +95,7 @@ public final class Options {
     /**
      * 获取日期格式
      */
-    public DateTimeFormatter getDateFormat() {
+    public String getDateFormat() {
         return dateFormat;
     }
 
@@ -191,24 +190,12 @@ public final class Options {
     /**
      * 设置日期格式
      */
-    public Options dateFormat(DateTimeFormatter format) {
+    public Options dateFormat(String format) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
         this.dateFormat = format;
-        return this;
-    }
-
-    /**
-     * 设置日期格式
-     */
-    public Options dateFormatText(String format) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.dateFormat = DateTimeFormatter.ofPattern(format);
         return this;
     }
 

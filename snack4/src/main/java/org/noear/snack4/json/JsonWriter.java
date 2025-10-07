@@ -18,6 +18,7 @@ package org.noear.snack4.json;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
+import org.noear.snack4.codec.util.DateUtil;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -55,7 +56,7 @@ public class JsonWriter {
                 writeString(node.getString());
                 break;
             case Number:
-                if (opts.hasFeature(Feature.Write_UseBigNumberMode)) {
+                if (opts.hasFeature(Feature.Write_UseBigNumberMode) || opts.hasFeature(Feature.Write_UseNumberString)) {
                     writeString(String.valueOf(node.getValue()));
                 } else {
                     writeNumber(node.getNumber());
@@ -63,7 +64,7 @@ public class JsonWriter {
                 break;
             case Date:
                 if (opts.hasFeature(Feature.Write_UseDateFormat)) {
-                    writeString(opts.getDateFormat().format(node.getDate().toInstant()));
+                    writeString(DateUtil.format(node.getDate(), opts.getDateFormat()));
                 } else {
                     writeNumber(node.getDate().getTime());
                 }

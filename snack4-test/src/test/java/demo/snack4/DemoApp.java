@@ -19,7 +19,7 @@ public class DemoApp {
                     return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
                 })
                 .addFeature(Feature.Write_PrettyFormat)
-                .dateFormatText("yyyy-MM");
+                .dateFormat("yyyy-MM");
 
         String json = ONode.load(null, options).toJson();
     }

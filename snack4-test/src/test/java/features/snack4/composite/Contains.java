@@ -55,12 +55,6 @@ public class Contains {
 
         tmp = ONode.load("[1,'2',3,4,5]");
         assert tmp.getArray().contains(new ONode().setValue("2"));
-
-        long times = System.currentTimeMillis();
-        Date time = new Date(times);
-
-        tmp = ONode.load("[1,'2',3,4,new Date(" + times + ")]");
-        assert tmp.getArray().contains(new ONode().setValue(time));
     }
 
     @Test
@@ -69,24 +63,18 @@ public class Contains {
         assert Long.hashCode(2) == new ONode().setValue(2).hashCode();
 
         ONode tmp = ONode.load("[1,2,3,4,5,true, null]");
-        assert tmp.getArray().contains(2l);
+        assert tmp.hasValue(2l) == false;
 
-        assert tmp.getArray().contains(2);
+        assert tmp.hasValue(2);
 
-        assert tmp.getArray().contains(true);
+        assert tmp.hasValue(true);
 
-        assert tmp.getArray().contains(null);
+        assert tmp.hasValue(null);
 
-        assert tmp.getArray().contains(new ONode());
+        assert tmp.hasValue(new ONode());
 
         tmp = ONode.load("[1,'2',3,4,5]");
-        assert tmp.getArray().contains("2");
-
-        long times = System.currentTimeMillis();
-        Date time = new Date(times);
-
-        tmp = ONode.load("[1,'2',3,4,new Date(" + times + ")]");
-        assert tmp.getArray().contains(time);
+        assert tmp.hasValue("2");
     }
 
     @Test

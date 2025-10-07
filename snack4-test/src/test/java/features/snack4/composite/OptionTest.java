@@ -20,7 +20,7 @@ public class OptionTest {
         options.addFeature(Feature.Write_UseDateFormat);
         options.addFeature(Feature.Write_Nulls);
         options.addFeature(Feature.Write_EnumUsingName);
-        options.dateFormatText("yyyy-MM-dd");
+        options.dateFormat("yyyy-MM-dd");
         options.timeZone(TimeZone.getTimeZone("GMT+8"));
         options.addDecoder(BigDecimal.class, (ctx, node) -> null);
         options.addEncoder(BigDecimal.class, (ctx, value) -> new ONode());
@@ -30,7 +30,7 @@ public class OptionTest {
         oNode.create("$.num").setValue(10000L);
         oNode.create("$.date").setValue(DateUtil.parse("2025-06-25"));
 
-        String json = oNode.toJson();
+        String json = oNode.toJson(options);
         System.out.println(json);
 
         assert "{\"num\":\"10000\",\"date\":\"2025-06-25\"}".equals(json);
