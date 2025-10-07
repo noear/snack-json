@@ -21,6 +21,7 @@ public class PropertyMethodWrap implements Property{
     private final ONodeAttr attr;
 
     private final String name;
+    private boolean readOnly;
     private boolean asString;
     private boolean flat;
 
@@ -41,6 +42,7 @@ public class PropertyMethodWrap implements Property{
 
         if(property.getReturnType() != void.class) {
             //getter
+            this.readOnly = true;
             this.propertyTypeWrap = TypeWrap.from(GenericUtil.reviewType(property.getGenericReturnType(), getGenericInfo(owner, property)));
         } else {
             //setter
@@ -83,11 +85,17 @@ public class PropertyMethodWrap implements Property{
     }
 
     public Object getValue(Object target) throws Exception {
-        return property.invoke(target);
+        if(readOnly) {
+            return property.invoke(target);
+        } else{
+            return null;
+        }
     }
 
     public void setValue(Object target, Object value) throws Exception {
-        property.invoke(target, value);
+        if (readOnly == false) {
+            property.invoke(target, value);
+        }
     }
 
 
