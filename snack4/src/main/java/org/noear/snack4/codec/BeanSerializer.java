@@ -141,7 +141,7 @@ public class BeanSerializer {
                     }
                 }
 
-                if(property.isSerialize() == false) {
+                if(property == null || property.isSerialize() == false) {
                     continue;
                 }
 

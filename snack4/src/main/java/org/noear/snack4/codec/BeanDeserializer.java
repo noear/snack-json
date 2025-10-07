@@ -163,6 +163,10 @@ public class BeanDeserializer {
                     property = propertyWrap.getFieldWrap();
                 }
 
+                if(property == null || property.isDeserialize() == false) {
+                    continue;
+                }
+
                 setValueForProperty(node, property, target, visited, opts);
             }
         }
@@ -171,16 +175,14 @@ public class BeanDeserializer {
     }
 
     private static void setValueForProperty(ONode node, Property property, Object target, Map<Object, Object> visited, Options opts) throws Exception {
-        if (property.isDeserialize()) {
-            ONode fieldNode = (property.isFlat() ? node : node.get(property.getName()));
+        ONode fieldNode = (property.isFlat() ? node : node.get(property.getName()));
 
-            if (fieldNode != null && !fieldNode.isNull()) {
-                //深度填充：获取字段当前的值，作为递归调用的 target
-                Object existingFieldValue = property.getValue(target);
-                Object value = convertValue(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
+        if (fieldNode != null && !fieldNode.isNull()) {
+            //深度填充：获取字段当前的值，作为递归调用的 target
+            Object existingFieldValue = property.getValue(target);
+            Object value = convertValue(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
 
-                property.setValue(target, value);
-            }
+            property.setValue(target, value);
         }
     }
 
