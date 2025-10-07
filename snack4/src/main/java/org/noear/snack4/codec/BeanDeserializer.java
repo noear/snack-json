@@ -50,7 +50,7 @@ public class BeanDeserializer {
             opts = Options.def();
         }
 
-        TypeWrap typeWrap = new TypeWrap(type);
+        TypeWrap typeWrap = TypeWrap.from(type);
 
         try {
             return (T) convertValue(node, typeWrap, target, null, new IdentityHashMap<>(), opts);
@@ -100,7 +100,11 @@ public class BeanDeserializer {
                     return ReflectionUtil.newInstance(clz);
                 }
             }
-            return node.getValue();
+
+            if(((Collection.class.isAssignableFrom(typeWrap.getClazz()) || typeWrap.getClazz().isArray()) && node.isString()) == false) {
+                return node.getValue();
+            }
+
         }
 
         // 处理嵌套对象
@@ -173,6 +177,17 @@ public class BeanDeserializer {
                         coll.add(item);
                     }
                 }
+            } else if(node.isString()){
+                // string 支持自动转数组
+                String[] strArray = node.toString().split(",");
+                Collection coll = (Collection) bean;
+
+                for (String str : strArray) {
+                    Object item = convertValue(new ONode(str), TypeWrap.from(elementType), null, null, visited, opts);
+                    if (item != null) {
+                        coll.add(item);
+                    }
+                }
             } else {
                 throw new IllegalArgumentException("The type of node " + node.getType() + " cannot be converted to collection.");
             }
@@ -185,7 +200,10 @@ public class BeanDeserializer {
                         //深度填充：获取字段当前的值，作为递归调用的 target
                         Object existingFieldValue = field.getField().get(bean);
                         Object value = convertValue(fieldNode, field.getTypeWrap(), existingFieldValue, field.getAttr(), visited, opts);
-                        field.getField().set(bean, value);
+
+                        if (field.isFinal() == false) {
+                            field.getField().set(bean, value);
+                        }
                     } else {
                         setPrimitiveDefault(field.getField(), bean);
                     }

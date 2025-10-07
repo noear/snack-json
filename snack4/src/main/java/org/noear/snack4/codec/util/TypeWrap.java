@@ -118,4 +118,9 @@ public class TypeWrap {
     public TypeVariable getTypeVariable() {
         return (TypeVariable) type;
     }
+
+    @Override
+    public String toString() {
+        return type.toString();
+    }
 }

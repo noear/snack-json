@@ -140,7 +140,11 @@ public class SerializationsTest2 {
 
     @Test
     public void test4() {
-        Properties properties = Solon.cfg().getProp("test1");
+        Properties properties = new Properties();
+        properties.put("label","1");
+        properties.put("users.a.name", "a");
+        properties.put("users.user1.name", "user1");
+
         PersonColl tmp = ONode.from(properties).to(PersonColl.class);
 
         assert tmp != null;

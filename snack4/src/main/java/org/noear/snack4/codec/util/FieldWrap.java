@@ -93,6 +93,10 @@ public class FieldWrap {
         }
     }
 
+    public boolean isFinal() {
+        return Modifier.isFinal(field.getModifiers());
+    }
+
     public boolean isAsString() {
         return asString;
     }
@@ -119,5 +123,10 @@ public class FieldWrap {
 
     public ObjectDecoder getDeserializeDecoder() {
         return deserializeDecoder;
+    }
+
+    @Override
+    public String toString() {
+        return field.toString();
     }
 }

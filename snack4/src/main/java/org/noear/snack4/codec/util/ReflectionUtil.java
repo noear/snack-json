@@ -19,6 +19,7 @@ import org.noear.snack4.exception.ReflectionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -34,6 +35,10 @@ public class ReflectionUtil {
             Class<?> current = clazz;
             while (current != null) {
                 for (Field field : current.getDeclaredFields()) {
+                    if(Modifier.isStatic(field.getModifiers())) {
+                        continue;
+                    }
+
                     field.setAccessible(true);
                     fields.put(field.getName(), new FieldWrap(field));
                 }
