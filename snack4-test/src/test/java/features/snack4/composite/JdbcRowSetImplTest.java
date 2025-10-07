@@ -1,6 +1,8 @@
 package features.snack4.composite;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.exception.SnackException;
 import org.noear.snack4.ONode;
 
 /**
@@ -13,9 +15,14 @@ public class JdbcRowSetImplTest {
         //
         //不会根据 dataSourceName、autoCommit 生成 Connection 对象，并注入构造函数
         //
-        Object tmp = ONode.load(json);
 
-        assert tmp != null;
-        assert tmp.getClass().getName().equals("com.sun.rowset.JdbcRowSetImpl");
+        Assertions.assertThrows(SnackException.class, () -> {
+            ONode.deserialize(json);
+        });
+
+//        Object tmp = ONode.deserialize(json);
+//
+//        assert tmp != null;
+//        assert tmp.getClass().getName().equals("com.sun.rowset.JdbcRowSetImpl");
     }
 }
