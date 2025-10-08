@@ -46,7 +46,7 @@ public class BeanSerializer {
         }
 
         if (opts == null) {
-            opts = Options.def();
+            opts = Options.DEF_OPTIONS;
         }
 
         try {

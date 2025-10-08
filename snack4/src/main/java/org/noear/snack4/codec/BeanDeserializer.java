@@ -44,7 +44,7 @@ public class BeanDeserializer {
         }
 
         if (opts == null) {
-            opts = Options.def();
+            opts = Options.DEF_OPTIONS;
         }
 
         TypeWrap typeWrap = TypeWrap.from(type);

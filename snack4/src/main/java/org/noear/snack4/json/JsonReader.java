@@ -50,12 +50,12 @@ public class JsonReader {
     private final ParserState state;
 
     public JsonReader(Reader reader) {
-        this(reader, Options.def());
+        this(reader, null);
     }
 
     public JsonReader(Reader reader, Options opts) {
         this.state = new ParserState(reader);
-        this.opts = opts != null ? opts : Options.def();
+        this.opts = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
     public ONode read() throws IOException {

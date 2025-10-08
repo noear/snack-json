@@ -48,8 +48,8 @@ public class JsonWriter {
     private int depth = 0;
 
     public JsonWriter(Options opts, Writer writer) {
-        this.opts = opts != null ? opts : Options.def();
         this.writer = writer;
+        this.opts = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
     public void write(ONode node) throws IOException {

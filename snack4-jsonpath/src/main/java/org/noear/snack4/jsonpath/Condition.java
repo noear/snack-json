@@ -132,9 +132,9 @@ public class Condition {
                 return null;
             } else {
                 if (ch == '\'') {
-                    return new ONode(Options.def(), value.substring(1, value.length() - 1));
+                    return new ONode(Options.DEF_OPTIONS, value.substring(1, value.length() - 1));
                 } else if (ch == '/') {
-                    return new ONode(Options.def(), value);
+                    return new ONode(Options.DEF_OPTIONS, value);
                 } else {
                     return ONode.ofJson(value);
                 }

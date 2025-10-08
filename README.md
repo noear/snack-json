@@ -124,5 +124,50 @@ JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'
 schema.validate(ONode.load("{userId:'1'}")); //校验格式
 ```
 
+
+## 路径树接口
+
+```java
+ONode o = ONode.ofJson(json).usePaths(); //会为每个子节点，生成 path 属性
+
+ONode rst = o.select("$.data.list[*].mobile");
+List<String> rstPaths = rst.pathList(); //获取结果节点的路径列表
+for(ONode n1 : rst.getArray()) {
+   n1.path(); //当前路径
+   n1.parent(); //父级节点
+}
+
+ONode rst = o.get("data").get("list").get(2);
+rst.path();
+rst.parent();
+```
+
+
+
 ## 高级定制
+
+
+```java
+Options options = Options.of();
+//添加编码器
+options.addEncoder(Date.class, (ctx, value, target) -> {
+    target.setValue(DateUtil.format(data, "yyyy-MM-dd"));
+});
+//添加解码器
+options.addDecoder(Date.class, ...);
+
+//添加特性
+options.addFeature(Feature.PrettyFormat);
+
+//移除特性
+options.removeFeature(Feature.PrettyFormat);
+
+//设置日期格式附
+options.add(Feature.WriteDateUseFormat); //使用日期格式
+options.setDateFormat("yyyy-MM");
+
+//..
+
+String json = ONode.ofBean(orderModel, options).toJson();
+```
 

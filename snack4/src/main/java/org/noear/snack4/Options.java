@@ -45,8 +45,8 @@ public final class Options {
     public static final int DEF_FEATURES = Feature.DEFAULT();
 
     //默认选项（私有）
-    private static final Options DEF_OPTIONS = new Options(true);
-    private static final String DEF_UNSUPPORTED_HINT = "Read-only mode does not support modification.";
+    public static final Options DEF_OPTIONS = new Options(true);
+    public static final String DEF_UNSUPPORTED_HINT = "Read-only mode does not support modification.";
 
     //编码仓库
     private final CodecLib codecLib = CodecLib.newInstance();
@@ -287,14 +287,6 @@ public final class Options {
 
         this.classLoader = classLoader;
         return this;
-    }
-
-
-    /**
-     * 获取默认选项
-     */
-    public static Options def() {
-        return DEF_OPTIONS;
     }
 
     public static Options of(Feature... features) {

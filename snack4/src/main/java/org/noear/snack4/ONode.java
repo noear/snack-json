@@ -56,22 +56,22 @@ public final class ONode {
     public transient PathSource source;
 
     public ONode() {
-        this(Options.def());
+        this(Options.DEF_OPTIONS);
     }
 
     public ONode(Object value) {
-        this(Options.def(), value);
+        this(Options.DEF_OPTIONS, value);
     }
 
-    public ONode(Options options) {
+    public ONode(Options opts) {
         this.type = JsonType.Undefined;
-        this.options = options;
+        this.options = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
-    public ONode(Options options, Object value) {
+    public ONode(Options opts, Object value) {
         this.value = value;
         this.type = JsonType.resolveType(value);
-        this.options = options;
+        this.options = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
     public Options options() {
@@ -571,7 +571,7 @@ public final class ONode {
 
     public static ONode ofBean(Object bean, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return BeanSerializer.serialize(bean, Options.def());
+            return BeanSerializer.serialize(bean, Options.DEF_OPTIONS);
         } else {
             return BeanSerializer.serialize(bean, Options.of(features));
         }
@@ -579,7 +579,7 @@ public final class ONode {
 
     public static ONode ofJson(String json, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return ofJson(json, Options.def());
+            return ofJson(json, Options.DEF_OPTIONS);
         } else {
             return ofJson(json, Options.of(features));
         }
@@ -598,7 +598,7 @@ public final class ONode {
 
     public static String serialize(Object object, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return serialize(object, Options.def());
+            return serialize(object, Options.DEF_OPTIONS);
         } else {
             return serialize(object, Options.of(features));
         }
@@ -610,7 +610,7 @@ public final class ONode {
 
     public static <T> T deserialize(String json, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return deserialize(json, Object.class, Options.def());
+            return deserialize(json, Object.class, Options.DEF_OPTIONS);
         } else {
             return deserialize(json, Object.class, Options.of(features));
         }
@@ -618,7 +618,7 @@ public final class ONode {
 
     public static <T> T deserialize(String json, Type type, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return deserialize(json, type, Options.def());
+            return deserialize(json, type, Options.DEF_OPTIONS);
         } else {
             return deserialize(json, type, Options.of(features));
         }
@@ -630,7 +630,7 @@ public final class ONode {
 
     public static <T> T deserialize(String json, TypeRef<T> type, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return deserialize(json, type, Options.def());
+            return deserialize(json, type, Options.DEF_OPTIONS);
         } else {
             return deserialize(json, type, Options.of(features));
         }
