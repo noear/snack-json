@@ -160,12 +160,23 @@ public class JsonPathCompatibleTest1 {
     public void test10(){
         String json = "{\"request1\":{\"result\":[{\"relTickers\":[{\"tickerId\":1},{\"tickerId\":1.1}],\"accountId\":400006},{\"relTickers\":[{\"tickerId\":2},{\"tickerId\":2.2}]},{\"relTickers\":[{\"tickerId\":3}]},{\"relTickers\":[{\"tickerId\":4}]},{\"relTickers\":[{\"tickerId\":5}]},{\"relTickers\":[{\"tickerId\":6}]}]}}\n";
 
+        String jsonpathStr2   = "$.request1.result[*].relTickers";
+        String jsonpathStr2_b   = "$.request1.result[*].relTickers[*]";
+        String jsonpathStr2_c   = "$.request1.result[*].relTickers[*].first()";
+        String jsonpathStr2_d   = "$.request1.result[*].relTickers[*].first().tickerId";
 
-        String jsonpathStr3   = "$.request1.result[*].relTickers.first().tickerId";
-        String jsonpathStr3_b = "$.request1.result[*].relTickers.last().tickerId";
+        String jsonpathStr3   = "$.request1.result[*].relTickers";
+        String jsonpathStr3_b   = "$.request1.result[*].relTickers.first()";
+        String jsonpathStr3_c = "$.request1.result[*].relTickers.first().tickerId";
 
-        compatible_do("1", json, jsonpathStr3);
-        compatible_do("2", json, jsonpathStr3_b);
+        compatible_do("1", json, jsonpathStr2);
+        compatible_do("2", json, jsonpathStr2_b);
+        //compatible_do("3", json, jsonpathStr2_c);
+        //compatible_do("4", json, jsonpathStr2_d);
+
+        compatible_do("5", json, jsonpathStr3);
+        compatible_do("6", json, jsonpathStr3_b);
+        compatible_do("7", json, jsonpathStr3_c);
     }
 
     @Test
