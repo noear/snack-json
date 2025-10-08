@@ -173,8 +173,8 @@ public class DateUtil {
 
     public static ZoneId zoneIdOf(DecodeContext ctx){
         ZoneId zoneId = ctx.getOptions().getTimeZone().toZoneId();
-        if (ctx.getAttr() != null && Asserts.isNotEmpty(ctx.getAttr().timezone())) {
-            zoneId = ZoneId.of(ctx.getAttr().timezone());
+        if (ctx.getAttr() != null && Asserts.isNotEmpty(ctx.getAttr().getTimezone())) {
+            zoneId = ZoneId.of(ctx.getAttr().getTimezone());
         }
 
         return zoneId;
@@ -188,10 +188,10 @@ public class DateUtil {
         } else if (node.isString()) {
             try {
                 if (ctx.getAttr() != null) {
-                    if (Asserts.isNotEmpty(ctx.getAttr().format())) {
-                        SimpleDateFormat formatter = new SimpleDateFormat(ctx.getAttr().format());
-                        if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
-                            formatter.setTimeZone(TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone())));
+                    if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
+                        SimpleDateFormat formatter = new SimpleDateFormat(ctx.getAttr().getFormat());
+                        if (Asserts.isNotEmpty(ctx.getAttr().getTimezone())) {
+                            formatter.setTimeZone(TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().getTimezone())));
                         }
 
                         return Instant.ofEpochMilli(formatter.parse(node.getString()).getTime());

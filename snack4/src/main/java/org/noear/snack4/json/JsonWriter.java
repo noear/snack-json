@@ -20,6 +20,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.codec.util.IoUtil;
+import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -140,8 +141,7 @@ public class JsonWriter {
     }
 
     private void writeNumber(Number num) throws IOException {
-        if (opts.hasFeature(Feature.Write_BigNumbersAsString)
-                && (num instanceof Double || num instanceof Long || num instanceof BigInteger || num instanceof BigDecimal)) {
+        if (opts.hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(num)) {
             writer.write('"' + num.toString() + '"');
         } else {
             writer.write(num.toString());

@@ -19,8 +19,8 @@ public class OffsetTimeEncoder implements ObjectEncoder<OffsetTime> {
     @Override
     public ONode encode(EncodeContext ctx, OffsetTime value, ONode target) {
         if (ctx.getAttr() != null) {
-            if (Asserts.isNotEmpty(ctx.getAttr().format())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
+            if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
                 return target.setValue(formatter.format(value));
             }
         }

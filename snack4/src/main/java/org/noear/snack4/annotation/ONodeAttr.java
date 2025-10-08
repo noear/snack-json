@@ -47,11 +47,6 @@ public @interface ONodeAttr {
     String timezone() default "";
 
     /**
-     * 作为字符串
-     */
-    boolean asString() default false;
-
-    /**
      * 扁平化
      */
     boolean flat() default false;

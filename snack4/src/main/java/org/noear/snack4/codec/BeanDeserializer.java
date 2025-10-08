@@ -19,6 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.SnackException;
 import org.noear.snack4.util.Asserts;
@@ -59,7 +60,7 @@ public class BeanDeserializer {
     }
 
     // 类型转换核心
-    private static Object convertValue(ONode node, TypeWrap typeWrap, Object target, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
+    private static Object convertValue(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr, Map<Object, Object> visited, Options opts) throws Exception {
         if (node.isNull()) {
             return null;
         }
@@ -168,7 +169,7 @@ public class BeanDeserializer {
                     property = propertyWrap.getFieldWrap();
                 }
 
-                if(property == null || property.isDeserialize() == false) {
+                if(property == null || property.getAttr().isDeserialize() == false) {
                     continue;
                 }
 
@@ -180,7 +181,7 @@ public class BeanDeserializer {
     }
 
     private static void setValueForProperty(ONode node, Property property, Object target, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode fieldNode = (property.isFlat() ? node : node.get(property.getName()));
+        ONode fieldNode = (property.getAttr().isFlat() ? node : node.get(property.getName()));
 
         if (fieldNode != null && !fieldNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
@@ -304,7 +305,7 @@ public class BeanDeserializer {
             excNames.add(p.getName());
 
             if (node.hasKey(p.getName())) {
-                ONodeAttr attr = p.getAnnotation(ONodeAttr.class);
+                ONodeAttrHolder attr = new ONodeAttrHolder(p.getAnnotation(ONodeAttr.class), false);
                 Object val = convertValue(node.get(p.getName()), TypeWrap.from(p.getParameterizedType()), null, attr, visited, opts);
                 argsV[j] = val;
             }

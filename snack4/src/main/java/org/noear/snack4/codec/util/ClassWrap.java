@@ -50,7 +50,7 @@ public class ClassWrap {
                     continue;
                 }
 
-                FieldWrap fieldWrap = new FieldWrap(typeWrap, f);
+                PropertyFieldWrap fieldWrap = new PropertyFieldWrap(typeWrap, f);
 
                 propertyWraps.computeIfAbsent(fieldWrap.getName(), k -> new PropertyWrap(k))
                         .setFieldWrap(fieldWrap);

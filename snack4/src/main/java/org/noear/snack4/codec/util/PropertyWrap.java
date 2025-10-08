@@ -9,7 +9,7 @@ package org.noear.snack4.codec.util;
 public class PropertyWrap {
     private final String name;
 
-    private FieldWrap fieldWrap;
+    private PropertyFieldWrap fieldWrap;
     private PropertyMethodWrap getterWrap;
     private PropertyMethodWrap setterWrap;
 
@@ -21,7 +21,7 @@ public class PropertyWrap {
         return name;
     }
 
-    public FieldWrap getFieldWrap() {
+    public PropertyFieldWrap getFieldWrap() {
         return fieldWrap;
     }
 
@@ -35,7 +35,7 @@ public class PropertyWrap {
 
     /// //////////
 
-    protected void setFieldWrap(FieldWrap fieldWrap) {
+    protected void setFieldWrap(PropertyFieldWrap fieldWrap) {
         this.fieldWrap = fieldWrap;
     }
 

@@ -18,7 +18,7 @@ package org.noear.snack4.codec;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
 
 import java.lang.reflect.Array;
@@ -69,7 +69,7 @@ public class BeanSerializer {
     }
 
     // 值转ONode处理
-    private static ONode convertValueToNode(Object value, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
+    private static ONode convertValueToNode(Object value, ONodeAttrHolder attr, Map<Object, Object> visited, Options opts) throws Exception {
         if (value == null) {
             return new ONode(opts, null);
         }
@@ -141,7 +141,7 @@ public class BeanSerializer {
                     }
                 }
 
-                if (property == null || property.isSerialize() == false) {
+                if (property == null || property.getAttr().isSerialize() == false) {
                     continue;
                 }
 
@@ -149,20 +149,20 @@ public class BeanSerializer {
 
                 if (propertyValue == null) {
                     if (opts.hasFeature(Feature.Write_Nulls) == false
-                            && property.hasSerializeFeature(Feature.Write_Nulls) == false) {
+                            && property.getAttr().hasSerializeFeature(Feature.Write_Nulls) == false) {
                         continue;
                     }
 
                     if (property.getTypeWrap().isString()) {
-                        if ((opts.hasFeature(Feature.Write_StringNullAsEmpty) || property.hasSerializeFeature(Feature.Write_StringNullAsEmpty))) {
+                        if ((opts.hasFeature(Feature.Write_StringNullAsEmpty) || property.getAttr().hasSerializeFeature(Feature.Write_StringNullAsEmpty))) {
                             propertyValue = "";
                         }
                     } else if (property.getTypeWrap().isBoolean()) {
-                        if ((opts.hasFeature(Feature.Write_BooleanNullAsFalse) || property.hasSerializeFeature(Feature.Write_BooleanNullAsFalse))) {
+                        if ((opts.hasFeature(Feature.Write_BooleanNullAsFalse) || property.getAttr().hasSerializeFeature(Feature.Write_BooleanNullAsFalse))) {
                             propertyValue = false;
                         }
                     } else if (property.getTypeWrap().isNumber()) {
-                        if ((opts.hasFeature(Feature.Write_NumberNullAsZero) || property.hasSerializeFeature(Feature.Write_NumberNullAsZero))) {
+                        if ((opts.hasFeature(Feature.Write_NumberNullAsZero) || property.getAttr().hasSerializeFeature(Feature.Write_NumberNullAsZero))) {
                             if (property.getTypeWrap().getType() == Long.class) {
                                 propertyValue = 0L;
                             } else if (property.getTypeWrap().getType() == Double.class) {
@@ -176,15 +176,10 @@ public class BeanSerializer {
                     }
                 }
 
-                ONode propertyNode = null;
-                if (property.isAsString()) {
-                    propertyNode = new ONode(opts, String.valueOf(propertyValue));
-                } else {
-                    propertyNode = convertValueToNode(propertyValue, property.getAttr(), visited, opts);
-                }
+                ONode propertyNode = convertValueToNode(propertyValue, property.getAttr(), visited, opts);
 
                 if (propertyNode != null) {
-                    if (property.isFlat()) {
+                    if (property.getAttr().isFlat()) {
                         if (propertyNode.isObject()) {
                             tmp.setAll(propertyNode.getObject());
                         }

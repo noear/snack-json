@@ -1,5 +1,7 @@
 package org.noear.snack4.util;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Map;
 
@@ -70,7 +72,8 @@ public class Asserts {
 
     /**
      * 是否为数字
-     * */
+     *
+     */
     public static boolean isNumber(String str) {
         if (str == null || str.isEmpty()) {
             return false;
@@ -118,5 +121,12 @@ public class Asserts {
                         str.charAt(length - 1) == 'E' ||
                         str.charAt(length - 1) == '+' ||
                         str.charAt(length - 1) == '-');
+    }
+
+    public static boolean isBigNumber(Number num) {
+        return num instanceof Double ||
+                num instanceof Long ||
+                num instanceof BigInteger ||
+                num instanceof BigDecimal;
     }
 }

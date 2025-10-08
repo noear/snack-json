@@ -2,6 +2,7 @@ package org.noear.snack4.codec;
 
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.annotation.ONodeAttrHolder;
 
 /**
  *
@@ -10,9 +11,9 @@ import org.noear.snack4.annotation.ONodeAttr;
  */
 public class EncodeContext {
     private final Options options;
-    private final ONodeAttr attr;
+    private final ONodeAttrHolder attr;
 
-    public EncodeContext(Options options, ONodeAttr attr) {
+    public EncodeContext(Options options, ONodeAttrHolder attr) {
         this.options = options;
         this.attr = attr;
     }
@@ -21,7 +22,7 @@ public class EncodeContext {
         return options;
     }
 
-    public ONodeAttr getAttr() {
+    public ONodeAttrHolder getAttr() {
         return attr;
     }
 }

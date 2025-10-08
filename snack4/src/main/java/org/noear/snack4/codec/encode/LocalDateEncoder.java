@@ -21,10 +21,10 @@ public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
     @Override
     public ONode encode(EncodeContext ctx, LocalDate value, ONode target) {
         if (ctx.getAttr() != null) {
-            if (Asserts.isNotEmpty(ctx.getAttr().format())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                if(Asserts.isNotEmpty(ctx.getAttr().timezone())){
-                    formatter.withZone(ZoneId.of(ctx.getAttr().timezone()));
+            if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
+                if(Asserts.isNotEmpty(ctx.getAttr().getTimezone())){
+                    formatter.withZone(ZoneId.of(ctx.getAttr().getTimezone()));
                 }
 
                 return target.setValue(formatter.format(value));
