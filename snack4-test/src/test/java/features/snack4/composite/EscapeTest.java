@@ -2,6 +2,7 @@ package features.snack4.composite;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
@@ -40,9 +41,11 @@ public class EscapeTest {
 
     @Test
     public void case2() throws IOException {
-        ONode c = ONode.load("{\"a\":\" \\0\\1\\2\\3\\4\\5\\6\\7\"}");
+        ONode c = ONode.load("{\"a\":\" \\0\\1\\2\\3\\4\\5\\6\\7\"}", Feature.Read_AllowBackslashEscapingAnyCharacter);
 
-        assert " \0\1\2\3\4\5\6\7".equals(c.get("a").getString());
+        String a = c.get("a").getString();
+        String a1 = " \0\1\2\3\4\5\6\7";
+        assert a1.equals(a);
 
         assert "{\"a\":\" \\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\"}".equals(c.toJson());
     }
@@ -76,7 +79,7 @@ public class EscapeTest {
 
         assert "'的\t\n".equals(c.get("a").getString());
 
-        assert "{\"a\":\"'的\\t\\n\"}".equals(c.toJson());
+        Assertions.assertEquals("{\"a\":\"'的\\t\\n\"}", c.toJson());
     }
 
     /**

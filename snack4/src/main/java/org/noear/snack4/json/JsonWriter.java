@@ -19,6 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
+import org.noear.snack4.codec.util.IoUtil;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -148,7 +149,7 @@ public class JsonWriter {
 
     private void writeKey(String s) throws IOException {
         if (opts.hasFeature(Feature.Write_UnquotedFieldNames)) {
-            writer.write(escapeString(s, opts));
+            writer.write(escapeString(s, '"', opts));
         } else {
             writeString(s);
         }
@@ -157,50 +158,41 @@ public class JsonWriter {
     private void writeString(String s) throws IOException {
         char quoteChar = opts.hasFeature(Feature.Write_UseSingleQuotes) ? '\'' : '"';
         writer.write(quoteChar);
-        writer.write(escapeString(s, opts));
+        writer.write(escapeString(s, quoteChar, opts));
         writer.write(quoteChar);
     }
 
-    private static String escapeString(String s, Options opts) {
+    private static String escapeString(String s, char quoteChar, Options opts) {
         StringBuilder sb = new StringBuilder(s.length() * 2);
         for (char c : s.toCharArray()) {
-            switch (c) {
-                case '"':
-                    sb.append("\\\"");
-                    break;
-                case '\'':
-                    sb.append("\\'");
-                    break;
-                case '\\':
-                    if(opts.hasFeature(Feature.Write_UseRawBackslash)) {
-                        sb.append('\\');
-                    } else {
-                        sb.append("\\\\");
-                    }
-                    break;
-                case '\b':
-                    sb.append("\\b");
-                    break;
-                case '\f':
-                    sb.append("\\f");
-                    break;
-                case '\n':
-                    sb.append("\\n");
-                    break;
-                case '\r':
-                    sb.append("\\r");
-                    break;
-                case '\t':
-                    sb.append("\\t");
-                    break;
-                default:
-                    if (c < 0x20 || (opts.hasFeature(Feature.Write_BrowserCompatible) && c > 0x7F)) {
-                        sb.append(String.format("\\u%04x", (int) c));
-                    } else {
-                        sb.append(c);
-                    }
+            if (c >= '\0' && c <= '\7') {
+                sb.append("\\u000");
+                sb.append(IoUtil.CHARS_MARK[(int) c]);
+                continue;
+            }
+
+            if (c == quoteChar || c == '\n' || c == '\r' || c == '\t' || c == '\f' || c == '\b') {
+                sb.append("\\");
+                sb.append(IoUtil.CHARS_MARK[(int) c]);
+                continue;
+            }
+
+            if (c == '\\') {
+                if (opts.hasFeature(Feature.Write_UseRawBackslash)) {
+                    sb.append('\\');
+                } else {
+                    sb.append("\\\\");
+                }
+                continue;
+            }
+
+            if (c < 0x20 || (opts.hasFeature(Feature.Write_BrowserCompatible) && c > 0x7F)) {
+                sb.append(String.format("\\u%04x", (int) c));
+            } else {
+                sb.append(c);
             }
         }
+
         return sb.toString();
     }
 

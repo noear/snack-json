@@ -18,6 +18,7 @@ package org.noear.snack4.json;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
+import org.noear.snack4.codec.util.IoUtil;
 import org.noear.snack4.exception.ParseException;
 
 import java.io.IOException;
@@ -25,10 +26,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JsonReader {
     public static ONode read(String json) throws IOException {
@@ -102,6 +100,11 @@ public class JsonReader {
 
             return new ONode(str);
         }
+        // 新增的 JavaScript Date 对象支持
+        if (c == 'n' && state.peekChar(1) == 'e' && state.peekChar(2) == 'w') {
+            return parseDate();
+        }
+
         if (c == '-' || (c >= '0' && c <= '9')) return new ONode(parseNumber());
         if (c == 't') return parseKeyword("true", true);
         if (c == 'f') return parseKeyword("false", false);
@@ -109,6 +112,56 @@ public class JsonReader {
         if (c == 'N') return parseKeyword("NaN", null);
         if (c == 'u') return parseKeyword("undefined", null);
         throw state.error("Unexpected character: " + c);
+    }
+
+    /**
+     * 解析 JavaScript Date 对象: new Date(long)
+     * @return ONode (Date)
+     * @throws IOException
+     */
+    private ONode parseDate() throws IOException {
+        // 期望 "new Date("
+        state.expect('n');
+        state.expect('e');
+        state.expect('w');
+        state.skipWhitespace();
+        state.expect('D');
+        state.expect('a');
+        state.expect('t');
+        state.expect('e');
+        state.expect('(');
+        state.skipWhitespace();
+
+        // 解析时间戳（long类型数字）
+        StringBuilder sb = new StringBuilder();
+        char c = state.peekChar();
+        boolean negative = false;
+
+        // 处理负号
+        if (c == '-') {
+            negative = true;
+            sb.append(state.nextChar());
+        }
+
+        if (isDigit(state.peekChar())) {
+            while (isDigit(state.peekChar())) {
+                sb.append(state.nextChar());
+            }
+        } else if (sb.length() == 0 && !negative) {
+            // 如果不是负号开头，且没有数字，则为错误格式
+            throw state.error("Invalid timestamp in new Date()");
+        }
+
+        state.skipWhitespace();
+        state.expect(')'); // 期望 ')'
+
+        try {
+            long timestamp = Long.parseLong(sb.toString());
+            // ONode 应该支持 Date 构造
+            return new ONode(new Date(timestamp));
+        } catch (NumberFormatException e) {
+            throw state.error("Invalid timestamp format in new Date()");
+        }
     }
 
     private ONode parseObject() throws IOException {
@@ -241,7 +294,9 @@ public class JsonReader {
                         sb.append((char) Integer.parseInt(new String(hex), 16));
                         break;
                     default:
-                        if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
+                        if(c >= '0' && c <= '7') {
+                            sb.append(IoUtil.CHARS_MARK_REV[(int)c]);
+                        } else if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
                             sb.append(c);
                         } else if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
                             sb.append('\\').append(c);
