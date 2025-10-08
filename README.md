@@ -163,7 +163,7 @@ options.addFeature(Feature.PrettyFormat);
 options.removeFeature(Feature.PrettyFormat);
 
 //设置日期格式附
-options.add(Feature.WriteDateUseFormat); //使用日期格式
+options.addFeature(Feature.WriteDateUseFormat); //使用日期格式
 options.setDateFormat("yyyy-MM");
 
 //..

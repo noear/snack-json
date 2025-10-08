@@ -54,8 +54,6 @@ public final class Options {
     private int featuresValue = DEF_FEATURES;
     // 时间格式
     private String dateFormat = DEF_DATETIME_FORMAT;
-    // 读取最大深度
-    private int readMaxDepth = 512;
     // 书写缩进
     private String writeIndent = "  ";
     // 类型属性名
@@ -81,6 +79,22 @@ public final class Options {
     public boolean hasFeature(Feature feature) {
         return Feature.hasFeature(this.featuresValue, feature);
     }
+
+    /**
+     * 加载类
+     */
+    public Class<?> loadClass(String className) {
+        try {
+            if (classLoader == null) {
+                return Class.forName(className);
+            } else {
+                return classLoader.loadClass(className);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new SnackException("Failed to load class: " + className, e);
+        }
+    }
+
 
     public int getFeatures() {
         return featuresValue;
@@ -127,36 +141,78 @@ public final class Options {
     }
 
     /**
-     * 获取最大解析深度
-     */
-    public int getReadMaxDepth() {
-        return readMaxDepth;
-    }
-
-    /**
      * 获取缩进字符串
      */
     public String getWriteIndent() {
         return writeIndent;
     }
 
+
+    /// /////////////
+
     /**
-     * 加载类
-     *
+     * 设置日期格式
      */
-    public Class<?> loadClass(String className) {
-        try {
-            if (classLoader == null) {
-                return Class.forName(className);
-            } else {
-                return classLoader.loadClass(className);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new SnackException("Failed to load class: " + className, e);
+    public Options dateFormat(String format) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
+
+        this.dateFormat = format;
+        return this;
     }
 
+    /**
+     * 设置地区
+     */
+    public Options locale(Locale locale) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
 
+        this.locale = locale;
+        return this;
+    }
+
+    /**
+     * 设置时区
+     */
+    public Options timeZone(TimeZone timeZone) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.timeZone = timeZone;
+        return this;
+    }
+
+    /**
+     * 设置缩进字符串
+     */
+    public Options writeIndent(String indent) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.writeIndent = indent;
+        return this;
+    }
+
+    /**
+     * 设置类加载器
+     */
+    public Options classLoader(ClassLoader classLoader) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.classLoader = classLoader;
+        return this;
+    }
+
+    /**
+     * 添加允许类
+     */
     public void addAllowClass(Class<?> clazz) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
@@ -189,35 +245,6 @@ public final class Options {
         return this;
     }
 
-    /**
-     * 设置日期格式
-     */
-    public Options dateFormat(String format) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.dateFormat = format;
-        return this;
-    }
-
-    public Options locale(Locale locale) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.locale = locale;
-        return this;
-    }
-
-    public Options timeZone(TimeZone timeZone) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.timeZone = timeZone;
-        return this;
-    }
 
     /**
      * 注册自定义解码器
@@ -245,7 +272,6 @@ public final class Options {
 
     /**
      * 注册自定义工厂
-     *
      */
     public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
         if (readonly) {
@@ -253,39 +279,6 @@ public final class Options {
         }
 
         codecLib.addFactory(type, factory);
-        return this;
-    }
-
-    /**
-     * 设置最大解析深度
-     */
-    public Options readMaxDepth(int depth) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.readMaxDepth = depth;
-        return this;
-    }
-
-    /**
-     * 设置缩进字符串
-     */
-    public Options writeIndent(String indent) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.writeIndent = indent;
-        return this;
-    }
-
-    public Options classLoader(ClassLoader classLoader) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.classLoader = classLoader;
         return this;
     }
 
