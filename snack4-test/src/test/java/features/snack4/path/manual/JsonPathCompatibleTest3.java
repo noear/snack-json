@@ -14,14 +14,18 @@ public class JsonPathCompatibleTest3 {
 
     @Test
     public void case1() {
-        compatible_do("1", json, "$.request1.result[*].relTickers[*].tickerId.first()");
-        compatible_do("6", json, "$.request1.result[*].relTickers[*].tickerId.last()");
+        compatible_do("1", json, "$.request1.result[*].relTickers[*]");
+        compatible_do("2", json, "$.request1.result[*].relTickers[*].tickerId");
+        compatible_do("3", json, "$.request1.result[*].relTickers[*].tickerId.first()");
+        compatible_do("4", json, "$.request1.result[*].relTickers[*].tickerId.last()");
     }
 
     @Test
     public void case2(){
-        compatible_do("1", json, "$.request1.result[*].relTickers[*].first().tickerId");
-        compatible_do("6", json, "$.request1.result[*].relTickers[*].last().tickerId");
+        compatible_do("1", json, "$.request1.result[*].relTickers[*]");
+        compatible_do("2", json, "$.request1.result[*].relTickers[*].first()");
+        compatible_do("3", json, "$.request1.result[*].relTickers[*].first().tickerId");
+        compatible_do("4", json, "$.request1.result[*].relTickers[*].last().tickerId");
     }
 
     private void compatible_do(String hint, String json, String jsonpathStr) {
