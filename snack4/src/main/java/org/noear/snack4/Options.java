@@ -15,10 +15,7 @@
  */
 package org.noear.snack4;
 
-import org.noear.snack4.codec.CodecLib;
-import org.noear.snack4.codec.ObjectDecoder;
-import org.noear.snack4.codec.ObjectEncoder;
-import org.noear.snack4.codec.ObjectFactory;
+import org.noear.snack4.codec.*;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -259,6 +256,18 @@ public final class Options {
     }
 
     /**
+     * 注册自定义解码器
+     */
+    public <T> Options addDecoder(ObjectPatternDecoder<T> decoder) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        codecLib.addDecoder(decoder);
+        return this;
+    }
+
+    /**
      * 注册自定义编码器
      */
     public <T> Options addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
@@ -271,6 +280,18 @@ public final class Options {
     }
 
     /**
+     * 注册自定义编码器
+     */
+    public <T> Options addEncoder(ObjectPatternEncoder<T> encoder) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        codecLib.addEncoder(encoder);
+        return this;
+    }
+
+    /**
      * 注册自定义工厂
      */
     public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
@@ -279,6 +300,18 @@ public final class Options {
         }
 
         codecLib.addFactory(type, factory);
+        return this;
+    }
+
+    /**
+     * 注册自定义工厂
+     */
+    public <T> Options addFactory(ObjectPatternFactory<T> factory) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        codecLib.addFactory(factory);
         return this;
     }
 

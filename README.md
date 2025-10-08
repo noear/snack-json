@@ -155,6 +155,7 @@ options.addEncoder(Date.class, (ctx, value, target) -> {
 });
 //添加解码器
 options.addDecoder(Date.class, ...);
+options.addFactory(...);
 
 //添加特性
 options.addFeature(Feature.Write_PrettyFormat);
