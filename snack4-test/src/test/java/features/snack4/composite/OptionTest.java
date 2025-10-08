@@ -23,7 +23,7 @@ public class OptionTest {
         options.dateFormat("yyyy-MM-dd");
         options.timeZone(TimeZone.getTimeZone("GMT+8"));
         options.addDecoder(BigDecimal.class, (ctx, node) -> null);
-        options.addEncoder(BigDecimal.class, (ctx, value) -> new ONode());
+        options.addEncoder(BigDecimal.class, (ctx, value, target) -> target);
 
         ONode oNode = ONode.load("{}", options);
 

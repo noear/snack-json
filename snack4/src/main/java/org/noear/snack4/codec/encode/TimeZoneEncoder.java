@@ -13,7 +13,7 @@ import java.util.TimeZone;
  */
 public class TimeZoneEncoder implements ObjectEncoder<TimeZone> {
     @Override
-    public ONode encode(EncodeContext ctx, TimeZone value) {
-        return new ONode(ctx.getOpts(), value.getID());
+    public ONode encode(EncodeContext ctx, TimeZone value, ONode target) {
+        return target.setValue(value.getID());
     }
 }

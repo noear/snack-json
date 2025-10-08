@@ -17,15 +17,15 @@ import java.util.Date;
  */
 public class LocalDateTimeEncoder implements ObjectEncoder<LocalDateTime> {
     @Override
-    public ONode encode(EncodeContext ctx, LocalDateTime value) {
+    public ONode encode(EncodeContext ctx, LocalDateTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(ctx.getOpts(), formatter.format(value));
+                return target.setValue(formatter.format(value));
             }
         }
 
         Instant instant = value.atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
-        return new ONode(ctx.getOpts(), new Date((instant.getEpochSecond() * 1000) + (instant.getNano() / 1000_000)));
+        return target.setValue(new Date((instant.getEpochSecond() * 1000) + (instant.getNano() / 1000_000)));
     }
 }

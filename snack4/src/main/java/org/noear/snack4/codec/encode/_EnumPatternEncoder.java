@@ -19,19 +19,19 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
     }
 
     @Override
-    public ONode encode(EncodeContext ctx, Enum value) {
+    public ONode encode(EncodeContext ctx, Enum value, ONode target) {
         EnumWrap ew = TypeUtil.createEnum(value.getClass());
         Object o = ew.getCustomValue(value);
 
         //如果为空代表该枚举没有被标注继续采用常规序列化方式
         if (o != null) {
-            return new ONode(ctx.getOpts(),o);
+            return target.setValue(o);
         } else {
 
-            if (ctx.getOpts().hasFeature(Feature.Write_EnumUsingName)) {
-                return new ONode(ctx.getOpts(), value.name());
+            if (ctx.getOptions().hasFeature(Feature.Write_EnumUsingName)) {
+                return target.setValue(value.name());
             } else {
-                return new ONode(ctx.getOpts(), value.ordinal());
+                return target.setValue(value.ordinal());
             }
         }
     }

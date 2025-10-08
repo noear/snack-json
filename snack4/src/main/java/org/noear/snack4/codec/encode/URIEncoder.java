@@ -13,7 +13,7 @@ import java.net.URI;
  */
 public class URIEncoder implements ObjectEncoder<URI> {
     @Override
-    public ONode encode(EncodeContext ctx, URI value) {
-        return new ONode(ctx.getOpts(), value.toString());
+    public ONode encode(EncodeContext ctx, URI value, ONode target) {
+        return target.setValue(value.toString());
     }
 }

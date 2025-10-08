@@ -14,13 +14,12 @@ import java.net.InetSocketAddress;
  */
 public class InetSocketAddressEncoder implements ObjectEncoder<InetSocketAddress> {
     @Override
-    public ONode encode(EncodeContext ctx, InetSocketAddress value) {
+    public ONode encode(EncodeContext ctx, InetSocketAddress value, ONode target) {
         InetAddress inetAddress = value.getAddress();
 
-        ONode node = new ONode(ctx.getOpts());
-        node.set("hostname", inetAddress.getHostAddress());
-        node.set("port", value.getPort());
+        target.set("hostname", inetAddress.getHostAddress());
+        target.set("port", value.getPort());
 
-        return node;
+        return target;
     }
 }

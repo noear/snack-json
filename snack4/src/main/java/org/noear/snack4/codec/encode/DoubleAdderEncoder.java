@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.DoubleAdder;
  */
 public class DoubleAdderEncoder implements ObjectEncoder<DoubleAdder> {
     @Override
-    public ONode encode(EncodeContext ctx, DoubleAdder value) {
-        return new ONode(ctx.getOpts(), value.doubleValue());
+    public ONode encode(EncodeContext ctx, DoubleAdder value, ONode target) {
+        return target.setValue(value.doubleValue());
     }
 }

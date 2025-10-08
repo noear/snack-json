@@ -17,15 +17,15 @@ import java.util.Date;
  */
 public class OffsetTimeEncoder implements ObjectEncoder<OffsetTime> {
     @Override
-    public ONode encode(EncodeContext ctx, OffsetTime value) {
+    public ONode encode(EncodeContext ctx, OffsetTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(ctx.getOpts(), formatter.format(value));
+                return target.setValue(formatter.format(value));
             }
         }
 
         Instant instant = value.atDate(LocalDate.of(1970, 1, 1)).toInstant();
-        return new ONode(ctx.getOpts(), Date.from(instant));
+        return target.setValue(Date.from(instant));
     }
 }

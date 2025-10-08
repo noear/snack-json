@@ -13,7 +13,7 @@ import java.time.Duration;
  */
 public class DurationEncoder implements ObjectEncoder<Duration> {
     @Override
-    public ONode encode(EncodeContext ctx, Duration value) {
-        return new ONode(ctx.getOpts(), value.toString());
+    public ONode encode(EncodeContext ctx, Duration value, ONode target) {
+        return target.setValue(value.toString());
     }
 }

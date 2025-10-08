@@ -43,7 +43,7 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
             Object array = Array.newInstance(itemType, strArray.length);
 
             for (int i = 0; i < strArray.length; i++) {
-                Array.set(array, i, new ONode(ctx.getOpts(), strArray[i]).toBean(itemType));
+                Array.set(array, i, new ONode(ctx.getOptions(), strArray[i]).toBean(itemType));
             }
             return array;
         } else {

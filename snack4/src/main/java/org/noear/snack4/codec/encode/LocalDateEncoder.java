@@ -19,7 +19,7 @@ import java.util.Date;
  */
 public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
     @Override
-    public ONode encode(EncodeContext ctx, LocalDate value) {
+    public ONode encode(EncodeContext ctx, LocalDate value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
@@ -27,11 +27,11 @@ public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
                     formatter.withZone(ZoneId.of(ctx.getAttr().timezone()));
                 }
 
-                return new ONode(ctx.getOpts(), formatter.format(value));
+                return target.setValue(formatter.format(value));
             }
         }
 
         Instant instant = value.atTime(LocalTime.MIN).atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
-        return new ONode(ctx.getOpts(), new Date(instant.getEpochSecond() * 1000));
+        return target.setValue(new Date(instant.getEpochSecond() * 1000));
     }
 }

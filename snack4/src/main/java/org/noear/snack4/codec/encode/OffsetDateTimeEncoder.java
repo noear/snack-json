@@ -15,14 +15,14 @@ import java.util.Date;
  */
 public class OffsetDateTimeEncoder implements ObjectEncoder<OffsetDateTime> {
     @Override
-    public ONode encode(EncodeContext ctx, OffsetDateTime value) {
+    public ONode encode(EncodeContext ctx, OffsetDateTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(ctx.getOpts(), formatter.format(value));
+                return target.setValue(formatter.format(value));
             }
         }
 
-        return new ONode(ctx.getOpts(), Date.from(value.toInstant()));
+        return target.setValue(Date.from(value.toInstant()));
     }
 }

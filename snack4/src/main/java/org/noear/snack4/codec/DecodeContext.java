@@ -12,22 +12,22 @@ import java.lang.reflect.Type;
  *
  */
 public class DecodeContext<T> {
-    private final Options opts;
+    private final Options options;
     private final ONodeAttr attr;
     private final T target;
     private final Class<?> type;
     private final Type genericType;
 
-    public DecodeContext(Options opts, ONodeAttr attr, T target, TypeWrap typeWrap) {
-        this.opts = opts;
+    public DecodeContext(Options options, ONodeAttr attr, T target, TypeWrap typeWrap) {
+        this.options = options;
         this.attr = attr;
         this.target = target;
         this.type = typeWrap.getType();
         this.genericType = typeWrap.getGenericType();
     }
 
-    public Options getOpts() {
-        return opts;
+    public Options getOptions() {
+        return options;
     }
 
     public ONodeAttr getAttr() {

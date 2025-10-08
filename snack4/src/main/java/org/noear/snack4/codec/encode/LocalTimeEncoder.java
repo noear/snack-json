@@ -18,11 +18,11 @@ import java.util.Date;
  */
 public class LocalTimeEncoder implements ObjectEncoder<LocalTime> {
     @Override
-    public ONode encode(EncodeContext ctx, LocalTime value) {
+    public ONode encode(EncodeContext ctx, LocalTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(ctx.getOpts(), formatter.format(value));
+                return target.setValue(formatter.format(value));
             }
         }
 
@@ -30,6 +30,6 @@ public class LocalTimeEncoder implements ObjectEncoder<LocalTime> {
                 .atZone(Options.DEF_TIME_ZONE.toZoneId())
                 .toInstant();
 
-        return new ONode(ctx.getOpts(), new Date(instant.getEpochSecond() * 1000));
+        return target.setValue(new Date(instant.getEpochSecond() * 1000));
     }
 }

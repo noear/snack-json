@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class FileEncoder implements ObjectEncoder<File> {
     @Override
-    public ONode encode(EncodeContext ctx, File value) {
-        return new ONode(ctx.getOpts(), value.getPath());
+    public ONode encode(EncodeContext ctx, File value, ONode target) {
+        return target.setValue(value.getPath());
     }
 }

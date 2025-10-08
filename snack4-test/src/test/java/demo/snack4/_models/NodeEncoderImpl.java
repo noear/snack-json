@@ -8,8 +8,9 @@ import org.noear.snack4.codec.ObjectEncoder;
  * @author noear 2022/4/17 created
  */
 public class NodeEncoderImpl implements ObjectEncoder<String> {
+
     @Override
-    public ONode encode(EncodeContext ctx, String value) {
+    public ONode encode(EncodeContext ctx, String value, ONode target) {
         return null;
     }
 }

@@ -14,10 +14,10 @@ import java.util.Date;
  */
 public class DemoApp {
     public static void main(String[] args) {
-        Options options =  Options.of()
-                .addEncoder(Date.class, (ctx, data) -> {
-                    return new ONode(ctx.getOpts(), DateUtil.format(data, "yyyy-MM-dd"));
-                })
+        Options options = Options.of()
+                .addEncoder(Date.class, (ctx, value, target) ->
+                        target.setValue(DateUtil.format(value, "yyyy-MM-dd"))
+                )
                 .addFeature(Feature.Write_PrettyFormat)
                 .dateFormat("yyyy-MM");
 

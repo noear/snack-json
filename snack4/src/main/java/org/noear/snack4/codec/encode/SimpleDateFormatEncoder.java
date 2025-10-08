@@ -13,9 +13,8 @@ import java.text.SimpleDateFormat;
  */
 public class SimpleDateFormatEncoder implements ObjectEncoder<SimpleDateFormat> {
     @Override
-    public ONode encode(EncodeContext ctx, SimpleDateFormat value) {
-        ONode node = new ONode(ctx.getOpts());
-        node.set("pattern", value.toPattern());
-        return node;
+    public ONode encode(EncodeContext ctx, SimpleDateFormat value, ONode target) {
+        target.set("pattern", value.toPattern());
+        return target;
     }
 }

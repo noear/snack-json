@@ -21,7 +21,7 @@ public class Coding {
         orderModel.order_id = 1;
         Options opts = Options.of();
         //添加编码器
-        opts.addEncoder(OrderModel.class, (ctx, value) -> new ONode().set("id", value.order_id));
+        opts.addEncoder(OrderModel.class, (ctx, value, target) -> target.set("id", value.order_id));
 
         String json = ONode.from(orderModel, opts).toJson();
         System.out.println(json);
@@ -61,10 +61,10 @@ public class Coding {
         orderModel.order_id = 1;
 
         Options options = Options.of();
-        options.addEncoder(Date.class, (ctx, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd"))));
+        options.addEncoder(Date.class, (ctx, value, target) ->target.setValue((DateUtil.format(value, "yyyy-MM-dd"))));
 
         //添加编码器
-        options.addEncoder(OrderModel.class, (ctx, value) -> new ONode().set("user", new ONode().set("uid", "1001")).set("order_time", null));
+        options.addEncoder(OrderModel.class, (ctx, value, target) -> target.set("user", new ONode().set("uid", "1001")).set("order_time", null));
 
 
         String json = ONode.from(orderModel, options).toJson();

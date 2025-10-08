@@ -9,5 +9,5 @@ import org.noear.snack4.ONode;
  * @since 4.0
  * */
 public interface ObjectEncoder<T> {
-    ONode encode(EncodeContext ctx, T value);
+    ONode encode(EncodeContext ctx, T value, ONode target);
 }

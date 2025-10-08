@@ -229,7 +229,6 @@ public class CodecLib {
         addEncoder(new _PropertiesPatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
-        addEncoder(ONode.class, new ONodeEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
         addEncoder(File.class, new FileEncoder());

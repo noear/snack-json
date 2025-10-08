@@ -21,17 +21,17 @@ public class _DatePatternEncoder implements ObjectPatternEncoder<Date> {
     }
 
     @Override
-    public ONode encode(EncodeContext ctx, Date value) {
+    public ONode encode(EncodeContext ctx, Date value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
-                    return new ONode(ctx.getOpts(), DateUtil.format(value, ctx.getAttr().format(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone()))));
+                    return new ONode(ctx.getOptions(), DateUtil.format(value, ctx.getAttr().format(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone()))));
                 } else {
-                    return new ONode(ctx.getOpts(), DateUtil.format(value, ctx.getAttr().format()));
+                    return new ONode(ctx.getOptions(), DateUtil.format(value, ctx.getAttr().format()));
                 }
             }
         }
 
-        return new ONode(ctx.getOpts(), value);
+        return new ONode(ctx.getOptions(), value);
     }
 }

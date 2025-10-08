@@ -9,16 +9,16 @@ import org.noear.snack4.annotation.ONodeAttr;
  *
  */
 public class EncodeContext {
-    private final Options opts;
+    private final Options options;
     private final ONodeAttr attr;
 
-    public EncodeContext(Options opts, ONodeAttr attr) {
-        this.opts = opts;
+    public EncodeContext(Options options, ONodeAttr attr) {
+        this.options = options;
         this.attr = attr;
     }
 
-    public Options getOpts() {
-        return opts;
+    public Options getOptions() {
+        return options;
     }
 
     public ONodeAttr getAttr() {

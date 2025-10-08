@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class UUIDEncoder implements ObjectEncoder<UUID> {
     @Override
-    public ONode encode(EncodeContext ctx, UUID value) {
-        return new ONode(ctx.getOpts(), value.toString());
+    public ONode encode(EncodeContext ctx, UUID value, ONode target) {
+        return target.setValue(value.toString());
     }
 }

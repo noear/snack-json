@@ -130,8 +130,8 @@ public class DateTest {
                 "\"shDatetime\":\"2025-07-23 08:15:40\"\n" + "}";
         Options options = Options.of();
         //添加编码器
-        options.addEncoder(Date.class, (ctx, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
-        options.addEncoder(LocalDateTime.class, (ctx, value) -> new ONode((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
+        options.addEncoder(Date.class, (ctx, value, target) -> target.setValue((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
+        options.addEncoder(LocalDateTime.class, (ctx, value, target) -> target.setValue((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
         DemoEntity rxPacsOrder = ONode.load(json, options).toBean(DemoEntity.class);
         String jsonText = ONode.serialize(rxPacsOrder);
         System.out.println("1 snack添加编码器" + jsonText);

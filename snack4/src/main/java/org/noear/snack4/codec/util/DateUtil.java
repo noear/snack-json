@@ -2,7 +2,6 @@ package org.noear.snack4.codec.util;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.exception.TypeConvertException;
 import org.noear.snack4.util.Asserts;
@@ -12,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -174,7 +172,7 @@ public class DateUtil {
     }
 
     public static ZoneId zoneIdOf(DecodeContext ctx){
-        ZoneId zoneId = ctx.getOpts().getTimeZone().toZoneId();
+        ZoneId zoneId = ctx.getOptions().getTimeZone().toZoneId();
         if (ctx.getAttr() != null && Asserts.isNotEmpty(ctx.getAttr().timezone())) {
             zoneId = ZoneId.of(ctx.getAttr().timezone());
         }

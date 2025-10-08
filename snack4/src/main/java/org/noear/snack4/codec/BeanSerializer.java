@@ -79,13 +79,13 @@ public class BeanSerializer {
         }
 
         if (value instanceof ObjectEncoder) {
-            return ((ObjectEncoder) value).encode(new EncodeContext(opts, attr), value);
+            return ((ObjectEncoder) value).encode(new EncodeContext(opts, attr), value, new ONode(opts));
         }
 
         // 优先使用自定义编解码器
         ObjectEncoder codec = opts.getEncoder(value);
         if (codec != null) {
-            return codec.encode(new EncodeContext(opts, attr), value);
+            return codec.encode(new EncodeContext(opts, attr), value, new  ONode(opts));
         }
 
         if (value instanceof Collection) {
