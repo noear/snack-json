@@ -78,17 +78,22 @@ public final class ONode {
         return options;
     }
 
+    public ONode options(Options opts) {
+        options = opts;
+        return this;
+    }
+
     public JsonType nodeType() {
         return type;
     }
 
     // Getters and Setters
-    public boolean isNull() {
-        return type == JsonType.Null || isUndefined();
-    }
-
     public boolean isUndefined() {
         return type == JsonType.Undefined;
+    }
+
+    public boolean isNull() {
+        return type == JsonType.Null || isUndefined();
     }
 
     public boolean isNullOrEmpty() {
