@@ -83,9 +83,9 @@ public enum Feature {
     Read_UseBigNumberMode(false),
 
     /**
-     * 转义非 ASCII 字符
+     * 浏览器兼容模式（转义非 ASCII 字符）
      */
-    Read_EscapeNonAscii(false),
+    Read_BrowserCompatible(false),
 
     /**
      * 使用日期格式化（默认使用时间戳）

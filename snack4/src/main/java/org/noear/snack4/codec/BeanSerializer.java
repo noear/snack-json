@@ -201,6 +201,11 @@ public class BeanSerializer {
     // 处理Map类型
     private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
         ONode tmp = new ONode().asObject();
+
+        if(opts.hasFeature(Feature.Write_ClassName)) {
+            tmp.set(opts.getTypePropertyName(), map.getClass().getName());
+        }
+
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
             tmp.set(String.valueOf(entry.getKey()), valueNode);

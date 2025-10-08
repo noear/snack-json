@@ -1,5 +1,6 @@
 package org.noear.snack4.codec;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 
 /**
@@ -9,5 +10,5 @@ import org.noear.snack4.Options;
  * @since 4.0
  */
 public interface ObjectFactory<T> {
-    T create(Options opts, Class<T> clazz);
+    T create(Options opts, ONode node, Class<?> clazz);
 }

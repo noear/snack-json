@@ -1,5 +1,6 @@
 package org.noear.snack4.codec.factory;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.ObjectFactory;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public class MapFactory implements ObjectFactory<Map> {
     @Override
-    public Map create(Options opts, Class<Map> clazz) {
+    public Map create(Options opts, ONode node, Class<?> clazz) {
         return new LinkedHashMap();
     }
 }

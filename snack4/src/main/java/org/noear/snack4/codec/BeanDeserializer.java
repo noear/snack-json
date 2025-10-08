@@ -98,7 +98,7 @@ public class BeanDeserializer {
             // 如果没有传入 target，则执行原有的创建新对象的逻辑
             ObjectFactory factory = opts.getFactory(typeWrap.getType());
             if (factory != null) {
-                target = factory.create(opts, typeWrap.getType());
+                target = factory.create(opts, node, typeWrap.getType());
             }
 
             if (target == null) {
@@ -129,13 +129,13 @@ public class BeanDeserializer {
         } else if (target instanceof Collection) {
             target = convertToCollection(node, typeWrap, target, visited, opts);
         } else {
-            return convertToObject(node, typeWrap, target, visited, opts);
+            return convertToBean(node, typeWrap, target, visited, opts);
         }
 
         return target;
     }
 
-    private static Object convertToObject(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private static Object convertToBean(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_UseSetter);
 
@@ -344,6 +344,7 @@ public class BeanDeserializer {
                 ONode n1 = oRef.getObject().get(opts.getTypePropertyName());
                 if (n1 != null) {
                     typeStr = n1.getString();
+                    oRef.getObject().remove(opts.getTypePropertyName());
                 }
             }
 

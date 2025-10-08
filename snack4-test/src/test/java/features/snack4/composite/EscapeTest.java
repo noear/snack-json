@@ -87,10 +87,10 @@ public class EscapeTest {
      */
     @Test
     public void case5() throws IOException {
-        ONode c = ONode.load("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Read_EscapeNonAscii);
+        ONode c = ONode.load("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Read_BrowserCompatible);
 
         assert "'👌\t\n".equals(c.get("a").getString());
 
-        assert "{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}".equalsIgnoreCase(c.toJson());
+        Assertions.assertEquals("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", c.toJson(Feature.Write_BrowserCompatible));
     }
 }

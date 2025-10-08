@@ -3,10 +3,7 @@ package org.noear.snack4.codec;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.decode.*;
 import org.noear.snack4.codec.encode.*;
-import org.noear.snack4.codec.factory.CollectionFactory;
-import org.noear.snack4.codec.factory.ListFactory;
-import org.noear.snack4.codec.factory.MapFactory;
-import org.noear.snack4.codec.factory.SetFactory;
+import org.noear.snack4.codec.factory.*;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -30,6 +27,7 @@ public class CodecLib {
     private static CodecLib DEFAULT = new CodecLib(null).loadDefault();
 
     private final Map<Class<?>, ObjectFactory<?>> factorys = new HashMap<>();
+    private final List<ObjectPatternFactory<?>> patternFactorys = new ArrayList<>();
 
     private final Map<Class<?>, ObjectDecoder<?>> decoders = new HashMap<>();
     private final List<ObjectPatternDecoder<?>> patternDecoders = new ArrayList<>();
@@ -52,6 +50,10 @@ public class CodecLib {
      */
     public <T> void addFactory(Class<T> type, ObjectFactory<T> factory) {
         factorys.put(type, factory);
+    }
+
+    public void addFactory(ObjectPatternFactory factory) {
+        patternFactorys.add(factory);
     }
 
     /**
@@ -112,6 +114,12 @@ public class CodecLib {
         ObjectFactory factory = factorys.get(clazz);
 
         if (factory == null) {
+            for(ObjectPatternFactory<?> factory1 : patternFactorys) {
+                if(factory1.calCreate(clazz)) {
+                    return factory1;
+                }
+            }
+
             if (parent != null) {
                 return parent.getFactory(clazz);
             }
@@ -141,6 +149,8 @@ public class CodecLib {
     /// //////////////////////
 
     private void loadDefaultFactories() {
+        addFactory( new _ThrowablePatternFactory());
+
         addFactory(Map.class, new MapFactory());
         addFactory(List.class, new ListFactory());
         addFactory(Set.class, new SetFactory());
@@ -150,7 +160,6 @@ public class CodecLib {
     private void loadDefaultDecoders() {
         addDecoder(new _ArrayPatternDecoder());
         addDecoder(new _EnumPatternDecoder());
-        addDecoder(new _ThrowablePatternDecoder());
         addDecoder(new _PropertiesPatternDecoder());
 
         addDecoder(StackTraceElement.class, new StackTraceElementDecoder());
@@ -217,7 +226,6 @@ public class CodecLib {
         addEncoder(new _ClobPatternEncoder());
         addEncoder(new _DatePatternEncoder());
         addEncoder(new _EnumPatternEncoder());
-        addEncoder(new _ThrowablePatternEncoder());
         addEncoder(new _PropertiesPatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());

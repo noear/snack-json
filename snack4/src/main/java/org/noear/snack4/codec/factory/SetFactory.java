@@ -1,5 +1,6 @@
 package org.noear.snack4.codec.factory;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.ObjectFactory;
 
@@ -13,7 +14,7 @@ import java.util.Set;
  */
 public class SetFactory implements ObjectFactory<Set> {
     @Override
-    public Set create(Options opts, Class<Set> clazz) {
+    public Set create(Options opts, ONode node, Class<?> clazz) {
         return new HashSet();
     }
 }

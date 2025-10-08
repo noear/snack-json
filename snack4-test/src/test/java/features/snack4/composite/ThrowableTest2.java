@@ -13,9 +13,9 @@ public class ThrowableTest2 {
 
     @Test
     public void test() {
-        Object tmp = ONode.load(json);
+        Object tmp = ONode.deserialize(json);
 
-        assert tmp instanceof Throwable;
+        assert tmp instanceof IllegalArgumentException;
 
         ((Throwable) tmp).printStackTrace();
 
@@ -26,9 +26,9 @@ public class ThrowableTest2 {
         System.out.println(json2);
 
 
-        tmp = ONode.load(json2);
+        tmp = ONode.deserialize(json2);
 
-        assert tmp instanceof Throwable;
+        assert tmp instanceof IllegalArgumentException;
 
         ((Throwable) tmp).printStackTrace();
 
@@ -43,7 +43,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test1() {
-        Object tmp = ONode.load(json);
+        Object tmp = ONode.deserialize(json);
 
         assert tmp instanceof Throwable;
 

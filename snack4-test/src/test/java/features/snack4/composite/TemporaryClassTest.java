@@ -33,13 +33,8 @@ public class TemporaryClassTest {
         String json = ONode.serialize(userServices, Feature.Write_ClassName);
         System.out.println(json);
 
-        try {
-            Object obj = ONode.load(json);
-            assert false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            assert true;
-        }
+        //临时类会自动转换为父类，并处理成功
+        ONode.deserialize(json);
     }
 
 

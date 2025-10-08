@@ -1,5 +1,6 @@
 package org.noear.snack4.codec.factory;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.ObjectFactory;
 
@@ -13,7 +14,7 @@ import java.util.Collection;
  */
 public class CollectionFactory implements ObjectFactory<Collection> {
     @Override
-    public Collection create(Options opts, Class<Collection> clazz) {
+    public Collection create(Options opts, ONode node, Class<?> clazz) {
         return new ArrayList();
     }
 }
