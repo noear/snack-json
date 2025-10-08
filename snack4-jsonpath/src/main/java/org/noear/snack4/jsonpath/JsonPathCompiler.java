@@ -20,6 +20,10 @@ import org.noear.snack4.jsonpath.segment.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author noear
+ * @since 4.0
+ * */
 public class JsonPathCompiler {
     /*
      * 编译

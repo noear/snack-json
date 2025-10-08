@@ -24,6 +24,9 @@ import java.util.Set;
 
 /**
  * 类型验证规则实现
+ *
+ * @author noear
+ * @since 4.0
  */
 public class TypeRule implements ValidationRule {
     private final Set<String> allowedTypes;

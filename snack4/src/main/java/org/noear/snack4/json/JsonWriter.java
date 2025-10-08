@@ -30,6 +30,10 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author noear 2025/3/16 created
+ * @since 4.0
+ */
 public class JsonWriter {
     public static String write(ONode node, Options opts) throws IOException {
         StringWriter writer = new StringWriter();

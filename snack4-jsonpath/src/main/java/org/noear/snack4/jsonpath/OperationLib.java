@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 操作符处理库(支持动态注册)
  *
  * @author noear 2025/5/5 created
+ * @since 4.0
  */
 public class OperationLib {
     private static final Map<String, Operation> LIB = new ConcurrentHashMap<>();

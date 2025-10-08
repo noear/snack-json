@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 表达式
  *
  * @author noear 2025/5/5 created
+ * @since 4.0
  */
 public class Expression {
     private static Map<String, Expression> expressionMap = new ConcurrentHashMap<>();

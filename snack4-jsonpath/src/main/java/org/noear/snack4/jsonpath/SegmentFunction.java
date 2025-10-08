@@ -19,6 +19,12 @@ import org.noear.snack4.ONode;
 
 import java.util.List;
 
+/**
+ * 版段处理函数
+ *
+ * @author noear
+ * @since 4.0
+ * */
 public interface SegmentFunction {
     List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode);
 }

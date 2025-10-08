@@ -35,6 +35,9 @@ import java.util.function.Consumer;
 
 /**
  * JSON 节点抽象
+ *
+ * @author noear 2019/2/12 created
+ * @since 4.0
  */
 public final class ONode {
     private static JsonPathProvider jsonPathProvider;

@@ -26,6 +26,9 @@ import java.util.*;
 
 /**
  * JSON 处理选项（线程安全配置）
+ *
+ * @author noear 2019/2/12 created
+ * @since 4.0
  */
 public final class Options {
     //默认类型的key

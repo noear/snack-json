@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
  * 条件描述
  *
  * @author noear 2025/5/5 created
+ * @since 4.0
  */
 public class Condition {
     private static Map<String, Condition> conditionMap = new ConcurrentHashMap<>();

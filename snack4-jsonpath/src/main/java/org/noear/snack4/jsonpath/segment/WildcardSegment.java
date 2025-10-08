@@ -29,6 +29,7 @@ import java.util.Map;
  * 处理通配符 * （子级偏平化）
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class WildcardSegment implements SegmentFunction {
     private boolean flattened;

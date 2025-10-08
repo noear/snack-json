@@ -29,6 +29,7 @@ import java.util.List;
  * 处理精确索引（支持负数）
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class IndexSegment implements SegmentFunction {
     private String key;

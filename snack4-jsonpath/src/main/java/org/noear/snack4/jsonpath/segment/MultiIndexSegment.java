@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  * 处理多索引选择（如 [1,4], ['a','b']）
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class MultiIndexSegment implements SegmentFunction {
     private boolean isAll;

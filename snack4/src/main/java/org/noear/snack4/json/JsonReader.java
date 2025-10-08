@@ -27,6 +27,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+/**
+ * @author noear noear 2025/3/16 created
+ * @since 4.0
+ * */
 public class JsonReader {
     public static ONode read(String json) throws IOException {
         return read(json, null);

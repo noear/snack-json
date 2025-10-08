@@ -17,6 +17,9 @@ package org.noear.snack4;
 
 /**
  * JSON 特性枚举（按读写方向分类）
+ *
+ * @author noear 2019/2/12 created
+ * @since 4.0
  */
 public enum Feature {
     //-----------------------------

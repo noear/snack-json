@@ -20,6 +20,9 @@ import org.noear.snack4.jsonschema.JsonSchemaException;
 
 /**
  * 预编译规则接口
+ *
+ * @author noear
+ * @since 4.0
  */
 public interface ValidationRule {
     void validate(ONode data) throws JsonSchemaException;

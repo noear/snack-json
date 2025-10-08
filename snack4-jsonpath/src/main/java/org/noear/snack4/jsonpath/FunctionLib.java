@@ -33,6 +33,7 @@ import java.util.stream.Stream;
  * 函数处理库(支持动态注册)
  *
  * @author noear 2025/3/17 created
+ * @since 4.0
  */
 public class FunctionLib {
     private static final Map<String, BiFunction<Options, List<ONode>, ONode>> LIB = new ConcurrentHashMap<>();

@@ -20,6 +20,9 @@ import java.util.Deque;
 
 /**
  * JSON路径追踪器，用于记录当前JSON节点的访问路径
+ *
+ * @author noear
+ * @since 4.0
  */
 public class PathTracker {
     private final Deque<String> stack = new ArrayDeque<>();

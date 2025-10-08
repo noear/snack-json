@@ -24,6 +24,9 @@ import java.util.Set;
 
 /**
  * 枚举验证规则实现
+ *
+ * @author noear
+ * @since 4.0
  */
 public class EnumRule implements ValidationRule {
     private final Set<ONode> allowedValues;

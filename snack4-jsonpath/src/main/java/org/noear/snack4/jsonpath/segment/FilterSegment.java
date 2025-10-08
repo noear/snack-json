@@ -29,6 +29,7 @@ import java.util.List;
  * 处理过滤器（如 [?(@.price > 10)]）
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class FilterSegment implements SegmentFunction {
     private final Expression expression;

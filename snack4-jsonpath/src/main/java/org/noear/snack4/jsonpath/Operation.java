@@ -21,6 +21,7 @@ import org.noear.snack4.ONode;
  * 操作符处理
  *
  * @author noear 2025/5/5 created
+ * @since 4.0
  */
 public interface Operation {
     boolean apply(ONode node, Condition condition, ONode root);

@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * @author noear 2025/5/4 created
+ * @since 4.0
  */
 public class Asserts {
     public static boolean isEmpty(String text) {

@@ -22,6 +22,9 @@ import java.util.List;
 
 /**
  * 编译验证规则实现
+ *
+ * @author noear
+ * @since 4.0
  */
 public class CompiledRule {
     private final List<ValidationRule> rules;

@@ -19,6 +19,7 @@ package org.noear.snack4.jsonpath;
  * 查询模式
  *
  * @author noear 2025/8/6 created
+ * @since 4.0
  */
 public enum QueryMode {
     SELECT,

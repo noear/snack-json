@@ -28,6 +28,9 @@ import java.util.Map;
 
 /**
  * JSON模式验证器，支持JSON Schema规范
+ *
+ * @author noear
+ * @since 4.0
  */
 public class JsonSchema {
     public static JsonSchema load(String jsonSchema) {

@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath.util;
 
 /**
  * @author noear 2025/5/5 created
+ * @since 4.0
  */
 public class RangeUtil {
     public static int normalize(int val, int size) {

@@ -30,6 +30,7 @@ import java.util.List;
  * 处理属性获取
  *
  * @author noear
+ * @since 4.0
  */
 public class PropertySegment implements SegmentFunction {
     private String key;

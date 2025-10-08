@@ -31,6 +31,7 @@ import java.util.List;
  * 处理范围选择（如 [1:4]，[1:5:1]）
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class RangeIndexSegment implements SegmentFunction {
     //[start:end:step]

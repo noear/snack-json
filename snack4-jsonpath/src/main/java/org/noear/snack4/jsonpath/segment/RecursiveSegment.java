@@ -29,6 +29,7 @@ import java.util.Map;
  * 处理递归搜索 ..
  *
  * @author noear 2025/10/3 created
+ * @since 4.0
  */
 public class RecursiveSegment implements SegmentFunction {
     @Override

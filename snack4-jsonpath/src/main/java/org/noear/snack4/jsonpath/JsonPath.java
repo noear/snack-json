@@ -24,6 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JSON路径查询工具类
+ *
+ * @author noear
+ * @since 4.0
  */
 public class JsonPath {
     private final String path;
