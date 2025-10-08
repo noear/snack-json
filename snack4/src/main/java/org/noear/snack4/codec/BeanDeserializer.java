@@ -20,7 +20,6 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.util.*;
-import org.noear.snack4.exception.ReflectionException;
 import org.noear.snack4.exception.SnackException;
 import org.noear.snack4.util.Asserts;
 
@@ -83,7 +82,7 @@ public class BeanDeserializer {
                     if (clz == null) {
                         return null;
                     } else {
-                        return BeanUtil.newInstance(clz);
+                        return ClassUtil.newInstance(clz);
                     }
                 }
             }

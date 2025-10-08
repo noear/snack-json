@@ -3,7 +3,7 @@ package org.noear.snack4.codec.decode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
-import org.noear.snack4.codec.util.BeanUtil;
+import org.noear.snack4.codec.util.ClassUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class _PropertiesPatternDecoder implements ObjectPatternDecoder<Propertie
     public Properties decode(DecodeContext<Properties> ctx, ONode node) {
         Properties properties = ctx.getTarget();
         if (properties == null) {
-            properties = (Properties) BeanUtil.newInstance(ctx.getType());
+            properties = (Properties) ClassUtil.newInstance(ctx.getType());
         }
 
         flattenNodeToProperties(node, properties, "");
@@ -32,7 +32,7 @@ public class _PropertiesPatternDecoder implements ObjectPatternDecoder<Propertie
 
 
     // 将嵌套的ONode扁平化为Properties
-    private void flattenNodeToProperties(ONode node, Properties properties, String prefix) {
+    static void flattenNodeToProperties(ONode node, Properties properties, String prefix) {
         if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
                 String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();

@@ -19,7 +19,6 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
-import org.noear.snack4.exception.SnackException;
 import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.Field;
@@ -68,11 +67,11 @@ public class FieldWrap implements Property{
             deserialize = attr.deserialize();
 
             if (attr.serializeEncoder().isInterface() == false) {
-                serializeEncoder = BeanUtil.newInstance(attr.serializeEncoder());
+                serializeEncoder = ClassUtil.newInstance(attr.serializeEncoder());
             }
 
             if (attr.deserializeDecoder().isInterface() == false) {
-                deserializeDecoder = BeanUtil.newInstance(attr.deserializeDecoder());
+                deserializeDecoder = ClassUtil.newInstance(attr.deserializeDecoder());
             }
 
             deserializeFeaturesValue = Feature.addFeature(0, attr.deserializeFeatures());
