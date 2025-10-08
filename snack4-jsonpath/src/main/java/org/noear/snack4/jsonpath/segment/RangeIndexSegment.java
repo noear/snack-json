@@ -18,7 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.util.RangeUtil;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 处理范围选择（如 [1:4]，[1:5:1]）
+ * 处理范围选择（如 $.list[1:4]，[1:5:1]）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
@@ -60,7 +60,7 @@ public class RangeIndexSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         if (step == 0) {
             return Collections.emptyList();
         }

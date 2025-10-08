@@ -19,7 +19,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理属性获取
+ * 处理属性获取（如 $.demo, $.demo.user）
  *
  * @author noear
  * @since 4.0
@@ -40,7 +40,7 @@ public class PropertySegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {

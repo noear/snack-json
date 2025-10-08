@@ -18,6 +18,8 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.SnackException;
 
 /**
+ * JsonPath 异常
+ *
  * @author noear 2025/3/16 created
  * @since 4.0
  */

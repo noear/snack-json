@@ -18,7 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理精确索引（支持负数）
+ * 处理精确索引，支持负数反选（如 $.list[1], $.list[-1]）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
@@ -34,7 +34,6 @@ import java.util.List;
 public class IndexSegment implements SegmentFunction {
     private String key;
     private int index;
-
 
     public IndexSegment(String segmentStr) {
         if (segmentStr.indexOf('\'') < 0) {
@@ -45,7 +44,7 @@ public class IndexSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         List<ONode> result = new ArrayList<>();
 
         if (key != null) {

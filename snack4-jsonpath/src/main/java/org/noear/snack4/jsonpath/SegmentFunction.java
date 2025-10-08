@@ -20,11 +20,14 @@ import org.noear.snack4.ONode;
 import java.util.List;
 
 /**
- * 版段处理函数
+ * 片段处理函数
  *
  * @author noear
  * @since 4.0
  * */
 public interface SegmentFunction {
-    List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode);
+    /**
+     * 分析
+     */
+    List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode);
 }

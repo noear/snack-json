@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Expression;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理过滤器（如 [?(@.price > 10)]）
+ * 处理过滤器（如 [?(@.price > 10)] ）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
@@ -44,7 +44,7 @@ public class FilterSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         if (this.flattened) {
             //已经偏平化
             List<ONode> result = new ArrayList<>();
@@ -67,7 +67,7 @@ public class FilterSegment implements SegmentFunction {
     }
 
     // 新增递归展开方法
-    private void flattenResolve(ONode node, Context context, List<ONode> result) {
+    private void flattenResolve(ONode node, QueryContext context, List<ONode> result) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {

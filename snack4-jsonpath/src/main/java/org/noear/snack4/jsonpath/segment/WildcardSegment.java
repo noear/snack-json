@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 处理通配符 * （子级偏平化）
+ * 处理通配符，相当于偏平化（如 $.list.*）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
@@ -39,7 +39,7 @@ public class WildcardSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         if (flattened) {
             return currentNodes;
         }

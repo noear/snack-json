@@ -18,14 +18,15 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 
 /**
- * @author noear
+ * 路径操作符处理
+ *
+ * @author noear 2025/5/5 created
  * @since 4.0
- * */
-public class Context {
-    public boolean flattened = false;
-    public final ONode root;
-
-    public Context(ONode root) {
-        this.root = root;
-    }
+ */
+@FunctionalInterface
+public interface PathOperation {
+    /**
+     * 应用
+     */
+    boolean apply(ONode node, Condition condition, ONode root);
 }

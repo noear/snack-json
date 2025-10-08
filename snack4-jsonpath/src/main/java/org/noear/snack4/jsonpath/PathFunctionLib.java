@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -35,40 +34,40 @@ import java.util.stream.Stream;
  * @author noear 2025/3/17 created
  * @since 4.0
  */
-public class FunctionLib {
-    private static final Map<String, BiFunction<Options, List<ONode>, ONode>> LIB = new ConcurrentHashMap<>();
+public class PathFunctionLib {
+    private static final Map<String, PathFunction> LIB = new ConcurrentHashMap<>();
 
     static {
         // 聚合函数
-        register("min", FunctionLib::min);
-        register("max", FunctionLib::max);
-        register("avg", FunctionLib::avg);
-        register("sum", FunctionLib::sum);
+        register("min", PathFunctionLib::min);
+        register("max", PathFunctionLib::max);
+        register("avg", PathFunctionLib::avg);
+        register("sum", PathFunctionLib::sum);
 
         // 集合函数
-        register("size", FunctionLib::size);
-        register("keys", FunctionLib::keys);
-        register("first", FunctionLib::first);
-        register("last", FunctionLib::last);
+        register("size", PathFunctionLib::size);
+        register("keys", PathFunctionLib::keys);
+        register("first", PathFunctionLib::first);
+        register("last", PathFunctionLib::last);
 
         // 字符串函数
-        register("length", FunctionLib::length);
-        register("upper", FunctionLib::upper);
-        register("lower", FunctionLib::lower);
-        register("trim", FunctionLib::trim);
+        register("length", PathFunctionLib::length);
+        register("upper", PathFunctionLib::upper);
+        register("lower", PathFunctionLib::lower);
+        register("trim", PathFunctionLib::trim);
     }
 
     /**
      * 注册
      */
-    public static void register(String name, BiFunction<Options, List<ONode>, ONode> func) {
+    public static void register(String name, PathFunction func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static BiFunction<Options, List<ONode>, ONode> get(String funcName) {
+    public static PathFunction get(String funcName) {
         return LIB.get(funcName);
     }
 
@@ -188,7 +187,7 @@ public class FunctionLib {
 
     private static Stream<ONode> flattenDo(ONode node) {
         if (node.isArray()) {
-            return node.getArray().stream().flatMap(FunctionLib::flattenDo);
+            return node.getArray().stream().flatMap(PathFunctionLib::flattenDo);
         } else {
             return Stream.of(node);
         }

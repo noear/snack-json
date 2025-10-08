@@ -18,7 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 处理多索引选择（如 [1,4], ['a','b']）
+ * 处理多索引选择（如 $.list[1,4], ['a','b']）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
@@ -59,7 +59,7 @@ public class MultiIndexSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {

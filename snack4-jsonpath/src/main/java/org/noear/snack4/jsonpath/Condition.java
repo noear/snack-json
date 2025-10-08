@@ -181,7 +181,6 @@ public class Condition {
 
     /**
      * 解析 js 正则
-     *
      */
     public static Pattern parseJsRegex(String jsRegex) {
         // 1. 检查输入是否以 / 开头和结尾

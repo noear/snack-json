@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 处理动态索引（如 $.meta[$.type] ）
  *
  * @author noear 2025/10/8 created
  * @since 4.0
@@ -37,7 +38,7 @@ public class DynamicIndexSegment implements SegmentFunction {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         List<ONode> results = new ArrayList<>();
 
         for (ONode node : currentNodes) {

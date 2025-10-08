@@ -16,21 +16,15 @@
 package org.noear.snack4.jsonpath.util;
 
 /**
+ * 区间工具
+ *
  * @author noear 2025/5/5 created
  * @since 4.0
  */
 public class RangeUtil {
-    public static int normalize(int val, int size) {
-        if (val >= 0) {
-            return val;
-        } else {
-            return size + val;
-        }
-    }
-
     public static Bounds bounds(int start, int end, int step, int size) {
-        int n_start = start;//normalize(start, size);
-        int n_end = end;//normalize(end, size);
+        int n_start = start;
+        int n_end = end;
 
         int lower, upper;
         if (step >= 0) {

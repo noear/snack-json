@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * JSON路径查询工具类
+ * JsonPath
  *
  * @author noear
  * @since 4.0
@@ -41,7 +41,7 @@ public class JsonPath {
 
     public ONode select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        Context context = new Context(root);
+        QueryContext context = new QueryContext(root);
         for (SegmentFunction seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.SELECT);
         }
@@ -63,7 +63,7 @@ public class JsonPath {
 
     public ONode create(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        Context context = new Context(root);
+        QueryContext context = new QueryContext(root);
         for (SegmentFunction seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.CREATE);
         }
@@ -85,7 +85,7 @@ public class JsonPath {
 
     public void delete(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        Context context = new Context(root);
+        QueryContext context = new QueryContext(root);
         for (SegmentFunction seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.DELETE);
         }

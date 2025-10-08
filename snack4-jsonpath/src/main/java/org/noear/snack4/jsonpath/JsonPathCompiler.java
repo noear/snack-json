@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * JsonPath 编译器
+ *
  * @author noear
  * @since 4.0
  * */
@@ -44,7 +46,7 @@ public class JsonPathCompiler {
     private JsonPath doCompile() {
         index = 0; // 起始位置为 $ 符号
         index++;
-        Context context = new Context(null); //记录分析中的 flattened 变化
+        QueryContext context = new QueryContext(null); //记录分析中的 flattened 变化
 
         while (index < path.length()) {
             skipWhitespace();
@@ -67,7 +69,7 @@ public class JsonPathCompiler {
      * 分析 '.' 或 '..' 操作符
      *
      */
-    private void resolveDot(Context context) {
+    private void resolveDot(QueryContext context) {
         index++;
         if (index < path.length() && path.charAt(index) == '.') {
             index++;
@@ -113,7 +115,7 @@ public class JsonPathCompiler {
      * 分析 '[...]' 操作符
      *
      */
-    private void resolveBracket(Context context) {
+    private void resolveBracket(QueryContext context) {
         index++; // 跳过'['
         String segment = parseSegment(']');
         while (index < path.length() && path.charAt(index) == ']') {

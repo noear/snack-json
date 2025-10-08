@@ -28,37 +28,37 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author noear 2025/5/5 created
  * @since 4.0
  */
-public class OperationLib {
-    private static final Map<String, Operation> LIB = new ConcurrentHashMap<>();
+public class PathOperationLib {
+    private static final Map<String, PathOperation> LIB = new ConcurrentHashMap<>();
 
     static {
         // 操作函数
-        register("startsWith", OperationLib::startsWith);
-        register("endsWith", OperationLib::endsWith);
-        register("contains", OperationLib::contains);
-        register("in", OperationLib::in);
-        register("nin", OperationLib::nin);
-        register("=~", OperationLib::matches);
+        register("startsWith", PathOperationLib::startsWith);
+        register("endsWith", PathOperationLib::endsWith);
+        register("contains", PathOperationLib::contains);
+        register("in", PathOperationLib::in);
+        register("nin", PathOperationLib::nin);
+        register("=~", PathOperationLib::matches);
 
-        register("==", OperationLib::compare);
-        register("!=", OperationLib::compare);
-        register(">", OperationLib::compare);
-        register("<", OperationLib::compare);
-        register(">=", OperationLib::compare);
-        register("<=", OperationLib::compare);
+        register("==", PathOperationLib::compare);
+        register("!=", PathOperationLib::compare);
+        register(">", PathOperationLib::compare);
+        register("<", PathOperationLib::compare);
+        register(">=", PathOperationLib::compare);
+        register("<=", PathOperationLib::compare);
     }
 
     /**
      * 注册
      */
-    public static void register(String name, Operation func) {
+    public static void register(String name, PathOperation func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static Operation get(String funcName) {
+    public static PathOperation get(String funcName) {
         return LIB.get(funcName);
     }
 

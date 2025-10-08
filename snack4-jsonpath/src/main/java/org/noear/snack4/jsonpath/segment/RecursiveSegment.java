@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.Context;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
@@ -26,14 +26,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 处理递归搜索 ..
+ * 处理递归搜索（如 $..a ）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
  */
 public class RecursiveSegment implements SegmentFunction {
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
         List<ONode> result = new ArrayList<>();
 
         for (ONode node : currentNodes) {

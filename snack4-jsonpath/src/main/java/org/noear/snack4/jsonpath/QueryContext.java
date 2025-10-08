@@ -18,11 +18,16 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 
 /**
- * 操作符处理
+ * 查询上下文
  *
- * @author noear 2025/5/5 created
+ * @author noear
  * @since 4.0
- */
-public interface Operation {
-    boolean apply(ONode node, Condition condition, ONode root);
+ * */
+public class QueryContext {
+    public boolean flattened = false;
+    public final ONode root;
+
+    public QueryContext(ONode root) {
+        this.root = root;
+    }
 }
