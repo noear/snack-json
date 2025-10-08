@@ -3,10 +3,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.exception.PathResolutionException;
 import org.noear.snack4.json.JsonSource;
-import org.noear.snack4.jsonpath.Context;
-import org.noear.snack4.jsonpath.JsonPath;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.SegmentFunction;
+import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,22 +24,18 @@ public class DynamicIndexSegment implements SegmentFunction {
     @Override
     public List<ONode> resolve(List<ONode> currentNodes, Context context, QueryMode mode) {
         List<ONode> results = new ArrayList<>();
-        // 仅处理 SELECT 模式，CREATE/DELETE 可能复杂
-        if (mode != QueryMode.SELECT) {
-            throw new UnsupportedOperationException("Dynamic path in CREATE/DELETE is not supported");
-        }
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = JsonPath.select(context.root, dynamicPath);
+            ONode dynamicResult = Condition.resolveNestedPath(node, dynamicPath, context.root);
 
             if (dynamicResult.isNumber()) {
                 forIndex(Arrays.asList(node), dynamicResult.getInt(), mode, results);
             } else if (dynamicResult.isString()) {
                 forKey(Arrays.asList(node), dynamicResult.getString(), mode, results);
             }
-
         }
+
         return results;
     }
 

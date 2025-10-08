@@ -142,7 +142,10 @@ public class Condition {
         }
     }
 
-    private static ONode resolveNestedPath(ONode node, String keyPath, ONode root) {
+    /**
+     * 分析内嵌路径
+     */
+    public static ONode resolveNestedPath(ONode node, String keyPath, ONode root) {
         if (keyPath.startsWith("$")) {
             return JsonPath.select(root, keyPath);
         }
@@ -176,6 +179,10 @@ public class Condition {
         return current;
     }
 
+    /**
+     * 解析 js 正则
+     *
+     */
     public static Pattern parseJsRegex(String jsRegex) {
         // 1. 检查输入是否以 / 开头和结尾
         if (!jsRegex.startsWith("/") || !jsRegex.contains("/")) {
