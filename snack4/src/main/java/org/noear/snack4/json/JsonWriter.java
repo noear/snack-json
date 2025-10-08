@@ -76,6 +76,7 @@ public class JsonWriter {
                 writer.write(node.getBoolean() ? "true" : "false");
                 break;
             case Null:
+            case Undefined:
                 writer.write("null");
                 break;
         }

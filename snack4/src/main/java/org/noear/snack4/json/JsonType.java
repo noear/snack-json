@@ -42,6 +42,8 @@ public enum JsonType {
 
     public static String getTypeName(JsonType type) {
         switch (type) {
+            case Undefined:
+                return "undefined";
             case Null:
                 return "null";
             case Boolean:

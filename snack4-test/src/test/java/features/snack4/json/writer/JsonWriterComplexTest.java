@@ -1,6 +1,7 @@
 package features.snack4.json.writer;
 
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.json.JsonWriter;
@@ -38,7 +39,7 @@ public class JsonWriterComplexTest {
         node.set("null", null);
         node.set("array", Arrays.asList(1, 2, 3));
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.of(), writer).write(node);
+        new JsonWriter(Options.of(Feature.Write_Nulls), writer).write(node);
         assertEquals("{\"string\":\"value\",\"number\":123,\"boolean\":true,\"null\":null,\"array\":[1,2,3]}", writer.toString());
     }
 
@@ -279,7 +280,7 @@ public class JsonWriterComplexTest {
         node.set("key1", null);
         node.set("key2", null);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.of(), writer).write(node);
+        new JsonWriter(Options.of(Feature.Write_Nulls), writer).write(node);
         assertEquals("{\"key1\":null,\"key2\":null}", writer.toString());
     }
 
@@ -290,7 +291,7 @@ public class JsonWriterComplexTest {
         node.set("key2", null);
         node.set("key3", "value3");
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.of(), writer).write(node);
+        new JsonWriter(Options.of(Feature.Write_Nulls), writer).write(node);
         assertEquals("{\"key1\":\"value1\",\"key2\":null,\"key3\":\"value3\"}", writer.toString());
     }
 
@@ -311,7 +312,7 @@ public class JsonWriterComplexTest {
         nested.set("key2", null);
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.of(), writer).write(node);
+        new JsonWriter(Options.of(Feature.Write_Nulls), writer).write(node);
         assertEquals("{\"nested\":{\"key1\":null,\"key2\":null}}", writer.toString());
     }
 
@@ -325,7 +326,7 @@ public class JsonWriterComplexTest {
         nested.set("nested", nested2);
         node.set("nested", nested);
         StringWriter writer = new StringWriter();
-        new JsonWriter(Options.of(), writer).write(node);
+        new JsonWriter(Options.of(Feature.Write_Nulls), writer).write(node);
         assertEquals("{\"nested\":{\"key1\":null,\"nested\":{\"key2\":null}}}", writer.toString());
     }
 
