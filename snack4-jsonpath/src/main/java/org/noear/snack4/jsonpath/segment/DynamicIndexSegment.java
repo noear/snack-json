@@ -2,12 +2,14 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,22 +19,9 @@ import java.util.List;
  */
 public class DynamicIndexSegment implements SegmentFunction {
     private final String dynamicPath;
-    private JsonPath compiledPath;
 
     public DynamicIndexSegment(String dynamicPath) {
-        // 移除 $ 或 @ 前缀 (如果适用)
-        if (dynamicPath.startsWith("$.")) {
-            this.dynamicPath = dynamicPath;
-        } else if (dynamicPath.startsWith("@.")) {
-            // 支持 @ 引用当前节点
-            this.dynamicPath = "$"+dynamicPath.substring(1);
-        } else {
-            throw new PathResolutionException("Dynamic path must start with '$' or '@'");
-        }
-
-        // 编译嵌套的 JsonPath (不在此处编译，因为 JsonPath.compile 依赖静态缓存，
-        // 且可能导致编译时循环依赖或在 ONode 上执行编译，所以通常在 resolve() 中按需编译或查询)
-        // 更好的做法是在 resolve() 中使用 JsonPath.select()
+        this.dynamicPath = dynamicPath;
     }
 
     @Override
@@ -45,18 +34,77 @@ public class DynamicIndexSegment implements SegmentFunction {
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = JsonPath.select(node, dynamicPath);
+            ONode dynamicResult = JsonPath.select(context.root, dynamicPath);
 
-            // 2. 获取查询结果作为键/索引
-            String key = dynamicResult.getString();
-            if (key != null && !key.isEmpty()) {
-                // 3. 使用结果作为键/索引进行下一步查询
-                ONode target = node.get(key);
-                if (target != null && target.isNull() == false) {
-                    results.add(target);
-                }
+            if (dynamicResult.isNumber()) {
+                forIndex(Arrays.asList(node), dynamicResult.getInt(), mode, results);
+            } else if (dynamicResult.isString()) {
+                forKey(Arrays.asList(node), dynamicResult.getString(), mode, results);
             }
+
         }
         return results;
+    }
+
+    private void forKey(List<ONode> currentNodes, String key, QueryMode mode, List<ONode> result) {
+        currentNodes.stream()
+                .filter(o -> {
+                    if (mode == QueryMode.CREATE) {
+                        o.asObject();
+                        return true;
+                    } else {
+                        return o.isObject();
+                    }
+                })
+                .map(obj -> {
+                    if (mode == QueryMode.CREATE) {
+                        obj.getOrNew(key);
+                    }
+
+                    ONode n1 = obj.getOrNull(key);
+                    if (n1.source == null) {
+                        n1.source = new JsonSource(obj, key, 0);
+                    }
+
+                    return n1;
+                })
+                .forEach(result::add);
+    }
+
+    private void forIndex(List<ONode> currentNodes, int index, QueryMode mode, List<ONode> result) {
+        currentNodes.stream()
+                .filter(o -> {
+                    if (mode == QueryMode.CREATE) {
+                        o.asArray();
+                        return true;
+                    } else {
+                        return o.isArray();
+                    }
+                })
+                .map(arr -> {
+                    int idx = index;
+                    if (idx < 0) {
+                        idx = arr.size() + idx;
+                    }
+
+                    if (mode == QueryMode.CREATE) {
+                        int count = idx + 1 - arr.size();
+                        for (int i = 0; i < count; i++) {
+                            arr.add(new ONode());
+                        }
+                    }
+
+                    if (idx < 0 || idx >= arr.size()) {
+                        throw new PathResolutionException("Index out of bounds: " + idx);
+                    }
+
+                    ONode n1 = arr.getOrNull(idx);
+                    if (n1.source == null) {
+                        n1.source = new JsonSource(arr, null, idx);
+                    }
+
+                    return n1;
+                })
+                .forEach(result::add);
     }
 }

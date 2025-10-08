@@ -153,15 +153,51 @@ public class JsonPathCompiler {
 
 
     // 解析路径段（支持终止符列表）
+    // 在 JsonPathCompiler.java 中
+
+    /**
+     * 解析路径段（支持终止符列表），同时健壮地处理引号、正则和嵌套方括号。
+     *
+     * @param terminators 允许的终止字符，如 '.', '[' 或 ']'。
+     * @return 解析到的路径段字符串。
+     */
     private String parseSegment(char... terminators) {
         StringBuilder sb = new StringBuilder();
-        boolean inRegex = false; // 标记是否正在解析正则表达式
-        boolean inBracket = false;
+        boolean inQuote = false; // 是否在引号内部
+        char quoteChar = 0;
+        boolean inRegex = false; // 是否在正则表达式内部 (仅在过滤器中可能出现)
+
+        // 检查当前解析是否是针对方括号内部的内容（即 resolveBracket 调用时）
+        boolean parsingBracketContent = isTerminator(']', terminators);
+        int bracketLevel = parsingBracketContent ? 1 : 0; // 如果解析方括号内容，初始级别为 1
 
         while (index < path.length()) {
             char ch = path.charAt(index);
 
-            // 处理正则表达式开始/结束标记
+            // 1. 处理引号内的内容
+            if ((ch == '\'' || ch == '\"') && !inRegex) {
+                if (inQuote && ch == quoteChar) {
+                    // 引号结束
+                    inQuote = false;
+                    quoteChar = 0;
+                } else if (!inQuote) {
+                    // 引号开始
+                    inQuote = true;
+                    quoteChar = ch;
+                }
+                sb.append(ch);
+                index++;
+                continue;
+            }
+
+            // 如果在引号内部，则除了上面的引号关闭逻辑，其他所有字符都只追加
+            if (inQuote) {
+                sb.append(ch);
+                index++;
+                continue;
+            }
+
+            // 2. 处理正则表达式的开始/结束 (仅在过滤器中适用)
             if (ch == '/' && !inRegex) {
                 inRegex = true;
                 sb.append(ch);
@@ -174,25 +210,35 @@ public class JsonPathCompiler {
                 continue;
             }
 
-            // 处理[]内嵌表达式结束
-            if (ch == ']' && inBracket) {
-                inBracket = false;
+            // 如果在正则表达式内部，忽略终止符检查
+            if (inRegex) {
                 sb.append(ch);
                 index++;
                 continue;
             }
 
-            // 如果在正则表达式内部，忽略终止符检查
-            if (!inBracket && !inRegex && isTerminator(ch, terminators)) {
-                if (ch == ']') {
-                    index++; // 跳过闭合的 ]
+
+            // 3. 处理嵌套的方括号 (仅在解析方括号内容时激活)
+            if (parsingBracketContent) {
+                if (ch == '[') {
+                    bracketLevel++;
+                } else if (ch == ']') {
+                    bracketLevel--;
+                    if (bracketLevel == 0) {
+                        index++; // 跳过闭合的 ]
+                        break;
+                    }
                 }
-                break;
             }
 
-            // 处理[]内嵌表达式开始
-            if (ch == '[' && !inBracket) {
-                inBracket = true;
+            // 4. 检查外部终止符（仅在非方括号内容解析模式下，或在方括号内容解析但遇到非方括号终止符时）
+            if (!parsingBracketContent || bracketLevel == 1) {
+                if (isTerminator(ch, terminators)) {
+                    // 遇到非方括号的终止符 (如 . 或 [)
+                    if (ch != ']') {
+                        break;
+                    }
+                }
             }
 
             sb.append(ch);

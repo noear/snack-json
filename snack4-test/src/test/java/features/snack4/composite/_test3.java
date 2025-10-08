@@ -2,6 +2,7 @@ package features.snack4.composite;
 
 import demo.snack4._models.PanOcrModel;
 import demo.snack4._models.ShanYunResModel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.TypeRef;
@@ -70,7 +71,7 @@ public class _test3 {
         ONode tmp = oNode.select("$.fromBranch[$.keyword]");
 
         System.out.print(tmp.toJson());
-        assert "{\"a\":\"a\"}".equals(tmp.toJson());
+        Assertions.assertEquals("{\"a\":\"a\"}", tmp.toJson());
     }
 
     @Test
