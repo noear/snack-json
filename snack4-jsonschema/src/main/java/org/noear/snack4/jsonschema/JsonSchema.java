@@ -33,11 +33,11 @@ import java.util.Map;
  * @since 4.0
  */
 public class JsonSchema {
-    public static JsonSchema load(String jsonSchema) {
+    public static JsonSchema ofJson(String jsonSchema) {
         return new JsonSchema(ONode.ofJson(jsonSchema));
     }
 
-    public static JsonSchema from(ONode jsonSchema) {
+    public static JsonSchema ofNode(ONode jsonSchema) {
         return new JsonSchema(jsonSchema);
     }
 

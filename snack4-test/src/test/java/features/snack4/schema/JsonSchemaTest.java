@@ -15,14 +15,14 @@ import java.io.StringReader;
 public class JsonSchemaTest {
     @Test
     public void case1() {
-        JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
+        JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
         schema.validate(ONode.ofJson("{userId:'1'}")); //校验格式
     }
 
     @Test
     public void case2() {
-        JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
+        JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
         Throwable err = null;
         try {
