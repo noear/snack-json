@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-    <a target="_blank" href="https://search.maven.org/artifact/org.noear/snack3">
-        <img src="https://img.shields.io/maven-central/v/org.noear/snack3.svg?label=Maven%20Central" alt="Maven" />
+    <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
+        <img src="https://img.shields.io/maven-central/v/org.noear/snack4.svg?label=Maven%20Central" alt="Maven" />
     </a>
     <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0.txt">
 		<img src="https://img.shields.io/:license-Apache2-blue.svg" alt="Apache 2" />
