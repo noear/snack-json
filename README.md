@@ -157,14 +157,14 @@ options.addEncoder(Date.class, (ctx, value, target) -> {
 options.addDecoder(Date.class, ...);
 
 //添加特性
-options.addFeature(Feature.PrettyFormat);
+options.addFeature(Feature.Write_PrettyFormat);
 
 //移除特性
-options.removeFeature(Feature.PrettyFormat);
+options.removeFeature(Feature.Write_PrettyFormat);
 
 //设置日期格式附
-options.addFeature(Feature.WriteDateUseFormat); //使用日期格式
-options.setDateFormat("yyyy-MM");
+options.addFeature(Feature.Write_UseDateFormat); //使用日期格式
+options.dateFormat("yyyy-MM");
 
 //..
 
