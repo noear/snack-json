@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.exception;
+package org.noear.snack4;
 
 /**
  * @author noear 2025/3/16 created
  */
-public class TypeConvertException extends SnackException {
-    public TypeConvertException(String message) {
+public class SnackException extends RuntimeException {
+    public SnackException(String message) {
         super(message);
     }
 
-    public TypeConvertException(String message, Throwable cause) {
+    public SnackException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public TypeConvertException(Throwable cause) {
+    public SnackException(Throwable cause) {
         super(cause);
     }
 }

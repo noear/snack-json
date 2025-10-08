@@ -3,7 +3,7 @@ package org.noear.snack4.codec.util;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.DecodeContext;
-import org.noear.snack4.exception.TypeConvertException;
+import org.noear.snack4.codec.CodecException;
 import org.noear.snack4.util.Asserts;
 
 import java.text.DateFormat;
@@ -201,10 +201,10 @@ public class DateUtil {
 
                 return DateUtil.parse(node.getString()).toInstant();
             } catch (Exception ex) {
-                throw new TypeConvertException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node, ex);
+                throw new CodecException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node, ex);
             }
         } else {
-            throw new TypeConvertException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node);
+            throw new CodecException("Cannot be converted to " + ctx.getType().getSimpleName() + ": " + node);
         }
     }
 

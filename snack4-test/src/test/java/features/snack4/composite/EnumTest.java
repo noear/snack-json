@@ -5,7 +5,7 @@ import demo.snack4.enums.BookType;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
-import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.SnackException;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

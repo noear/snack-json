@@ -2,7 +2,7 @@ package org.noear.snack4.codec.util;
 
 
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.SnackException;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

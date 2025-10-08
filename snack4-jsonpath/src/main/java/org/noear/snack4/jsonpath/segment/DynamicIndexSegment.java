@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.exception.JsonPathException;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.*;
 

@@ -19,7 +19,6 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.IoUtil;
-import org.noear.snack4.exception.JsonParseException;
 
 import java.io.IOException;
 import java.io.Reader;

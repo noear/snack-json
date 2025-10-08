@@ -13,17 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.exception;
+package org.noear.snack4.codec;
+
+import org.noear.snack4.SnackException;
 
 /**
- * 解析异常
+ * @author noear 2025/3/16 created
  */
-public class JsonParseException extends SnackException {
-    public JsonParseException(String message) {
+public class CodecException extends SnackException {
+    public CodecException(String message) {
         super(message);
     }
 
-    public JsonParseException(String message, Throwable cause) {
+    public CodecException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public CodecException(Throwable cause) {
+        super(cause);
     }
 }

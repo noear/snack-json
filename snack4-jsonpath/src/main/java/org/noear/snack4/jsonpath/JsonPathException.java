@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.exception;
+package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.SnackException;
 
 /**
  * @author noear 2025/3/16 created

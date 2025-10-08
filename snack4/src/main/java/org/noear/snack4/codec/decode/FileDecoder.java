@@ -3,7 +3,7 @@ package org.noear.snack4.codec.decode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
-import org.noear.snack4.exception.TypeConvertException;
+import org.noear.snack4.codec.CodecException;
 
 import java.io.File;
 
@@ -19,6 +19,6 @@ public class FileDecoder implements ObjectDecoder<File> {
             return new File(node.getString());
         }
 
-        throw new TypeConvertException("Cannot be converted to File: " + node);
+        throw new CodecException("Cannot be converted to File: " + node);
     }
 }

@@ -16,7 +16,6 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.util.Asserts;
 
 import java.util.*;

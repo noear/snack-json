@@ -3,7 +3,7 @@ package org.noear.snack4.codec.decode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectDecoder;
-import org.noear.snack4.exception.TypeConvertException;
+import org.noear.snack4.codec.CodecException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -20,7 +20,7 @@ public class URLDecoder implements ObjectDecoder<URL> {
         try {
             return URI.create(node.getString()).toURL();
         } catch (MalformedURLException e) {
-            throw new TypeConvertException(e);
+            throw new CodecException(e);
         }
     }
 }

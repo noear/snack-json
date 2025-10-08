@@ -20,7 +20,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.util.*;
-import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.SnackException;
 import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.*;

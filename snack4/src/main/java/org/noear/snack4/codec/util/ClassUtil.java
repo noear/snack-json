@@ -1,10 +1,8 @@
 package org.noear.snack4.codec.util;
 
-import org.noear.snack4.exception.SnackException;
+import org.noear.snack4.SnackException;
 
-import java.io.Reader;
 import java.lang.reflect.Constructor;
-import java.sql.Clob;
 
 /**
  *

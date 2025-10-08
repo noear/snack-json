@@ -1,6 +1,5 @@
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.jsonpath.segment.*;
 
 import java.util.ArrayList;

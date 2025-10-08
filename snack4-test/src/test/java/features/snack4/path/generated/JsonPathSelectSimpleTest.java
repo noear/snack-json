@@ -2,7 +2,7 @@ package features.snack4.path.generated;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.exception.JsonPathException;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.JsonPath;
 
 import static org.junit.jupiter.api.Assertions.*;

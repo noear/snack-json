@@ -3,7 +3,7 @@ package org.noear.snack4.codec.decode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
-import org.noear.snack4.exception.TypeConvertException;
+import org.noear.snack4.codec.CodecException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
@@ -47,7 +47,7 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
             }
             return array;
         } else {
-            throw new TypeConvertException("Cannot be converted to Array: " + node);
+            throw new CodecException("Cannot be converted to Array: " + node);
         }
     }
 }

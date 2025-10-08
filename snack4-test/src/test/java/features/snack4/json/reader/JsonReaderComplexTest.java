@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.Options;
-import org.noear.snack4.exception.JsonParseException;
+import org.noear.snack4.json.JsonParseException;
 
 import java.io.StringReader;
 
