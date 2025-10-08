@@ -28,7 +28,7 @@ public enum Feature {
     Read_FailOnUnknownProperties(false),
 
     /**
-     * 是否允许使用注释
+     * 允许使用注释
      */
     Read_AllowComment(false),
     /**
@@ -70,6 +70,12 @@ public enum Feature {
      */
     Read_AllowBackslashEscapingAnyCharacter(false),
 
+    /**
+     * 允许无效的转义符
+     * */
+    Read_AllowInvalidEscapeCharacter(false),
+
+    Read_AllowUnescapedControlCharacters(false),
 
     /**
      * 处理大数字时使用字符串模式（避免精度丢失）
@@ -142,14 +148,21 @@ public enum Feature {
     Write_UseBigNumberMode(false),
 
     /**
-     * 转义非 ASCII 字符
+     * 使用原始反斜杠（`\\` 不会转为 `\\\\`）
+     * */
+    Write_UseRawBackslash(false),
+
+    /**
+     * 兼容浏览器显示（转义非 ASCII 字符）
      */
-    Write_EscapeNonAscii(false),
+    Write_BrowserCompatible(false),
+
     /**
      * 使用日期格式化（默认使用时间戳）
      */
     Write_UseDateFormat(false),
-    Write_UseNumberString(false),
+    Write_NumbersAsString(false),
+    Write_BigNumbersAsString(false),
     ;
 
 

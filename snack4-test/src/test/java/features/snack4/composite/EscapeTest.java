@@ -16,8 +16,8 @@ public class EscapeTest {
     public void case1() {
         String json = "{\"a\":\"\1\"}";
 
-        ONode node = ONode.load(json);
-        String json2 = node.toJson();
+        ONode node = ONode.load(json, Feature.Read_AllowUnescapedControlCharacters);
+        String json2 = node.toJson(Feature.Write_UseRawBackslash);
         String json2Val = node.get("a").getString();
         String json2Val2 = node.get("a").toJson();
 

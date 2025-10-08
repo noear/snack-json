@@ -9,8 +9,6 @@ import org.noear.snack4.Options;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -170,7 +168,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteEscapeNonAscii() throws IOException {
         ONode node = new ONode("こんにちは");
-        Options opts = Options.of(Feature.Write_EscapeNonAscii);
+        Options opts = Options.of(Feature.Write_BrowserCompatible);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("\"\\u3053\\u3093\\u306b\\u3061\\u306f\"", writer.toString());
@@ -179,7 +177,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteBigNumberMode() throws IOException {
         ONode node = new ONode(1234567890123456789L);
-        Options opts = Options.of(Feature.Write_UseBigNumberMode);
+        Options opts = Options.of(Feature.Write_BigNumbersAsString);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("\"1234567890123456789\"", writer.toString());

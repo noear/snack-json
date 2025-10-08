@@ -16,7 +16,7 @@ public class OptionTest {
     @Test
     public void case1() throws Exception {
         Options options = Options.of();
-        options.addFeature(Feature.Write_UseNumberString);
+        options.addFeature(Feature.Write_NumbersAsString);
         options.addFeature(Feature.Write_UseDateFormat);
         options.addFeature(Feature.Write_Nulls);
         options.addFeature(Feature.Write_EnumUsingName);

@@ -23,6 +23,8 @@ import org.noear.snack4.codec.util.DateUtil;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public class JsonWriter {
                 writeString(node.getString());
                 break;
             case Number:
-                if (opts.hasFeature(Feature.Write_UseBigNumberMode) || opts.hasFeature(Feature.Write_UseNumberString)) {
+                if (opts.hasFeature(Feature.Write_NumbersAsString)) {
                     writeString(String.valueOf(node.getValue()));
                 } else {
                     writeNumber(node.getNumber());
@@ -136,7 +138,8 @@ public class JsonWriter {
     }
 
     private void writeNumber(Number num) throws IOException {
-        if (opts.hasFeature(Feature.Write_UseBigNumberMode) && num instanceof Double) {
+        if (opts.hasFeature(Feature.Write_BigNumbersAsString)
+                && (num instanceof Double || num instanceof Long || num instanceof BigInteger || num instanceof BigDecimal)) {
             writer.write('"' + num.toString() + '"');
         } else {
             writer.write(num.toString());
@@ -169,7 +172,11 @@ public class JsonWriter {
                     sb.append("\\'");
                     break;
                 case '\\':
-                    sb.append("\\\\");
+                    if(opts.hasFeature(Feature.Write_UseRawBackslash)) {
+                        sb.append('\\');
+                    } else {
+                        sb.append("\\\\");
+                    }
                     break;
                 case '\b':
                     sb.append("\\b");
@@ -187,7 +194,7 @@ public class JsonWriter {
                     sb.append("\\t");
                     break;
                 default:
-                    if (c < 0x20 || (opts.hasFeature(Feature.Write_EscapeNonAscii) && c > 0x7F)) {
+                    if (c < 0x20 || (opts.hasFeature(Feature.Write_BrowserCompatible) && c > 0x7F)) {
                         sb.append(String.format("\\u%04x", (int) c));
                     } else {
                         sb.append(c);

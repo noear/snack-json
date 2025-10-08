@@ -60,7 +60,7 @@ public class Demo3 {
         User user = new User("张三", 24);
         String json = ONode.from(user).toJson(); // {"name":"张三","age":24}
 
-        String json2 = ONode.from(user).toJson(Options.of(Feature.Write_ClassName, Feature.Write_EscapeNonAscii)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
+        String json2 = ONode.from(user).toJson(Options.of(Feature.Write_ClassName, Feature.Write_BrowserCompatible)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
 
         System.out.println(json);
         System.out.println(json2);

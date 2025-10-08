@@ -241,17 +241,26 @@ public class JsonReader {
                         sb.append((char) Integer.parseInt(new String(hex), 16));
                         break;
                     default:
-                        if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
-                            sb.append("\\").append(c);
+                        if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
+                            sb.append(c);
+                        } else if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
+                            sb.append('\\').append(c);
                         } else {
+                            //RFC 8259
                             throw state.error("Invalid escape character: \\" + c);
                         }
                 }
             } else {
-                if (c < 0x20) throw state.error("Unescaped control character: 0x" + Integer.toHexString(c));
+                if (c < 0x20) {
+                    if (opts.hasFeature(Feature.Read_AllowUnescapedControlCharacters) == false) {
+                        //RFC 8259
+                        throw state.error("Unescaped control character: 0x" + Integer.toHexString(c));
+                    }
+                }
                 sb.append(c);
             }
         }
+
         return sb.toString();
     }
 

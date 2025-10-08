@@ -1,6 +1,7 @@
 package features.snack4.composite;
 
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 /**
@@ -10,8 +11,8 @@ public class _test4 {
     @Test
     public void testONodeToJson() {
         String jsonSomeFieldValueContainBackslash = "{\"abc\":\"\\abc\"}";
-        ONode oNode = ONode.load(jsonSomeFieldValueContainBackslash);
-        String toJson = oNode.toJson();//new Options().disableFeature(Feature.Write_EscapeNonAscii));
+        ONode oNode = ONode.load(jsonSomeFieldValueContainBackslash, Feature.Read_AllowBackslashEscapingAnyCharacter);
+        String toJson = oNode.toJson(Feature.Write_UseRawBackslash);
 
         System.out.println(jsonSomeFieldValueContainBackslash);
         System.out.println(toJson);
