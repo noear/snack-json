@@ -37,7 +37,7 @@ public class JsonPathCompiler {
 
     private final String path;
     private int index;
-    private List<SegmentFunction> segments = new ArrayList<>();
+    private List<Segment> segments = new ArrayList<>();
 
     private JsonPathCompiler(String path) {
         this.path = path;

@@ -17,17 +17,16 @@ package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
 
-import java.util.List;
-
 /**
- * 片段处理函数
+ * 路径操作符处理
  *
- * @author noear
+ * @author noear 2025/5/5 created
  * @since 4.0
- * */
-public interface SegmentFunction {
+ */
+@FunctionalInterface
+public interface Operation {
     /**
-     * 分析
+     * 应用
      */
-    List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode);
+    boolean apply(ONode node, Condition condition, ONode root);
 }

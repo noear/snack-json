@@ -30,7 +30,7 @@ import java.util.List;
  * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class DynamicIndexSegment implements SegmentFunction {
+public class DynamicIndexSegment implements Segment {
     private final String dynamicPath;
 
     public DynamicIndexSegment(String dynamicPath) {

@@ -30,10 +30,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JsonPath {
     private final String path;
-    private final List<SegmentFunction> segments;
+    private final List<Segment> segments;
     private final boolean multiple;
 
-    public JsonPath(String path, List<SegmentFunction> segments) {
+    public JsonPath(String path, List<Segment> segments) {
         this.path = path;
         this.segments = segments;
         this.multiple = ((path.indexOf('?') < 0 && path.indexOf('*') < 0 && path.indexOf("..") < 0 && path.indexOf(",") < 0 && path.indexOf(":") < 0) || path.indexOf("()") > 0);
@@ -42,7 +42,7 @@ public class JsonPath {
     public ONode select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContext context = new QueryContext(root);
-        for (SegmentFunction seg : segments) {
+        for (Segment seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.SELECT);
         }
 
@@ -64,7 +64,7 @@ public class JsonPath {
     public ONode create(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContext context = new QueryContext(root);
-        for (SegmentFunction seg : segments) {
+        for (Segment seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.CREATE);
         }
 
@@ -86,7 +86,7 @@ public class JsonPath {
     public void delete(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContext context = new QueryContext(root);
-        for (SegmentFunction seg : segments) {
+        for (Segment seg : segments) {
             currentNodes = seg.resolve(currentNodes, context, QueryMode.DELETE);
         }
 

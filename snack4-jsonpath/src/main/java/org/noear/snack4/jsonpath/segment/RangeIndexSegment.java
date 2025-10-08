@@ -21,7 +21,7 @@ import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.util.RangeUtil;
-import org.noear.snack4.jsonpath.SegmentFunction;
+import org.noear.snack4.jsonpath.Segment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class RangeIndexSegment implements SegmentFunction {
+public class RangeIndexSegment implements Segment {
     //[start:end:step]
 
     private Integer startRef;

@@ -23,51 +23,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 /**
- * 函数处理库(支持动态注册)
+ * JsonPath 函数处理库(支持动态注册)
  *
  * @author noear 2025/3/17 created
  * @since 4.0
  */
-public class PathFunctionLib {
-    private static final Map<String, PathFunction> LIB = new ConcurrentHashMap<>();
+public class FunctionLib {
+    private static final Map<String, Function> LIB = new ConcurrentHashMap<>();
 
     static {
         // 聚合函数
-        register("min", PathFunctionLib::min);
-        register("max", PathFunctionLib::max);
-        register("avg", PathFunctionLib::avg);
-        register("sum", PathFunctionLib::sum);
+        register("min", FunctionLib::min);
+        register("max", FunctionLib::max);
+        register("avg", FunctionLib::avg);
+        register("sum", FunctionLib::sum);
 
         // 集合函数
-        register("size", PathFunctionLib::size);
-        register("keys", PathFunctionLib::keys);
-        register("first", PathFunctionLib::first);
-        register("last", PathFunctionLib::last);
+        register("size", FunctionLib::size);
+        register("keys", FunctionLib::keys);
+        register("first", FunctionLib::first);
+        register("last", FunctionLib::last);
 
         // 字符串函数
-        register("length", PathFunctionLib::length);
-        register("upper", PathFunctionLib::upper);
-        register("lower", PathFunctionLib::lower);
-        register("trim", PathFunctionLib::trim);
+        register("length", FunctionLib::length);
+        register("upper", FunctionLib::upper);
+        register("lower", FunctionLib::lower);
+        register("trim", FunctionLib::trim);
     }
 
     /**
      * 注册
      */
-    public static void register(String name, PathFunction func) {
+    public static void register(String name, Function func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static PathFunction get(String funcName) {
+    public static Function get(String funcName) {
         return LIB.get(funcName);
     }
 
@@ -187,7 +186,7 @@ public class PathFunctionLib {
 
     private static Stream<ONode> flattenDo(ONode node) {
         if (node.isArray()) {
-            return node.getArray().stream().flatMap(PathFunctionLib::flattenDo);
+            return node.getArray().stream().flatMap(FunctionLib::flattenDo);
         } else {
             return Stream.of(node);
         }
@@ -202,7 +201,7 @@ public class PathFunctionLib {
                 .mapToDouble(ONode::getDouble);
     }
 
-    private static ONode processStrings(Options opts, List<ONode> nodes, Function<String, String> processor) {
+    private static ONode processStrings(Options opts, List<ONode> nodes, java.util.function.Function<String, String> processor) {
         List<String> results = nodes.stream()
                 .flatMap(n -> {
                     if (n.isString()) {

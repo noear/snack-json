@@ -21,7 +21,7 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.SegmentFunction;
+import org.noear.snack4.jsonpath.Segment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  * @author noear
  * @since 4.0
  */
-public class PropertySegment implements SegmentFunction {
+public class PropertySegment implements Segment {
     private String key;
 
     public PropertySegment(String key) {

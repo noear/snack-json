@@ -20,7 +20,7 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.SegmentFunction;
+import org.noear.snack4.jsonpath.Segment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class MultiIndexSegment implements SegmentFunction {
+public class MultiIndexSegment implements Segment {
     private boolean isAll;
     private List<String> keys;
     private List<Integer> indices;

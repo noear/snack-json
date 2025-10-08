@@ -176,7 +176,7 @@ public class Expression {
             }
         }
 
-        PathOperation operation = PathOperationLib.get(condition.getOp());
+        Operation operation = OperationLib.get(condition.getOp());
 
         if (operation == null) {
             throw new JsonPathException("Unsupported operator : " + condition.getOp());
