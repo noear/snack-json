@@ -53,7 +53,7 @@ public class _test2 {
         System.out.println(json);
 
         ONode data2 = ONode.load(json);
-        ComplexModel model2 = data2.get("model").to(model.getClass());
+        ComplexModel model2 = data2.get("model").toBean(model.getClass());
 
         assert model2 != null;
     }
@@ -71,7 +71,7 @@ public class _test2 {
     public void test2(){
          String json = "[{\"code\":0,\"name\":\"缺陷\",\"icon\":\"fa-bug\"},{\"code\":1,\"name\":\"改进\",\"icon\":\"fa-twitter\"},{\"code\":2,\"name\":\"需求\",\"icon\":\"fa-circle-o\"}]";
 
-         Object tmp = ONode.load(json).to();
+         Object tmp = ONode.load(json).toBean();
 
          assert tmp instanceof List;
     }

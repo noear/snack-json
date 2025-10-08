@@ -25,13 +25,13 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
 
         //如果为空代表该枚举没有被标注继续采用常规序列化方式
         if (o != null) {
-            return new ONode(o);
+            return new ONode(ctx.getOpts(),o);
         } else {
 
             if (ctx.getOpts().hasFeature(Feature.Write_EnumUsingName)) {
-                return new ONode(value.name());
+                return new ONode(ctx.getOpts(), value.name());
             } else {
-                return new ONode(value.ordinal());
+                return new ONode(ctx.getOpts(), value.ordinal());
             }
         }
     }

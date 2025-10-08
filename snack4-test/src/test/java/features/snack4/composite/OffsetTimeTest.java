@@ -22,7 +22,7 @@ public class OffsetTimeTest {
         String poc = "{\"time\":\"20:54:51\"}";
         ONode oNode = ONode.load(poc);
 //        //解析
-        OffsetTimeModel model = oNode.to(OffsetTimeModel.class);
+        OffsetTimeModel model = oNode.toBean(OffsetTimeModel.class);
         OffsetTime time0 = model.time;
         // 转到0时区
         OffsetTime time1 = time0.withOffsetSameInstant(ZoneOffset.of("Z"));
@@ -37,7 +37,7 @@ public class OffsetTimeTest {
         String poc = "{\"time\":\"20:54:51+08:00\"}";
         ONode oNode = ONode.load(poc);
 //        //解析
-        OffsetTimeModel model = oNode.to(OffsetTimeModel.class);
+        OffsetTimeModel model = oNode.toBean(OffsetTimeModel.class);
         OffsetTime time0 = model.time;
         // 转到0时区
         OffsetTime time1 = time0.withOffsetSameInstant(ZoneOffset.of("Z"));

@@ -14,7 +14,7 @@ public void demo1() {
 
     ONode n = ONode.load(json);
 
-    Map map = n.select("$.store.book[0]").to(Map.class);
+    Map map = n.select("$.store.book[0]").toBean(Map.class);
 
     System.out.println("category: " + map.get("category"));
     System.out.println("author: " + map.get("author"));
@@ -23,7 +23,7 @@ public void demo1() {
 
     System.out.println("========================");
 
-    List<String> list = n.select("$.store.book[*].author").to(List.class);
+    List<String> list = n.select("$.store.book[*].author").toBean(List.class);
     for (String author : list) {
         System.out.println(author);
     }

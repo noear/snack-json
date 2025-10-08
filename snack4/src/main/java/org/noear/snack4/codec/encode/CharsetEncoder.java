@@ -14,6 +14,6 @@ import java.nio.charset.Charset;
 public class CharsetEncoder implements ObjectEncoder<Charset> {
     @Override
     public ONode encode(EncodeContext ctx, Charset value) {
-        return new ONode(value.name());
+        return new ONode(ctx.getOpts(), value.name());
     }
 }

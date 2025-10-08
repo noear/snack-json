@@ -60,7 +60,7 @@ public class Demo3 {
         User user = new User("张三", 24);
         String json = ONode.from(user).toJson(); // {"name":"张三","age":24}
 
-        String json2 = ONode.from(user).toJson(Options.of(Feature.Write_ClassName, Feature.Write_BrowserCompatible)); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
+        String json2 = ONode.from(user, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson(); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
 
         System.out.println(json);
         System.out.println(json2);
@@ -69,7 +69,7 @@ public class Demo3 {
     @Test
     public void demo4() {
         String json = "{name:'张三',age:24}";
-        User user = ONode.load(json).to(User.class);
+        User user = ONode.load(json).toBean(User.class);
 
         assert user.age == 24;
     }
@@ -77,7 +77,7 @@ public class Demo3 {
     @Test
     public void demo5() {
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
-        String[] strings = ONode.load(jsonArray).to(String[].class);
+        String[] strings = ONode.load(jsonArray).toBean(String[].class);
 
         assert strings.length == 3;
     }
@@ -89,8 +89,8 @@ public class Demo3 {
         ONode ary0 		  = ONode.load(jsonArray);
         assertNotNull(ary0);
 
-        List<String> ary1 = ONode.load(jsonArray).to((new ArrayList<String>(){}).getClass());
-        List<String> ary2 = ONode.load(jsonArray).to((new TypeRef<List<String>>(){}).getType());
+        List<String> ary1 = ONode.load(jsonArray).toBean((new ArrayList<String>(){}).getClass());
+        List<String> ary2 = ONode.load(jsonArray).toBean((new TypeRef<List<String>>(){}).getType());
 
         assert ary1.size() == ary2.size();
     }
@@ -100,7 +100,7 @@ public class Demo3 {
         String json = "{\"name\":\"张三\",\"age\":\"24\"}";
 
         //反序列化
-        User user = ONode.load(json).to(User.class);
+        User user = ONode.load(json).toBean(User.class);
 
         //序列化
         ONode.from(user).toJson();
@@ -112,7 +112,7 @@ public class Demo3 {
         System.out.println(ONode.from(user).toJson()); //{"name":"张三","age":24}
 
         Options opts = Options.of(Feature.Write_Nulls);
-        System.out.println(ONode.from(user).toJson(opts)); //{"name":"张三","age":24,"emailAddress":null}
+        System.out.println(ONode.from(user, opts).toJson()); //{"name":"张三","age":24,"emailAddress":null}
     }
 
     @Test
@@ -121,7 +121,7 @@ public class Demo3 {
 
         Options opts = Options.of(Feature.Write_UseDateFormat).dateFormat("yyyy-MM-dd");
 
-        System.out.println(ONode.from(date).toJson(opts)); //2019-12-06
+        System.out.println(ONode.from(date, opts).toJson()); //2019-12-06
     }
     @Test
     public void demo10() {

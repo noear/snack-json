@@ -16,7 +16,7 @@ public class DemoApp {
     public static void main(String[] args) {
         Options options =  Options.of()
                 .addEncoder(Date.class, (ctx, data) -> {
-                    return new ONode(DateUtil.format(data, "yyyy-MM-dd"));
+                    return new ONode(ctx.getOpts(), DateUtil.format(data, "yyyy-MM-dd"));
                 })
                 .addFeature(Feature.Write_PrettyFormat)
                 .dateFormat("yyyy-MM");

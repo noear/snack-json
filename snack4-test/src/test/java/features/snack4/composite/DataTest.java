@@ -32,7 +32,7 @@ public class DataTest {
 
         System.out.println(oNode.toJson());
 
-        Object data = oNode.to();
+        Object data = oNode.toBean();
 
         assert (data instanceof Map);
     }
@@ -54,7 +54,7 @@ public class DataTest {
 
         System.out.println(c.toJson());
 
-        Object data = c.to();
+        Object data = c.toBean();
 
         assert (data instanceof Map);
 
@@ -91,9 +91,9 @@ public class DataTest {
 
         Object g2 = ONode.load(json);
 
-        ONode node = ONode.load(json);
+        ONode node = ONode.load(json, Feature.Read_DisableClassName);
 
-        Object tmp = node.to(Feature.Read_DisableClassName);
+        Object tmp = node.toBean();
 
         assert (tmp instanceof Map);
 

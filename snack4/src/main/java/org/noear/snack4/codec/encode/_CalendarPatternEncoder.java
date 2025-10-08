@@ -19,6 +19,6 @@ public class _CalendarPatternEncoder implements ObjectPatternEncoder<Calendar> {
 
     @Override
     public ONode encode(EncodeContext ctx, Calendar value) {
-        return new ONode(value.getTime());
+        return new ONode(ctx.getOpts(), value.getTime());
     }
 }

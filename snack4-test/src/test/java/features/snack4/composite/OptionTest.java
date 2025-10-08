@@ -30,7 +30,7 @@ public class OptionTest {
         oNode.create("$.num").setValue(10000L);
         oNode.create("$.date").setValue(DateUtil.parse("2025-06-25"));
 
-        String json = oNode.toJson(options);
+        String json = oNode.toJson();
         System.out.println(json);
 
         assert "{\"num\":\"10000\",\"date\":\"2025-06-25\"}".equals(json);

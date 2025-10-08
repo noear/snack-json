@@ -53,7 +53,7 @@ public class ObjectTest {
 
         System.out.println(c.toJson());
 
-        OrderModel order2 = c.to(OrderModel.class);
+        OrderModel order2 = c.toBean(OrderModel.class);
 
         assert 1111 == order2.user.id;
     }
@@ -84,7 +84,7 @@ public class ObjectTest {
 
         assert 1 == c.get("users").get(1).get("id").getInt();
 
-        UserGroupModel g = c.to(UserGroupModel.class);
+        UserGroupModel g = c.toBean(UserGroupModel.class);
 
         assert g.id == 9999;
     }
@@ -102,13 +102,13 @@ public class ObjectTest {
     public void test4() {
         String json = "{\"names\":null}";
         ONode oNode = ONode.load(json);
-        A a = oNode.to(A.class);
+        A a = oNode.toBean(A.class);
 
         assert a.names == null;
         System.out.println(a);
 
         oNode = ONode.from(a, Feature.Write_Nulls);
-        String json2 = oNode.toJson(Feature.Write_Nulls);
+        String json2 = oNode.toJson();
         System.out.println(json2);
 
         assert json.equals(json2);

@@ -13,6 +13,6 @@ import java.io.File;
 public class FileEncoder implements ObjectEncoder<File> {
     @Override
     public ONode encode(EncodeContext ctx, File value) {
-        return new ONode(value.getPath());
+        return new ONode(ctx.getOpts(), value.getPath());
     }
 }

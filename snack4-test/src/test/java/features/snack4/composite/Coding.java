@@ -5,9 +5,6 @@ import demo.snack4._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.DecodeContext;
-import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.util.DateUtil;
 
 import java.time.LocalDateTime;
@@ -37,11 +34,11 @@ public class Coding {
             return tmp;
         });
 
-        OrderModel rst = ONode.load(json).to(OrderModel.class);
+        OrderModel rst = ONode.load(json).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 0;
 
-        rst = ONode.load(json).to(OrderModel.class, opts);
+        rst = ONode.load(json, opts).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 1;
     }
@@ -55,7 +52,7 @@ public class Coding {
             return LocalDateTime.parse(node.getString());
         });
 
-        OrderModel tmp = ONode.load(json, opts).to(OrderModel.class);
+        OrderModel tmp = ONode.load(json, opts).toBean(OrderModel.class);
     }
 
     @Test
@@ -103,11 +100,11 @@ public class Coding {
             return tmp;
         });
 
-        OrderModel rst = ONode.load(json).to(OrderModel.class);
+        OrderModel rst = ONode.load(json).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 0;
 
-        rst = ONode.load(json).to(OrderModel.class, options);
+        rst = ONode.load(json, options).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 1001;
     }

@@ -11,7 +11,7 @@ import org.noear.snack4.codec.ObjectEncoder;
 public class StackTraceElementEncoder implements ObjectEncoder<StackTraceElement> {
     @Override
     public ONode encode(EncodeContext ctx, StackTraceElement value) {
-        ONode tmp = new ONode();
+        ONode tmp = new ONode(ctx.getOpts());
 
         tmp.set("className", value.getClassName());
         tmp.set("methodName", value.getMethodName());

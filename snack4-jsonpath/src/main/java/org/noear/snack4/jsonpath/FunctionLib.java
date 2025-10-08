@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 import org.noear.snack4.exception.PathResolutionException;
 
 import java.util.DoubleSummaryStatistics;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -34,7 +36,7 @@ import java.util.stream.Stream;
  * @author noear 2025/3/17 created
  */
 public class FunctionLib {
-    private static final Map<String, Function<List<ONode>, ONode>> LIB = new ConcurrentHashMap<>();
+    private static final Map<String, BiFunction<Options, List<ONode>, ONode>> LIB = new ConcurrentHashMap<>();
 
     static {
         // 聚合函数
@@ -59,79 +61,79 @@ public class FunctionLib {
     /**
      * 注册
      */
-    public static void register(String name, Function<List<ONode>, ONode> func) {
+    public static void register(String name, BiFunction<Options, List<ONode>, ONode> func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static Function<List<ONode>, ONode> get(String funcName) {
+    public static BiFunction<Options, List<ONode>, ONode> get(String funcName) {
         return LIB.get(funcName);
     }
 
     /// /////////////////
 
-    static ONode sum(List<ONode> nodes) {
-        if(nodes.isEmpty()){
-            return new  ONode();
+    static ONode sum(Options opts, List<ONode> nodes) {
+        if (nodes.isEmpty()) {
+            return new ONode(opts);
         }
 
         DoubleStream stream = nodes.stream()
-                .flatMap(n -> flatten(n)) // 使用统一的展开方法
+                .flatMap(n -> flattenDo(n)) // 使用统一的展开方法
                 .filter(ONode::isNumber)
                 .mapToDouble(ONode::getDouble);
 
-        return new ONode(stream.sum());
+        return new ONode(opts, stream.sum());
     }
 
 
-    static ONode min(List<ONode> nodes) {
-        if(nodes.isEmpty()){
-            return new  ONode();
-        }
-
-        OptionalDouble min = collectNumbers(nodes).min();
-        return min.isPresent() ? new ONode(min.getAsDouble()) : new ONode(null);
-    }
-
-    static ONode max(List<ONode> nodes) {
-        if(nodes.isEmpty()){
-            return new  ONode();
-        }
-
-        OptionalDouble max = collectNumbers(nodes).max();
-        return max.isPresent() ? new ONode(max.getAsDouble()) : new ONode(null);
-    }
-
-    static ONode avg(List<ONode> nodes) {
-        if(nodes.isEmpty()){
-            return new  ONode();
-        }
-
-        DoubleSummaryStatistics stats = collectNumbers(nodes).summaryStatistics();
-        return stats.getCount() > 0 ?
-                new ONode(stats.getAverage()) :
-                new ONode(null);
-    }
-
-    static ONode first(List<ONode> nodes) {
+    static ONode min(Options opts, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode();
+            return new ONode(opts);
+        }
+
+        OptionalDouble min = collectNumbersDo(nodes).min();
+        return min.isPresent() ? new ONode(opts, min.getAsDouble()) : new ONode(opts);
+    }
+
+    static ONode max(Options opts, List<ONode> nodes) {
+        if (nodes.isEmpty()) {
+            return new ONode(opts);
+        }
+
+        OptionalDouble max = collectNumbersDo(nodes).max();
+        return max.isPresent() ? new ONode(opts, max.getAsDouble()) : new ONode(opts);
+    }
+
+    static ONode avg(Options opts, List<ONode> nodes) {
+        if (nodes.isEmpty()) {
+            return new ONode(opts);
+        }
+
+        DoubleSummaryStatistics stats = collectNumbersDo(nodes).summaryStatistics();
+        return stats.getCount() > 0 ?
+                new ONode(opts, stats.getAverage()) :
+                new ONode(opts, null);
+    }
+
+    static ONode first(Options opts, List<ONode> nodes) {
+        if (nodes.isEmpty()) {
+            return new ONode(opts);
         }
 
         return nodes.get(0);
     }
 
-    static ONode last(List<ONode> nodes) {
+    static ONode last(Options opts, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode();
+            return new ONode(opts);
         }
 
         return nodes.get(nodes.size() - 1);
     }
 
-    static ONode keys(List<ONode> nodes) {
+    static ONode keys(Options opts, List<ONode> nodes) {
         if (nodes.size() == 1) {
             ONode node = nodes.get(0);
 
@@ -145,50 +147,54 @@ public class FunctionLib {
         }
     }
 
-    static ONode size(List<ONode> nodes) {
+    static ONode size(Options opts, List<ONode> nodes) {
         int size = nodes.stream()
                 .filter(n -> n.isArray() || n.isObject())
                 .mapToInt(n -> n.size())
                 .sum();
 
-        return new ONode(size);
+        return new ONode(opts, size);
     }
 
     /* 字符串函数实现 */
-    static ONode length(List<ONode> nodes) {
+    static ONode length(Options opts, List<ONode> nodes) {
         if (nodes.size() == 1) {
             ONode n = nodes.get(0);
-            if (n.isString()) return new ONode(n.getString().length());
-            if (n.isArray()) return new ONode(n.size());
-            if (n.isObject()) return new ONode(n.getObject().size());
+            if (n.isString()) return new ONode(opts, n.getString().length());
+            if (n.isArray()) return new ONode(opts, n.size());
+            if (n.isObject()) return new ONode(opts, n.getObject().size());
         }
-        return new ONode(0);
+        return new ONode(opts, 0);
     }
 
 
-    static ONode upper(List<ONode> nodes) {
-        return processStrings(nodes, String::toUpperCase);
+    static ONode upper(Options opts, List<ONode> nodes) {
+        return processStrings(opts, nodes, String::toUpperCase);
     }
 
-    static ONode lower(List<ONode> nodes) {
-        return processStrings(nodes, String::toLowerCase);
+    static ONode lower(Options opts, List<ONode> nodes) {
+        return processStrings(opts, nodes, String::toLowerCase);
     }
 
-    static ONode trim(List<ONode> nodes) {
-        return processStrings(nodes, String::trim);
+    static ONode trim(Options opts, List<ONode> nodes) {
+        return processStrings(opts, nodes, String::trim);
     }
 
     /// ///////////////// 工具方法 //////////////////
 
-    private static Stream<ONode> flatten(ONode node) {
+    private static Stream<ONode> flatten(Options opts, ONode node) {
+        return flattenDo(node);
+    }
+
+    private static Stream<ONode> flattenDo(ONode node) {
         if (node.isArray()) {
-            return node.getArray().stream().flatMap(FunctionLib::flatten);
+            return node.getArray().stream().flatMap(FunctionLib::flattenDo);
         } else {
             return Stream.of(node);
         }
     }
 
-    private static DoubleStream collectNumbers(List<ONode> nodes) {
+    private static DoubleStream collectNumbersDo(List<ONode> nodes) {
         return nodes.stream()
                 .flatMap(n -> n.isArray() ?
                         n.getArray().stream() :
@@ -197,7 +203,7 @@ public class FunctionLib {
                 .mapToDouble(ONode::getDouble);
     }
 
-    private static ONode processStrings(List<ONode> nodes, Function<String, String> processor) {
+    private static ONode processStrings(Options opts, List<ONode> nodes, Function<String, String> processor) {
         List<String> results = nodes.stream()
                 .flatMap(n -> {
                     if (n.isString()) {
@@ -213,7 +219,7 @@ public class FunctionLib {
                 .collect(Collectors.toList());
 
         return results.size() == 1 ?
-                new ONode(results.get(0)) :
+                new ONode(opts, results.get(0)) :
                 ONode.from(results);
     }
 }

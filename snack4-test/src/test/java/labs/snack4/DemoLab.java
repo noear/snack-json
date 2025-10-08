@@ -19,7 +19,7 @@ public class DemoLab {
 
     public void case2() {
         String store = "{}";
-        ONode.from(store).select("$..book[?(@.tags contains 'war')]").to(Book.class);
+        ONode.from(store).select("$..book[?(@.tags contains 'war')]").toBean(Book.class);
         ONode.load(store).select("$.store.book.count()");
 
         ONode.from(store).create("$.store.book[0].category").toJson();

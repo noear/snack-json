@@ -14,6 +14,6 @@ import java.util.Currency;
 public class CurrencyEncoder implements ObjectEncoder<Currency> {
     @Override
     public ONode encode(EncodeContext ctx, Currency value) {
-        return new ONode(value.getCurrencyCode());
+        return new ONode(ctx.getOpts(), value.getCurrencyCode());
     }
 }

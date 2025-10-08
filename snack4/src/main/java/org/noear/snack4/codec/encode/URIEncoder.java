@@ -14,6 +14,6 @@ import java.net.URI;
 public class URIEncoder implements ObjectEncoder<URI> {
     @Override
     public ONode encode(EncodeContext ctx, URI value) {
-        return new ONode(value.toString());
+        return new ONode(ctx.getOpts(), value.toString());
     }
 }

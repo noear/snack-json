@@ -14,6 +14,6 @@ import java.time.Duration;
 public class DurationEncoder implements ObjectEncoder<Duration> {
     @Override
     public ONode encode(EncodeContext ctx, Duration value) {
-        return new ONode(value.toString());
+        return new ONode(ctx.getOpts(), value.toString());
     }
 }

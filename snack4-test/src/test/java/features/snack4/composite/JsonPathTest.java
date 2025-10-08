@@ -22,7 +22,7 @@ public class JsonPathTest {
 
         //4.获取一个数组
         //List<Integer> list = n.get("data").get("list").to(List.class);
-        List<Integer> list = n.select("$.data.list").to(List.class);
+        List<Integer> list = n.select("$.data.list").toBean(List.class);
         assert list.size() == 5;
 
 
@@ -30,14 +30,14 @@ public class JsonPathTest {
         //int mi = n.get("data").get("list").get(0).getInt();
         int mi = n.select("$.data.list[-1]").getInt();
 
-        List<Integer> list2 = n.select("$.data.list[2,4]").to(List.class);
-        List<Integer> list3 = n.select("$.data.list[2:4]").to(List.class);
+        List<Integer> list2 = n.select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list3 = n.select("$.data.list[2:4]").toBean(List.class);
         assert list2.size() == 2;
         assert list3.size() == 2;
 
 
-        List<Integer> list22 = n.usePaths().select("$.data.list[2,4]").to(List.class);
-        List<Integer> list32 = n.usePaths().select("$.data.list[2:4]").to(List.class);
+        List<Integer> list22 = n.usePaths().select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list32 = n.usePaths().select("$.data.list[2:4]").toBean(List.class);
         assert list22.size() == 2;
         assert list32.size() == 2;
 
@@ -68,16 +68,16 @@ public class JsonPathTest {
 
         //4.获取一个数组
         //List<Integer> list = n.get("data").get("list").to(List.class);
-        List<Integer> list = n.select("$.data.list").to(List.class);
+        List<Integer> list = n.select("$.data.list").toBean(List.class);
 
 
 
         //int mi = n.get("data").get("list").get(0).getInt();
         int mi = n.select("$.data.list[-1]").getInt();
 
-        List<Integer> list2 = n.select("$.data.list[2,4]").to(List.class);
-        List<Integer> list3 = n.select("$.data.list[1:4]").to(List.class);
-        List<Integer> list4 = n.select("$.data.list[:4]").to(List.class);
+        List<Integer> list2 = n.select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list3 = n.select("$.data.list[1:4]").toBean(List.class);
+        List<Integer> list4 = n.select("$.data.list[:4]").toBean(List.class);
 
         ONode ary2_a = n.select("$.data.ary2[*].b.c");
 

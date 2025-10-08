@@ -20,6 +20,7 @@ package org.noear.snack4.jsonpath;
  * @author noear 2025/5/5 created
  * */
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 import org.noear.snack4.util.Asserts;
 
 import java.util.Map;
@@ -132,9 +133,9 @@ public class Condition {
                 return null;
             } else {
                 if (ch == '\'') {
-                    return new ONode(value.substring(1, value.length() - 1));
+                    return new ONode(Options.def(), value.substring(1, value.length() - 1));
                 } else if (ch == '/') {
-                    return new ONode(value);
+                    return new ONode(Options.def(), value);
                 } else {
                     return ONode.load(value);
                 }

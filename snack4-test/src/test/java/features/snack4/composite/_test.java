@@ -107,7 +107,7 @@ public class _test {
 
         assert o.select("$.data.list").size() == 2;
 
-        List<UserModel> list2 = o.select("$.data.list").to(List.class);
+        List<UserModel> list2 = o.select("$.data.list").toBean(List.class);
         assert list2.size() == 2;
 
         String message = o.toJson();
@@ -151,7 +151,7 @@ public class _test {
 
         //普通数据，转为泛型列表
         //
-        List<UserModel> list2 = o.select("$.data.list").to((new ArrayList<UserModel>() {
+        List<UserModel> list2 = o.select("$.data.list").toBean((new ArrayList<UserModel>() {
         }).getClass());
 
         assert list2.size() == list.size();
@@ -207,11 +207,11 @@ public class _test {
         // 单引号输出
         //
         String txt = "{id:1,name:'x'}";
-        ONode tmp = ONode.load(txt);
-
-        String txt2 = tmp.toJson(Options.of()
+        ONode tmp = ONode.load(txt,Options.of()
                 .addFeature(Feature.Write_UseSingleQuotes) //采用单引号
                 .addFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
+
+        String txt2 = tmp.toJson();
 
         assert txt.equals(txt2);
     }

@@ -11,8 +11,8 @@ public class _test4 {
     @Test
     public void testONodeToJson() {
         String jsonSomeFieldValueContainBackslash = "{\"abc\":\"\\abc\"}";
-        ONode oNode = ONode.load(jsonSomeFieldValueContainBackslash, Feature.Read_AllowBackslashEscapingAnyCharacter);
-        String toJson = oNode.toJson(Feature.Write_UseRawBackslash);
+        ONode oNode = ONode.load(jsonSomeFieldValueContainBackslash, Feature.Read_AllowBackslashEscapingAnyCharacter, Feature.Write_UseRawBackslash);
+        String toJson = oNode.toJson();
 
         System.out.println(jsonSomeFieldValueContainBackslash);
         System.out.println(toJson);

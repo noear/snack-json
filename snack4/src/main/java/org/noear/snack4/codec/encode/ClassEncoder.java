@@ -12,6 +12,6 @@ import org.noear.snack4.codec.ObjectEncoder;
 public class ClassEncoder implements ObjectEncoder<Class> {
     @Override
     public ONode encode(EncodeContext ctx, Class value) {
-        return new ONode(value.getName());
+        return new ONode(ctx.getOpts(), value.getName());
     }
 }

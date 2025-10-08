@@ -16,6 +16,6 @@ public class _NumberPatternEncoder implements ObjectPatternEncoder<Number> {
 
     @Override
     public ONode encode(EncodeContext ctx, Number value) {
-        return new ONode(value);
+        return new ONode(ctx.getOpts(), value);
     }
 }

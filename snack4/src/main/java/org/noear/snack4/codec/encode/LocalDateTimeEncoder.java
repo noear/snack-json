@@ -21,11 +21,11 @@ public class LocalDateTimeEncoder implements ObjectEncoder<LocalDateTime> {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(formatter.format(value));
+                return new ONode(ctx.getOpts(), formatter.format(value));
             }
         }
 
         Instant instant = value.atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
-        return new ONode(new Date((instant.getEpochSecond() * 1000) + (instant.getNano() / 1000_000)));
+        return new ONode(ctx.getOpts(), new Date((instant.getEpochSecond() * 1000) + (instant.getNano() / 1000_000)));
     }
 }

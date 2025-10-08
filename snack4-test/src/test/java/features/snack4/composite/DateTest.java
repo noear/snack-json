@@ -115,7 +115,7 @@ public class DateTest {
         map.put("date", date);
         System.out.println(date);
 
-        DateMapModel model = ONode.from(map).to(DateMapModel.class);
+        DateMapModel model = ONode.from(map).toBean(DateMapModel.class);
         System.out.println(model.date.toString());
 
         assert date.toString().equals(model.date.toString());
@@ -132,7 +132,7 @@ public class DateTest {
         //添加编码器
         options.addEncoder(Date.class, (ctx, value) -> new ONode((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
         options.addEncoder(LocalDateTime.class, (ctx, value) -> new ONode((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
-        DemoEntity rxPacsOrder = ONode.load(json, options).to(DemoEntity.class);
+        DemoEntity rxPacsOrder = ONode.load(json, options).toBean(DemoEntity.class);
         String jsonText = ONode.serialize(rxPacsOrder);
         System.out.println("1 snack添加编码器" + jsonText);
 

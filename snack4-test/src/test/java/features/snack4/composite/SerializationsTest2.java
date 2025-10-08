@@ -5,9 +5,7 @@ import demo.snack4._models.*;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
-import org.noear.snack4.Options;
 import org.noear.snack4.codec.TypeRef;
-import org.noear.solon.Solon;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -72,7 +70,7 @@ public class SerializationsTest2 {
 
         System.out.println(json0);
         UserGroupModel group0 = ONode.load(json0)
-                .to((new TypeRef<UserGroupModel>() {
+                .toBean((new TypeRef<UserGroupModel>() {
                 }));
 
         assert group0.id == 9999;
@@ -84,7 +82,7 @@ public class SerializationsTest2 {
 
         System.out.println(json0);
         UserGroupModel group0 = ONode.load(json0)
-                .to(UserGroupModel.class);
+                .toBean(UserGroupModel.class);
 
         assert group0.id == 9999;
     }
@@ -95,7 +93,7 @@ public class SerializationsTest2 {
 
         System.out.println(json0);
         List<UserModel> group0 = ONode.load(json0).get("users")
-                .to((new ArrayList<UserModel>() {
+                .toBean((new ArrayList<UserModel>() {
                 }).getClass());
 
         assert group0.size() == 5;
@@ -107,7 +105,7 @@ public class SerializationsTest2 {
 
         System.out.println(json0);
         List<UserModel> group0 = ONode.load(json0).get("users")
-                .to((new TypeRef<List<UserModel>>() {}));
+                .toBean((new TypeRef<List<UserModel>>() {}));
 
         assert group0.size() == 5;
     }
@@ -127,7 +125,7 @@ public class SerializationsTest2 {
 
         System.out.println(oNode.toJson());
 
-        QueryParamEntity entity = oNode.to(QueryParamEntity.class);
+        QueryParamEntity entity = oNode.toBean(QueryParamEntity.class);
 
         assert entity != null;
         assert entity.getPageIndex() == 0;
@@ -144,7 +142,7 @@ public class SerializationsTest2 {
         properties.put("users.a.name", "a");
         properties.put("users.user1.name", "user1");
 
-        PersonColl tmp = ONode.from(properties).to(PersonColl.class);
+        PersonColl tmp = ONode.from(properties).toBean(PersonColl.class);
 
         assert tmp != null;
         assert tmp.getUsers() != null;
@@ -186,7 +184,7 @@ public class SerializationsTest2 {
     public void test8() {
         String json = "{age:11,name:'test'}";
 
-        SModel sModel = ONode.load(json).to(SModel.class, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter);
+        SModel sModel = ONode.load(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toBean(SModel.class);
         System.out.println(sModel);
 
         assert sModel.name == null;
@@ -220,7 +218,7 @@ public class SerializationsTest2 {
         String json = ONode.from(sets).toJson();
         System.out.println(json);
 
-        Set<String> sets2 = ONode.load(json).to(Set.class);
+        Set<String> sets2 = ONode.load(json).toBean(Set.class);
         System.out.println(ONode.from(sets2).toJson());
 
         assert sets2.size() == sets.size();
@@ -244,7 +242,7 @@ public class SerializationsTest2 {
         DTimeVO tmp = new DTimeVO();
 
         try {
-            String json2 = ONode.from(tmp).toJson(Feature.Write_PrettyFormat);
+            String json2 = ONode.from(tmp, Feature.Write_PrettyFormat).toJson();
             System.out.println(json2);
             assert false;
         } catch (UnsupportedTemporalTypeException e) {

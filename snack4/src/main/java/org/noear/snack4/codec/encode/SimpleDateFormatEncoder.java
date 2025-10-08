@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 public class SimpleDateFormatEncoder implements ObjectEncoder<SimpleDateFormat> {
     @Override
     public ONode encode(EncodeContext ctx, SimpleDateFormat value) {
-        ONode node = new ONode();
+        ONode node = new ONode(ctx.getOpts());
         node.set("pattern", value.toPattern());
         return node;
     }

@@ -22,6 +22,6 @@ public class ClassLoaderTest {
         String json = ONode.from(data, options).toJson();
 
         //反序列化
-        data = ONode.load(json, options).to();
+        data = ONode.load(json, options).toBean();
     }
 }

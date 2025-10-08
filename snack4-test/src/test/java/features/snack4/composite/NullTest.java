@@ -11,12 +11,12 @@ public class NullTest {
     @Test
     public void test1() {
         String json = "{num:null}";
-        ONode node = ONode.load(json);
+        ONode node = ONode.load(json, Feature.Write_Nulls);
 
         System.out.println(node.toJson());
         assert node.get("num").isNull();
 
-        Object tmp = node.to(Feature.Write_Nulls);
+        Object tmp = node.toBean();
         System.out.println(tmp);
     }
 }

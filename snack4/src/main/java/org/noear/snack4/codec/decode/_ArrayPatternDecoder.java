@@ -23,8 +23,8 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
     @Override
     public Object decode(DecodeContext ctx, ONode node) {
         Class<?> itemType = null;
-        if(ctx.getGenericType() instanceof GenericArrayType){
-            itemType = (Class<?>) ((GenericArrayType)ctx.getGenericType()).getGenericComponentType();
+        if (ctx.getGenericType() instanceof GenericArrayType) {
+            itemType = (Class<?>) ((GenericArrayType) ctx.getGenericType()).getGenericComponentType();
         } else {
             itemType = ctx.getType().getComponentType();
         }
@@ -33,7 +33,7 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
             Object array = Array.newInstance(itemType, node.size());
 
             for (int i = 0; i < node.size(); i++) {
-                Array.set(array, i, node.get(i).to(itemType));
+                Array.set(array, i, node.get(i).toBean(itemType));
             }
 
             return array;
@@ -43,7 +43,7 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
             Object array = Array.newInstance(itemType, strArray.length);
 
             for (int i = 0; i < strArray.length; i++) {
-                Array.set(array, i, new ONode(strArray[i]).to(itemType));
+                Array.set(array, i, new ONode(ctx.getOpts(), strArray[i]).toBean(itemType));
             }
             return array;
         } else {

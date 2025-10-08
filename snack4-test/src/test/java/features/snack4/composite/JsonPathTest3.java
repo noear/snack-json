@@ -46,7 +46,7 @@ public class JsonPathTest3 {
         entities.add(new Entity("ljw2083"));
         ONode n = ONode.from(entities);
 
-        List<String> names = n.select("$..name").to(List.class);
+        List<String> names = n.select("$..name").toBean(List.class);
         assert names.size() == 2;
 
         System.out.println(n.usePaths().select("$..name"));
@@ -61,7 +61,7 @@ public class JsonPathTest3 {
         entities.add(new Entity("Yako"));
         ONode n = ONode.from(entities);
 
-        List<Entity> result = n.select("$[1,2]").to((new ArrayList<Entity>() {
+        List<Entity> result = n.select("$[1,2]").toBean((new ArrayList<Entity>() {
         }).getClass());
         assert result.size() == 2;
 
@@ -78,7 +78,7 @@ public class JsonPathTest3 {
         entities.add(new Entity("Yako"));
         ONode n = ONode.from(entities);
 
-        List<Entity> result = n.select("$[0:2]").to((new ArrayList<Entity>() {
+        List<Entity> result = n.select("$[0:2]").toBean((new ArrayList<Entity>() {
         }).getClass());
         assert result.size() == 2;
 
@@ -132,7 +132,7 @@ public class JsonPathTest3 {
 
         ONode n = ONode.from(root);
 
-        List<Object> ids = n.select("$..id").to(List.class);
+        List<Object> ids = n.select("$..id").toBean(List.class);
         assertEquals(3, ids.size());
         assertEquals(1001, ids.get(0));
         assertEquals(1002, ids.get(1));

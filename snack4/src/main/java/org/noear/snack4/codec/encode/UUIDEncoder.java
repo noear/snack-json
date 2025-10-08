@@ -14,6 +14,6 @@ import java.util.UUID;
 public class UUIDEncoder implements ObjectEncoder<UUID> {
     @Override
     public ONode encode(EncodeContext ctx, UUID value) {
-        return new ONode(value.toString());
+        return new ONode(ctx.getOpts(), value.toString());
     }
 }

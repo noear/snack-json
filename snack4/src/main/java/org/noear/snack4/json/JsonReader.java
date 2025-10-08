@@ -98,14 +98,14 @@ public class JsonReader {
                 }
             }
 
-            return new ONode(str);
+            return new ONode(opts, str);
         }
         // 新增的 JavaScript Date 对象支持
         if (c == 'n' && state.peekChar(1) == 'e' && state.peekChar(2) == 'w') {
             return parseDate();
         }
 
-        if (c == '-' || (c >= '0' && c <= '9')) return new ONode(parseNumber());
+        if (c == '-' || (c >= '0' && c <= '9')) return new ONode(opts, parseNumber());
         if (c == 't') return parseKeyword("true", true);
         if (c == 'f') return parseKeyword("false", false);
         if (c == 'n') return parseKeyword("null", null);
@@ -158,7 +158,7 @@ public class JsonReader {
         try {
             long timestamp = Long.parseLong(sb.toString());
             // ONode 应该支持 Date 构造
-            return new ONode(new Date(timestamp));
+            return new ONode(opts, new Date(timestamp));
         } catch (NumberFormatException e) {
             throw state.error("Invalid timestamp format in new Date()");
         }
@@ -196,7 +196,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or '}'");
             }
         }
-        return new ONode(map);
+        return new ONode(opts, map);
     }
 
     private String parseKey() throws IOException {
@@ -245,7 +245,7 @@ public class JsonReader {
                 throw state.error("Expected ',' or ']'");
             }
         }
-        return new ONode(list);
+        return new ONode(opts, list);
     }
 
     private String parseString() throws IOException {
@@ -415,7 +415,7 @@ public class JsonReader {
                 throw state.error("Unexpected keyword: expected '" + expect + "'");
             }
         }
-        return new ONode(value);
+        return new ONode(opts, value);
     }
 
     private boolean isDigit(char c) {

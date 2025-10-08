@@ -23,7 +23,7 @@ public class ZonedDateTimeTest {
         String poc = "{\"date\":\"2024-01-12T10:30:00.000+03:00\"}";
         ONode oNode = ONode.load(poc);
         //解析
-        ZonedDateTimeModel model = oNode.to(ZonedDateTimeModel.class);
+        ZonedDateTimeModel model = oNode.toBean(ZonedDateTimeModel.class);
         ZonedDateTime date = model.date;
         ZonedDateTime zonedDateTime = date.withZoneSameInstant(ZoneId.of("GMT+3"));
         assert date.toInstant().equals(zonedDateTime.toInstant());

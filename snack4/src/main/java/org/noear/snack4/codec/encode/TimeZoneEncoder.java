@@ -14,6 +14,6 @@ import java.util.TimeZone;
 public class TimeZoneEncoder implements ObjectEncoder<TimeZone> {
     @Override
     public ONode encode(EncodeContext ctx, TimeZone value) {
-        return new ONode(value.getID());
+        return new ONode(ctx.getOpts(), value.getID());
     }
 }

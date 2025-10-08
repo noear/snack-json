@@ -18,7 +18,7 @@ public class JsonPathTest {
 
         //4.获取一个数组
         //List<Integer> list = n.get("data").get("list").toBean(List.class);
-        List<Integer> list = n.select("$.data.list").to(new ArrayList<Integer>(){}.getClass());
+        List<Integer> list = n.select("$.data.list").toBean(new ArrayList<Integer>(){}.getClass());
         assertEquals(5, list.size());
 
 
@@ -27,13 +27,13 @@ public class JsonPathTest {
 
         assertEquals(5, mi);
 
-        List<Integer> list2 = n.select("$.data.list[2,4]").to(new ArrayList<Integer>(){}.getClass());
+        List<Integer> list2 = n.select("$.data.list[2,4]").toBean(new ArrayList<Integer>(){}.getClass());
         assertEquals(2, list2.size());
 
-        List<Integer> list3 = n.select("$.data.list[1:4]").to(new ArrayList<Integer>(){}.getClass());
+        List<Integer> list3 = n.select("$.data.list[1:4]").toBean(new ArrayList<Integer>(){}.getClass());
         assertEquals(3, list3.size());
 
-        List<Integer> list4 = n.select("$.data.list[:4]").to(new ArrayList<Integer>(){}.getClass());
+        List<Integer> list4 = n.select("$.data.list[:4]").toBean(new ArrayList<Integer>(){}.getClass());
         assertEquals(4, list4.size());
 
         ONode ary2_a = n.select("$.data.ary2[*].b.c");

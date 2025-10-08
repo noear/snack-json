@@ -19,7 +19,7 @@ public class _test3 {
         ONode oNode = ONode.load(json);
         oNode.get("data").set("@type", PanOcrModel.class.getName());
 
-        ShanYunResModel<PanOcrModel> tmp = oNode.to(ShanYunResModel.class);
+        ShanYunResModel<PanOcrModel> tmp = oNode.toBean(ShanYunResModel.class);
 
         assert tmp.data instanceof PanOcrModel;
     }
@@ -31,7 +31,7 @@ public class _test3 {
 
         ONode oNode = ONode.load(json);
 
-        ShanYunResModel<PanOcrModel> tmp = oNode.to(new TypeRef<ShanYunResModel<PanOcrModel>>() {});
+        ShanYunResModel<PanOcrModel> tmp = oNode.toBean(new TypeRef<ShanYunResModel<PanOcrModel>>() {});
 
         assert tmp.data instanceof PanOcrModel;
     }
@@ -79,7 +79,7 @@ public class _test3 {
         String json = "['1','2']";
 
         //用静态函数反序列化（基础类型，不需要指明类型）
-        List<String> list = ONode.load(json).to();
+        List<String> list = ONode.load(json).toBean();
         assert list.size() == 2;
 
         //用静态函数反序列化（也可以指下类型）
@@ -93,13 +93,13 @@ public class _test3 {
 
         ONode oNode = ONode.load(json);
 
-        List<String> list = oNode.to();
+        List<String> list = oNode.toBean();
         assert list.size() == 2;
 
-        list = oNode.to((new ArrayList<String>()).getClass());
+        list = oNode.toBean((new ArrayList<String>()).getClass());
         assert list.size() == 2;
 
-        List<String> list2 = oNode.to(new TypeRef<List<String>>() {});
+        List<String> list2 = oNode.toBean(new TypeRef<List<String>>() {});
         assert list2.size() == 2;
     }
 }

@@ -17,8 +17,8 @@ public class EscapeTest {
     public void case1() {
         String json = "{\"a\":\"\1\"}";
 
-        ONode node = ONode.load(json, Feature.Read_AllowUnescapedControlCharacters);
-        String json2 = node.toJson(Feature.Write_UseRawBackslash);
+        ONode node = ONode.load(json, Feature.Read_AllowUnescapedControlCharacters, Feature.Write_UseRawBackslash);
+        String json2 = node.toJson();
         String json2Val = node.get("a").getString();
         String json2Val2 = node.get("a").toJson();
 
@@ -87,10 +87,10 @@ public class EscapeTest {
      */
     @Test
     public void case5() throws IOException {
-        ONode c = ONode.load("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Read_BrowserCompatible);
+        ONode c = ONode.load("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Read_BrowserCompatible, Feature.Write_BrowserCompatible);
 
         assert "'👌\t\n".equals(c.get("a").getString());
 
-        Assertions.assertEquals("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", c.toJson(Feature.Write_BrowserCompatible));
+        Assertions.assertEquals("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", c.toJson());
     }
 }

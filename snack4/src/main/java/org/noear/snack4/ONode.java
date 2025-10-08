@@ -48,17 +48,32 @@ public final class ONode {
     }
 
     private Object value;
-    private JsonType type;
+    private transient JsonType type;
+    private transient Options options;
 
     public transient JsonSource source;
 
     public ONode() {
-        this.type = JsonType.Undefined;
+        this(Options.def());
     }
 
     public ONode(Object value) {
+        this(Options.def(), value);
+    }
+
+    public ONode(Options options) {
+        this.type = JsonType.Undefined;
+        this.options = options;
+    }
+
+    public ONode(Options options, Object value) {
         this.value = value;
         this.type = JsonType.resolveType(value);
+        this.options = options;
+    }
+
+    public Options options() {
+        return options;
     }
 
     public JsonType nodeType() {
@@ -78,7 +93,7 @@ public final class ONode {
         return isNull() ||
                 (isString() && Asserts.isEmpty(getString())) ||
                 (isObject() && Asserts.isEmpty(getObject())) ||
-                (isArray() && Asserts.isEmpty(getArray())) ;
+                (isArray() && Asserts.isEmpty(getArray()));
     }
 
     public boolean isBoolean() {
@@ -141,7 +156,11 @@ public final class ONode {
         if (isString()) {
             return (String) value;
         } else if (isNull()) {
-            return null;
+            if (options.hasFeature(Feature.Write_StringNullAsEmpty)) {
+                return "";
+            } else {
+                return null;
+            }
         } else {
             return String.valueOf(value);
         }
@@ -274,14 +293,14 @@ public final class ONode {
 
         ONode tmp = getObject().get(key);
         if (tmp == null) {
-            return new ONode();
+            return new ONode(options);
         } else {
             return tmp;
         }
     }
 
     public ONode getOrNew(String key) {
-        return getObject().computeIfAbsent(key, k -> new ONode());
+        return getObject().computeIfAbsent(key, k -> new ONode(options));
     }
 
     public ONode getOrNull(String key) {
@@ -326,7 +345,7 @@ public final class ONode {
         return this.fill(ONode.load(json, opts), opts);
     }
 
-    public ONode setAll(Map<?,?> map) {
+    public ONode setAll(Map<?, ?> map) {
         for (Map.Entry entry : map.entrySet()) {
             set(String.valueOf(entry.getKey()), entry.getValue());
         }
@@ -346,9 +365,9 @@ public final class ONode {
             oNode = BeanSerializer.serialize(value);
         } else {
             if (value.getClass().isArray()) {
-                oNode = new ONode().addAll(Arrays.asList((Object[]) value));
+                oNode = new ONode(options).addAll(Arrays.asList((Object[]) value));
             } else {
-                oNode = new ONode(value);
+                oNode = new ONode(options, value);
             }
         }
 
@@ -371,7 +390,7 @@ public final class ONode {
             return getArray().get(index);
         }
 
-        return new ONode();
+        return new ONode(options);
     }
 
     public ONode getOrNew(int index) {
@@ -386,8 +405,8 @@ public final class ONode {
         } else {
             ONode last = null;
             for (int i = self.size(); i <= index; i++) {
-                last = new ONode();
-                if(thenApply != null) {
+                last = new ONode(options);
+                if (thenApply != null) {
                     thenApply.accept(last);
                 }
                 self.add(last);
@@ -425,7 +444,7 @@ public final class ONode {
         } else if (value instanceof Map) {
             oNode = BeanSerializer.serialize(value);
         } else {
-            oNode = new ONode(value);
+            oNode = new ONode(options, value);
         }
 
         add0(oNode);
@@ -442,7 +461,7 @@ public final class ONode {
     public ONode addNew() {
         asArray();
 
-        ONode oNode = new ONode();
+        ONode oNode = new ONode(options);
         getArray().add(oNode);
         return oNode;
     }
@@ -592,7 +611,7 @@ public final class ONode {
     }
 
     public static String serialize(Object object, Options opts) {
-        return ONode.from(object, opts).toJson(opts);
+        return ONode.from(object, opts).toJson();
     }
 
     public static <T> T deserialize(String json, Feature... features) {
@@ -612,7 +631,7 @@ public final class ONode {
     }
 
     public static <T> T deserialize(String json, Type type, Options opts) {
-        return ONode.load(json, opts).to(type, opts);
+        return ONode.load(json, opts).toBean(type);
     }
 
     public static <T> T deserialize(String json, TypeRef<T> type, Feature... features) {
@@ -624,58 +643,36 @@ public final class ONode {
     }
 
     public static <T> T deserialize(String json, TypeRef<T> type, Options opts) {
-        return ONode.load(json, opts).to(type, opts);
+        return ONode.load(json, opts).toBean(type);
     }
 
     /// ///////////
 
-    public <T> T to(Type type, Options opts) {
-        return BeanDeserializer.deserialize(this, type, null, opts);
+    public <T> T toBean(Type type) {
+        return BeanDeserializer.deserialize(this, type, null, options);
     }
 
-    public <T> T to(Type type, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return to(type, Options.def());
-        } else {
-            return to(type, Options.of(features));
-        }
+
+    public <T> T toBean(TypeRef<T> typeRef) {
+        return toBean(typeRef.getType());
     }
 
-    public <T> T to(TypeRef<T> typeRef, Feature... features) {
-        return to(typeRef.getType(), features);
-    }
 
-    public <T> T to(TypeRef<T> typeRef, Options opts) {
-        return to(typeRef.getType(), opts);
-    }
-
-    public <T> T to(Feature... features) {
-        return to(Object.class, features);
+    public <T> T toBean() {
+        return toBean(Object.class);
     }
 
     public <T> T bindTo(T target) {
-        return BeanDeserializer.deserialize(this, target.getClass(), target, Options.def());
+        return BeanDeserializer.deserialize(this, target.getClass(), target, options);
     }
 
-    public <T> T bindTo(T target, Options opts) {
-        return BeanDeserializer.deserialize(this, target.getClass(), target, opts);
-    }
-
-    public String toJson(Options opts) {
+    public String toJson() {
         try {
-            return JsonWriter.write(this, opts);
+            return JsonWriter.write(this, options);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {
             throw new RuntimeException(ex);
-        }
-    }
-
-    public String toJson(Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return toJson(Options.def());
-        } else {
-            return toJson(Options.of(features));
         }
     }
 

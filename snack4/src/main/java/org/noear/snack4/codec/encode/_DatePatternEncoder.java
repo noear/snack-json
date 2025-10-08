@@ -25,13 +25,13 @@ public class _DatePatternEncoder implements ObjectPatternEncoder<Date> {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 if (Asserts.isNotEmpty(ctx.getAttr().timezone())) {
-                    return new ONode(DateUtil.format(value, ctx.getAttr().format(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone()))));
+                    return new ONode(ctx.getOpts(), DateUtil.format(value, ctx.getAttr().format(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().timezone()))));
                 } else {
-                    return new ONode(DateUtil.format(value, ctx.getAttr().format()));
+                    return new ONode(ctx.getOpts(), DateUtil.format(value, ctx.getAttr().format()));
                 }
             }
         }
 
-        return new ONode(value);
+        return new ONode(ctx.getOpts(), value);
     }
 }

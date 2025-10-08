@@ -45,16 +45,16 @@ public class JsonPath {
         }
 
         if (currentNodes.size() > 1) {
-            return new ONode(currentNodes);
+            return new ONode(root.options(), currentNodes);
         } else {
             if (multiple) {
                 if (currentNodes.size() > 0) {
                     return currentNodes.get(0);
                 } else {
-                    return new ONode();
+                    return new ONode(root.options());
                 }
             } else {
-                return new ONode(currentNodes);
+                return new ONode(root.options(), currentNodes);
             }
         }
     }
@@ -67,16 +67,16 @@ public class JsonPath {
         }
 
         if (currentNodes.size() > 1) {
-            return new ONode(currentNodes);
+            return new ONode(root.options(), currentNodes);
         } else {
             if (multiple) {
                 if (currentNodes.size() > 0) {
                     return currentNodes.get(0);
                 } else {
-                    return new ONode();
+                    return new ONode(root.options());
                 }
             } else {
-                return new ONode(currentNodes);
+                return new ONode(root.options(), currentNodes);
             }
         }
     }

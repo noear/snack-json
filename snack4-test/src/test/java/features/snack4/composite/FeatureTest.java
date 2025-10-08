@@ -11,12 +11,12 @@ import org.noear.snack4.Options;
 public class FeatureTest {
     @Test
     public void test() {
-        ONode oNode = new ONode();
         Options options = Options.of();
+        ONode oNode = new ONode(options);
 
         System.out.println(options.getFeatures());
         assert options.hasFeature(Feature.Write_StringNullAsEmpty) == false;
-        assert oNode.get("name").getString() != null;
+        assert oNode.get("name").getString() == null;
 
         options.addFeature(Feature.Write_StringNullAsEmpty);
         System.out.println(options.getFeatures());

@@ -21,7 +21,7 @@ public class OffsetDateTimeTest {
         String poc = "{\"date\":\"2024-01-12T10:30:00.000+03:00\"}";
         ONode oNode = ONode.load(poc);
         //解析
-        OffsetDateTimeModel model = oNode.to(OffsetDateTimeModel.class);
+        OffsetDateTimeModel model = oNode.toBean(OffsetDateTimeModel.class);
         OffsetDateTime date = model.date;
         OffsetDateTime offsetDateTime = date.withOffsetSameInstant(ZoneOffset.of("+03:00"));
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

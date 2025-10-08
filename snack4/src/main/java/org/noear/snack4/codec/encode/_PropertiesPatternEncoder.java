@@ -20,7 +20,7 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
 
     @Override
     public ONode encode(EncodeContext ctx, Properties properties) {
-        ONode rootNode = new ONode();
+        ONode rootNode = new ONode(ctx.getOpts());
 
         //对key排序，确保数组有序
         List<String> keyVector = new ArrayList<>();

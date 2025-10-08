@@ -24,6 +24,6 @@ public class StringEncoder implements ObjectEncoder<String> {
             }
         }
 
-        return new ONode(value);
+        return new ONode(ctx.getOpts(), value);
     }
 }

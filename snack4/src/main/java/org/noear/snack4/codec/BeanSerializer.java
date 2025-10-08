@@ -38,7 +38,7 @@ public class BeanSerializer {
 
     public static ONode serialize(Object value, Options opts) {
         if (value == null) {
-            return new ONode(null);
+            return new ONode(opts, null);
         }
 
         if (value instanceof ONode) {
@@ -71,7 +71,7 @@ public class BeanSerializer {
     // 值转ONode处理
     private static ONode convertValueToNode(Object value, ONodeAttr attr, Map<Object, Object> visited, Options opts) throws Exception {
         if (value == null) {
-            return new ONode(null);
+            return new ONode(opts, null);
         }
 
         if (value instanceof ONode) {
@@ -111,7 +111,7 @@ public class BeanSerializer {
             visited.put(bean, null);
         }
 
-        ONode tmp = new ONode().asObject();
+        ONode tmp = new ONode(opts).asObject();
 
         try {
             if (opts.hasFeature(Feature.Write_ClassName)) {
@@ -141,7 +141,7 @@ public class BeanSerializer {
                     }
                 }
 
-                if(property == null || property.isSerialize() == false) {
+                if (property == null || property.isSerialize() == false) {
                     continue;
                 }
 
@@ -157,7 +157,7 @@ public class BeanSerializer {
                 ONode propertyNode = null;
 
                 if (property.isAsString()) {
-                    propertyNode = new ONode(String.valueOf(propertyValue));
+                    propertyNode = new ONode(opts, String.valueOf(propertyValue));
                 } else {
                     propertyNode = convertValueToNode(propertyValue, property.getAttr(), visited, opts);
                 }
@@ -181,7 +181,7 @@ public class BeanSerializer {
 
     // 处理数组类型
     private static ONode convertArrayToNode(Object array, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode().asArray();
+        ONode tmp = new ONode(opts).asArray();
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
             tmp.add(convertValueToNode(Array.get(array, i), null, visited, opts));
@@ -191,7 +191,7 @@ public class BeanSerializer {
 
     // 处理集合类型
     private static ONode convertCollectionToNode(Collection<?> collection, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode().asArray();
+        ONode tmp = new ONode(opts).asArray();
         for (Object item : collection) {
             tmp.add(convertValueToNode(item, null, visited, opts));
         }
@@ -200,9 +200,9 @@ public class BeanSerializer {
 
     // 处理Map类型
     private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode().asObject();
+        ONode tmp = new ONode(opts).asObject();
 
-        if(opts.hasFeature(Feature.Write_ClassName)) {
+        if (opts.hasFeature(Feature.Write_ClassName)) {
             tmp.set(opts.getTypePropertyName(), map.getClass().getName());
         }
 

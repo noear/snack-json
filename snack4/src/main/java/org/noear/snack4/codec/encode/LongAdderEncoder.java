@@ -14,6 +14,6 @@ import java.util.concurrent.atomic.LongAdder;
 public class LongAdderEncoder implements ObjectEncoder<LongAdder> {
     @Override
     public ONode encode(EncodeContext ctx, LongAdder value) {
-        return new ONode(value.longValue());
+        return new ONode(ctx.getOpts(), value.longValue());
     }
 }

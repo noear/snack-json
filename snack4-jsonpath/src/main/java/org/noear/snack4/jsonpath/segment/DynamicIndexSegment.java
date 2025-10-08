@@ -83,7 +83,7 @@ public class DynamicIndexSegment implements SegmentFunction {
                     if (mode == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
-                            arr.add(new ONode());
+                            arr.add(new ONode(arr.options()));
                         }
                     }
 

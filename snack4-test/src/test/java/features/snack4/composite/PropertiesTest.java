@@ -29,7 +29,7 @@ public class PropertiesTest {
 
         System.out.println(json);
 
-        Properties props2 = ONode.load(json).to(Properties.class);
+        Properties props2 = ONode.load(json).toBean(Properties.class);
         String json2 = ONode.from(props2).toJson();
 
         System.out.println(json2);
@@ -67,7 +67,7 @@ public class PropertiesTest {
         props.setProperty("typeA", "demo.snack4._model5.TypeAImpl");
         props.setProperty("typeB", "demo.snack4._model5.TypeBImpl");
 
-        TypeC typeC = ONode.from(props).to(TypeC.class);
+        TypeC typeC = ONode.from(props).toBean(TypeC.class);
         assert typeC.typeA != null;
         System.out.println(typeC.typeA);
         assert typeC.typeB != null;
@@ -140,7 +140,7 @@ public class PropertiesTest {
         assert userModel.getUserName() == null;
 
 
-        userModel = ONode.load(json).to(UserModel.class, Feature.Write_UseOnlySetter);
+        userModel = ONode.load(json, Feature.Write_UseOnlySetter).toBean(UserModel.class);
         assert "a".equals(userModel.getUserName());
     }
 

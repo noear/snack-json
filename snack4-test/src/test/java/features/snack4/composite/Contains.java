@@ -86,10 +86,10 @@ public class Contains {
         assert tmp.equals(tmp2);
 
         ONode tmp3 = ONode.load("[1,2,3,4,5]");
-        List<Integer> tmp4 = ONode.load("[1,2,3,4,5]").to(List.class);
+        List<Integer> tmp4 = ONode.load("[1,2,3,4,5]").toBean(List.class);
 
-        List<Integer> tmp41 = ONode.load("[1,2,3,5,4]").to(List.class);
-        List<Integer> tmp42 = ONode.load("[1,2,3,4]").to(List.class);
+        List<Integer> tmp41 = ONode.load("[1,2,3,5,4]").toBean(List.class);
+        List<Integer> tmp42 = ONode.load("[1,2,3,4]").toBean(List.class);
 
         assert  tmp.hasKey("a");
         assert  tmp.hasValue(tmp3);

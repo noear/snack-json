@@ -20,6 +20,6 @@ public class _ClobPatternEncoder implements ObjectPatternEncoder<Clob> {
 
     @Override
     public ONode encode(EncodeContext ctx, Clob value) {
-        return new ONode(BeanUtil.clobToString(value));
+        return new ONode(ctx.getOpts(), BeanUtil.clobToString(value));
     }
 }

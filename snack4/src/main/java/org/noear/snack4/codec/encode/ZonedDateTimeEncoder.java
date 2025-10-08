@@ -20,10 +20,10 @@ public class ZonedDateTimeEncoder implements ObjectEncoder<ZonedDateTime> {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(formatter.format(value));
+                return new ONode(ctx.getOpts(), formatter.format(value));
             }
         }
         
-        return new ONode(Date.from(value.toInstant()));
+        return new ONode(ctx.getOpts(), Date.from(value.toInstant()));
     }
 }

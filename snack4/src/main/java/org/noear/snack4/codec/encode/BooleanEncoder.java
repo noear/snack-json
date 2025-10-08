@@ -12,6 +12,6 @@ import org.noear.snack4.codec.ObjectEncoder;
 public class BooleanEncoder implements ObjectEncoder<Boolean> {
     @Override
     public ONode encode(EncodeContext ctx, Boolean value) {
-        return new ONode(value);
+        return new ONode(ctx.getOpts(), value);
     }
 }

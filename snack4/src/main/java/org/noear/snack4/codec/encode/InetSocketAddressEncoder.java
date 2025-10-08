@@ -17,7 +17,7 @@ public class InetSocketAddressEncoder implements ObjectEncoder<InetSocketAddress
     public ONode encode(EncodeContext ctx, InetSocketAddress value) {
         InetAddress inetAddress = value.getAddress();
 
-        ONode node = new ONode();
+        ONode node = new ONode(ctx.getOpts());
         node.set("hostname", inetAddress.getHostAddress());
         node.set("port", value.getPort());
 

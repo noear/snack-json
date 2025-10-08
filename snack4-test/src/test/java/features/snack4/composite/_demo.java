@@ -32,7 +32,7 @@ public class _demo {
 
         assert o.select("$.data.list").size() == 2;
 
-        List<UserModel> list2 = o.select("$.data.list").to(List.class);
+        List<UserModel> list2 = o.select("$.data.list").toBean(List.class);
         assert list2.size() == 2;
 
         String message = o.toJson();
@@ -78,7 +78,7 @@ public class _demo {
         String json = ONode.from(user).toJson();
 
         //demo2::反序列化
-        UserModel user2 = ONode.load(json).to(UserModel.class);
+        UserModel user2 = ONode.load(json).toBean(UserModel.class);
 
         assert user.id == user2.id;
     }
@@ -141,7 +141,7 @@ public class _demo {
 
     @Test
     public void demo32() throws Exception {
-        UserModel tmp = ONode.load("{id:1,name:'x'}").to(UserModel.class);
+        UserModel tmp = ONode.load("{id:1,name:'x'}").toBean(UserModel.class);
 
         assert tmp.id == 1;
     }
@@ -153,14 +153,14 @@ public class _demo {
                 .addFeature(Feature.Write_UnquotedFieldNames);
 
         String txt = "{id:1,name:'x'}";
-        ONode tmp = ONode.load(txt);
+        ONode tmp = ONode.load(txt, options);
 
         //事后特性操控::
         //
         //去掉QuoteFieldNames特性，添加UseSingleQuotes特性
         //
 
-        String txt2 = tmp.toJson(options);
+        String txt2 = tmp.toJson();
 
         System.out.println(txt2);
 

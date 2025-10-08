@@ -41,7 +41,7 @@ public class TestFlat {
     public void test01() {
         String json = "{\"name\":\"test\",\"age\":34,\"result\":true,\"age2\":54,\"result2\":false}";
 
-        TestFlatDto dto = ONode.load(json).to(TestFlatDto.class);
+        TestFlatDto dto = ONode.load(json).toBean(TestFlatDto.class);
 
         assertEquals(dto.getName(), "test");
 

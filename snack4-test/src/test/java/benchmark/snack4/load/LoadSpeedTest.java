@@ -158,11 +158,11 @@ public class LoadSpeedTest {
         String json =ONode.from(group).toJson();
         System.out.println(json);
 
-        ONode.load(json).to(UserGroupModel.class);
+        ONode.load(json).toBean(UserGroupModel.class);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.load(json).to(UserGroupModel.class);
+            ONode.load(json).toBean(UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -201,11 +201,11 @@ public class LoadSpeedTest {
         String json = ONode.from(group).toJson();
         System.out.println(json);
 
-        ONode.load(json).to(Object.class);
+        ONode.load(json).toBean(Object.class);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.load(json).to(Object.class);
+            ONode.load(json).toBean(Object.class);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -247,11 +247,11 @@ public class LoadSpeedTest {
 
         ONode tmp = ONode.load(json);
 
-        tmp.to(UserGroupModel.class);
+        tmp.toBean(UserGroupModel.class);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            tmp.to(UserGroupModel.class);
+            tmp.toBean(UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -292,11 +292,11 @@ public class LoadSpeedTest {
 
         ONode tmp = ONode.load(json);
 
-        tmp.to(Object.class);
+        tmp.toBean(Object.class);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            tmp.to(Object.class);
+            tmp.toBean(Object.class);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -329,12 +329,12 @@ public class LoadSpeedTest {
         String json = ONode.from(obj).toJson();
         System.out.println(json);
 
-        ONode.load(json).to(obj.getClass());
+        ONode.load(json).toBean(obj.getClass());
 
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.load(json).to(obj.getClass());
+            ONode.load(json).toBean(obj.getClass());
         }
         long times = System.currentTimeMillis() - start;
 
@@ -404,7 +404,7 @@ public class LoadSpeedTest {
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            n.to(obj.getClass());
+            n.toBean(obj.getClass());
         }
         long times = System.currentTimeMillis() - start;
 

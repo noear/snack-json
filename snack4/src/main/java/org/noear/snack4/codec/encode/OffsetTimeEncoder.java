@@ -21,11 +21,11 @@ public class OffsetTimeEncoder implements ObjectEncoder<OffsetTime> {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().format())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().format());
-                return new ONode(formatter.format(value));
+                return new ONode(ctx.getOpts(), formatter.format(value));
             }
         }
 
         Instant instant = value.atDate(LocalDate.of(1970, 1, 1)).toInstant();
-        return new ONode(Date.from(instant));
+        return new ONode(ctx.getOpts(), Date.from(instant));
     }
 }

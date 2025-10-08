@@ -27,11 +27,11 @@ public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
                     formatter.withZone(ZoneId.of(ctx.getAttr().timezone()));
                 }
 
-                return new ONode(formatter.format(value));
+                return new ONode(ctx.getOpts(), formatter.format(value));
             }
         }
 
         Instant instant = value.atTime(LocalTime.MIN).atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
-        return new ONode(new Date(instant.getEpochSecond() * 1000));
+        return new ONode(ctx.getOpts(), new Date(instant.getEpochSecond() * 1000));
     }
 }

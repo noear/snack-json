@@ -15,6 +15,6 @@ import java.net.URL;
 public class URLEncoder implements ObjectEncoder<URL> {
     @Override
     public ONode encode(EncodeContext ctx, URL value) {
-        return new ONode(value.toString());
+        return new ONode(ctx.getOpts(), value.toString());
     }
 }

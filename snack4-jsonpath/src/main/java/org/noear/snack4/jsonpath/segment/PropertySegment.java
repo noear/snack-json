@@ -59,7 +59,7 @@ public class PropertySegment implements SegmentFunction {
 
             if (n1 == null) {
                 if (mode == QueryMode.CREATE) {
-                    n1 = new ONode();
+                    n1 = new ONode(node.options());
                     node.set(key, n1);
                 } else if (false) {
                     throw new PathResolutionException("Missing key '" + key + "'");

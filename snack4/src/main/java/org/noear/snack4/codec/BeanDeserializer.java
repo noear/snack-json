@@ -226,7 +226,7 @@ public class BeanDeserializer {
             TypeWrap elementTypeWrap = TypeWrap.from(elementType);
 
             for (String str : strArray) {
-                Object item = convertValue(new ONode(str), elementTypeWrap, null, null, visited, opts);
+                Object item = convertValue(new ONode(opts, str), elementTypeWrap, null, null, visited, opts);
                 if (item != null) {
                     coll.add(item);
                 }
@@ -281,7 +281,7 @@ public class BeanDeserializer {
             if (decoder == null) {
                 return Enum.valueOf((Class<Enum>) keyType.getType(), key);
             } else {
-                return decoder.decode(new DecodeContext(opts, null, null, keyType), new ONode(key));
+                return decoder.decode(new DecodeContext(opts, null, null, keyType), new ONode(opts, key));
             }
         }
 
