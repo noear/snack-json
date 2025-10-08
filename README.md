@@ -24,8 +24,8 @@
     <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html">
 		<img src="https://img.shields.io/badge/JDK-21-green.svg" alt="jdk-21" />
 	</a>
-    <a target="_blank" href="https://www.oracle.com/java/technologies/javase/jdk23-archive-downloads.html">
-		<img src="https://img.shields.io/badge/JDK-23-green.svg" alt="jdk-23" />
+    <a target="_blank" href="https://www.oracle.com/java/technologies/downloads/">
+		<img src="https://img.shields.io/badge/JDK-25-green.svg" alt="jdk-25" />
 	</a>
     <br />
     <a target="_blank" href='https://gitee.com/noear/snack3/stargazers'>
