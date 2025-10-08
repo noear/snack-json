@@ -75,10 +75,13 @@ public enum Feature {
      * */
     Read_AllowInvalidEscapeCharacter(false),
 
+    /**
+     * 允许未编码的控制符
+     * */
     Read_AllowUnescapedControlCharacters(false),
 
     /**
-     * 处理大数字时使用字符串模式（避免精度丢失）
+     * 读取大数字时使用字符串模式（避免精度丢失）
      */
     Read_UseBigNumberMode(false),
 
@@ -143,11 +146,6 @@ public enum Feature {
     Write_NotRootClassName(false),
 
     /**
-     * 处理大数字时使用字符串模式（避免精度丢失）
-     */
-    Write_UseBigNumberMode(false),
-
-    /**
      * 使用原始反斜杠（`\\` 不会转为 `\\\\`）
      * */
     Write_UseRawBackslash(false),
@@ -161,7 +159,13 @@ public enum Feature {
      * 使用日期格式化（默认使用时间戳）
      */
     Write_UseDateFormat(false),
+    /**
+     * 写入数字时使用字符串模式
+     * */
     Write_NumbersAsString(false),
+    /**
+     * 写入大数字时使用字符串模式（避免精度丢失）
+     */
     Write_BigNumbersAsString(false),
     ;
 
