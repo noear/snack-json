@@ -18,7 +18,7 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 
 /**
- * 路径操作符处理
+ * JsonPath 操作符
  *
  * @author noear 2025/5/5 created
  * @since 4.0

@@ -20,7 +20,7 @@ import org.noear.snack4.ONode;
 import java.util.List;
 
 /**
- * JsonPath 片段处理
+ * JsonPath 片段
  *
  * @author noear
  * @since 4.0
@@ -28,6 +28,10 @@ import java.util.List;
 public interface Segment {
     /**
      * 分析
+     *
+     * @param currentNodes 当前节点
+     * @param context      查询上下文
+     * @param mode         查询模式
      */
     List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode);
 }

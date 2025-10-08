@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 操作符处理库(支持动态注册)
+ * JsonPath 操作符库(支持动态注册)
  *
  * @author noear 2025/5/5 created
  * @since 4.0
@@ -35,9 +35,12 @@ public class OperationLib {
         // 操作函数
         register("startsWith", OperationLib::startsWith);
         register("endsWith", OperationLib::endsWith);
+
         register("contains", OperationLib::contains);
+
         register("in", OperationLib::in);
         register("nin", OperationLib::nin);
+
         register("=~", OperationLib::matches);
 
         register("==", OperationLib::compare);
@@ -135,7 +138,7 @@ public class OperationLib {
         return rst;
     }
 
-    public static boolean matches(ONode node, Condition condition, ONode root) {
+    private static boolean matches(ONode node, Condition condition, ONode root) {
         ONode leftNode = condition.getLeftNode(node, root);
         ONode rightNode = condition.getRightNode(node, root);
 
@@ -150,7 +153,7 @@ public class OperationLib {
         return found;
     }
 
-    public static boolean compare(ONode node, Condition condition, ONode root) {
+    private static boolean compare(ONode node, Condition condition, ONode root) {
         ONode leftNode = condition.getLeftNode(node, root);
         ONode rightNode = condition.getRightNode(node, root);
 
