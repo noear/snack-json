@@ -115,7 +115,7 @@ public class BeanDeserializer {
                     throw new SnackException("Create instance failed: " + typeWrap.getType().getName());
                 }
 
-                if(constructor.isAccessible() == false) {
+                if (constructor.isAccessible() == false) {
                     constructor.setAccessible(true);
                 }
 
@@ -169,7 +169,7 @@ public class BeanDeserializer {
                     property = propertyWrap.getFieldWrap();
                 }
 
-                if(property == null || property.getAttr().isDeserialize() == false) {
+                if (property == null || property.getAttr().isDeserialize() == false) {
                     continue;
                 }
 
@@ -321,10 +321,9 @@ public class BeanDeserializer {
 
     /**
      * 确认节点类型
-     *
      */
     private static TypeWrap confirmNodeType(Options opts, ONode oRef, TypeWrap def) {
-        TypeWrap type0 = getTypeByNode0(opts, oRef, def);
+        TypeWrap type0 = resolveNodeType(opts, oRef, def);
 
         if (Throwable.class.isAssignableFrom(type0.getType())) {
             //如果有异常，则异常优先
@@ -341,10 +340,14 @@ public class BeanDeserializer {
         return type0;
     }
 
-    private static TypeWrap getTypeByNode0(Options opts, ONode oRef, TypeWrap def) {
+    /**
+     * 分析节点类型
+     *
+     */
+    private static TypeWrap resolveNodeType(Options opts, ONode oRef, TypeWrap def) {
         if (oRef.isObject()) {
             String typeStr = null;
-            if (opts.hasFeature(Feature.Read_DisableClassName) == false) {
+            if (isReadClassName(opts, oRef)) {
                 ONode n1 = oRef.getObject().get(opts.getTypePropertyName());
                 if (n1 != null) {
                     typeStr = n1.getString();
@@ -380,5 +383,20 @@ public class BeanDeserializer {
         }
 
         return def;
+    }
+
+    /**
+     * 是否读取类名字
+     */
+    private static boolean isReadClassName(Options opts, ONode node) {
+        if (opts.hasFeature(Feature.Read_DisableClassName)) {
+            return false;
+        }
+
+        if (node.isObject() == false) {
+            return false;
+        }
+
+        return true;
     }
 }

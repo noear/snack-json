@@ -145,6 +145,8 @@ public enum Feature {
 
     Write_ArrayClassName(false),
 
+    Write_MapClassName(false),
+
     Write_NotRootClassName(false),
 
     /**

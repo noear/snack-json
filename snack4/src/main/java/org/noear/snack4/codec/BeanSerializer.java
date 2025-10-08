@@ -114,7 +114,7 @@ public class BeanSerializer {
         ONode tmp = new ONode(opts).asObject();
 
         try {
-            if (opts.hasFeature(Feature.Write_ClassName)) {
+            if (isWriteClassName(opts, bean)) {
                 tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
             }
 
@@ -225,7 +225,7 @@ public class BeanSerializer {
         try {
             ONode tmp = new ONode(opts).asObject();
 
-            if (opts.hasFeature(Feature.Write_ClassName)) {
+            if (isWriteClassName(opts, map)) {
                 tmp.set(opts.getTypePropertyName(), map.getClass().getName());
             }
 
@@ -237,5 +237,17 @@ public class BeanSerializer {
         } finally {
             visited.remove(map);
         }
+    }
+
+    private static boolean isWriteClassName(Options opts, Object obj) {
+        if (opts.hasFeature(Feature.Write_ClassName) == false) {
+            return false;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        return true;
     }
 }
