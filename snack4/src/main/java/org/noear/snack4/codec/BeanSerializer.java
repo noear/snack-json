@@ -85,7 +85,7 @@ public class BeanSerializer {
         // 优先使用自定义编解码器
         ObjectEncoder codec = opts.getEncoder(value);
         if (codec != null) {
-            return codec.encode(new EncodeContext(opts, attr), value, new  ONode(opts));
+            return codec.encode(new EncodeContext(opts, attr), value, new ONode(opts));
         }
 
         if (value instanceof Collection) {
@@ -221,16 +221,26 @@ public class BeanSerializer {
 
     // 处理Map类型
     private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
-        ONode tmp = new ONode(opts).asObject();
-
-        if (opts.hasFeature(Feature.Write_ClassName)) {
-            tmp.set(opts.getTypePropertyName(), map.getClass().getName());
+        if (visited.containsKey(map)) {
+            return null;
+        } else {
+            visited.put(map, null);
         }
 
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
-            tmp.set(String.valueOf(entry.getKey()), valueNode);
+        try {
+            ONode tmp = new ONode(opts).asObject();
+
+            if (opts.hasFeature(Feature.Write_ClassName)) {
+                tmp.set(opts.getTypePropertyName(), map.getClass().getName());
+            }
+
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
+                tmp.set(String.valueOf(entry.getKey()), valueNode);
+            }
+            return tmp;
+        } finally {
+            visited.remove(map);
         }
-        return tmp;
     }
 }

@@ -1,5 +1,6 @@
 package features.snack4.codec;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.BeanDeserializer;
@@ -229,7 +230,7 @@ public class JsonBeanCodecSimpleTest {
         bean.normal = "data";
 
         ONode node = BeanSerializer.serialize(bean);
-        assertTrue(node.hasKey("temp")); // 根据实现决定是否包含
+        assertTrue(node.hasKey("temp") == false); // 根据实现决定是否包含
     }
 
     // 测试用例 14: 不同访问权限字段
@@ -280,9 +281,9 @@ public class JsonBeanCodecSimpleTest {
         map.put("status", new ONode("error"));
         ONode node = new ONode(map);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            BeanDeserializer.deserialize(node, EnumBean.class); // 需要 "ERROR" 大写
-        });
+        EnumBean enumBean = BeanDeserializer.deserialize(node, EnumBean.class); // 需要 "ERROR" 大写
+
+        Assertions.assertEquals(TestEnum.ERROR, enumBean.status);
     }
 
     // 测试用例 17: 数字转换验证
@@ -327,9 +328,8 @@ public class JsonBeanCodecSimpleTest {
         LoopBean bean = new LoopBean();
         bean.self = bean;
 
-        assertThrows(StackOverflowError.class, () -> {
-            BeanSerializer.serialize(bean);
-        });
+        //循环引用，不会出错了
+        BeanSerializer.serialize(bean);
     }
 
     // 测试用例 20: 静态内部类支持

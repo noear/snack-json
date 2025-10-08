@@ -115,6 +115,10 @@ public class BeanDeserializer {
                     throw new ReflectionException("Create instance failed: " + typeWrap.getType().getName());
                 }
 
+                if(constructor.isAccessible() == false) {
+                    constructor.setAccessible(true);
+                }
+
                 if (constructor.getParameterCount() == 0) {
                     target = constructor.newInstance();
                 } else {
