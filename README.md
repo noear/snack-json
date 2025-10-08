@@ -1,5 +1,5 @@
 <h1 align="center" style="text-align:center;">
-  Snack-Json for Java
+  Snack4 for Java
 </h1>
 <p align="center">
 	<strong>一个高性能的 JsonPath 框架</strong>
