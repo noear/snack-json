@@ -28,7 +28,7 @@ public class DataTest {
         a.b = b;
         b.a = a;
 
-        ONode oNode = ONode.from(a);
+        ONode oNode = ONode.ofBean(a);
 
         System.out.println(oNode.toJson());
 
@@ -50,7 +50,7 @@ public class DataTest {
         order.order_id = 2222;
         order.order_num = "ddddd";
 
-        ONode c = ONode.from(order);
+        ONode c = ONode.ofBean(order);
 
         System.out.println(c.toJson());
 
@@ -89,9 +89,9 @@ public class DataTest {
 
         System.out.println(json);//context.node.toJson());
 
-        Object g2 = ONode.load(json);
+        Object g2 = ONode.ofJson(json);
 
-        ONode node = ONode.load(json, Feature.Read_DisableClassName);
+        ONode node = ONode.ofJson(json, Feature.Read_DisableClassName);
 
         Object tmp = node.toBean();
 

@@ -18,70 +18,70 @@ public class RFC9535FilterTest {
 
     @Test
     public void case1_1() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("$.absent1 == $.absent2").test(node, node);
         assertTrue(rst);
     }
 
     @Test
     public void case1_2() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("$.absent1 <= $.absent2").test(node, node);
         assertTrue(rst);
     }
 
     @Test
     public void case1_3() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("$.absent == 'g'").test(node, node);
         assertFalse(rst);
     }
 
     @Test
     public void case1_4() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("$.absent1 != $.absent2").test(node, node);
         assertFalse(rst);
     }
 
     @Test
     public void case1_5() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("$.absent != 'g'").test(node, node);
         assertTrue(rst);
     }
 
     @Test
     public void case1_6() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("1 <= 2").test(node, node);
         assertTrue(rst);
     }
 
     @Test
     public void case1_7() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("1 > 2").test(node, node);
         assertFalse(rst);
     }
 
     @Test
     public void case1_8() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("13 == '13'").test(node, node);
         assertFalse(rst);
     }
 
     @Test
     public void case1_9() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("'a' <= 'b'").test(node, node);
         assertTrue(rst);
     }
 
     @Test
     public void case1_10() {
-        ONode node = ONode.load(json1);
+        ONode node = ONode.ofJson(json1);
         boolean rst = Expression.get("'a' > 'b'").test(node, node);
         assertFalse(rst);
     }

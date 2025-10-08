@@ -19,12 +19,12 @@ public class DemoLab {
 
     public void case2() {
         String store = "{}";
-        ONode.from(store).select("$..book[?(@.tags contains 'war')]").toBean(Book.class);
-        ONode.load(store).select("$.store.book.count()");
+        ONode.ofBean(store).select("$..book[?(@.tags contains 'war')]").toBean(Book.class);
+        ONode.ofJson(store).select("$.store.book.count()");
 
-        ONode.from(store).create("$.store.book[0].category").toJson();
+        ONode.ofBean(store).create("$.store.book[0].category").toJson();
 
-        ONode.from(store).delete("$..book[-1]");
+        ONode.ofBean(store).delete("$..book[-1]");
     }
 
     @Test

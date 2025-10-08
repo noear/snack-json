@@ -21,7 +21,7 @@ public class ResultNodeLongTest {
         Options options = Options.of();
         options.addEncoder(Long.class, (ctx, value, target) ->  target.setValue(String.valueOf(value)));
 
-        ONode oNode2 =  ONode.from(result, options);
+        ONode oNode2 =  ONode.ofBean(result, options);
         String json = oNode2.toJson();
         System.out.println(json);
         assert json.contains("\"12\"") == false;
@@ -36,7 +36,7 @@ public class ResultNodeLongTest {
         Options options = Options.of();
         options.addEncoder(Long.class, (ctx, value, target) -> target.setValue(String.valueOf(value)));
 
-        ONode oNode2 =  ONode.from(result, options);
+        ONode oNode2 =  ONode.ofBean(result, options);
         String json = oNode2.toJson();
         System.out.println(json);
         assert json.contains("\"12\"");

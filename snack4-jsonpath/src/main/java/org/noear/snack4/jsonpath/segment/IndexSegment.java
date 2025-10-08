@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -73,7 +73,7 @@ public class IndexSegment implements SegmentFunction {
 
                     ONode n1 = obj.getOrNull(key);
                     if(n1.source == null) {
-                        n1.source = new JsonSource(obj, key, 0);
+                        n1.source = new PathSource(obj, key, 0);
                     }
 
                     return n1;
@@ -110,7 +110,7 @@ public class IndexSegment implements SegmentFunction {
 
                     ONode n1 = arr.getOrNull(idx);
                     if(n1.source == null) {
-                        n1.source = new JsonSource(arr, null, idx);
+                        n1.source = new PathSource(arr, null, idx);
                     }
 
                     return n1;

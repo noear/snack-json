@@ -13,7 +13,7 @@ public class FinalTest {
     public void test() throws Exception{
 //        String json = "{'bean-searcher':{'sql':{'dialect':'Oracle'}}}";
         String json = "{'sql':{'dialect':'Oracle'}}";
-        BSProps bsProps = ONode.load(json, Feature.Write_UseSetter).toBean(BSProps.class);
+        BSProps bsProps = ONode.ofJson(json, Feature.Write_UseSetter).toBean(BSProps.class);
 
         assert "Oracle".equals(bsProps.getSql().getDialect());
     }

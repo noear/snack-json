@@ -18,7 +18,10 @@ package org.noear.snack4.codec;
 import org.noear.snack4.SnackException;
 
 /**
+ * 编解码异常
+ *
  * @author noear 2025/3/16 created
+ * @since 4.0
  */
 public class CodecException extends SnackException {
     public CodecException(String message) {

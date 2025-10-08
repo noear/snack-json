@@ -17,7 +17,7 @@ package org.noear.snack4.jsonschema.rule;
 
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonschema.exception.SchemaException;
+import org.noear.snack4.jsonschema.JsonSchemaException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,9 +38,9 @@ public class EnumRule implements ValidationRule {
     }
 
     @Override
-    public void validate(ONode data) throws SchemaException {
+    public void validate(ONode data) throws JsonSchemaException {
         if (!allowedValues.contains(data)) {
-            throw new SchemaException("Value not in enum list");
+            throw new JsonSchemaException("Value not in enum list");
         }
     }
 }

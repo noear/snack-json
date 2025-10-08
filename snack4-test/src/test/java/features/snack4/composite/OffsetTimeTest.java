@@ -20,7 +20,7 @@ public class OffsetTimeTest {
     @Test
     public void deserialize() {
         String poc = "{\"time\":\"20:54:51\"}";
-        ONode oNode = ONode.load(poc);
+        ONode oNode = ONode.ofJson(poc);
 //        //解析
         OffsetTimeModel model = oNode.toBean(OffsetTimeModel.class);
         OffsetTime time0 = model.time;
@@ -35,7 +35,7 @@ public class OffsetTimeTest {
     @Test
     public void deserializeOffset() {
         String poc = "{\"time\":\"20:54:51+08:00\"}";
-        ONode oNode = ONode.load(poc);
+        ONode oNode = ONode.ofJson(poc);
 //        //解析
         OffsetTimeModel model = oNode.toBean(OffsetTimeModel.class);
         OffsetTime time0 = model.time;
@@ -53,6 +53,6 @@ public class OffsetTimeTest {
         OffsetTimeModel data = new OffsetTimeModel();
         data.time = OffsetTime.of(2, 3, 1, 0, ZoneOffset.of("+03:00"));
 
-        ONode.from(data); //不出异常就行
+        ONode.ofBean(data); //不出异常就行
     }
 }

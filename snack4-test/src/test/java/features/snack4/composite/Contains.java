@@ -50,10 +50,10 @@ public class Contains {
 
         assert Long.hashCode(2) == new ONode().setValue(2).hashCode();
 
-        ONode tmp = ONode.load("[1,2,3,4,5]");
+        ONode tmp = ONode.ofJson("[1,2,3,4,5]");
         assert tmp.getArray().contains(new ONode().setValue(2));
 
-        tmp = ONode.load("[1,'2',3,4,5]");
+        tmp = ONode.ofJson("[1,'2',3,4,5]");
         assert tmp.getArray().contains(new ONode().setValue("2"));
     }
 
@@ -62,7 +62,7 @@ public class Contains {
 
         assert Long.hashCode(2) == new ONode().setValue(2).hashCode();
 
-        ONode tmp = ONode.load("[1,2,3,4,5,true, null]");
+        ONode tmp = ONode.ofJson("[1,2,3,4,5,true, null]");
         assert tmp.hasValue(2l) == false;
 
         assert tmp.hasValue(2);
@@ -73,23 +73,23 @@ public class Contains {
 
         assert tmp.hasValue(new ONode());
 
-        tmp = ONode.load("[1,'2',3,4,5]");
+        tmp = ONode.ofJson("[1,'2',3,4,5]");
         assert tmp.hasValue("2");
     }
 
     @Test
     public void test3() {
 
-        ONode tmp = ONode.load("{a:[1,2,3,4,5],b:2}");
-        ONode tmp2 = ONode.load("{a:[1,2,3,4,5],b:2}");
+        ONode tmp = ONode.ofJson("{a:[1,2,3,4,5],b:2}");
+        ONode tmp2 = ONode.ofJson("{a:[1,2,3,4,5],b:2}");
 
         assert tmp.equals(tmp2);
 
-        ONode tmp3 = ONode.load("[1,2,3,4,5]");
-        List<Integer> tmp4 = ONode.load("[1,2,3,4,5]").toBean(List.class);
+        ONode tmp3 = ONode.ofJson("[1,2,3,4,5]");
+        List<Integer> tmp4 = ONode.ofJson("[1,2,3,4,5]").toBean(List.class);
 
-        List<Integer> tmp41 = ONode.load("[1,2,3,5,4]").toBean(List.class);
-        List<Integer> tmp42 = ONode.load("[1,2,3,4]").toBean(List.class);
+        List<Integer> tmp41 = ONode.ofJson("[1,2,3,5,4]").toBean(List.class);
+        List<Integer> tmp42 = ONode.ofJson("[1,2,3,4]").toBean(List.class);
 
         assert  tmp.hasKey("a");
         assert  tmp.hasValue(tmp3);
@@ -103,9 +103,9 @@ public class Contains {
 
     @Test
     public void test4() {
-        ONode tmp = ONode.load("[1,2,{c:1,d:2,b:[4]}]");
+        ONode tmp = ONode.ofJson("[1,2,{c:1,d:2,b:[4]}]");
 
-        ONode tmp2 = ONode.load("{c:1,d:2,b:[4]}");
+        ONode tmp2 = ONode.ofJson("{c:1,d:2,b:[4]}");
 
         assert tmp.getArray().contains(tmp2);
 

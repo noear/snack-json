@@ -15,10 +15,6 @@
  */
 package org.noear.snack4.jsonpath;
 
-/**
- * 
- * @author noear 2025/5/5 created
- * */
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.util.Asserts;
@@ -29,6 +25,8 @@ import java.util.regex.Pattern;
 
 /**
  * 条件描述
+ *
+ * @author noear 2025/5/5 created
  */
 public class Condition {
     private static Map<String, Condition> conditionMap = new ConcurrentHashMap<>();
@@ -137,7 +135,7 @@ public class Condition {
                 } else if (ch == '/') {
                     return new ONode(Options.def(), value);
                 } else {
-                    return ONode.load(value);
+                    return ONode.ofJson(value);
                 }
             }
         }

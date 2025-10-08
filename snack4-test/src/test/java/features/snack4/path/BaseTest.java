@@ -55,7 +55,7 @@ public class BaseTest {
 
     @Test
     public void case4() {
-        ONode root = ONode.load("{}");
+        ONode root = ONode.ofJson("{}");
         JsonPath.delete(root, "$.store.book[0]");
         ONode result = JsonPath.select(root, "$.store.book[0]");
         assertTrue(result.isNull());
@@ -63,7 +63,7 @@ public class BaseTest {
 
     @Test
     public void case5() {
-        ONode root = ONode.load("{}");
+        ONode root = ONode.ofJson("{}");
         JsonPath.create(root, "$.store.newNode");
         ONode result = JsonPath.select(root, "$.store.newNode");
         assertNotNull(result);

@@ -27,7 +27,7 @@ public class EnumTest {
     public void case1() {
 
         String poc = "{\"name\":\"西游记\",\"dict\":" + BookType.CLASSICS.getCode() + "}";
-        ONode oNode = ONode.load(poc);
+        ONode oNode = ONode.ofJson(poc);
         //解析
         Book tmp = oNode.toBean(Book.class);
 
@@ -44,7 +44,7 @@ public class EnumTest {
         book.setName("西游记");
         book.setDict(BookType.CLASSICS);
 
-        ONode.from(book); //不出异常即可
+        ONode.ofBean(book); //不出异常即可
     }
 
     /**
@@ -89,10 +89,10 @@ public class EnumTest {
         String s2 = "number";
         String s3 = "select";
         String s4 = "switcher";
-        ConfigControlType type1 = ONode.from(s1).toBean(ConfigControlType.class);
-        ConfigControlType type2 = ONode.from(s2).toBean( ConfigControlType.class);
-        ConfigControlType type3 = ONode.from(s3).toBean( ConfigControlType.class);
-        ConfigControlType type4 = ONode.from(s4).toBean( ConfigControlType.class);
+        ConfigControlType type1 = ONode.ofBean(s1).toBean(ConfigControlType.class);
+        ConfigControlType type2 = ONode.ofBean(s2).toBean( ConfigControlType.class);
+        ConfigControlType type3 = ONode.ofBean(s3).toBean( ConfigControlType.class);
+        ConfigControlType type4 = ONode.ofBean(s4).toBean( ConfigControlType.class);
         System.out.println(type1);
         System.out.println(type2);
         System.out.println(type3);
@@ -137,7 +137,7 @@ public class EnumTest {
         rec.map = map;
         rec.set = Collections.singleton(3);
 
-        String json = ONode.from(rec, Feature.Write_PrettyFormat).toJson();
+        String json = ONode.ofBean(rec, Feature.Write_PrettyFormat).toJson();
 
         System.out.println(json);
         Rec rec2 = ONode.deserialize(json, Rec.class);

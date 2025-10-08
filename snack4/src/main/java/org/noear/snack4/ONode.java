@@ -21,7 +21,7 @@ import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.codec.CodecException;
 import org.noear.snack4.json.JsonReader;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.json.JsonType;
 import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.jsonpath.JsonPathProvider;
@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * 高性能 JSON 节点抽象
+ * JSON 节点抽象
  */
 public final class ONode {
     private static JsonPathProvider jsonPathProvider;
@@ -50,7 +50,7 @@ public final class ONode {
     private transient JsonType type;
     private transient Options options;
 
-    public transient JsonSource source;
+    public transient PathSource source;
 
     public ONode() {
         this(Options.def());
@@ -321,7 +321,7 @@ public final class ONode {
     }
 
     public ONode fill(Object source) {
-        ONode oNode = ONode.from(source, options);
+        ONode oNode = ONode.ofBean(source, options);
 
         this.value = oNode.value;
         this.type = oNode.type;
@@ -329,7 +329,7 @@ public final class ONode {
     }
 
     public ONode fillJson(String json) {
-        return this.fill(ONode.load(json, options));
+        return this.fill(ONode.ofJson(json, options));
     }
 
     public ONode setAll(Map<?, ?> map) {
@@ -562,11 +562,11 @@ public final class ONode {
     /// /////////////
 
 
-    public static ONode from(Object bean, Options opts) {
+    public static ONode ofBean(Object bean, Options opts) {
         return BeanSerializer.serialize(bean, opts);
     }
 
-    public static ONode from(Object bean, Feature... features) {
+    public static ONode ofBean(Object bean, Feature... features) {
         if (Asserts.isEmpty(features)) {
             return BeanSerializer.serialize(bean, Options.def());
         } else {
@@ -574,15 +574,15 @@ public final class ONode {
         }
     }
 
-    public static ONode load(String json, Feature... features) {
+    public static ONode ofJson(String json, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return load(json, Options.def());
+            return ofJson(json, Options.def());
         } else {
-            return load(json, Options.of(features));
+            return ofJson(json, Options.of(features));
         }
     }
 
-    public static ONode load(String json, Options opts) {
+    public static ONode ofJson(String json, Options opts) {
         try {
             return new JsonReader(new StringReader(json), opts).read();
         } catch (SnackException ex) {
@@ -602,7 +602,7 @@ public final class ONode {
     }
 
     public static String serialize(Object object, Options opts) {
-        return ONode.from(object, opts).toJson();
+        return ONode.ofBean(object, opts).toJson();
     }
 
     public static <T> T deserialize(String json, Feature... features) {
@@ -622,7 +622,7 @@ public final class ONode {
     }
 
     public static <T> T deserialize(String json, Type type, Options opts) {
-        return ONode.load(json, opts).toBean(type);
+        return ONode.ofJson(json, opts).toBean(type);
     }
 
     public static <T> T deserialize(String json, TypeRef<T> type, Feature... features) {
@@ -634,10 +634,14 @@ public final class ONode {
     }
 
     public static <T> T deserialize(String json, TypeRef<T> type, Options opts) {
-        return ONode.load(json, opts).toBean(type);
+        return ONode.ofJson(json, opts).toBean(type);
     }
 
     /// ///////////
+
+    public <T> T bindTo(T target) {
+        return BeanDeserializer.deserialize(this, target.getClass(), target, options);
+    }
 
     public <T> T toBean(Type type) {
         return BeanDeserializer.deserialize(this, type, null, options);
@@ -651,10 +655,6 @@ public final class ONode {
 
     public <T> T toBean() {
         return toBean(Object.class);
-    }
-
-    public <T> T bindTo(T target) {
-        return BeanDeserializer.deserialize(this, target.getClass(), target, options);
     }
 
     public String toJson() {
@@ -729,12 +729,11 @@ public final class ONode {
 
     /// ///////////
 
-    @Deprecated
-    public ONode usePaths() {
+    public ONode usePaths(){
+        PathSource.resolvePath( this);
         return this;
     }
 
-    @Deprecated
     public ONode parent() {
         if (source == null) {
             return null;
@@ -743,7 +742,6 @@ public final class ONode {
         }
     }
 
-    @Deprecated
     public ONode parents(int depth) {
         if (source == null) {
             return null;
@@ -763,10 +761,9 @@ public final class ONode {
         }
     }
 
-    @Deprecated
     public List<String> pathList() {
         List<String> paths = new ArrayList<>();
-        extractPath(paths, this);
+        PathSource.extractPath(paths, this);
         return paths;
     }
 
@@ -774,30 +771,13 @@ public final class ONode {
         if (source == null) {
             return null;
         } else {
-            Object pk = (source.key == null ? source.index : source.key);
-            String pp = source.parent.path();
+            Object pathKey = (source.key == null ? source.index : source.key);
+            String parentPath = source.parent.path();
 
-            if (pp == null) {
-                return "$[" + pk + "]";
+            if (parentPath == null) {
+                return "$[" + pathKey + "]";
             } else {
-                return pp + "[" + pk + "]";
-            }
-        }
-    }
-
-    public static void extractPath(List<String> paths, ONode oNode) {
-        String path = oNode.path();
-        if (path != null) {
-            paths.add(path);
-        }
-
-        if (oNode.isArray()) {
-            for (ONode n1 : oNode.getArray()) {
-                extractPath(paths, n1);
-            }
-        } else if (oNode.isObject()) {
-            for (Map.Entry<String, ONode> kv : oNode.getObject().entrySet()) {
-                extractPath(paths, kv.getValue());
+                return parentPath + "[" + pathKey + "]";
             }
         }
     }

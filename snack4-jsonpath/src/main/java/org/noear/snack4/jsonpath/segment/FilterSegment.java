@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.Expression;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -71,7 +71,7 @@ public class FilterSegment implements SegmentFunction {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
                 if(n1.source == null) {
-                    n1.source = new JsonSource(node, null, idx);
+                    n1.source = new PathSource(node, null, idx);
                 }
 
                 flattenResolve(n1, context, result);

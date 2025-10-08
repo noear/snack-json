@@ -137,7 +137,7 @@ public class FunctionLib {
             ONode node = nodes.get(0);
 
             if (node.isObject()) {
-                return ONode.from(node.getObject().keySet());
+                return ONode.ofBean(node.getObject().keySet());
             } else {
                 throw new JsonPathException("keys() requires object");
             }
@@ -219,6 +219,6 @@ public class FunctionLib {
 
         return results.size() == 1 ?
                 new ONode(opts, results.get(0)) :
-                ONode.from(results);
+                ONode.ofBean(results);
     }
 }

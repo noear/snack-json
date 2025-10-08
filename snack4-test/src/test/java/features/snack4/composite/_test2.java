@@ -52,7 +52,7 @@ public class _test2 {
     private void call(String json, ComplexModel<Point> model){
         System.out.println(json);
 
-        ONode data2 = ONode.load(json);
+        ONode data2 = ONode.ofJson(json);
         ComplexModel model2 = data2.get("model").toBean(model.getClass());
 
         assert model2 != null;
@@ -71,7 +71,7 @@ public class _test2 {
     public void test2(){
          String json = "[{\"code\":0,\"name\":\"缺陷\",\"icon\":\"fa-bug\"},{\"code\":1,\"name\":\"改进\",\"icon\":\"fa-twitter\"},{\"code\":2,\"name\":\"需求\",\"icon\":\"fa-circle-o\"}]";
 
-         Object tmp = ONode.load(json).toBean();
+         Object tmp = ONode.ofJson(json).toBean();
 
          assert tmp instanceof List;
     }
@@ -80,7 +80,7 @@ public class _test2 {
     public void test3(){
         String json = test3_json();
 
-        ONode oNode = ONode.load(json);
+        ONode oNode = ONode.ofJson(json);
 
         //$.content.amount_detail.amount_units[?(@.name == "C_score")].amount
 
@@ -99,7 +99,7 @@ public class _test2 {
     public void test4(){
         String json = test4_json();
 
-        ONode oNode = ONode.load(json);
+        ONode oNode = ONode.ofJson(json);
 
         assert oNode != null;
     }

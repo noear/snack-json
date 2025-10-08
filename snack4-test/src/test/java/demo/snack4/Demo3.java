@@ -17,10 +17,10 @@ public class Demo3 {
     @Test
     public void demo1() {
 
-        int i = ONode.load("100").getInt(); //100
-        double d = ONode.load("\"99.99\"").getDouble();  //99.99
-        boolean b = ONode.load("true").getBoolean();     // true
-        String str = ONode.load("String").getString();   // String
+        int i = ONode.ofJson("100").getInt(); //100
+        double d = ONode.ofJson("\"99.99\"").getDouble();  //99.99
+        boolean b = ONode.ofJson("true").getBoolean();     // true
+        String str = ONode.ofJson("String").getString();   // String
 
         assert i == 100;
         assert d == 99.99;
@@ -46,9 +46,9 @@ public class Demo3 {
 
     @Test
     public void demo2() {
-        String jsonNumber = ONode.from(100).toJson();       // 100
-        String jsonBoolean = ONode.from(false).toJson();    // false
-        String jsonString = ONode.from("String").toString(); //"String"
+        String jsonNumber = ONode.ofBean(100).toJson();       // 100
+        String jsonBoolean = ONode.ofBean(false).toJson();    // false
+        String jsonString = ONode.ofBean("String").toString(); //"String"
 
         assertEquals(jsonNumber, "100");
         assertEquals(jsonBoolean, "false");
@@ -58,9 +58,9 @@ public class Demo3 {
     @Test
     public void demo3() {
         User user = new User("张三", 24);
-        String json = ONode.from(user).toJson(); // {"name":"张三","age":24}
+        String json = ONode.ofBean(user).toJson(); // {"name":"张三","age":24}
 
-        String json2 = ONode.from(user, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson(); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
+        String json2 = ONode.ofBean(user, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson(); // {"@type":"demo.User","name":"\u5F20\u4E09","age":24}
 
         System.out.println(json);
         System.out.println(json2);
@@ -69,7 +69,7 @@ public class Demo3 {
     @Test
     public void demo4() {
         String json = "{name:'张三',age:24}";
-        User user = ONode.load(json).toBean(User.class);
+        User user = ONode.ofJson(json).toBean(User.class);
 
         assert user.age == 24;
     }
@@ -77,7 +77,7 @@ public class Demo3 {
     @Test
     public void demo5() {
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
-        String[] strings = ONode.load(jsonArray).toBean(String[].class);
+        String[] strings = ONode.ofJson(jsonArray).toBean(String[].class);
 
         assert strings.length == 3;
     }
@@ -86,11 +86,11 @@ public class Demo3 {
     public void demo6() {
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
 
-        ONode ary0 		  = ONode.load(jsonArray);
+        ONode ary0 		  = ONode.ofJson(jsonArray);
         assertNotNull(ary0);
 
-        List<String> ary1 = ONode.load(jsonArray).toBean((new ArrayList<String>(){}).getClass());
-        List<String> ary2 = ONode.load(jsonArray).toBean((new TypeRef<List<String>>(){}).getType());
+        List<String> ary1 = ONode.ofJson(jsonArray).toBean((new ArrayList<String>(){}).getClass());
+        List<String> ary2 = ONode.ofJson(jsonArray).toBean((new TypeRef<List<String>>(){}).getType());
 
         assert ary1.size() == ary2.size();
     }
@@ -100,19 +100,19 @@ public class Demo3 {
         String json = "{\"name\":\"张三\",\"age\":\"24\"}";
 
         //反序列化
-        User user = ONode.load(json).toBean(User.class);
+        User user = ONode.ofJson(json).toBean(User.class);
 
         //序列化
-        ONode.from(user).toJson();
+        ONode.ofBean(user).toJson();
     }
 
     @Test
     public void demo8() {
         User user = new User("张三", 24);
-        System.out.println(ONode.from(user).toJson()); //{"name":"张三","age":24}
+        System.out.println(ONode.ofBean(user).toJson()); //{"name":"张三","age":24}
 
         Options opts = Options.of(Feature.Write_Nulls);
-        System.out.println(ONode.from(user, opts).toJson()); //{"name":"张三","age":24,"emailAddress":null}
+        System.out.println(ONode.ofBean(user, opts).toJson()); //{"name":"张三","age":24,"emailAddress":null}
     }
 
     @Test
@@ -121,12 +121,12 @@ public class Demo3 {
 
         Options opts = Options.of(Feature.Write_UseDateFormat).dateFormat("yyyy-MM-dd");
 
-        System.out.println(ONode.from(date, opts).toJson()); //2019-12-06
+        System.out.println(ONode.ofBean(date, opts).toJson()); //2019-12-06
     }
     @Test
     public void demo10() {
         User user = new User("name", 12, "xxx@mail.cn");
-        String json = ONode.from(user).rename("emailAddress", "email").toJson(); // {"name":"name","age":12,"email":"xxx@mail.cn"}
+        String json = ONode.ofBean(user).rename("emailAddress", "email").toJson(); // {"name":"name","age":12,"email":"xxx@mail.cn"}
 
         System.out.println(json);
     }
@@ -159,7 +159,7 @@ public class Demo3 {
 
         System.out.println(jsonStr);
 
-        ONode o = ONode.load(jsonStr);
+        ONode o = ONode.ofJson(jsonStr);
 
 //得到所有的书
         ONode books = o.select("$.store.book");

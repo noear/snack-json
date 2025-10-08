@@ -41,7 +41,7 @@ public class TestFlat {
     public void test01() {
         String json = "{\"name\":\"test\",\"age\":34,\"result\":true,\"age2\":54,\"result2\":false}";
 
-        TestFlatDto dto = ONode.load(json).toBean(TestFlatDto.class);
+        TestFlatDto dto = ONode.ofJson(json).toBean(TestFlatDto.class);
 
         assertEquals(dto.getName(), "test");
 
@@ -55,7 +55,7 @@ public class TestFlat {
         assertEquals(childDto2.getAge2(), 54);
         assertEquals(childDto2.getResult2(), false);
 
-        String str = ONode.from(dto).toJson();
+        String str = ONode.ofBean(dto).toJson();
         System.out.println(str);
         assertEquals(str, json);
     }

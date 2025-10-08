@@ -25,7 +25,7 @@ public class JsonPathCompatibleTest4 {
 
     @Test
     public void case2(){
-       final String json = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
+       final String json = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
 
         compatible_do("1", json, "$.*.list[0]");
         compatible_do("2", json, "$.*.list[0][0]");
@@ -39,7 +39,7 @@ public class JsonPathCompatibleTest4 {
         entities.add(new JsonPathTest3.Entity(1002, "wenshao"));
         entities.add(new JsonPathTest3.Entity(1003, "yakolee"));
         entities.add(new JsonPathTest3.Entity(1004, null));
-        String json = ONode.from(entities).toJson();
+        String json = ONode.ofBean(entities).toJson();
 
         compatible_do("1", json, "$[?(@.id in [1001,1002])]");
     }
@@ -47,7 +47,7 @@ public class JsonPathCompatibleTest4 {
     @Test
     public void case4(){
         JsonPathTest3.Entity entity = new JsonPathTest3.Entity(1001, "ljw2083");
-        String json = ONode.from(entity).toJson();
+        String json = ONode.ofBean(entity).toJson();
 
         compatible_do("1", json, "$[?(@.id == 1001)]");
     }
@@ -66,7 +66,7 @@ public class JsonPathCompatibleTest4 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.load(json).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

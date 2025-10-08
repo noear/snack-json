@@ -92,11 +92,11 @@ oNode.getOrNew("list").fillJson("[1,2,3,4,5,6]");
 
 ```java
 User user = new User();
-ONode.from(user).toBean(User.class); //可以作为 bean 转换使用
-ONode.from(user).toJson();
+ONode.ofBean(user).toBean(User.class); //可以作为 bean 转换使用
+ONode.ofBean(user).toJson();
 
-ONode.load("{}").toBean(User.class);
-ONode.load("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
+ONode.ofJson("{}").toBean(User.class);
+ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 
 //快捷方式
 String json = ONode.serialize(user);
@@ -106,20 +106,20 @@ User user = ONode.deserialize(json, User.class);
 支持 jsonpath 查询、构建、删除
 
 ```java
-ONode.from(store).select("$..book[?@.tags contains 'war'].first()").toBean(Book.class); //RFC9535 规范，可以没有括号
-ONode.from(store).select("$..book[?(!(@.category == 'fiction') && @.price < 40)].first()").toBean(Book.class);
-ONode.load(store).select("$.store.book.count()");
+ONode.ofBean(store).select("$..book[?@.tags contains 'war'].first()").toBean(Book.class); //RFC9535 规范，可以没有括号
+ONode.ofBean(store).select("$..book[?(!(@.category == 'fiction') && @.price < 40)].first()").toBean(Book.class);
+ONode.ofJson(store).select("$.store.book.count()");
 
-ONode.from(store).create("$.store.book[0].category").toJson();
+ONode.ofBean(store).create("$.store.book[0].category").toJson();
 
-ONode.from(store).delete("$..book[-1]");
+ONode.ofBean(store).delete("$..book[-1]");
 ```
 
 
 支持架构校验
 
 ```java
-JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
+JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
 schema.validate(ONode.load("{userId:'1'}")); //校验格式
 ```

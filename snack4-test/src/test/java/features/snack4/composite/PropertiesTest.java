@@ -22,23 +22,23 @@ public class PropertiesTest {
         props.setProperty("server.urls[1]", "http://y.y.y");
         props.setProperty("user.orders[0].items[0].name", "手机");
 
-        ONode oNode = ONode.from(props);
+        ONode oNode = ONode.ofBean(props);
         String json = oNode.toJson();
 
         assert oNode.get("debug").getBoolean();
 
         System.out.println(json);
 
-        Properties props2 = ONode.load(json).toBean(Properties.class);
-        String json2 = ONode.from(props2).toJson();
+        Properties props2 = ONode.ofJson(json).toBean(Properties.class);
+        String json2 = ONode.ofBean(props2).toJson();
 
         System.out.println(json2);
 
         assert json.length() == json2.length();
 
         Properties props3 = new Properties();
-        ONode.load(json).bindTo(props3);
-        String json3 = ONode.from(props3).toJson();
+        ONode.ofJson(json).bindTo(props3);
+        String json3 = ONode.ofBean(props3).toJson();
 
         System.out.println(json3);
 
@@ -54,7 +54,7 @@ public class PropertiesTest {
         props.setProperty("[1].id", "2");
         props.setProperty("[1].name", "id2");
 
-        ONode oNode = ONode.from(props);
+        ONode oNode = ONode.ofBean(props);
         System.out.println(oNode.toJson());
 
         assert oNode.isArray() == true;
@@ -67,7 +67,7 @@ public class PropertiesTest {
         props.setProperty("typeA", "demo.snack4._model5.TypeAImpl");
         props.setProperty("typeB", "demo.snack4._model5.TypeBImpl");
 
-        TypeC typeC = ONode.from(props).toBean(TypeC.class);
+        TypeC typeC = ONode.ofBean(props).toBean(TypeC.class);
         assert typeC.typeA != null;
         System.out.println(typeC.typeA);
         assert typeC.typeB != null;
@@ -79,7 +79,7 @@ public class PropertiesTest {
         Properties props = new Properties();
         props.setProperty("type[]", "_model5.TypeAImpl");
 
-        ONode tmp = ONode.from(props).get("type");
+        ONode tmp = ONode.ofBean(props).get("type");
         System.out.println(tmp.toJson());
 
         assert tmp.isArray();
@@ -99,7 +99,7 @@ public class PropertiesTest {
         nameValues.put("type[0]", "a");
         nameValues.put("type[1]", "b");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.ofBean(nameValues).toJson();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"server\":{\"urls\":[\"http://x.x.x\",\"http://y.y.y\"]},\"title\":\"test\",\"type\":[\"a\",\"b\"],\"user\":{\"id\":\"1\",\"name\":\"noear\",\"orders\":[{\"items\":[{\"name\":\"手机\"}]}]}}".equals(json);
@@ -113,7 +113,7 @@ public class PropertiesTest {
         nameValues.put("user[id]", "1");
         nameValues.put("user[name]", "noear");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.ofBean(nameValues).toJson();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"title\":\"test\",\"user\":{\"id\":\"1\",\"name\":\"noear\"}}".equals(json);
@@ -127,7 +127,7 @@ public class PropertiesTest {
         nameValues.put("user['id']", "1");
         nameValues.put("user[\"name\"]", "noear");
 
-        String json = ONode.from(nameValues).toJson();
+        String json = ONode.ofBean(nameValues).toJson();
         System.out.println(json);
 
         assert "{\"debug\":\"true\",\"title\":\"test\",\"user\":{\"name\":\"noear\",\"id\":\"1\"}}".equals(json);
@@ -140,7 +140,7 @@ public class PropertiesTest {
         assert userModel.getUserName() == null;
 
 
-        userModel = ONode.load(json, Feature.Write_UseOnlySetter).toBean(UserModel.class);
+        userModel = ONode.ofJson(json, Feature.Write_UseOnlySetter).toBean(UserModel.class);
         assert "a".equals(userModel.getUserName());
     }
 

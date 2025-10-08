@@ -11,7 +11,7 @@ public class NullTest {
     @Test
     public void test1() {
         String json = "{num:null}";
-        ONode node = ONode.load(json, Feature.Write_Nulls);
+        ONode node = ONode.ofJson(json, Feature.Write_Nulls);
 
         System.out.println(node.toJson());
         assert node.get("num").isNull();

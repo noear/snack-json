@@ -31,12 +31,12 @@ public class StringTest {
         String json = oNode.toJson();
         System.out.println(json);
 
-        String json2 = ONode.load(json).toJson();
+        String json2 = ONode.ofJson(json).toJson();
         System.out.println(json2);
 
         assert json.equals(json2);
 
-        System.out.println(ONode.load(json, Feature.Read_UnwrapJsonString).toJson());
+        System.out.println(ONode.ofJson(json, Feature.Read_UnwrapJsonString).toJson());
     }
 
     @Test
@@ -55,13 +55,13 @@ public class StringTest {
         map.put("c", "{d:'3'}");
 
 
-        String json =  ONode.from(map).toJson();
+        String json =  ONode.ofBean(map).toJson();
         System.out.println(json);
-        assert ONode.load(json).get("c").isValue();
+        assert ONode.ofJson(json).get("c").isValue();
 
-        json =  ONode.from(map, Feature.Read_UnwrapJsonString).toJson();
+        json =  ONode.ofBean(map, Feature.Read_UnwrapJsonString).toJson();
         System.out.println(json);
-        assert ONode.load(json).get("c").isObject();
+        assert ONode.ofJson(json).get("c").isObject();
     }
 
     @Test
@@ -79,15 +79,15 @@ public class StringTest {
                 "    \"example\": \"[{\\\"unitTypeName\\\":\\\"塔机安全监管系统\\\",\\\"iotType\\\":\\\"main\\\"},{\\\"unitTypeName\\\":\\\"吊钩可视化系统\\\",\\\"iotType\\\":\\\"video\\\"}]\"\n" +
                 "}";
         JSONObject json = (JSONObject) JSONObject.parse(str); //故意转成对象，下面用loadObj
-        ONode jsonNode =  ONode.from(json, Feature.Read_UnwrapJsonString);
+        ONode jsonNode =  ONode.ofBean(json, Feature.Read_UnwrapJsonString);
 
         System.out.println(jsonNode.toJson());
 
         String typeName = jsonNode.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------Feature.StringJsonToNode typeName:{}" + typeName);
 
-        String jsonStr =  ONode.from(json, Feature.Read_UnwrapJsonString).toJson();
-        ONode jsonNode2 = ONode.load(jsonStr);
+        String jsonStr =  ONode.ofBean(json, Feature.Read_UnwrapJsonString).toJson();
+        ONode jsonNode2 = ONode.ofJson(jsonStr);
         String typeName2 = jsonNode2.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------ typeName:{}" + typeName2);
     }
@@ -95,7 +95,7 @@ public class StringTest {
     @Test
     public void test5() {
         String json = "'1a'";
-        System.out.println(ONode.load(json).getString());
-        System.out.println(ONode.load(json).toJson());
+        System.out.println(ONode.ofJson(json).getString());
+        System.out.println(ONode.ofJson(json).toJson());
     }
 }

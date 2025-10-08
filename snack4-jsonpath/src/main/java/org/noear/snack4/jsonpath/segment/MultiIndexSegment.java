@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -67,7 +67,7 @@ public class MultiIndexSegment implements SegmentFunction {
                     int idx = 0;
                     for(ONode n1 : n.getArray()) {
                         if(n1.source == null) {
-                            n1.source = new JsonSource(n, null, idx);
+                            n1.source = new PathSource(n, null, idx);
                         }
 
                         result.add(n1);
@@ -77,7 +77,7 @@ public class MultiIndexSegment implements SegmentFunction {
                     for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
                         ONode n1 =  entry.getValue();
                         if(n1.source == null) {
-                            n1.source = new JsonSource(n, entry.getKey(), 0);
+                            n1.source = new PathSource(n, entry.getKey(), 0);
                         }
 
                         result.add(n1);
@@ -89,7 +89,7 @@ public class MultiIndexSegment implements SegmentFunction {
                         ONode n1 = n.getOrNull(k);
                         if (n1 != null) {
                             if(n1.source == null) {
-                                n1.source = new JsonSource(n, k, 0);
+                                n1.source = new PathSource(n, k, 0);
                             }
 
                             result.add(n1);
@@ -105,7 +105,7 @@ public class MultiIndexSegment implements SegmentFunction {
                         }
                         ONode n1 = n.getOrNull(idx);
                         if(n1.source == null) {
-                            n1.source = new JsonSource(n, null, idx);
+                            n1.source = new PathSource(n, null, idx);
                         }
 
                         result.add(n1);

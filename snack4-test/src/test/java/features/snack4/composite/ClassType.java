@@ -6,7 +6,6 @@ import demo.snack4._model5.TypeC;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
-import org.noear.snack4.Options;
 
 /**
  * @author noear 2025/5/9 created
@@ -30,7 +29,7 @@ public class ClassType {
         c.typeA = new TypeAImpl();
         c.typeB = new TypeBImpl();
 
-        String rst = ONode.from(c, Feature.Write_ClassName, Feature.Write_NotRootClassName).toJson();
+        String rst = ONode.ofBean(c, Feature.Write_ClassName, Feature.Write_NotRootClassName).toJson();
         System.out.println(rst);
 
         assert "{\"typeA\":{\"@type\":\"demo.snack4._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack4._model5.TypeBImpl\"}}".equals(rst);

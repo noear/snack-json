@@ -16,11 +16,11 @@ public class ExistsTest {
         assert oNode.select("$.user").isNull();
         assert oNode.select("$.user").nodeType() == JsonType.Undefined;
 
-        ONode oNode2 = ONode.load("{user:1}");
+        ONode oNode2 = ONode.ofJson("{user:1}");
         assert oNode2.select("$.user").isNull() == false;
         assert oNode2.select("$.user").nodeType() != JsonType.Null;
 
-        ONode oNode3 = ONode.load("{user:null}");
+        ONode oNode3 = ONode.ofJson("{user:null}");
         assert oNode3.select("$.user").isNull();
         assert oNode3.select("$.user").nodeType() == JsonType.Null;
     }
@@ -31,23 +31,23 @@ public class ExistsTest {
         assert oNode.select("$.user").isNull();
         assert oNode.select("$.user").isUndefined();
 
-        ONode oNode2 = ONode.load("{user:1}");
+        ONode oNode2 = ONode.ofJson("{user:1}");
         assert oNode2.select("$.user").isNull() == false;
         assert oNode2.select("$.user").isUndefined() == false;
 
-        ONode oNode3 = ONode.load("{user:null}");
+        ONode oNode3 = ONode.ofJson("{user:null}");
         assert oNode3.select("$.user").isNull();
         assert oNode3.select("$.user").isUndefined() == false;
     }
 
     @Test
     public void test3() {
-        ONode oNode4 = ONode.load("[{user:null}]");
+        ONode oNode4 = ONode.ofJson("[{user:null}]");
         assert oNode4.select("$[0].user").isNull();
         assert oNode4.select("$[0].user").isUndefined() == false;
         assert oNode4.exists("$[0].user");
 
-        ONode oNode5 = ONode.load("[{user:1}]");
+        ONode oNode5 = ONode.ofJson("[{user:1}]");
         assert oNode5.select("$[0].user").isNull() == false;
         assert oNode5.select("$[0].user").isUndefined() == false;
         assert oNode5.exists("$[0].user");
@@ -56,12 +56,12 @@ public class ExistsTest {
 
     @Test
     public void test4() {
-        ONode oNode4 = ONode.load("[{user:null}]");
+        ONode oNode4 = ONode.ofJson("[{user:null}]");
         assert oNode4.select("$[0].user.name").isNull();
         assert oNode4.select("$[0].user.name").isUndefined();
         assert oNode4.exists("$[0].user.name") == false;
 
-        ONode oNode5 = ONode.load("[{user:{}}]");
+        ONode oNode5 = ONode.ofJson("[{user:{}}]");
         assert oNode5.select("$[0].user.name").isNull();
         assert oNode5.select("$[0].user.name").isUndefined();
         assert oNode5.exists("$[0].user.name") == false;
@@ -69,12 +69,12 @@ public class ExistsTest {
 
     @Test
     public void test5() {
-        ONode oNode4 = ONode.load("[{user:null}]");
+        ONode oNode4 = ONode.ofJson("[{user:null}]");
         assert oNode4.select("$[0].user.name.first").isNull();
         assert oNode4.select("$[0].user.name.first").isUndefined();
         assert oNode4.exists("$[0].user.name.first") == false;
 
-        ONode oNode5 = ONode.load("[{user:{}}]");
+        ONode oNode5 = ONode.ofJson("[{user:{}}]");
         assert oNode5.select("$[0].user.name.first").isNull();
         assert oNode5.select("$[0].user.name.first").isUndefined();
         assert oNode5.exists("$[0].user.name.first") == false;
@@ -85,8 +85,8 @@ public class ExistsTest {
         String str = "{'note':null,name:'1'}";
         UserModel userModel = ONode.deserialize(str, UserModel.class);
 
-        ONode load = ONode.load(str);
-        ONode load1 = ONode.from(userModel, Feature.Write_Nulls);
+        ONode load = ONode.ofJson(str);
+        ONode load1 = ONode.ofBean(userModel, Feature.Write_Nulls);
 
 
         System.out.println(load.toJson());
@@ -108,13 +108,13 @@ public class ExistsTest {
     @Test
     public void test7() {
         UserModel userModel1 = new UserModel();
-        ONode user1 = ONode.from(userModel1);
+        ONode user1 = ONode.ofBean(userModel1);
         System.out.println(user1.exists("$.note"));
         assert user1.exists("$.note") == false;
 
 
         userModel1 = new UserModel();
-        user1 = ONode.from(userModel1, Feature.Write_Nulls);
+        user1 = ONode.ofBean(userModel1, Feature.Write_Nulls);
         System.out.println(user1.exists("$.note"));
         assert user1.exists("$.note") == true;
     }

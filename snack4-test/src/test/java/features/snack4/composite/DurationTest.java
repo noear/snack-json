@@ -11,25 +11,25 @@ import java.time.Duration;
 public class DurationTest {
     @Test
     public void test1() {
-        Duration duration = ONode.load("'6s'").toBean(Duration.class);
+        Duration duration = ONode.ofJson("'6s'").toBean(Duration.class);
         System.out.println(duration);
 
-        duration = ONode.load("'6m'").toBean(Duration.class);
+        duration = ONode.ofJson("'6m'").toBean(Duration.class);
         System.out.println(duration);
 
-        duration = ONode.load("'6d'").toBean(Duration.class);
+        duration = ONode.ofJson("'6d'").toBean(Duration.class);
         System.out.println(duration);
     }
 
     @Test
     public void test3() {
-        Duration duration = ONode.load("'PT6S'").toBean(Duration.class);
+        Duration duration = ONode.ofJson("'PT6S'").toBean(Duration.class);
         System.out.println(duration);
 
-        duration = ONode.load("'PT6M'").toBean(Duration.class);
+        duration = ONode.ofJson("'PT6M'").toBean(Duration.class);
         System.out.println(duration);
 
-        duration = ONode.load("'PT6H'").toBean(Duration.class);
+        duration = ONode.ofJson("'PT6H'").toBean(Duration.class);
         System.out.println(duration);
     }
 }

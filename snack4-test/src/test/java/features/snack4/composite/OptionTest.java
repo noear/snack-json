@@ -25,7 +25,7 @@ public class OptionTest {
         options.addDecoder(BigDecimal.class, (ctx, node) -> null);
         options.addEncoder(BigDecimal.class, (ctx, value, target) -> target);
 
-        ONode oNode = ONode.load("{}", options);
+        ONode oNode = ONode.ofJson("{}", options);
 
         oNode.create("$.num").setValue(10000L);
         oNode.create("$.date").setValue(DateUtil.parse("2025-06-25"));

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.jsonschema.JsonSchema;
-import org.noear.snack4.jsonschema.exception.SchemaException;
+import org.noear.snack4.jsonschema.JsonSchemaException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,7 +17,7 @@ public class JsonSchemaTest {
     public void case1() {
         JsonSchema schema = JsonSchema.load("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
-        schema.validate(ONode.load("{userId:'1'}")); //校验格式
+        schema.validate(ONode.ofJson("{userId:'1'}")); //校验格式
     }
 
     @Test
@@ -26,7 +26,7 @@ public class JsonSchemaTest {
 
         Throwable err = null;
         try {
-            schema.validate(ONode.load("{userId:1}"));//校验格式
+            schema.validate(ONode.ofJson("{userId:1}"));//校验格式
         } catch (Throwable e) {
             e.printStackTrace();
             err = e;
@@ -59,7 +59,7 @@ public class JsonSchemaTest {
         ONode data = new JsonReader(new StringReader("{\"name\":\"Alice\",\"age\":-5}")).read();
         try {
             validator.validate(data);
-        } catch (SchemaException e) {
+        } catch (JsonSchemaException e) {
             System.out.println(e.getMessage());
             // 输出: Value -5.0 < minimum(0.0) at $.age
         }

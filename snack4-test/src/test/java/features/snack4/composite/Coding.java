@@ -23,7 +23,7 @@ public class Coding {
         //添加编码器
         opts.addEncoder(OrderModel.class, (ctx, value, target) -> target.set("id", value.order_id));
 
-        String json = ONode.from(orderModel, opts).toJson();
+        String json = ONode.ofBean(orderModel, opts).toJson();
         System.out.println(json);
         assert json.contains("1");
 
@@ -34,11 +34,11 @@ public class Coding {
             return tmp;
         });
 
-        OrderModel rst = ONode.load(json).toBean(OrderModel.class);
+        OrderModel rst = ONode.ofJson(json).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 0;
 
-        rst = ONode.load(json, opts).toBean(OrderModel.class);
+        rst = ONode.ofJson(json, opts).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.order_id == 1;
     }
@@ -52,7 +52,7 @@ public class Coding {
             return LocalDateTime.parse(node.getString());
         });
 
-        OrderModel tmp = ONode.load(json, opts).toBean(OrderModel.class);
+        OrderModel tmp = ONode.ofJson(json, opts).toBean(OrderModel.class);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class Coding {
         options.addEncoder(OrderModel.class, (ctx, value, target) -> target.set("user", new ONode().set("uid", "1001")).set("order_time", null));
 
 
-        String json = ONode.from(orderModel, options).toJson();
+        String json = ONode.ofBean(orderModel, options).toJson();
         System.out.println(json);
         assert json.contains("1001");
 
@@ -100,11 +100,11 @@ public class Coding {
             return tmp;
         });
 
-        OrderModel rst = ONode.load(json).toBean(OrderModel.class);
+        OrderModel rst = ONode.ofJson(json).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 0;
 
-        rst = ONode.load(json, options).toBean(OrderModel.class);
+        rst = ONode.ofJson(json, options).toBean(OrderModel.class);
         System.out.println(rst);
         assert rst.user.id == 1001;
     }

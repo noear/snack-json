@@ -29,7 +29,7 @@ public class ObjectTest {
         a.b = b;
         b.a = a;
 
-        ONode c = ONode.from(a);
+        ONode c = ONode.ofBean(a);
 
         System.out.println(c.toJson());
 
@@ -49,7 +49,7 @@ public class ObjectTest {
         order.order_id = 2222;
         order.order_num = "ddddd";
 
-        ONode c = ONode.from(order);
+        ONode c = ONode.ofBean(order);
 
         System.out.println(c.toJson());
 
@@ -78,7 +78,7 @@ public class ObjectTest {
             group.iids[i] = (int) i;
         }
 
-        ONode c = ONode.from(group);
+        ONode c = ONode.ofBean(group);
 
         System.out.println(c.toJson());
 
@@ -101,13 +101,13 @@ public class ObjectTest {
     @Test
     public void test4() {
         String json = "{\"names\":null}";
-        ONode oNode = ONode.load(json);
+        ONode oNode = ONode.ofJson(json);
         A a = oNode.toBean(A.class);
 
         assert a.names == null;
         System.out.println(a);
 
-        oNode = ONode.from(a, Feature.Write_Nulls);
+        oNode = ONode.ofBean(a, Feature.Write_Nulls);
         String json2 = oNode.toJson();
         System.out.println(json2);
 

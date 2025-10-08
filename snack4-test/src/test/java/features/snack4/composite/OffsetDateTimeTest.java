@@ -19,7 +19,7 @@ public class OffsetDateTimeTest {
     @Test
     public void deserialize() {
         String poc = "{\"date\":\"2024-01-12T10:30:00.000+03:00\"}";
-        ONode oNode = ONode.load(poc);
+        ONode oNode = ONode.ofJson(poc);
         //解析
         OffsetDateTimeModel model = oNode.toBean(OffsetDateTimeModel.class);
         OffsetDateTime date = model.date;
@@ -38,6 +38,6 @@ public class OffsetDateTimeTest {
         OffsetDateTimeModel data = new OffsetDateTimeModel();
         data.date = OffsetDateTime.now();
 
-        ONode.from(data); //不异常就行
+        ONode.ofBean(data); //不异常就行
     }
 }

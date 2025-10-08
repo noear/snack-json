@@ -59,7 +59,7 @@ public class TemporaryClassTest {
         String json = ONode.serialize(userServices, Feature.Write_ClassName);
         System.out.println(json);
 
-        Object obj = ONode.load(json);
+        Object obj = ONode.ofJson(json);
         assert obj != null;
     }
 }

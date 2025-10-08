@@ -19,9 +19,9 @@ public class ClassLoaderTest {
         options.classLoader(data.getClass().getClassLoader());
 
         //序列化
-        String json = ONode.from(data, options).toJson();
+        String json = ONode.ofBean(data, options).toJson();
 
         //反序列化
-        data = ONode.load(json, options).toBean();
+        data = ONode.ofJson(json, options).toBean();
     }
 }

@@ -19,6 +19,9 @@ import org.noear.snack4.SnackException;
 
 /**
  * 解析异常
+ *
+ * @author noear
+ * @since 4.0
  */
 public class JsonParseException extends SnackException {
     public JsonParseException(String message) {

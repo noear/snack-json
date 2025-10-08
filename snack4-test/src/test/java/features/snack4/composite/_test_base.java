@@ -93,7 +93,7 @@ public class _test_base {
     public void test5() {
         Integer[] a = {1, 2, 3, 4, 5};
         String json = "{\"list\":[],\"name\":\"nn\"}";
-        ONode node = ONode.load(json);
+        ONode node = ONode.ofJson(json);
         node.set("value", a);
 
         System.out.println(node.toJson());

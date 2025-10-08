@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.json;
+package org.noear.snack4.jsonschema;
 
-import org.noear.snack4.ONode;
+import org.noear.snack4.SnackException;
 
 /**
- * @author noear 2025/3/16 created
+ * 模式验证异常
  */
-public class JsonSource {
-    public ONode parent;
-    public String key;
-    public int index;
+public class JsonSchemaException extends SnackException {
+    public JsonSchemaException(String message) {
+        super(message);
+    }
 
-    public JsonSource(ONode parent, String key, int index) {
-        this.parent = parent;
-        this.key = key;
-        this.index = index;
-
+    public JsonSchemaException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

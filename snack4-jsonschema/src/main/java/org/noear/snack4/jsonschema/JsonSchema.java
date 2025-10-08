@@ -16,7 +16,6 @@
 package org.noear.snack4.jsonschema;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonschema.exception.SchemaException;
 import org.noear.snack4.json.JsonType;
 import org.noear.snack4.jsonschema.rule.EnumRule;
 import org.noear.snack4.jsonschema.rule.TypeRule;
@@ -32,7 +31,7 @@ import java.util.Map;
  */
 public class JsonSchema {
     public static JsonSchema load(String jsonSchema) {
-        return new JsonSchema(ONode.load(jsonSchema));
+        return new JsonSchema(ONode.ofJson(jsonSchema));
     }
 
     public static JsonSchema from(ONode jsonSchema) {
@@ -54,12 +53,12 @@ public class JsonSchema {
         return schema.toJson();
     }
 
-    public void validate(ONode data) throws SchemaException {
+    public void validate(ONode data) throws JsonSchemaException {
         validateNode(schema, data, PathTracker.begin());
     }
 
     // 核心验证方法（完整实现）
-    private void validateNode(ONode schemaNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateNode(ONode schemaNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         // 执行预编译规则
         CompiledRule rule = compiledRules.get(path.currentPath());
         if (rule != null) {
@@ -101,7 +100,7 @@ public class JsonSchema {
     }
 
     // 类型校验（完整实现）
-    private void validateType(ONode typeNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateType(ONode typeNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         if (typeNode.isString()) {
             String expectedType = typeNode.getString();
             if (!matchType(dataNode, expectedType)) {
@@ -116,7 +115,7 @@ public class JsonSchema {
                 }
             }
             if (!matched) {
-                throw new SchemaException("Type not in allowed types at " + path.currentPath());
+                throw new JsonSchemaException("Type not in allowed types at " + path.currentPath());
             }
         }
     }
@@ -140,7 +139,7 @@ public class JsonSchema {
     }
 
     // 枚举校验（完整实现）
-    private void validateEnum(ONode enumNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateEnum(ONode enumNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         if (!enumNode.isArray()) return;
 
         for (ONode allowedValue : enumNode.getArray()) {
@@ -148,11 +147,11 @@ public class JsonSchema {
                 return;
             }
         }
-        throw new SchemaException("Value not in enum list at " + path.currentPath());
+        throw new JsonSchemaException("Value not in enum list at " + path.currentPath());
     }
 
     // 对象属性校验（完整实现）
-    private void validateProperties(ONode propertiesNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateProperties(ONode propertiesNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         Map<String, ONode> properties = propertiesNode.getObject();
         Map<String, ONode> dataObj = dataNode.getObject();
 
@@ -163,7 +162,7 @@ public class JsonSchema {
                 for (ONode requiredField : requiredNode.getArray()) {
                     String field = requiredField.getString();
                     if (!dataObj.containsKey(field)) {
-                        throw new SchemaException("Missing required field: " + field + " at " + path.currentPath());
+                        throw new JsonSchemaException("Missing required field: " + field + " at " + path.currentPath());
                     }
                 }
             }
@@ -181,19 +180,19 @@ public class JsonSchema {
     }
 
     // 数组约束校验（完整实现）
-    private void validateArrayConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateArrayConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         List<ONode> items = dataNode.getArray();
 
         if (schemaNode.hasKey("minItems")) {
             int min = schemaNode.get("minItems").getInt();
             if (items.size() < min) {
-                throw new SchemaException("Array length " + items.size() + " < minItems(" + min + ") at " + path.currentPath());
+                throw new JsonSchemaException("Array length " + items.size() + " < minItems(" + min + ") at " + path.currentPath());
             }
         }
         if (schemaNode.hasKey("maxItems")) {
             int max = schemaNode.get("maxItems").getInt();
             if (items.size() > max) {
-                throw new SchemaException("Array length " + items.size() + " > maxItems(" + max + ") at " + path.currentPath());
+                throw new JsonSchemaException("Array length " + items.size() + " > maxItems(" + max + ") at " + path.currentPath());
             }
         }
 
@@ -208,49 +207,49 @@ public class JsonSchema {
     }
 
     // 数值范围校验（完整实现）
-    private void validateNumericConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateNumericConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         double value = dataNode.getDouble();
 
         if (schemaNode.hasKey("minimum")) {
             double min = schemaNode.get("minimum").getDouble();
             if (value < min) {
-                throw new SchemaException("Value " + value + " < minimum(" + min + ") at " + path.currentPath());
+                throw new JsonSchemaException("Value " + value + " < minimum(" + min + ") at " + path.currentPath());
             }
         }
         if (schemaNode.hasKey("maximum")) {
             double max = schemaNode.get("maximum").getDouble();
             if (value > max) {
-                throw new SchemaException("Value " + value + " > maximum(" + max + ") at " + path.currentPath());
+                throw new JsonSchemaException("Value " + value + " > maximum(" + max + ") at " + path.currentPath());
             }
         }
     }
 
     // 字符串约束校验（完整实现）
-    private void validateStringConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateStringConstraints(ONode schemaNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         String value = dataNode.getString();
 
         if (schemaNode.hasKey("minLength")) {
             int min = schemaNode.get("minLength").getInt();
             if (value.length() < min) {
-                throw new SchemaException("String length " + value.length() + " < minLength(" + min + ") at " + path.currentPath());
+                throw new JsonSchemaException("String length " + value.length() + " < minLength(" + min + ") at " + path.currentPath());
             }
         }
         if (schemaNode.hasKey("maxLength")) {
             int max = schemaNode.get("maxLength").getInt();
             if (value.length() > max) {
-                throw new SchemaException("String length " + value.length() + " > maxLength(" + max + ") at " + path.currentPath());
+                throw new JsonSchemaException("String length " + value.length() + " > maxLength(" + max + ") at " + path.currentPath());
             }
         }
         if (schemaNode.hasKey("pattern")) {
             String pattern = schemaNode.get("pattern").getString();
             if (!value.matches(pattern)) {
-                throw new SchemaException("String does not match pattern: " + pattern + " at " + path.currentPath());
+                throw new JsonSchemaException("String does not match pattern: " + pattern + " at " + path.currentPath());
             }
         }
     }
 
     // 条件校验（完整实现）
-    private void validateConditional(ONode schemaNode, ONode dataNode, PathTracker path) throws SchemaException {
+    private void validateConditional(ONode schemaNode, ONode dataNode, PathTracker path) throws JsonSchemaException {
         validateConditionalGroup(schemaNode, "anyOf", dataNode, path, false);
         validateConditionalGroup(schemaNode, "allOf", dataNode, path, true);
         validateConditionalGroup(schemaNode, "oneOf", dataNode, path, false);
@@ -258,31 +257,31 @@ public class JsonSchema {
 
     private void validateConditionalGroup(ONode schemaNode, String key,
                                           ONode dataNode, PathTracker path,
-                                          boolean requireAll) throws SchemaException {
+                                          boolean requireAll) throws JsonSchemaException {
         if (!schemaNode.hasKey(key)) return;
 
         List<ONode> schemas = schemaNode.get(key).getArray();
         int matchCount = 0;
-        List<SchemaException> errors = new ArrayList<>();
+        List<JsonSchemaException> errors = new ArrayList<>();
 
         for (ONode subSchema : schemas) {
             try {
                 validateNode(subSchema, dataNode, path);
                 matchCount++;
-            } catch (SchemaException e) {
+            } catch (JsonSchemaException e) {
                 errors.add(e);
                 if (requireAll) throw e;
             }
         }
 
         if (requireAll && matchCount != schemas.size()) {
-            throw new SchemaException("Failed to satisfy allOf constraints at " + path.currentPath());
+            throw new JsonSchemaException("Failed to satisfy allOf constraints at " + path.currentPath());
         }
         if (!requireAll && key.equals("anyOf") && matchCount == 0) {
-            throw new SchemaException("Failed to satisfy anyOf constraints at " + path.currentPath());
+            throw new JsonSchemaException("Failed to satisfy anyOf constraints at " + path.currentPath());
         }
         if (!requireAll && key.equals("oneOf") && matchCount != 1) {
-            throw new SchemaException("Must satisfy exactly one of oneOf constraints at " + path.currentPath());
+            throw new JsonSchemaException("Must satisfy exactly one of oneOf constraints at " + path.currentPath());
         }
     }
 
@@ -320,8 +319,8 @@ public class JsonSchema {
     }
 
     // 异常处理
-    private SchemaException typeMismatch(String expected, ONode actual, PathTracker path) {
-        return new SchemaException("Expected type " + expected + " but got " +
+    private JsonSchemaException typeMismatch(String expected, ONode actual, PathTracker path) {
+        return new JsonSchemaException("Expected type " + expected + " but got " +
                 JsonType.getTypeName(actual.getType()) + " at " + path.currentPath());
     }
 

@@ -23,7 +23,7 @@ public class JsonPathCompatibleTest1 {
         System.out.println(tmp.toJSONString());
         assert tmp.size() == 14;
 
-        ONode tmp2 = ONode.load(json).select("$..*");
+        ONode tmp2 = ONode.ofJson(json).select("$..*");
         System.out.println(tmp2);
         assert tmp2.isArray();
         assertEquals(14, tmp2.size());
@@ -39,7 +39,7 @@ public class JsonPathCompatibleTest1 {
         System.out.println(tmp);
         assert tmp.size() == 5;
 
-        ONode tmp2 = ONode.load(json).select("$..*[?(@.treePath)]");
+        ONode tmp2 = ONode.ofJson(json).select("$..*[?(@.treePath)]");
         System.out.println(tmp2);
         assert tmp2.isArray();
         assert tmp2.size() == 5;
@@ -55,7 +55,7 @@ public class JsonPathCompatibleTest1 {
         System.out.println(tmp);
         assert tmp.size() == 3;
 
-        ONode tmp2 = ONode.load(json).select("$..[?(@.treePath)]");
+        ONode tmp2 = ONode.ofJson(json).select("$..[?(@.treePath)]");
         System.out.println(tmp2);
         assertEquals(3,  tmp2.size());
     }
@@ -189,7 +189,7 @@ public class JsonPathCompatibleTest1 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.load(json).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

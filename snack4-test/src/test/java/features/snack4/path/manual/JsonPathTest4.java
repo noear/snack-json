@@ -12,11 +12,11 @@ public class JsonPathTest4 {
     public void test1() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$..*[?(@.id)]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -26,11 +26,11 @@ public class JsonPathTest4 {
     public void test2() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$.*.*";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -40,11 +40,11 @@ public class JsonPathTest4 {
     public void test2_2() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$.*.*.*";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -54,11 +54,11 @@ public class JsonPathTest4 {
     public void test2_2_2() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$.[*].[*].[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -68,11 +68,11 @@ public class JsonPathTest4 {
     public void test3() {
         String test = "[1,2,3]";
         String jsonPath = "$.*";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -82,11 +82,11 @@ public class JsonPathTest4 {
     public void test3_2() {
         String test = "[1,2,3]";
         String jsonPath = "$.[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -96,11 +96,11 @@ public class JsonPathTest4 {
     public void test4() {
         String test = "[{a:1},{a:2},{a:3}]";
         String jsonPath = "$.*";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -110,11 +110,11 @@ public class JsonPathTest4 {
     public void test4_2() {
         String test = "[{a:1},{a:2},{a:3}]";
         String jsonPath = "$.[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -124,11 +124,11 @@ public class JsonPathTest4 {
     public void test5() {
         String test = "[{a:1},{a:2},{a:3}]";
         String jsonPath = "$.*.*";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -138,11 +138,11 @@ public class JsonPathTest4 {
     public void test5_2() {
         String test = "[{a:1},{a:2},{a:3}]";
         String jsonPath = "$.[*].[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -152,11 +152,11 @@ public class JsonPathTest4 {
     public void test6() {
         String test = "[{a:1},{a:2},{a:3}]";
         String jsonPath = "$.*.[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -167,11 +167,11 @@ public class JsonPathTest4 {
         String test = "[{\"field\":\"l1-field-1\",\"children\":[{\"field\":\"l2-field-1\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]},{\"field\":\"l2-field-2\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]}]},{\"field\":\"l1-field-2\",\"children\":[{\"field\":\"l2-field-1\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]},{\"field\":\"l2-field-2\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]}]}]";
 
         String jsonPath = "$.[?(@.field == 'l1-field-1')].children[?(@.field == 'l2-field-1')]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -183,11 +183,11 @@ public class JsonPathTest4 {
         String test = "[{\"field\":\"l1-field-1\",\"children\":[{\"field\":\"l2-field-1\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]},{\"field\":\"l2-field-2\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]}]},{\"field\":\"l1-field-2\",\"children\":[{\"field\":\"l2-field-1\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]},{\"field\":\"l2-field-2\",\"fields\":[{\"field\":\"l3-field-1\"},{\"field\":\"l3-field-2\"}]}]}]";
 
         String jsonPath = "$[?(@.field == 'l1-field-1')].children[?(@.field == 'l2-field-1')].fields[*]";
-        String json1 = ONode.load(test).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.from(documentContext).toJson();
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -226,7 +226,7 @@ public class JsonPathTest4 {
         String jsonpathStr3 = "$.request1.result[*].relTickers[*].first().tickerId";
         String jsonpathStr3_b = "$.request1.result[*].relTickers[*].last().tickerId";
 
-        System.out.println(ONode.load(json).select("$.request1.result[*].relTickers.first()"));
+        System.out.println(ONode.ofJson(json).select("$.request1.result[*].relTickers.first()"));
 
         assert_do("1", json, jsonpathStr3);
         assert_do("6", json, jsonpathStr3_b);
@@ -234,7 +234,7 @@ public class JsonPathTest4 {
 
     private void assert_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
-        Object tmp = ONode.load(json).select(jsonpathStr);
+        Object tmp = ONode.ofJson(json).select(jsonpathStr);
         System.out.println(tmp);
 
         assert tmp.toString().equals(hint.toString());
@@ -244,7 +244,7 @@ public class JsonPathTest4 {
     public void test10_1() {
         String json = "{\"result\":[]}";
 
-        ONode oNode = ONode.load(json).select("$.result[*].amount.sum()");
+        ONode oNode = ONode.ofJson(json).select("$.result[*].amount.sum()");
         System.out.println(oNode.toString());
 
         assert oNode.getLong() == 0L;
@@ -254,7 +254,7 @@ public class JsonPathTest4 {
     public void test10_2() {
         String json = "{\"result\":[]}";
 
-        ONode oNode = ONode.load(json).select("$.result[*].amount.min()");
+        ONode oNode = ONode.ofJson(json).select("$.result[*].amount.min()");
         System.out.println(oNode.toString());
 
         assert oNode.getLong() == 0L;
@@ -263,7 +263,7 @@ public class JsonPathTest4 {
     @Test
     public void test11() {
         //示例代码：
-        ONode oNode = ONode.load("{\n" +
+        ONode oNode = ONode.ofJson("{\n" +
                 "  \"projectCode\" : \"IS0101\",\n" +
                 "  \"columns\" : [ {\n" +
                 "    \"columnCode\" : \"#YEAR(-1)#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#[None]#REPORT#PRCTotal\",\n" +

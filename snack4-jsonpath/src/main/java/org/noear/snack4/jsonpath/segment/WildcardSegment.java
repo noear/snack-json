@@ -16,13 +16,12 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +52,7 @@ public class WildcardSegment implements SegmentFunction {
                 int idx= 0;
                 for (ONode n1 : n.getArray()) {
                     if (n1.source == null) {
-                        n1.source = new JsonSource(n, null, idx);
+                        n1.source = new PathSource(n, null, idx);
                     }
 
                     childs.add(n1);
@@ -63,7 +62,7 @@ public class WildcardSegment implements SegmentFunction {
                 for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
                     ONode n1 = entry.getValue();
                     if(n1.source == null) {
-                        n1.source = new JsonSource(n, entry.getKey(), 0);
+                        n1.source = new PathSource(n, entry.getKey(), 0);
                     }
 
                     childs.add(n1);

@@ -37,7 +37,7 @@ public class AttrTest3 {
     public void test2() {
         String json = "{\"dateTime\":\"2025-08-08 12:34:01\",\"date\":\"2025/08/08\",\"time\":\"12:34:01\"}";
 
-        AnnoTimeObject obj = ONode.load(json).toBean(AnnoTimeObject.class);
+        AnnoTimeObject obj = ONode.ofJson(json).toBean(AnnoTimeObject.class);
 
         System.out.println(obj);
         assert obj != null;

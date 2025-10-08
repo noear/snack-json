@@ -17,10 +17,10 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.RangeUtil;
+import org.noear.snack4.jsonpath.util.RangeUtil;
 import org.noear.snack4.jsonpath.SegmentFunction;
 
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class RangeIndexSegment implements SegmentFunction {
                     while (i < bounds.getUpper()) {
                         ONode n1 = arr.getOrNull(i);
                         if(n1.source == null) {
-                            n1.source = new JsonSource(arr, null, i);
+                            n1.source = new PathSource(arr, null, i);
                         }
 
                         result.add(n1);
@@ -91,7 +91,7 @@ public class RangeIndexSegment implements SegmentFunction {
                     while (bounds.getLower() < i) {
                         ONode n1 = arr.getOrNull(i);
                         if(n1.source == null) {
-                            n1.source = new JsonSource(arr, null, i);
+                            n1.source = new PathSource(arr, null, i);
                         }
 
                         result.add(n1);

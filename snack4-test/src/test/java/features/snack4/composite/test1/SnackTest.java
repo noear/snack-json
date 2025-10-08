@@ -36,6 +36,6 @@ public class SnackTest {
 
     System.out.println(ONode.serialize(subB));
     System.out.println("\n");
-    System.out.println(ONode.from(subB, Feature.Write_EnumUsingName));
+    System.out.println(ONode.ofBean(subB, Feature.Write_EnumUsingName));
   }
 }

@@ -16,7 +16,6 @@
 package org.noear.snack4.jsonschema;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonschema.exception.SchemaException;
 import org.noear.snack4.jsonschema.rule.ValidationRule;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class CompiledRule {
         this.rules = rules;
     }
 
-   public void validate(ONode data, PathTracker path) throws SchemaException {
+   public void validate(ONode data, PathTracker path) throws JsonSchemaException {
         for (ValidationRule rule : rules) {
             rule.validate(data);
         }

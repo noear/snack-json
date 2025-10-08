@@ -13,7 +13,7 @@ public class YamlListTest {
     @Test
     public void test() {
         Props props = new Props(Utils.loadProperties("app.yml"));
-        SwaggerInfo swaggerInfo = ONode.from(props.getProp("swagger")).toBean(SwaggerInfo.class);
+        SwaggerInfo swaggerInfo = ONode.ofBean(props.getProp("swagger")).toBean(SwaggerInfo.class);
 
         assert swaggerInfo.getResources() != null;
         assert swaggerInfo.getResources().size() == 2;

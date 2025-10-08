@@ -10,7 +10,7 @@ public class JsonPathTest {
     @Test
     public void demo1() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
         //2.取一个属性的值
         String msg = n.get("msg").getString();
@@ -36,15 +36,15 @@ public class JsonPathTest {
         assert list3.size() == 2;
 
 
-        List<Integer> list22 = n.usePaths().select("$.data.list[2,4]").toBean(List.class);
-        List<Integer> list32 = n.usePaths().select("$.data.list[2:4]").toBean(List.class);
+        List<Integer> list22 = n.select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list32 = n.select("$.data.list[2:4]").toBean(List.class);
         assert list22.size() == 2;
         assert list32.size() == 2;
 
         ONode ary2_a = n.select("$.data.ary2[*].b.c");
         assert ary2_a.size() == 1;
 
-        ONode ary2_a2 = n.usePaths().select("$.data.ary2[*].b.c");
+        ONode ary2_a2 = n.select("$.data.ary2[*].b.c");
         assert ary2_a2.size() == 1;
         assert ary2_a2.get(0).parent().parent().equals(ary2_a2.get(0).parents(2));
         assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(3));
@@ -63,7 +63,7 @@ public class JsonPathTest {
     @Test
     public void demo2() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
 
         //4.获取一个数组
@@ -92,7 +92,7 @@ public class JsonPathTest {
     @Test
     public void demo3() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
 
         ONode ary2_a = n.select("$['code','msg']");
@@ -112,7 +112,7 @@ public class JsonPathTest {
     @Test
     public void demo4() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
 
         ONode ary2_a = n.select("$.*");
@@ -136,7 +136,7 @@ public class JsonPathTest {
     @Test
     public void testx1() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5],b:2,ary2:[{a:2,b:8},{a:3,b:{c:'ddd',b:23}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5],b:2,ary2:[{a:2,b:8},{a:3,b:{c:'ddd',b:23}}]}}");
 
         ONode t1 = n.select("$.data.ary2[*].a");
         assert  t1.size() ==2;
@@ -178,7 +178,7 @@ public class JsonPathTest {
     @Test
     public void testx2() {
         //1.加载json
-        ONode n = ONode.load("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
+        ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
         ONode t0 = n.select("$..b");
         assert  t0.size() ==4;
@@ -211,7 +211,7 @@ public class JsonPathTest {
     @Test
     public void testx2_2() {
         //1.加载json
-        ONode n = ONode.load("[1,2,3,4]");
+        ONode n = ONode.ofJson("[1,2,3,4]");
 
         ONode t2 = n.select("$..*[?(@ == 1)]");
         assert t2.size() == 1;
@@ -220,7 +220,7 @@ public class JsonPathTest {
     @Test
     public void testx2_3() {
         //1.加载json
-        ONode n = ONode.load("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
+        ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
         ONode t2 = n.select("$..*[?(@ == 19.95)]");
         assert t2.size() == 1;
@@ -229,7 +229,7 @@ public class JsonPathTest {
     @Test
     public void testx2_4() {
         //1.加载json
-        ONode n = ONode.load("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
+        ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
         ONode t2 = n.select("$..*[?(@.price == 19.95)]");
         assert t2.size() == 1;
@@ -238,7 +238,7 @@ public class JsonPathTest {
     @Test
     public void testx2_5() {
         //1.加载json
-        ONode n = ONode.load("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
+        ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
         ONode t2 = n.select("$..[?(@.price == 19.95)]");
         assert t2.size() == 1;
@@ -247,7 +247,7 @@ public class JsonPathTest {
     @Test
     public void testx3() {
         //1.加载json
-        ONode n = ONode.load("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
+        ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
         ONode t1 = n.select("$[?(@.c =~ /a+/)]");//
         assert  t1.size() ==2;
@@ -265,7 +265,7 @@ public class JsonPathTest {
     @Test
     public void testx4() {
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5],b:2,ary2:[{a:2,b:8},{a:3,b:{c:'ddd',b:23}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5],b:2,ary2:[{a:2,b:8},{a:3,b:{c:'ddd',b:23}}]}}");
 
         ONode t1 = n.select("$..b");
         assert t1.size() ==4;

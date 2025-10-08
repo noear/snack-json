@@ -76,7 +76,7 @@ public class NameTest {
         String json = ONode.serialize(data, options);
         System.out.println(json);
 
-        String json2 = ONode.load(json).toJson();
+        String json2 = ONode.ofJson(json).toJson();
         System.out.println(json2);
         assert json2.equals(json);
     }

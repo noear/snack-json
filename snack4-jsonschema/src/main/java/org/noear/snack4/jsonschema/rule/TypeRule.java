@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonschema.rule;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonschema.exception.SchemaException;
+import org.noear.snack4.jsonschema.JsonSchemaException;
 import org.noear.snack4.json.JsonType;
 
 import java.util.HashSet;
@@ -40,10 +40,10 @@ public class TypeRule implements ValidationRule {
     }
 
     @Override
-    public void validate(ONode data) throws SchemaException {
+    public void validate(ONode data) throws JsonSchemaException {
         String actualType = JsonType.getTypeName(data.getType());
         if (!allowedTypes.contains(actualType)) {
-            throw new SchemaException("Type mismatch. Expected: " + allowedTypes + ", Actual: " + actualType);
+            throw new JsonSchemaException("Type mismatch. Expected: " + allowedTypes + ", Actual: " + actualType);
         }
     }
 }

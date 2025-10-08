@@ -20,28 +20,28 @@ public class JsonTest {
      */
     @Test
     public void test11() throws IOException {
-       ONode c =  ONode.load("\"xxx\"");
+       ONode c =  ONode.ofJson("\"xxx\"");
         assert "xxx".equals(c.getString());
 
-        c = ONode.load("'xxx'");
+        c = ONode.ofJson("'xxx'");
         assert "xxx".equals(c.getString());
 
-        c = ONode.load( "true");
+        c = ONode.ofJson( "true");
         assert c.getBoolean();
 
-        c = ONode.load("false");
+        c = ONode.ofJson("false");
         assert c.getBoolean() == false;
 
-        c = ONode.load("123");
+        c = ONode.ofJson("123");
         assert 123 == c.getInt();
 
-        c = ONode.load("null");
+        c = ONode.ofJson("null");
         assert c.isNull();
 
-        c = ONode.load("NaN");
+        c = ONode.ofJson("NaN");
         assert c.isNull();
 
-        c = ONode.load( "undefined");
+        c = ONode.ofJson( "undefined");
         assert c.isNull();
 
 //        long times = System.currentTimeMillis();
@@ -52,7 +52,7 @@ public class JsonTest {
 
     @Test
     public void test21() throws IOException {
-        ONode c = ONode.load("{'a':'b','c':{'d':'e'},'f':{'g':\"h\"},'i':[{'j':'k','l':'m'},'n']}");
+        ONode c = ONode.ofJson("{'a':'b','c':{'d':'e'},'f':{'g':\"h\"},'i':[{'j':'k','l':'m'},'n']}");
 
         assert "m".equals(c.get("i").get(0).get("l").getString());
         assert "n".equals(c.get("i").get(1).getString());
@@ -62,7 +62,7 @@ public class JsonTest {
 
     @Test
     public void test22() throws IOException {
-        ONode c = ONode.load("{a:\"b\"}");
+        ONode c = ONode.ofJson("{a:\"b\"}");
 
         assert "b".equals(c.get("a").getString());
 
@@ -71,7 +71,7 @@ public class JsonTest {
 
     @Test
     public void test23() throws IOException {
-       ONode c = ONode.load("{a:{b:{c:{d:{e:'f'}}}}}");
+       ONode c = ONode.ofJson("{a:{b:{c:{d:{e:'f'}}}}}");
 
         assert "f".equals(c.get("a").get("b").get("c").get("d").get("e").getString());
 
@@ -82,14 +82,14 @@ public class JsonTest {
     public void test24() throws IOException {
         String json = "[[[],[]],[[]],[],[{},{},null]]";
 
-        ONode c = ONode.load(json);
+        ONode c = ONode.ofJson(json);
 
         assert json.equals(c.toJson());
     }
 
     @Test
     public void test25() throws IOException {
-        ONode c= ONode.load( "[{a:'b'},{c:'d'},[{e:'f'}]]");
+        ONode c= ONode.ofJson( "[{a:'b'},{c:'d'},[{e:'f'}]]");
 
         assert "f".equals(c.get(2).get(0).get("e").getString());
 
@@ -98,7 +98,7 @@ public class JsonTest {
 
     @Test
     public void test26() throws IOException {
-        ONode c = ONode.load("[123,123.45,'123.45','2019-01-02T03:04:05',true,false]");
+        ONode c = ONode.ofJson("[123,123.45,'123.45','2019-01-02T03:04:05',true,false]");
 
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -117,7 +117,7 @@ public class JsonTest {
      */
     @Test
     public void test27() throws IOException {
-        ONode c = ONode.load( "{\"a\":\"\\t\"}");
+        ONode c = ONode.ofJson( "{\"a\":\"\\t\"}");
 
         assert "\t".equals(c.get("a").getString());
 
@@ -132,7 +132,7 @@ public class JsonTest {
         Throwable err = null;
 
         try {
-            ONode.load("{{\"aaa\":\"111\",\"bbb\":\"222\"}", Feature.Read_DisableUnquotedKeys);
+            ONode.ofJson("{{\"aaa\":\"111\",\"bbb\":\"222\"}", Feature.Read_DisableUnquotedKeys);
         } catch (Throwable e) {
             err = e;
             e.printStackTrace();
@@ -146,7 +146,7 @@ public class JsonTest {
         Throwable err = null;
 
         try {
-            ONode c = ONode.load("[\"\"aaa\",\"bbb\",\"ccc\"]");
+            ONode c = ONode.ofJson("[\"\"aaa\",\"bbb\",\"ccc\"]");
         } catch (Throwable e) {
             err = e;
             e.printStackTrace();

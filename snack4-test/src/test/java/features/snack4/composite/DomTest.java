@@ -16,7 +16,7 @@ public class DomTest {
 
         System.out.println(json);
 
-        assert ONode.load(json).get(1).isObject();
+        assert ONode.ofJson(json).get(1).isObject();
     }
 
     @Test
@@ -28,6 +28,6 @@ public class DomTest {
 
         System.out.println(json);
 
-        assert ONode.load(json).get("n1").isObject();
+        assert ONode.ofJson(json).get("n1").isObject();
     }
 }

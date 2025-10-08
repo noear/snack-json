@@ -75,7 +75,7 @@ public class GenericTest {
                 "\t}\n" +
                 "}";
 
-        String json2 = ONode.load(json).toJson();
+        String json2 = ONode.ofJson(json).toJson();
         System.out.println(json2);
 
         Result<House> result = JSON.parseObject(json, new TypeReference<Result<House>>() {
@@ -161,7 +161,7 @@ public class GenericTest {
 //        String s = "[{\"type\":\"receive\",\"message\":{\"msg_id\":30603422,\"id\":1639933436,\"sender\":\"8a6c90e660ed11ecbbec52540025c377\",\"r_status\":2,\"type\":2,\"content\":{\"out_trade_no\":\"202112200103454952555517322\",\"show_amount\":\"5.00\",\"total_amount\":\"5.00\",\"per_month\":\"5.00\",\"month\":1,\"discount\":\"0.00\",\"is_upgrade\":0,\"remark\":\"\",\"ext\":{\"address\":{\"name\":\"\",\"phone\":\"\",\"address\":\"\"}},\"pay_type\":2,\"product_type\":0,\"sku_detail\":[],\"sku_count\":0,\"plan\":{\"plan_id\":\"a4fa470c988411e9a72252540025c377\",\"rank\":0,\"user_id\":\"0e4112d2988411e9adc252540025c377\",\"status\":1,\"name\":\"请吃5包辣条\",\"pic\":\"\",\"desc\":\"\",\"price\":\"5.00\",\"update_time\":1561603416,\"pay_month\":1,\"show_price\":\"5.00\",\"independent\":0,\"permanent\":0,\"can_buy_hide\":1,\"need_address\":0,\"product_type\":0,\"sale_limit_count\":-1,\"need_invite_code\":false},\"time_range\":{\"begin_time\":1639929600,\"end_time\":1642608000}},\"send_time\":1639933436}},{\"type\":\"receive\",\"message\":{\"msg_id\":30603692,\"id\":1639933644,\"sender\":\"8a6c90e660ed11ecbbec52540025c377\",\"r_status\":2,\"type\":1,\"content\":\"landmark的不录了嘛\",\"send_time\":1639933644}},{\"type\":\"send\",\"message\":{\"msg_id\":30644266,\"id\":1640009303,\"sender\":\"0e4112d2988411e9adc252540025c377\",\"r_status\":2,\"type\":1,\"content\":\"直播有广告，过不了审\",\"send_time\":1640009303}},{\"type\":\"receive\",\"message\":{\"msg_id\":30689842,\"id\":1640085379,\"sender\":\"8a6c90e660ed11ecbbec52540025c377\",\"r_status\":2,\"type\":1,\"content\":\"啊好想看\",\"send_time\":1640085379}}]";
         String s = "[{\"type\":\"receive\",\"message\":{\"msg_id\":30603422,\"id\":1639933436,\"sender\":\"8a6c90e660ed11ecbbec52540025c377\",\"r_status\":2,\"type\":2,\"content\":{\"out_trade_no\":\"202112200103454952555517322\",\"show_amount\":\"5.00\",\"total_amount\":\"5.00\",\"per_month\":\"5.00\",\"month\":1,\"discount\":\"0.00\",\"is_upgrade\":0,\"remark\":\"\",\"ext\":{\"address\":{\"name\":\"\",\"phone\":\"\",\"address\":\"\"}},\"pay_type\":2,\"product_type\":0,\"sku_detail\":[],\"sku_count\":0,\"plan\":{\"plan_id\":\"a4fa470c988411e9a72252540025c377\",\"rank\":0,\"user_id\":\"0e4112d2988411e9adc252540025c377\",\"status\":1,\"name\":\"请吃5包辣条\",\"pic\":\"\",\"desc\":\"\",\"price\":\"5.00\",\"update_time\":1561603416,\"pay_month\":1,\"show_price\":\"5.00\",\"independent\":0,\"permanent\":0,\"can_buy_hide\":1,\"need_address\":0,\"product_type\":0,\"sale_limit_count\":-1,\"need_invite_code\":false},\"time_range\":{\"begin_time\":1639929600,\"end_time\":1642608000}},\"send_time\":1639933436}}]";
         System.out.println(s);
-        List<MessageListItem> messageListItems = ONode.load(s).toBean(new TypeRef<List<MessageListItem>>(){});
+        List<MessageListItem> messageListItems = ONode.ofJson(s).toBean(new TypeRef<List<MessageListItem>>(){});
         for (MessageListItem messageListItem : messageListItems) {
             System.out.println(messageListItem);
             assert messageListItem.getMessage().getContent() instanceof String;
@@ -219,7 +219,7 @@ public class GenericTest {
     @Test
     public void test10_2(){
         String json = "{list:[[1],[3,5],[6,3,1]]}";
-        List<List<Long>> list = ONode.load(json).get("list").toBean(new TypeRef<List<List<Long>>>(){});
+        List<List<Long>> list = ONode.ofJson(json).get("list").toBean(new TypeRef<List<List<Long>>>(){});
 
         assert list != null;
         assert list.get(0).get(0) instanceof Long;

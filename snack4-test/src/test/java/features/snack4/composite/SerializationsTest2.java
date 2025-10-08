@@ -44,7 +44,7 @@ public class SerializationsTest2 {
     }
 
     public String buildJson() {
-        return ONode.from(buildObj()).toJson();
+        return ONode.ofBean(buildObj()).toJson();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        UserGroupModel group0 = ONode.load(json0)
+        UserGroupModel group0 = ONode.ofJson(json0)
                 .toBean((new TypeRef<UserGroupModel>() {
                 }));
 
@@ -81,7 +81,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        UserGroupModel group0 = ONode.load(json0)
+        UserGroupModel group0 = ONode.ofJson(json0)
                 .toBean(UserGroupModel.class);
 
         assert group0.id == 9999;
@@ -92,7 +92,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        List<UserModel> group0 = ONode.load(json0).get("users")
+        List<UserModel> group0 = ONode.ofJson(json0).get("users")
                 .toBean((new ArrayList<UserModel>() {
                 }).getClass());
 
@@ -104,7 +104,7 @@ public class SerializationsTest2 {
         String json0 = buildJson();
 
         System.out.println(json0);
-        List<UserModel> group0 = ONode.load(json0).get("users")
+        List<UserModel> group0 = ONode.ofJson(json0).get("users")
                 .toBean((new TypeRef<List<UserModel>>() {}));
 
         assert group0.size() == 5;
@@ -121,7 +121,7 @@ public class SerializationsTest2 {
             props.setProperty(kv[0], kv[1]);
         }
 
-        ONode oNode = ONode.from(props);
+        ONode oNode = ONode.ofBean(props);
 
         System.out.println(oNode.toJson());
 
@@ -142,7 +142,7 @@ public class SerializationsTest2 {
         properties.put("users.a.name", "a");
         properties.put("users.user1.name", "user1");
 
-        PersonColl tmp = ONode.from(properties).toBean(PersonColl.class);
+        PersonColl tmp = ONode.ofBean(properties).toBean(PersonColl.class);
 
         assert tmp != null;
         assert tmp.getUsers() != null;
@@ -174,7 +174,7 @@ public class SerializationsTest2 {
         sModel.age = 11;
         sModel.name = "test";
 
-        String json = ONode.from(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toJson();
+        String json = ONode.ofBean(sModel, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toJson();
         System.out.println(json);
         assert json.contains("name") == false;
         assert json.contains("age");
@@ -184,7 +184,7 @@ public class SerializationsTest2 {
     public void test8() {
         String json = "{age:11,name:'test'}";
 
-        SModel sModel = ONode.load(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toBean(SModel.class);
+        SModel sModel = ONode.ofJson(json, Feature.Read_UseOnlyGetter, Feature.Write_UseOnlySetter).toBean(SModel.class);
         System.out.println(sModel);
 
         assert sModel.name == null;
@@ -215,11 +215,11 @@ public class SerializationsTest2 {
         sets.add("2");
         sets.add("3");
 
-        String json = ONode.from(sets).toJson();
+        String json = ONode.ofBean(sets).toJson();
         System.out.println(json);
 
-        Set<String> sets2 = ONode.load(json).toBean(Set.class);
-        System.out.println(ONode.from(sets2).toJson());
+        Set<String> sets2 = ONode.ofJson(json).toBean(Set.class);
+        System.out.println(ONode.ofBean(sets2).toJson());
 
         assert sets2.size() == sets.size();
     }
@@ -233,7 +233,7 @@ public class SerializationsTest2 {
         tmp.setEndTime(OffsetTime.now());
         tmp.setStartTime(OffsetTime.now());
 
-        String json2 = ONode.from(tmp).toJson();
+        String json2 = ONode.ofBean(tmp).toJson();
         System.out.println(json2);
     }
 
@@ -242,7 +242,7 @@ public class SerializationsTest2 {
         DTimeVO tmp = new DTimeVO();
 
         try {
-            String json2 = ONode.from(tmp, Feature.Write_PrettyFormat).toJson();
+            String json2 = ONode.ofBean(tmp, Feature.Write_PrettyFormat).toJson();
             System.out.println(json2);
             assert false;
         } catch (UnsupportedTemporalTypeException e) {

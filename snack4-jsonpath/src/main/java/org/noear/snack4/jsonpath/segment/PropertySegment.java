@@ -18,7 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.json.JsonSource;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.SegmentFunction;
@@ -68,7 +68,7 @@ public class PropertySegment implements SegmentFunction {
 
             if (n1 != null) {
                 if (n1.source == null) {
-                    n1.source = new JsonSource(node, key, 0);
+                    n1.source = new PathSource(node, key, 0);
                 }
 
                 result.add(n1);
