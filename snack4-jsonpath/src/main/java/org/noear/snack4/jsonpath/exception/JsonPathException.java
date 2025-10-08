@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.exception;
+package org.noear.snack4.jsonpath.exception;
+
+import org.noear.snack4.exception.SnackException;
 
 /**
  * @author noear 2025/3/16 created
  */
-public class AnnotationProcessException extends SnackException {
-    public AnnotationProcessException(String message, Throwable cause) {
-        super(message, cause);
+public class JsonPathException extends SnackException {
+    public JsonPathException(String message) {
+        super(message);
     }
 }

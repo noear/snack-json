@@ -83,7 +83,7 @@ public class BeanDeserializer {
                     if (clz == null) {
                         return null;
                     } else {
-                        return ClassUtil.newInstance(clz);
+                        return BeanUtil.newInstance(clz);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public class BeanDeserializer {
 
                 Constructor constructor = typeWrap.getConstructor();
                 if (constructor == null) {
-                    throw new ReflectionException("Create instance failed: " + typeWrap.getType().getName());
+                    throw new SnackException("Create instance failed: " + typeWrap.getType().getName());
                 }
 
                 if(constructor.isAccessible() == false) {

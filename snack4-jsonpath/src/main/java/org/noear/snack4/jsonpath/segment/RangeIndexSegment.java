@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -42,7 +42,7 @@ public class RangeIndexSegment implements SegmentFunction {
     public RangeIndexSegment(String segmentStr) {
         String[] parts = segmentStr.split(":", 3); //[start:end:step]
         if (parts.length == 1) {
-            throw new PathResolutionException("Invalid range syntax: " + segmentStr);
+            throw new JsonPathException("Invalid range syntax: " + segmentStr);
         }
 
         final int step = (parts.length == 3 && parts[2].length() > 0) ? Integer.parseInt(parts[2]) : 1;

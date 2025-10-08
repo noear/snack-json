@@ -2,7 +2,7 @@ package features.snack4.path.generated;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.jsonpath.JsonPath;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -240,7 +240,7 @@ public class JsonPathSelectSimpleTest {
     @Test
     public void testNegativeIndexOutOfBounds() {
         ONode root = ONode.load(JSON);
-        assertThrows(PathResolutionException.class, () -> {
+        assertThrows(JsonPathException.class, () -> {
             JsonPath.select(root, "$.store.book[-10]");
         });
     }
@@ -248,7 +248,7 @@ public class JsonPathSelectSimpleTest {
     @Test
     public void testPositiveIndexOutOfBounds() {
         ONode root = ONode.load(JSON);
-        assertThrows(PathResolutionException.class, () -> {
+        assertThrows(JsonPathException.class, () -> {
             JsonPath.select(root, "$.store.book[10]");
         });
     }

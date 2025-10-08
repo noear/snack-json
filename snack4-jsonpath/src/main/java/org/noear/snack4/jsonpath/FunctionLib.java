@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -140,10 +140,10 @@ public class FunctionLib {
             if (node.isObject()) {
                 return ONode.from(node.getObject().keySet());
             } else {
-                throw new PathResolutionException("keys() requires object");
+                throw new JsonPathException("keys() requires object");
             }
         } else {
-            throw new PathResolutionException("keys() requires object");
+            throw new JsonPathException("keys() requires object");
         }
     }
 

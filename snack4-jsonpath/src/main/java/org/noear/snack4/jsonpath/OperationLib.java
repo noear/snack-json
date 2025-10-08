@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath;
 
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 
 import java.util.Map;
 import java.util.Objects;
@@ -190,7 +190,7 @@ public class OperationLib {
                 return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) <= 0;
 
             default:
-                throw new PathResolutionException("Unsupported operator for string: " + op);
+                throw new JsonPathException("Unsupported operator for string: " + op);
         }
     }
 
@@ -209,7 +209,7 @@ public class OperationLib {
             case "<=":
                 return a <= b;
             default:
-                throw new PathResolutionException("Unsupported operator for number: " + op);
+                throw new JsonPathException("Unsupported operator for number: " + op);
         }
     }
 

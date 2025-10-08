@@ -171,7 +171,7 @@ public class JsonPathCompatibleTest1 {
 
         compatible_do("1", json, jsonpathStr2);
         compatible_do("2", json, jsonpathStr2_b);
-        //compatible_do("3", json, jsonpathStr2_c);
+        compatible_do("3", json, jsonpathStr2_c);
         //compatible_do("4", json, jsonpathStr2_d);
 
         compatible_do("5", json, jsonpathStr3);

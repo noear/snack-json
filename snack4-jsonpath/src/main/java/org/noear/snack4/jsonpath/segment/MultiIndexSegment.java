@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.json.JsonSource;
 import org.noear.snack4.jsonpath.Context;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -101,7 +101,7 @@ public class MultiIndexSegment implements SegmentFunction {
                     if (n.isArray()) {
                         if (idx < 0) idx += n.size();
                         if (idx < 0 || idx >= n.size()) {
-                            throw new PathResolutionException("Index out of bounds: " + idx);
+                            throw new JsonPathException("Index out of bounds: " + idx);
                         }
                         ONode n1 = n.getOrNull(idx);
                         if(n1.source == null) {

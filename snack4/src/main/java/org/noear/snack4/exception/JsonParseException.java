@@ -16,10 +16,14 @@
 package org.noear.snack4.exception;
 
 /**
- * @author noear 2025/3/16 created
+ * 解析异常
  */
-public class PathResolutionException extends SnackException {
-    public PathResolutionException(String message) {
+public class JsonParseException extends SnackException {
+    public JsonParseException(String message) {
         super(message);
+    }
+
+    public JsonParseException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

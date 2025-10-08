@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 
 import java.util.Collections;
 import java.util.List;
@@ -115,7 +115,7 @@ public class JsonPath {
      */
     public static JsonPath compile(String path) {
         if (!path.startsWith("$")) {
-            throw new PathResolutionException("Path must start with $");
+            throw new JsonPathException("Path must start with $");
         }
 
         return cached.computeIfAbsent(path, JsonPathCompiler::compile);

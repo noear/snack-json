@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.Options;
-import org.noear.snack4.exception.ParseException;
+import org.noear.snack4.exception.JsonParseException;
 
 import java.io.StringReader;
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,7 +89,7 @@ class JsonReaderOptionsAndFeaturesTest {
     void testAllowEmptyKeys() {
         String json = "{\"\": \"value\"}";
         JsonReader reader = new JsonReader(new StringReader(json));
-        assertThrows(ParseException.class,() -> reader.read());
+        assertThrows(JsonParseException.class,() -> reader.read());
     }
 
     @Test

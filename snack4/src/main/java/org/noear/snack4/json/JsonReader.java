@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.IoUtil;
-import org.noear.snack4.exception.ParseException;
+import org.noear.snack4.exception.JsonParseException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -177,7 +177,7 @@ public class JsonReader {
             String key = parseKey();
 
             if (key.isEmpty() && opts.hasFeature(Feature.Read_AllowEmptyKeys) == false) {
-                throw new ParseException("Empty key is not allowed");
+                throw new JsonParseException("Empty key is not allowed");
             }
 
             state.skipWhitespace();
@@ -474,8 +474,8 @@ public class JsonReader {
             }
         }
 
-        private ParseException error(String message) {
-            return new ParseException(message + " at line " + line + " column " + column);
+        private JsonParseException error(String message) {
+            return new JsonParseException(message + " at line " + line + " column " + column);
         }
 
         private void skipWhitespace() throws IOException {

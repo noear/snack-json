@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
-import org.noear.snack4.exception.ParseException;
+import org.noear.snack4.exception.JsonParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -164,7 +164,7 @@ public class _test {
 
     @Test
     public void test6() {
-        Assertions.assertThrows(ParseException.class, () -> ONode.load("{asdfasdf}"));
+        Assertions.assertThrows(JsonParseException.class, () -> ONode.load("{asdfasdf}"));
     }
 
     @Test

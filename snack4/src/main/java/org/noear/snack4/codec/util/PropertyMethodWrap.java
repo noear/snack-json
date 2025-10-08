@@ -4,7 +4,8 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
-import org.noear.snack4.exception.AnnotationProcessException;
+import org.noear.snack4.exception.SnackException;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -61,11 +62,11 @@ public class PropertyMethodWrap implements Property{
             deserialize = attr.deserialize();
 
             if (attr.serializeEncoder().isInterface() == false) {
-                serializeEncoder = ClassUtil.newInstance(attr.serializeEncoder(), e -> new AnnotationProcessException("Property to create decoder for field: " + property.getName(), e));
+                serializeEncoder = BeanUtil.newInstance(attr.serializeEncoder());
             }
 
             if (attr.deserializeDecoder().isInterface() == false) {
-                deserializeDecoder = ClassUtil.newInstance(attr.deserializeDecoder(), e -> new AnnotationProcessException("Property to create encoder for field: " + property.getName(), e));
+                deserializeDecoder = BeanUtil.newInstance(attr.deserializeDecoder());
             }
 
             deserializeFeaturesValue = Feature.addFeature(0, attr.deserializeFeatures());

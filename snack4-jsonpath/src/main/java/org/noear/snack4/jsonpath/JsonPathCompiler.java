@@ -1,6 +1,6 @@
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.exception.PathResolutionException;
+import org.noear.snack4.jsonpath.exception.JsonPathException;
 import org.noear.snack4.jsonpath.segment.*;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class JsonPathCompiler {
             } else if (ch == '[') {
                 resolveBracket(context);
             } else {
-                throw new PathResolutionException("Unexpected character '" + ch + "' at index " + index);
+                throw new JsonPathException("Unexpected character '" + ch + "' at index " + index);
             }
         }
 
