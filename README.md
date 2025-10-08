@@ -34,18 +34,18 @@ oNode.getOrNew("layout").then(o -> {
 
 ```java
 User user = new User();
-ONode.from(user).to(User.class);
+ONode.from(user).toBean(User.class);
 ONode.from(user).toJson();
 
-ONode.load("{}").to(User.class);
-ONode.load("[{},{}]").toJavaObject((new ArrayList<User>(){}).getClass());
+ONode.load("{}").toBean(User.class);
+ONode.load("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 ```
 
 支持 jsonpath 查询、构建、删除
 
 ```java
-ONode.from(store).select("$..book[?@.tags contains 'war']").to(Book.class); //RFC9535 规范，可以没有括号
-ONode.from(store).select("$..book[?(!(@.category == 'fiction') && @.price < 40)]").to(Book.class);
+ONode.from(store).select("$..book[?@.tags contains 'war']").toBean(Book.class); //RFC9535 规范，可以没有括号
+ONode.from(store).select("$..book[?(!(@.category == 'fiction') && @.price < 40)]").toBean(Book.class);
 ONode.load(store).select("$.store.book.count()");
 
 ONode.from(store).create("$.store.book[0].category").toJson();
