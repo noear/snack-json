@@ -130,6 +130,10 @@ public final class ONode {
         return value;
     }
 
+    public <T> T getValueAs() {
+        return (T) value;
+    }
+
     public Boolean getBoolean() {
         if (isBoolean()) {
             return (Boolean) value;
@@ -367,10 +371,6 @@ public final class ONode {
     }
 
     private ONode set0(String key, ONode value) {
-        if (type == JsonType.Null) {
-            asObject();
-        }
-
         getObject().put(key, value);
         return this;
     }
@@ -461,10 +461,6 @@ public final class ONode {
     }
 
     private ONode add0(ONode value) {
-        if (type == JsonType.Null) {
-            asArray();
-        }
-
         getArray().add(value);
         return this;
     }
@@ -472,16 +468,6 @@ public final class ONode {
     public ONode then(Consumer<ONode> builder) {
         builder.accept(this);
         return this;
-    }
-
-    public Optional<ONode> getOptional(String key) {
-        return isObject() ? Optional.ofNullable(getObject().get(key)) : Optional.empty();
-    }
-
-    public Optional<ONode> getOptional(int index) {
-        if (!isArray()) return Optional.empty();
-        List<ONode> arr = getArray();
-        return (index >= 0 && index < arr.size()) ? Optional.of(arr.get(index)) : Optional.empty();
     }
 
     public int size() {
@@ -732,8 +718,8 @@ public final class ONode {
 
     /// ///////////
 
-    public ONode usePaths(){
-        PathSource.resolvePath( this);
+    public ONode usePaths() {
+        PathSource.resolvePath(this);
         return this;
     }
 
