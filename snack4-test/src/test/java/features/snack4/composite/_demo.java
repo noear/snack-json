@@ -181,9 +181,9 @@ public class _demo {
     public void demo50() {
         String txt = "{id:1,name:'x', data:'[1,2,3,4,5]'}";
 
-        ONode oNode = new ONode();
+        ONode oNode = new ONode(Options.of(Feature.Read_UnwrapJsonString));
 
-        oNode.fillJson(txt, Feature.Read_UnwrapJsonString);
+        oNode.fillJson(txt);
 
         assert oNode.get("data").isArray();
 

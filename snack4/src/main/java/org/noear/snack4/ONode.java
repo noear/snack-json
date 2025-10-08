@@ -321,31 +321,21 @@ public final class ONode {
         return this;
     }
 
-    public ONode fill(Object source, Feature... features) {
-        ONode oNode = ONode.from(source, features);
+    public ONode fill(Object source) {
+        ONode oNode = ONode.from(source, options);
 
         this.value = oNode.value;
         this.type = oNode.type;
         return this;
     }
 
-    public ONode fill(Object source, Options opts) {
-        ONode oNode = ONode.from(source, opts);
-
-        this.value = oNode.value;
-        this.type = oNode.type;
-        return this;
-    }
-
-    public ONode fillJson(String json, Feature... features) {
-        return fillJson(json, Options.of(features));
-    }
-
-    public ONode fillJson(String json, Options opts) {
-        return this.fill(ONode.load(json, opts), opts);
+    public ONode fillJson(String json) {
+        return this.fill(ONode.load(json, options));
     }
 
     public ONode setAll(Map<?, ?> map) {
+        Objects.requireNonNull(map, "map");
+
         for (Map.Entry entry : map.entrySet()) {
             set(String.valueOf(entry.getKey()), entry.getValue());
         }
@@ -452,6 +442,8 @@ public final class ONode {
     }
 
     public ONode addAll(Collection collection) {
+        Objects.requireNonNull(collection, "collection");
+
         for (Object o : collection) {
             add(o);
         }
