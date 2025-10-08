@@ -47,7 +47,7 @@ public class _ArrayPatternDecoder implements ObjectPatternDecoder<Object> {
             }
             return array;
         } else {
-            throw new TypeConvertException("Not supported for automatic conversion: " + node);
+            throw new TypeConvertException("Cannot be converted to Array: " + node);
         }
     }
 }
