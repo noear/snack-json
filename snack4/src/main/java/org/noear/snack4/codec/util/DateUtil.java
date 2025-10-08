@@ -112,9 +112,9 @@ public class DateUtil {
                 ft = FORMAT_16_a;
             }
         } else if (len == 14) {
-            if(val.charAt(2) == ':'){
+            if (val.charAt(2) == ':') {
                 ft = FORMAT_14_b;
-            }else {
+            } else {
                 ft = FORMAT_14_a;
             }
         } else if (len == 12 && val.charAt(2) == ':') {
@@ -171,10 +171,10 @@ public class DateUtil {
         }
     }
 
-    public static ZoneId zoneIdOf(DecodeContext ctx){
+    public static ZoneId zoneIdOf(DecodeContext ctx) {
         ZoneId zoneId = ctx.getOptions().getTimeZone().toZoneId();
-        if (ctx.getAttr() != null && Asserts.isNotEmpty(ctx.getAttr().getTimezone())) {
-            zoneId = ZoneId.of(ctx.getAttr().getTimezone());
+        if (ctx.getAttr() != null && ctx.getAttr().getTimezone() != null) {
+            zoneId = ctx.getAttr().getTimezone().toZoneId();
         }
 
         return zoneId;
@@ -190,8 +190,8 @@ public class DateUtil {
                 if (ctx.getAttr() != null) {
                     if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
                         SimpleDateFormat formatter = new SimpleDateFormat(ctx.getAttr().getFormat());
-                        if (Asserts.isNotEmpty(ctx.getAttr().getTimezone())) {
-                            formatter.setTimeZone(TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().getTimezone())));
+                        if (ctx.getAttr().getTimezone() != null) {
+                            formatter.setTimeZone(ctx.getAttr().getTimezone());
                         }
 
                         return Instant.ofEpochMilli(formatter.parse(node.getString()).getTime());

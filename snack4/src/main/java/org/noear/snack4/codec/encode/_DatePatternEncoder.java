@@ -24,14 +24,10 @@ public class _DatePatternEncoder implements ObjectPatternEncoder<Date> {
     public ONode encode(EncodeContext ctx, Date value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                if (Asserts.isNotEmpty(ctx.getAttr().getTimezone())) {
-                    return new ONode(ctx.getOptions(), DateUtil.format(value, ctx.getAttr().getFormat(), TimeZone.getTimeZone(ZoneId.of(ctx.getAttr().getTimezone()))));
-                } else {
-                    return new ONode(ctx.getOptions(), DateUtil.format(value, ctx.getAttr().getFormat()));
-                }
+                return target.setValue(ctx.getAttr().formatDate(value));
             }
         }
 
-        return new ONode(ctx.getOptions(), value);
+        return target.setValue(value);
     }
 }

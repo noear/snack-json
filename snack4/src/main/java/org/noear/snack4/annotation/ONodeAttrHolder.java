@@ -4,6 +4,12 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.util.ClassUtil;
+import org.noear.snack4.codec.util.DateUtil;
+import org.noear.snack4.util.Asserts;
+
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  *
@@ -12,7 +18,7 @@ import org.noear.snack4.codec.util.ClassUtil;
 public class ONodeAttrHolder {
     private String name;
     private String format;
-    private String timezone;
+    private TimeZone timezone;
 
     private boolean flat;
 
@@ -27,7 +33,9 @@ public class ONodeAttrHolder {
         if (attrAnno != null) {
             name = attrAnno.name();
             format = attrAnno.format();
-            timezone = attrAnno.timezone();
+            if (Asserts.isNotEmpty(attrAnno.timezone())) {
+                timezone = TimeZone.getTimeZone(ZoneId.of(attrAnno.timezone()));
+            }
 
             flat = attrAnno.flat();
             serialize = attrAnno.serialize();
@@ -59,8 +67,16 @@ public class ONodeAttrHolder {
         return format;
     }
 
-    public String getTimezone() {
+    public TimeZone getTimezone() {
         return timezone;
+    }
+
+    public String formatDate(Date value) {
+        if (getTimezone() != null) {
+            return DateUtil.format(value, getFormat(), getTimezone());
+        } else {
+            return DateUtil.format(value, getFormat());
+        }
     }
 
     public boolean isFlat() {

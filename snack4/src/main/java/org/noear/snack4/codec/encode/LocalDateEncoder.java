@@ -23,8 +23,8 @@ public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
-                if(Asserts.isNotEmpty(ctx.getAttr().getTimezone())){
-                    formatter.withZone(ZoneId.of(ctx.getAttr().getTimezone()));
+                if(ctx.getAttr().getTimezone() != null){
+                    formatter.withZone(ctx.getAttr().getTimezone().toZoneId());
                 }
 
                 return target.setValue(formatter.format(value));

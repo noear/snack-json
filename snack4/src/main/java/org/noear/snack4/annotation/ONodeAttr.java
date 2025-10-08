@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author noear 2025/3/16 created
+ * @since 4.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
