@@ -111,6 +111,8 @@ public enum Feature {
     Write_Nulls(false),
 
     Write_StringNullAsEmpty(false),
+    Write_BooleanNullAsFalse(false),
+    Write_NumberNullAsZero(false),
 
     Write_UseSetter(false),
     Write_UseOnlySetter(false),

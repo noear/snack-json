@@ -92,6 +92,18 @@ public class TypeWrap {
         return type.isEnum();
     }
 
+    public boolean isString(){
+        return String.class.isAssignableFrom(type);
+    }
+
+    public boolean isBoolean(){
+        return Boolean.class.isAssignableFrom(type);
+    }
+
+    public boolean isNumber(){
+        return Number.class.isAssignableFrom(type);
+    }
+
     public boolean isParameterizedType() {
         return genericType instanceof ParameterizedType;
     }

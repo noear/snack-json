@@ -152,10 +152,31 @@ public class BeanSerializer {
                             && property.hasSerializeFeature(Feature.Write_Nulls) == false) {
                         continue;
                     }
+
+                    if (property.getTypeWrap().isString()) {
+                        if ((opts.hasFeature(Feature.Write_StringNullAsEmpty) || property.hasSerializeFeature(Feature.Write_StringNullAsEmpty))) {
+                            propertyValue = "";
+                        }
+                    } else if (property.getTypeWrap().isBoolean()) {
+                        if ((opts.hasFeature(Feature.Write_BooleanNullAsFalse) || property.hasSerializeFeature(Feature.Write_BooleanNullAsFalse))) {
+                            propertyValue = false;
+                        }
+                    } else if (property.getTypeWrap().isNumber()) {
+                        if ((opts.hasFeature(Feature.Write_NumberNullAsZero) || property.hasSerializeFeature(Feature.Write_NumberNullAsZero))) {
+                            if (property.getTypeWrap().getType() == Long.class) {
+                                propertyValue = 0L;
+                            } else if (property.getTypeWrap().getType() == Double.class) {
+                                propertyValue = 0D;
+                            } else if (property.getTypeWrap().getType() == Float.class) {
+                                propertyValue = 0F;
+                            } else {
+                                propertyValue = 0;
+                            }
+                        }
+                    }
                 }
 
                 ONode propertyNode = null;
-
                 if (property.isAsString()) {
                     propertyNode = new ONode(opts, String.valueOf(propertyValue));
                 } else {
