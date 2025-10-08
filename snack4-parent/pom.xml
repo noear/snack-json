@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
-    <description>Java project for snack4</description>
-    <url>https://github.com/noear/snack4</url>
+    <description>Java project for snack-json</description>
+    <url>https://github.com/noear/snack-json</url>
 
     <licenses>
         <license>
@@ -30,9 +30,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:noear/snack4.git</connection>
-        <developerConnection>scm:git:git@github.com:noear/snack4.git</developerConnection>
-        <url>https://github.com/noear/snack4</url>
+        <connection>scm:git:git@github.com:noear/snack-json.git</connection>
+        <developerConnection>scm:git:git@github.com:noear/snack-json.git</developerConnection>
+        <url>https://github.com/noear/snack-json</url>
     </scm>
 
     <properties>
