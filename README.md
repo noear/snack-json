@@ -2,7 +2,7 @@
   Snack
 </h1>
 <p align="center">
-	<strong>一个高性能的 Json Dom & JsonPath 框架（for Java）</strong>
+	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
 </p>
 
 <p align="center">
