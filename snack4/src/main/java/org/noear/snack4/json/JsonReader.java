@@ -436,10 +436,6 @@ public class JsonReader {
         return c >= '0' && c <= '9';
     }
 
-    private boolean isHex(char c) {
-        return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-    }
-
     static class ParserState {
         private static final int BUFFER_SIZE = 8192;
         private final Reader reader;
