@@ -48,18 +48,18 @@ public class IndexSegment implements Segment {
         List<ONode> result = new ArrayList<>();
 
         if (key != null) {
-            forKey(currentNodes, ctx, result);
+            forKey(ctx, currentNodes, result);
         } else {
-            forIndex(currentNodes, ctx, result);
+            forIndex(ctx, currentNodes, result);
         }
 
         return result;
     }
 
-    private void forKey(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
+    private void forKey(QueryContext ctx, List<ONode> currentNodes, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -67,12 +67,12 @@ public class IndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
                     ONode n1 = obj.getOrNull(key);
-                    if(n1.source == null) {
+                    if (n1.source == null) {
                         n1.source = new PathSource(obj, key, 0);
                     }
 
@@ -81,10 +81,10 @@ public class IndexSegment implements Segment {
                 .forEach(result::add);
     }
 
-    private void forIndex(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
+    private void forIndex(QueryContext ctx, List<ONode> currentNodes, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -97,7 +97,7 @@ public class IndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));
@@ -109,7 +109,7 @@ public class IndexSegment implements Segment {
                     }
 
                     ONode n1 = arr.getOrNull(idx);
-                    if(n1.source == null) {
+                    if (n1.source == null) {
                         n1.source = new PathSource(arr, null, idx);
                     }
 

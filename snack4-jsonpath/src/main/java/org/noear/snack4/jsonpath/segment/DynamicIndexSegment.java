@@ -46,19 +46,19 @@ public class DynamicIndexSegment implements Segment {
             ONode dynamicResult = Condition.resolveNestedPath(ctx, node, dynamicPath);
 
             if (dynamicResult.isNumber()) {
-                forIndex(Arrays.asList(node), dynamicResult.getInt(), ctx, results);
+                forIndex(ctx, Arrays.asList(node), dynamicResult.getInt(), results);
             } else if (dynamicResult.isString()) {
-                forKey(Arrays.asList(node), dynamicResult.getString(), ctx, results);
+                forKey(ctx, Arrays.asList(node), dynamicResult.getString(), results);
             }
         }
 
         return results;
     }
 
-    private void forKey(List<ONode> currentNodes, String key, QueryContext context, List<ONode> result) {
+    private void forKey(QueryContext ctx, List<ONode> currentNodes, String key, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -66,7 +66,7 @@ public class DynamicIndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
@@ -80,10 +80,10 @@ public class DynamicIndexSegment implements Segment {
                 .forEach(result::add);
     }
 
-    private void forIndex(List<ONode> currentNodes, int index, QueryContext context, List<ONode> result) {
+    private void forIndex(QueryContext ctx, List<ONode> currentNodes, int index, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -96,7 +96,7 @@ public class DynamicIndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (context.getMode() == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));

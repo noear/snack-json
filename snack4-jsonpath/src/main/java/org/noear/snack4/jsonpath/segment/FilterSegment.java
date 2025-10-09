@@ -64,11 +64,11 @@ public class FilterSegment implements Segment {
                         n.asArray().addNew();
                     }
 
-                    flattenResolve(n, ctx, result);
+                    flattenResolve(ctx, n, result);
                 }
             } else {
                 for (ONode n : currentNodes) {
-                    flattenResolve(n, ctx, result);
+                    flattenResolve(ctx, n, result);
                 }
             }
 
@@ -77,7 +77,7 @@ public class FilterSegment implements Segment {
     }
 
     // 新增递归展开方法
-    private void flattenResolve(ONode node, QueryContext context, List<ONode> result) {
+    private void flattenResolve(QueryContext ctx, ONode node, List<ONode> result) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
@@ -85,17 +85,17 @@ public class FilterSegment implements Segment {
                     n1.source = new PathSource(node, null, idx);
                 }
 
-                flattenResolve(n1, context, result);
+                flattenResolve(ctx, n1, result);
                 idx++;
             }
         } else {
-            if (context.getMode() == QueryMode.CREATE) {
+            if (ctx.getMode() == QueryMode.CREATE) {
                 if (node.isNull()) {
                     node.asObject();
                 }
             }
 
-            if (expression.test(node, context)) {
+            if (expression.test(node, ctx)) {
                 result.add(node);
             }
         }
