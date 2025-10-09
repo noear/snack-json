@@ -36,6 +36,7 @@ public class ClassWrap {
     }
 
     private final TypeWrap typeWrap;
+    private final Map<String, FieldWrap> fieldWraps = new LinkedHashMap<>();
     private final Map<String, PropertyWrap> propertyWraps = new LinkedHashMap<>();
 
     private ClassWrap(TypeWrap typeWrap) {
@@ -46,6 +47,14 @@ public class ClassWrap {
 
     public TypeWrap getTypeWrap() {
         return typeWrap;
+    }
+
+    public Map<String, FieldWrap> getFieldWraps() {
+        return fieldWraps;
+    }
+
+    public FieldWrap getFieldWrap(String fieldName) {
+        return fieldWraps.get(fieldName);
     }
 
     public Map<String, PropertyWrap> getPropertyWraps() {
@@ -65,8 +74,9 @@ public class ClassWrap {
                     continue;
                 }
 
-                PropertyFieldWrap fieldWrap = new PropertyFieldWrap(typeWrap, f);
+                FieldWrap fieldWrap = new FieldWrap(typeWrap, f);
 
+                fieldWraps.put(fieldWrap.getName(), fieldWrap);
                 propertyWraps.computeIfAbsent(fieldWrap.getName(), k -> new PropertyWrap(k))
                         .setFieldWrap(fieldWrap);
             }

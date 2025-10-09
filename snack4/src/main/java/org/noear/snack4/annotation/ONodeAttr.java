@@ -38,6 +38,16 @@ public @interface ONodeAttr {
     String name() default "";
 
     /**
+     * 描述
+     */
+    String description() default "";
+
+    /**
+     * 必须的
+     */
+    boolean required() default true;
+
+    /**
      * 格式化
      */
     String format() default "";

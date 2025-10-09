@@ -28,7 +28,7 @@ import java.util.Map;
  * @author noear 2025/3/16 created
  * @since 4.0
  */
-public class PropertyFieldWrap implements Property {
+public class FieldWrap implements Property {
     private final Field field;
     private final TypeWrap fieldTypeWrap;
 
@@ -38,7 +38,7 @@ public class PropertyFieldWrap implements Property {
     private boolean isFinal;
     private boolean isTransient;
 
-    public PropertyFieldWrap(TypeWrap owner, Field field) {
+    public FieldWrap(TypeWrap owner, Field field) {
         if (field.isAccessible() == false) {
             field.setAccessible(true);
         }
@@ -69,6 +69,10 @@ public class PropertyFieldWrap implements Property {
             Type superType = GenericUtil.reviewType(owner.getType().getGenericSuperclass(), owner.getGenericInfo());
             return getGenericInfo(TypeWrap.from(superType), field);
         }
+    }
+
+    public Field getField() {
+        return field;
     }
 
     @Override

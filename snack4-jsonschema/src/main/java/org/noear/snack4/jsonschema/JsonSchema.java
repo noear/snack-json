@@ -20,7 +20,9 @@ import org.noear.snack4.json.JsonType;
 import org.noear.snack4.jsonschema.rule.EnumRule;
 import org.noear.snack4.jsonschema.rule.TypeRule;
 import org.noear.snack4.jsonschema.rule.ValidationRule;
+import org.noear.snack4.jsonschema.util.SchemaUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +41,10 @@ public class JsonSchema {
 
     public static JsonSchema ofNode(ONode jsonSchema) {
         return new JsonSchema(jsonSchema);
+    }
+
+    public static JsonSchema ofType(Type type) {
+        return new JsonSchema(SchemaUtil.buildTypeSchemaNode(type, "", new  ONode()));
     }
 
     private final ONode schema;

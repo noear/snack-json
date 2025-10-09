@@ -33,6 +33,8 @@ import java.util.TimeZone;
  */
 public class ONodeAttrHolder {
     private String name;
+    private String description;
+
     private String format;
     private TimeZone timezone;
 
@@ -48,6 +50,8 @@ public class ONodeAttrHolder {
     public ONodeAttrHolder(ONodeAttr attrAnno, boolean isTransient) {
         if (attrAnno != null) {
             name = attrAnno.name();
+            description = attrAnno.description();
+
             format = attrAnno.format();
             if (Asserts.isNotEmpty(attrAnno.timezone())) {
                 timezone = TimeZone.getTimeZone(ZoneId.of(attrAnno.timezone()));
@@ -77,6 +81,10 @@ public class ONodeAttrHolder {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getFormat() {
