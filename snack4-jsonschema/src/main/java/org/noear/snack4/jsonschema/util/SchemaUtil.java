@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 noear.org and authors
+ * Copyright 2005-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,10 @@ import java.net.URI;
 import java.util.*;
 
 /**
- * Tool 架构工具
+ * 架构工具
  *
  * @author noear
- * @author ityangs ityangs@163.com
- * @since 3.1
- * @since 3.3
+ * @since 4.0
  */
 public class SchemaUtil {
     public static final String TYPE_OBJECT = "object";
@@ -56,7 +54,7 @@ public class SchemaUtil {
     /**
      * 构建参数申明
      * */
-    public static ONodeDesc paramOf(AnnotatedElement ae) {
+    public static PropertyDesc paramOf(AnnotatedElement ae) {
         ONodeAttr p1Anno = ae.getAnnotation(ONodeAttr.class);
         if (p1Anno == null) {
             return null;
@@ -68,11 +66,11 @@ public class SchemaUtil {
         if (ae instanceof Parameter) {
             Parameter p1 = (Parameter) ae;
             String name = nameOr(p1Anno.name(), p1.getName());
-            return new ONodeDesc(name, p1.getParameterizedType(), p1Anno.required(), p1Anno.description());
+            return new PropertyDesc(name, p1.getParameterizedType(), p1Anno.required(), p1Anno.description());
         } else {
             Field p1 = (Field) ae;
             String name = nameOr(p1Anno.name(), p1.getName());
-            return new ONodeDesc(name, p1.getGenericType(), p1Anno.required(), p1Anno.description());
+            return new PropertyDesc(name, p1.getGenericType(), p1Anno.required(), p1Anno.description());
         }
     }
 
@@ -81,7 +79,7 @@ public class SchemaUtil {
      *
      * @param toolParams       工具参数
      */
-    public static String buildInputSchema(List<ONodeDesc> toolParams) {
+    public static String buildInputSchema(List<PropertyDesc> toolParams) {
         return buildToolParametersNode(toolParams, new ONode()).toJson();
     }
 
@@ -98,7 +96,7 @@ public class SchemaUtil {
      * @param toolParams       工具参数
      * @param schemaParentNode 架构父节点（待构建）
      */
-    public static ONode buildToolParametersNode(List<ONodeDesc> toolParams, ONode schemaParentNode) {
+    public static ONode buildToolParametersNode(List<PropertyDesc> toolParams, ONode schemaParentNode) {
         schemaParentNode.asObject();
 
         ONode requiredNode = new ONode(schemaParentNode.options()).asArray();
@@ -107,7 +105,7 @@ public class SchemaUtil {
         schemaParentNode.getOrNew("properties").then(propertiesNode -> {
             propertiesNode.asObject();
 
-            for (ONodeDesc fp : toolParams) {
+            for (PropertyDesc fp : toolParams) {
                 propertiesNode.getOrNew(fp.name()).then(paramNode -> {
                     buildTypeSchemaNode(fp.type(), fp.description(), paramNode);
                 });
@@ -371,7 +369,7 @@ public class SchemaUtil {
             propertiesNode.asObject();
 
             for (Map.Entry<String, FieldWrap> entry : ClassWrap.from(TypeWrap.from(clazz)).getFieldWraps().entrySet()) {
-                ONodeDesc fp = paramOf(entry.getValue().getField());
+                PropertyDesc fp = paramOf(entry.getValue().getField());
 
                 if (fp != null) {
                     propertiesNode.getOrNew(fp.name()).then(paramNode -> {
