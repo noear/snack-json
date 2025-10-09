@@ -21,6 +21,7 @@ import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.codec.CodecException;
 import org.noear.snack4.json.JsonReader;
+import org.noear.snack4.jsonpath.JsonPathProviderWarn;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.json.JsonType;
 import org.noear.snack4.json.JsonWriter;
@@ -40,7 +41,7 @@ import java.util.function.Consumer;
  * @since 4.0
  */
 public final class ONode {
-    private static JsonPathProvider jsonPathProvider;
+    private static JsonPathProvider jsonPathProvider = new JsonPathProviderWarn();
 
     static {
         ServiceLoader<JsonPathProvider> serviceLoader = ServiceLoader.load(JsonPathProvider.class);
@@ -530,7 +531,6 @@ public final class ONode {
      * 根据 jsonpath 查询
      */
     public ONode select(String jsonpath) {
-        Objects.requireNonNull(jsonPathProvider, "Requires 'snack4-jsonpath' dependency ");
         return jsonPathProvider.select(this, jsonpath);
     }
 
@@ -542,7 +542,6 @@ public final class ONode {
      * 根据 jsonpath 删除
      */
     public void delete(String jsonpath) {
-        Objects.requireNonNull(jsonPathProvider, "Requires 'snack4-jsonpath' dependency ");
         jsonPathProvider.delete(this, jsonpath);
     }
 
@@ -550,7 +549,6 @@ public final class ONode {
      * 根据 jsonpath 生成
      */
     public ONode create(String jsonpath) {
-        Objects.requireNonNull(jsonPathProvider, "Requires 'snack4-jsonpath' dependency ");
         return jsonPathProvider.create(this, jsonpath);
     }
 
