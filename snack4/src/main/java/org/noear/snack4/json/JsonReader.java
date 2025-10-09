@@ -136,7 +136,7 @@ public class JsonReader {
         state.skipWhitespace();
 
         // 解析时间戳（long类型数字）
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = state.getStringBuilder();
         char c = state.peekChar();
         boolean negative = false;
 
@@ -214,7 +214,7 @@ public class JsonReader {
     }
 
     private String parseUnquotedString() throws IOException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = state.getStringBuilder();
         while (true) {
             char c = state.peekChar();
             if (c == ':' || c == ',' || c == '}' || c == ']' || Character.isWhitespace(c)) {
@@ -257,7 +257,7 @@ public class JsonReader {
             throw state.error("Expected string to start with a quote");
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = state.getStringBuilder();
         while (true) {
             char c = state.nextChar();
             if (c == quoteChar) break;
@@ -334,7 +334,7 @@ public class JsonReader {
     }
 
     private Number parseNumber() throws IOException {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = state.getStringBuilder();
         char c = state.peekChar();
 
         // 处理负数
@@ -441,7 +441,7 @@ public class JsonReader {
     }
 
     static class ParserState {
-        private static final int BUFFER_SIZE = 1024;
+        private static final int BUFFER_SIZE = 8192;
         private final Reader reader;
         private long line = 1;
         private long column = 0;
@@ -449,7 +449,16 @@ public class JsonReader {
         private final char[] buffer = new char[BUFFER_SIZE];
         private int bufferPosition;
         private int bufferLimit;
-        private int cachedPosition;
+
+        private StringBuilder stringBuilder;
+        private StringBuilder getStringBuilder() {
+            if (stringBuilder == null) {
+                stringBuilder = new StringBuilder(32);
+            } else {
+                stringBuilder.setLength(0);
+            }
+            return stringBuilder;
+        }
 
         public ParserState(Reader reader) {
             this.reader = reader;
