@@ -94,17 +94,6 @@ public class DynamicIndexSegment implements Segment {
             idx = arr.size() + idx;
         }
 
-        if (ctx.getMode() == QueryMode.CREATE) {
-            int count = idx + 1 - arr.size();
-            for (int i = 0; i < count; i++) {
-                arr.add(new ONode(arr.options()));
-            }
-        }
-
-        if (idx < 0 || idx >= arr.size()) {
-            throw new JsonPathException("Index out of bounds: " + idx);
-        }
-
         ONode n1 = ctx.getNodeAt(arr, idx);
 
         if (n1 != null) {

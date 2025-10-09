@@ -97,9 +97,7 @@ public class FilterSegment implements Segment {
             }
         } else {
             if (ctx.getMode() == QueryMode.CREATE) {
-                if (node.isNull()) {
-                    node.asObject();
-                }
+                node.asObject();
             }
 
             if (expression.test(node, ctx)) {

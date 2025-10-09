@@ -240,17 +240,13 @@ public class JsonPathSelectSimpleTest {
     @Test
     public void testNegativeIndexOutOfBounds() {
         ONode root = ONode.ofJson(JSON);
-        assertThrows(JsonPathException.class, () -> {
-            JsonPath.select(root, "$.store.book[-10]");
-        });
+        assert JsonPath.select(root, "$.store.book[-10]").isNull();
     }
 
     @Test
     public void testPositiveIndexOutOfBounds() {
         ONode root = ONode.ofJson(JSON);
-        assertThrows(JsonPathException.class, () -> {
-            JsonPath.select(root, "$.store.book[10]");
-        });
+        assert JsonPath.select(root, "$.store.book[10]").isNull();
     }
 
     @Test

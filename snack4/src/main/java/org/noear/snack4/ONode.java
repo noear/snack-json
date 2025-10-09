@@ -401,7 +401,9 @@ public final class ONode {
             return self.get(index);
         } else {
             ONode last = null;
-            for (int i = self.size(); i <= index; i++) {
+            int count = index + 1 - self.size();
+
+            for (int i = 0; i < count; i++) {
                 last = new ONode(options);
                 if (thenApply != null) {
                     thenApply.accept(last);

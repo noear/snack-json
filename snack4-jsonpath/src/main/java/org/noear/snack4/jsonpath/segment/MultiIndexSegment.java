@@ -102,12 +102,7 @@ public class MultiIndexSegment implements Segment {
 
             if (node.isObject()) {
                 for (String key : keys) {
-                    ONode n1 = null;
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        n1 = node.getOrNew(key);
-                    } else {
-                        n1 = node.getOrNull(key);
-                    }
+                    ONode n1 = ctx.getNodeBy(node, key);
 
                     if (n1 != null) {
                         if (n1.source == null) {
@@ -129,16 +124,7 @@ public class MultiIndexSegment implements Segment {
                         idx += node.size();
                     }
 
-                    if (idx < 0 || idx >= node.size()) {
-                        throw new JsonPathException("Index out of bounds: " + idx);
-                    }
-
-                    ONode n1 = null;
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        n1 = node.getOrNew(idx);
-                    } else {
-                        n1 = node.getOrNull(idx);
-                    }
+                    ONode n1 = ctx.getNodeAt(node, idx);
 
                     if (n1 != null) {
                         if (n1.source == null) {

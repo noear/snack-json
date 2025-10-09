@@ -33,15 +33,17 @@ import java.util.List;
  */
 public class IndexSegment implements Segment {
     private final String segmentStr;
-    private String key;
-    private int index;
+    private final String key;
+    private final int index;
 
     public IndexSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
         if (segmentStr.indexOf('\'') < 0) {
             index = Integer.parseInt(segmentStr);
+            key = null;
         } else {
+            index = 0;
             key = segmentStr.substring(1, segmentStr.length() - 1);
         }
     }
@@ -75,12 +77,7 @@ public class IndexSegment implements Segment {
             return;
         }
 
-        ONode n1 = null;
-        if (ctx.getMode() == QueryMode.CREATE) {
-            n1 = node.getOrNew(key);
-        } else {
-            n1 = node.getOrNull(key);
-        }
+        ONode n1 = ctx.getNodeBy(node, key);
 
         if (n1 != null) {
             if (n1.source == null) {
@@ -102,21 +99,10 @@ public class IndexSegment implements Segment {
 
         int idx = index;
         if (idx < 0) {
-            idx = node.size() + idx;
+            idx += node.size();
         }
 
-        if (ctx.getMode() == QueryMode.CREATE) {
-            int count = idx + 1 - node.size();
-            for (int i = 0; i < count; i++) {
-                node.add(new ONode(node.options()));
-            }
-        }
-
-        if (idx < 0 || idx >= node.size()) {
-            throw new JsonPathException("Index out of bounds: " + idx);
-        }
-
-        ONode n1 = node.getOrNull(idx);
+        ONode n1 = ctx.getNodeAt(node, idx);
 
         if (n1 != null) {
             if (n1.source == null) {

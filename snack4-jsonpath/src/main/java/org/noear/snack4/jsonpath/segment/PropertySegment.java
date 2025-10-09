@@ -47,25 +47,22 @@ public class PropertySegment implements Segment {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {
-            getChild(n, key, ctx, result);
+            getChild(ctx, n, key, result);
         }
 
         return result;
     }
 
-    private void getChild(ONode node, String key, QueryContext context, List<ONode> result) {
-        ONode n1 = null;
-
-        if (context.getMode() == QueryMode.CREATE) {
+    private void getChild(QueryContext ctx, ONode node, String key, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
-            if (node.isObject()) {
-                n1 = node.getOrNew(key);
-            }
-        } else {
-            if (node.isObject()) {
-                n1 = node.getOrNull(key);
-            }
         }
+
+        if (node.isObject() == false) {
+            return;
+        }
+
+        ONode n1 = ctx.getNodeBy(node, key);
 
         if (n1 != null) {
             if (n1.source == null) {
