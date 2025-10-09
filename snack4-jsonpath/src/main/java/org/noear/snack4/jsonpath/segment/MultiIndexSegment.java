@@ -16,11 +16,7 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +32,7 @@ import java.util.stream.Collectors;
  */
 public class MultiIndexSegment implements Segment {
     private final String segmentStr;
-    private boolean isAll;
+    private boolean isWildcard; //是否为通配符？
     private List<String> keys;
     private List<Integer> indices;
 
@@ -45,7 +41,7 @@ public class MultiIndexSegment implements Segment {
 
         if (segmentStr.indexOf('*') >= 0) {
             //通配符
-            isAll = true;
+            isWildcard = true;
         } else if (segmentStr.indexOf('\'') >= 0) {
             //key
             this.keys = Arrays.stream(segmentStr.split(","))
@@ -71,59 +67,88 @@ public class MultiIndexSegment implements Segment {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {
-            if (isAll) {
-                if (n.isArray()) {
-                    int idx = 0;
-                    for(ONode n1 : n.getArray()) {
-                        if(n1.source == null) {
-                            n1.source = new PathSource(n, null, idx);
-                        }
+            doResolve(ctx, n, result);
+        }
 
-                        idx++;
-                        result.add(n1);
-                    }
-                } else if (n.isObject()) {
-                    for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
-                        ONode n1 =  entry.getValue();
-                        if(n1.source == null) {
-                            n1.source = new PathSource(n, entry.getKey(), 0);
-                        }
+        return result;
+    }
 
-                        result.add(n1);
+    private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
+        if (isWildcard) { //本级偏平化
+            if (node.isArray()) {
+                int idx = 0;
+                for (ONode n1 : node.getArray()) {
+                    if (n1.source == null) {
+                        n1.source = new PathSource(node, null, idx);
                     }
+
+                    idx++;
+                    result.add(n1);
                 }
-            } else if (keys != null) {
-                for (String k : keys) {
-                    if (n.isObject()) {
-                        ONode n1 = n.getOrNull(k);
-                        if (n1 != null) {
-                            if(n1.source == null) {
-                                n1.source = new PathSource(n, k, 0);
-                            }
-
-                            result.add(n1);
-                        }
+            } else if (node.isObject()) {
+                for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+                    ONode n1 = entry.getValue();
+                    if (n1.source == null) {
+                        n1.source = new PathSource(node, entry.getKey(), 0);
                     }
+
+                    result.add(n1);
                 }
-            } else {
-                for (Integer idx : indices) {
-                    if (n.isArray()) {
-                        if (idx < 0) idx += n.size();
-                        if (idx < 0 || idx >= n.size()) {
-                            throw new JsonPathException("Index out of bounds: " + idx);
-                        }
-                        ONode n1 = n.getOrNull(idx);
-                        if(n1.source == null) {
-                            n1.source = new PathSource(n, null, idx);
+            }
+        } else if (keys != null) {
+            if (ctx.getMode() == QueryMode.CREATE) {
+                node.asObject();
+            }
+
+            if (node.isObject()) {
+                for (String key : keys) {
+                    ONode n1 = null;
+                    if (ctx.getMode() == QueryMode.CREATE) {
+                        n1 = node.getOrNew(key);
+                    } else {
+                        n1 = node.getOrNull(key);
+                    }
+
+                    if (n1 != null) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, key, 0);
                         }
 
                         result.add(n1);
                     }
                 }
             }
+        } else {
+            if (ctx.getMode() == QueryMode.CREATE) {
+                node.asArray();
+            }
 
+            if (node.isArray()) {
+                for (Integer idx : indices) {
+                    if (idx < 0) {
+                        idx += node.size();
+                    }
+
+                    if (idx < 0 || idx >= node.size()) {
+                        throw new JsonPathException("Index out of bounds: " + idx);
+                    }
+
+                    ONode n1 = null;
+                    if (ctx.getMode() == QueryMode.CREATE) {
+                        n1 = node.getOrNew(idx);
+                    } else {
+                        n1 = node.getOrNull(idx);
+                    }
+
+                    if (n1 != null) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, null, idx);
+                        }
+
+                        result.add(n1);
+                    }
+                }
+            }
         }
-
-        return result;
     }
 }

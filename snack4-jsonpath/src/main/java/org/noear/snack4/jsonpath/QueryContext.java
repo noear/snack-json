@@ -58,6 +58,22 @@ public class QueryContext {
         return options;
     }
 
+    public ONode getNodeBy(ONode node, String key) {
+        if (mode == QueryMode.CREATE) {
+            return node.getOrNew(key);
+        } else {
+            return node.getOrNull(key);
+        }
+    }
+
+    public ONode getNodeAt(ONode node, int idx) {
+        if (mode == QueryMode.CREATE) {
+            return node.getOrNew(idx);
+        } else {
+            return node.getOrNull(idx);
+        }
+    }
+
     private Map<String, Object> attach;
 
     private Map<String, Object> getAttach() {

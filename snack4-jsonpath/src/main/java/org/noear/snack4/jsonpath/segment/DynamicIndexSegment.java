@@ -21,7 +21,6 @@ import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,74 +50,69 @@ public class DynamicIndexSegment implements Segment {
             ONode dynamicResult = Condition.resolveNestedPath(ctx, node, segmentStr);
 
             if (dynamicResult.isNumber()) {
-                forIndex(ctx, Arrays.asList(node), dynamicResult.getInt(), results);
+                forIndex(ctx, node, dynamicResult.getInt(), results);
             } else if (dynamicResult.isString()) {
-                forKey(ctx, Arrays.asList(node), dynamicResult.getString(), results);
+                forKey(ctx, node, dynamicResult.getString(), results);
             }
         }
 
         return results;
     }
 
-    private void forKey(QueryContext ctx, List<ONode> currentNodes, String key, List<ONode> result) {
-        currentNodes.stream()
-                .filter(o -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        o.asObject();
-                        return true;
-                    } else {
-                        return o.isObject();
-                    }
-                })
-                .map(obj -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        obj.getOrNew(key);
-                    }
+    private void forKey(QueryContext ctx, ONode node, String key, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            node.asObject();
+        }
 
-                    ONode n1 = obj.getOrNull(key);
-                    if (n1.source == null) {
-                        n1.source = new PathSource(obj, key, 0);
-                    }
+        if (node.isObject() == false) {
+            return;
+        }
 
-                    return n1;
-                })
-                .forEach(result::add);
+        ONode n1 = ctx.getNodeBy(node, key);
+
+        if (n1 != null) {
+            if (n1.source == null) {
+                n1.source = new PathSource(node, key, 0);
+            }
+
+            result.add(n1);
+        }
     }
 
-    private void forIndex(QueryContext ctx, List<ONode> currentNodes, int index, List<ONode> result) {
-        currentNodes.stream()
-                .filter(o -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        o.asArray();
-                        return true;
-                    } else {
-                        return o.isArray();
-                    }
-                })
-                .map(arr -> {
-                    int idx = index;
-                    if (idx < 0) {
-                        idx = arr.size() + idx;
-                    }
+    private void forIndex(QueryContext ctx, ONode arr, int index, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            arr.asArray();
+        }
 
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        int count = idx + 1 - arr.size();
-                        for (int i = 0; i < count; i++) {
-                            arr.add(new ONode(arr.options()));
-                        }
-                    }
+        if (arr.isArray() == false) {
+            return;
+        }
 
-                    if (idx < 0 || idx >= arr.size()) {
-                        throw new JsonPathException("Index out of bounds: " + idx);
-                    }
 
-                    ONode n1 = arr.getOrNull(idx);
-                    if (n1.source == null) {
-                        n1.source = new PathSource(arr, null, idx);
-                    }
+        int idx = index;
+        if (idx < 0) {
+            idx = arr.size() + idx;
+        }
 
-                    return n1;
-                })
-                .forEach(result::add);
+        if (ctx.getMode() == QueryMode.CREATE) {
+            int count = idx + 1 - arr.size();
+            for (int i = 0; i < count; i++) {
+                arr.add(new ONode(arr.options()));
+            }
+        }
+
+        if (idx < 0 || idx >= arr.size()) {
+            throw new JsonPathException("Index out of bounds: " + idx);
+        }
+
+        ONode n1 = ctx.getNodeAt(arr, idx);
+
+        if (n1 != null) {
+            if (n1.source == null) {
+                n1.source = new PathSource(arr, null, idx);
+            }
+
+            result.add(n1);
+        }
     }
 }

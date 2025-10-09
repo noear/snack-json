@@ -75,41 +75,53 @@ public class RangeIndexSegment implements Segment {
         List<ONode> result = new ArrayList<>();
 
         for (ONode arr : currentNodes) {
-            if (arr.isArray()) {
-                int size = arr.size();
-                int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
-                int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
-
-                // 调整范围确保有效
-                RangeUtil.Bounds bounds = RangeUtil.bounds(start, end, step, size);
-
-                if (step > 0) {
-                    int i = bounds.getLower();
-                    while (i < bounds.getUpper()) {
-                        ONode n1 = arr.getOrNull(i);
-                        if(n1.source == null) {
-                            n1.source = new PathSource(arr, null, i);
-                        }
-
-                        i += step;
-                        result.add(n1);
-                    }
-                } else {
-                    int i = bounds.getUpper();
-                    while (bounds.getLower() < i) {
-                        ONode n1 = arr.getOrNull(i);
-                        if(n1.source == null) {
-                            n1.source = new PathSource(arr, null, i);
-                        }
-
-                        i += step;
-                        result.add(n1);
-                    }
-                }
-            }
+            doResolve(ctx, arr, result);
         }
 
         return result;
+    }
+
+    private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
+        if (node.isArray()) {
+            int size = node.size();
+            int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
+            int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
+
+            // 调整范围确保有效
+            RangeUtil.Bounds bounds = RangeUtil.bounds(start, end, step, size);
+
+            if (step > 0) {
+                int i = bounds.getLower();
+                while (i < bounds.getUpper()) {
+                    ONode n1 = ctx.getNodeAt(node, i);
+
+                    if (n1 != null) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, null, i);
+                        }
+
+                        result.add(n1);
+                    }
+
+                    i += step;
+                }
+            } else {
+                int i = bounds.getUpper();
+                while (bounds.getLower() < i) {
+                    ONode n1 = ctx.getNodeAt(node, i);
+
+                    if (n1 != null) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, null, i);
+                        }
+
+                        result.add(n1);
+                    }
+
+                    i += step;
+                }
+            }
+        }
     }
 
     // 辅助方法：解析范围边界
