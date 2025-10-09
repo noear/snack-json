@@ -775,18 +775,24 @@ public final class ONode {
         return paths;
     }
 
-    public String path() {
-        if (source == null) {
-            return null;
-        } else {
-            Object pathKey = (source.key == null ? source.index : source.key);
-            String parentPath = source.parent.path();
+    private transient String path;
 
-            if (parentPath == null) {
-                return "$[" + pathKey + "]";
+    public String path() {
+        if (path == null) {
+            if (source == null) {
+                path = null;
             } else {
-                return parentPath + "[" + pathKey + "]";
+                Object pathKey = (source.key == null ? source.index : source.key);
+                String parentPath = source.parent.path();
+
+                if (Asserts.isEmpty(parentPath)) {
+                    path = "$[" + pathKey + "]";
+                } else {
+                    path = parentPath + "[" + pathKey + "]";
+                }
             }
         }
+
+        return path;
     }
 }

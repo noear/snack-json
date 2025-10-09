@@ -14,6 +14,7 @@ public class SpeedSnack4JsonPathTest {
         ONode tmp = n.select("$..a");
         System.out.println(tmp);//打印
         assert tmp.size()==2;
+        System.out.println(tmp.pathList());
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
