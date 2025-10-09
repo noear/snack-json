@@ -349,8 +349,7 @@ public class JsonReader {
 
         // 处理负数
         if (c == '-') {
-            sb.append(c);
-            state.bufferPosition++;
+            sb.append(state.nextChar());
         }
 
         // 解析整数部分
@@ -396,10 +395,15 @@ public class JsonReader {
             }
         }
 
+        // 检查类型后缀 (L, F, D, M) - 但不添加到字符串中
+        char postfix = 0;
+        if (state.peekChar() == 'L' || state.peekChar() == 'F' || state.peekChar() == 'D' || state.peekChar() == 'M') {
+            postfix = state.nextChar(); // 读取后缀但不添加到sb中
+        }
+
         String numStr = sb.toString();
         try {
-            char postfix = numStr.charAt(numStr.length() - 1);
-
+            // 根据后缀类型解析数字
             if (postfix == 'M') {
                 return new BigDecimal(numStr);
             } else if (postfix == 'D') {
