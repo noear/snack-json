@@ -31,10 +31,15 @@ import java.util.List;
  * @since 4.0
  */
 public class DynamicIndexSegment implements Segment {
-    private final String dynamicPath;
+    private final String segmentStr;
 
-    public DynamicIndexSegment(String dynamicPath) {
-        this.dynamicPath = dynamicPath;
+    public DynamicIndexSegment(String segmentStr) {
+        this.segmentStr = segmentStr;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + segmentStr + "]";
     }
 
     @Override
@@ -43,7 +48,7 @@ public class DynamicIndexSegment implements Segment {
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = Condition.resolveNestedPath(ctx, node, dynamicPath);
+            ONode dynamicResult = Condition.resolveNestedPath(ctx, node, segmentStr);
 
             if (dynamicResult.isNumber()) {
                 forIndex(ctx, Arrays.asList(node), dynamicResult.getInt(), results);

@@ -31,10 +31,17 @@ import java.util.List;
  * @since 4.0
  */
 public class FunctionSegment implements Segment {
+    private final String segmentStr;
     private final String funcName;
 
     public FunctionSegment(String segmentStr) {
+        this.segmentStr = segmentStr;
         this.funcName = segmentStr.substring(0, segmentStr.length() - 2);
+    }
+
+    @Override
+    public String toString() {
+        return segmentStr;
     }
 
     @Override

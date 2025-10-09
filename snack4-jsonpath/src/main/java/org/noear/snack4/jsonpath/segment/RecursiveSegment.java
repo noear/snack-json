@@ -33,6 +33,11 @@ import java.util.Map;
  */
 public class RecursiveSegment implements Segment {
     @Override
+    public String toString() {
+        return "..";
+    }
+
+    @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 

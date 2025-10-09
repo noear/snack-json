@@ -29,10 +29,17 @@ import java.util.List;
  * @since 4.0
  */
 public class PropertySegment implements Segment {
+    private final String segmentStr;
     private String key;
 
     public PropertySegment(String key) {
+        this.segmentStr = key;
         this.key = key;
+    }
+
+    @Override
+    public String toString() {
+        return segmentStr;
     }
 
     @Override

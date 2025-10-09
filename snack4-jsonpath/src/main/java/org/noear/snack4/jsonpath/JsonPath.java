@@ -39,6 +39,15 @@ public class JsonPath {
         this.multiple = (path.indexOf('*') > 0 || path.indexOf("..") > 0 || path.indexOf(',') > 0 || path.indexOf(':') > 0 || path.indexOf('?') > 0) && (path.indexOf("()") < 0);
     }
 
+    @Override
+    public String toString() {
+        return "JsonPath{" +
+                "path='" + path + '\'' +
+                ", segments=" + segments +
+                ", multiple=" + multiple +
+                '}';
+    }
+
     public ONode select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContext ctx = new QueryContext(root, QueryMode.SELECT);

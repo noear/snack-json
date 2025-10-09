@@ -39,6 +39,11 @@ public class WildcardSegment implements Segment {
     }
 
     @Override
+    public String toString() {
+        return "*";
+    }
+
+    @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         if (flattened) {
             return currentNodes;

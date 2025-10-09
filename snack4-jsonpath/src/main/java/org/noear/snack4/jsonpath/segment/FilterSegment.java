@@ -32,6 +32,7 @@ import java.util.List;
  * @since 4.0
  */
 public class FilterSegment implements Segment {
+    private final String segmentStr;
     private final Expression expression;
     private final boolean flattened;
 
@@ -39,8 +40,14 @@ public class FilterSegment implements Segment {
      * @param segmentStr `?...`
      */
     public FilterSegment(String segmentStr, boolean flattened) {
+        this.segmentStr = segmentStr;
         this.expression = Expression.get(segmentStr.substring(1));
         this.flattened = flattened;
+    }
+
+    @Override
+    public String toString() {
+        return segmentStr;
     }
 
     @Override

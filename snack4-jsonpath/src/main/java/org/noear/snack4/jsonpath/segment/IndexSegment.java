@@ -32,15 +32,23 @@ import java.util.List;
  * @since 4.0
  */
 public class IndexSegment implements Segment {
+    private final String segmentStr;
     private String key;
     private int index;
 
     public IndexSegment(String segmentStr) {
+        this.segmentStr = segmentStr;
+
         if (segmentStr.indexOf('\'') < 0) {
             index = Integer.parseInt(segmentStr);
         } else {
             key = segmentStr.substring(1, segmentStr.length() - 1);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "[" + segmentStr + "]";
     }
 
     @Override

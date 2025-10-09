@@ -35,12 +35,14 @@ import java.util.List;
  */
 public class RangeIndexSegment implements Segment {
     //[start:end:step]
-
+    private final String segmentStr;
     private Integer startRef;
     private Integer endRef;
     private int step;
 
     public RangeIndexSegment(String segmentStr) {
+        this.segmentStr = segmentStr;
+
         String[] parts = segmentStr.split(":", 3); //[start:end:step]
         if (parts.length == 1) {
             throw new JsonPathException("Invalid range syntax: " + segmentStr);
@@ -57,6 +59,11 @@ public class RangeIndexSegment implements Segment {
         }
 
         this.step = step;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + segmentStr + "]";
     }
 
     @Override

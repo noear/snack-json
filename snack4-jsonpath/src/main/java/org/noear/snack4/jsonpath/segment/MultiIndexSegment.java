@@ -35,11 +35,14 @@ import java.util.stream.Collectors;
  * @since 4.0
  */
 public class MultiIndexSegment implements Segment {
+    private final String segmentStr;
     private boolean isAll;
     private List<String> keys;
     private List<Integer> indices;
 
     public MultiIndexSegment(String segmentStr) {
+        this.segmentStr = segmentStr;
+
         if (segmentStr.indexOf('*') >= 0) {
             //通配符
             isAll = true;
@@ -56,6 +59,11 @@ public class MultiIndexSegment implements Segment {
                     .map(Integer::parseInt)
                     .collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "[" + segmentStr + "]";
     }
 
     @Override
