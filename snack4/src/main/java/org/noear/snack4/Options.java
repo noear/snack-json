@@ -58,7 +58,6 @@ public final class Options {
     // 类加载器
     private ClassLoader classLoader;
     // 允许安全类
-    private Set<Class<?>> allowedClasses = new HashSet<>();
     private Locale locale = DEF_LOCALE;
 
     private TimeZone timeZone = DEF_TIME_ZONE;
@@ -205,17 +204,6 @@ public final class Options {
 
         this.classLoader = classLoader;
         return this;
-    }
-
-    /**
-     * 添加允许类
-     */
-    public void addAllowClass(Class<?> clazz) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        allowedClasses.add(clazz);
     }
 
     /**
