@@ -59,7 +59,7 @@ public class MultiIndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
+    public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {

@@ -44,13 +44,13 @@ public class IndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
+    public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
         if (key != null) {
-            forKey(currentNodes, context, result);
+            forKey(currentNodes, ctx, result);
         } else {
-            forIndex(currentNodes, context, result);
+            forIndex(currentNodes, ctx, result);
         }
 
         return result;

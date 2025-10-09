@@ -44,12 +44,12 @@ public class FilterSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
+    public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         if (this.flattened) {
             //已经偏平化
             List<ONode> result = new ArrayList<>();
             for (ONode n1 : currentNodes) {
-                if (expression.test(n1, context)) {
+                if (expression.test(n1, ctx)) {
                     result.add(n1);
                 }
             }
@@ -58,17 +58,17 @@ public class FilterSegment implements Segment {
             //还未偏平化
             List<ONode> result = new ArrayList<>();
 
-            if (context.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
+            if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) {
                     if (n.isNull()) {
                         n.asArray().addNew();
                     }
 
-                    flattenResolve(n, context, result);
+                    flattenResolve(n, ctx, result);
                 }
             } else {
                 for (ONode n : currentNodes) {
-                    flattenResolve(n, context, result);
+                    flattenResolve(n, ctx, result);
                 }
             }
 

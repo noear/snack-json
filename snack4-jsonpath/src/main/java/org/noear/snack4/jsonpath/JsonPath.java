@@ -41,10 +41,10 @@ public class JsonPath {
 
     public ONode select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext context = new QueryContext(root, QueryMode.SELECT);
+        QueryContext ctx = new QueryContext(root, QueryMode.SELECT);
 
         for (Segment seg : segments) {
-            currentNodes = seg.resolve(currentNodes, context);
+            currentNodes = seg.resolve(ctx, currentNodes);
         }
 
         if (currentNodes.size() > 1) {
@@ -64,10 +64,10 @@ public class JsonPath {
 
     public ONode create(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext context = new QueryContext(root, QueryMode.CREATE);
+        QueryContext dtx = new QueryContext(root, QueryMode.CREATE);
 
         for (Segment seg : segments) {
-            currentNodes = seg.resolve(currentNodes, context);
+            currentNodes = seg.resolve(dtx, currentNodes);
         }
 
         if (currentNodes.size() > 1) {
@@ -87,10 +87,10 @@ public class JsonPath {
 
     public void delete(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext context = new QueryContext(root, QueryMode.DELETE);
+        QueryContext ctx = new QueryContext(root, QueryMode.DELETE);
 
         for (Segment seg : segments) {
-            currentNodes = seg.resolve(currentNodes, context);
+            currentNodes = seg.resolve(ctx, currentNodes);
         }
 
         if (currentNodes.size() == 1) {
@@ -119,7 +119,7 @@ public class JsonPath {
      * 编译
      */
     public static JsonPath compile(String path) {
-        if (!path.startsWith("$")) {
+        if (!path.startsWith("$") && !path.startsWith("@")) {
             throw new JsonPathException("Path must start with $");
         }
 

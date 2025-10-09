@@ -38,17 +38,17 @@ public class DynamicIndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
+    public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> results = new ArrayList<>();
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = Condition.resolveNestedPath(context, node, dynamicPath);
+            ONode dynamicResult = Condition.resolveNestedPath(ctx, node, dynamicPath);
 
             if (dynamicResult.isNumber()) {
-                forIndex(Arrays.asList(node), dynamicResult.getInt(), context, results);
+                forIndex(Arrays.asList(node), dynamicResult.getInt(), ctx, results);
             } else if (dynamicResult.isString()) {
-                forKey(Arrays.asList(node), dynamicResult.getString(), context, results);
+                forKey(Arrays.asList(node), dynamicResult.getString(), ctx, results);
             }
         }
 

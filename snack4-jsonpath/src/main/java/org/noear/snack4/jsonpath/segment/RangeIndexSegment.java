@@ -60,7 +60,7 @@ public class RangeIndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
+    public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         if (step == 0) {
             return Collections.emptyList();
         }

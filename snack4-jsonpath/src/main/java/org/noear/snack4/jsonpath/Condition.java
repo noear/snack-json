@@ -150,6 +150,12 @@ public class Condition {
             return JsonPath.select(ctx.getRoot(), keyPath);
         }
 
+//        if (keyPath.startsWith("@")) {
+//            return JsonPath.select(node, keyPath);
+//        } else {
+//            throw new JsonPathException("Unsupported path: " + keyPath);
+//        }
+
 
         String[] keys = keyPath.split("\\.|\\[");
         ONode current = node;

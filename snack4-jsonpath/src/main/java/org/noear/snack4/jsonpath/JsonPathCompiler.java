@@ -44,9 +44,8 @@ public class JsonPathCompiler {
     }
 
     private JsonPath doCompile() {
-        index = 0; // 起始位置为 $ 符号
-        index++;
-        QueryContext context = new QueryContext(null, QueryMode.SELECT); //记录分析中的 flattened 变化
+        index = 1; //Skip $, @
+        QueryContext ctx = new QueryContext(null, QueryMode.SELECT); //记录分析中的 flattened 变化
 
         while (index < path.length()) {
             skipWhitespace();
@@ -54,9 +53,9 @@ public class JsonPathCompiler {
 
             char ch = path.charAt(index);
             if (ch == '.') {
-                resolveDot(context);
+                resolveDot(ctx);
             } else if (ch == '[') {
-                resolveBracket(context);
+                resolveBracket(ctx);
             } else {
                 throw new JsonPathException("Unexpected character '" + ch + "' at index " + index);
             }
