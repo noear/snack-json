@@ -505,20 +505,20 @@ public class JsonReader {
         private void skipWhitespace() throws IOException {
             while (bufferPosition < bufferLimit || fillBuffer()) {
                 char c = buffer[bufferPosition];
-                if (c == '\n') {
-                    line++;
-                    column = 0;
-                } else if (c == '\r') {
-                    if (peekChar(1) == '\n') bufferPosition++;
-                    line++;
-                    column = 0;
-                } else if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
-                    // Continue
+                if ((c == ' ' || c == '\t' || c == '\n' || c == '\r')) {
+                    if (c == '\n') {
+                        line++;
+                        column = 0;
+                    } else if (c == '\r') {
+                        if (peekChar(1) == '\n') bufferPosition++;
+                        line++;
+                        column = 0;
+                    }
+                    bufferPosition++;
+                    column++;
                 } else {
                     break;
                 }
-                bufferPosition++;
-                column++;
             }
         }
 
