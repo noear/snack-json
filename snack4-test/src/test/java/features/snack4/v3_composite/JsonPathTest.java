@@ -1,5 +1,6 @@
 package features.snack4.v3_composite;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
@@ -196,7 +197,7 @@ public class JsonPathTest {
         assert  t4.size() ==2;
 
         ONode t4_min = n.select("$..b[?(@.c > 1)].c.min()");
-        assert  t4_min.getInt()==2;
+        Assertions.assertEquals(2, t4_min.getInt());
 
         ONode t5 = n.select("$..b[?(@.c in [1,2])]");
         assert  t5.size() ==2;

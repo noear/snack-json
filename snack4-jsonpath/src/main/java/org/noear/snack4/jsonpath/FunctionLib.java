@@ -90,8 +90,32 @@ public class FunctionLib {
             return new ONode(ctx.getOptions());
         }
 
-        OptionalDouble min = collectNumbersDo(nodes).min();
-        return min.isPresent() ? new ONode(ctx.getOptions(), min.getAsDouble()) : new ONode(ctx.getOptions());
+        Double ref = null;
+        for (ONode n : nodes) {
+            if (n.isArray()) {
+                for (ONode n1 : n.getArray()) {
+                    if (n1.isNumber()) {
+                        if (ref == null) {
+                            ref = n1.getDouble();
+                        } else {
+                            if (ref > n1.getDouble()) {
+                                ref = n1.getDouble();
+                            }
+                        }
+                    }
+                }
+            } else if (n.isNumber()) {
+                if (ref == null) {
+                    ref = n.getDouble();
+                } else {
+                    if (ref > n.getDouble()) {
+                        ref = n.getDouble();
+                    }
+                }
+            }
+        }
+
+        return new ONode(ctx.getOptions(), ref);
     }
 
     static ONode max(QueryContext ctx, List<ONode> nodes) {
