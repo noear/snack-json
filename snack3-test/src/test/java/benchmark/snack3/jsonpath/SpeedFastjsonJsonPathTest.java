@@ -14,7 +14,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test1(){
-        //1000000=>529,546,539;;;353,370,397
+        //1000000=>529,546,539;;;353,370,397 //472,454,442
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -64,7 +64,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test3(){
-        //1000000=>85,90,86;;;104,108,113
+        //1000000=>85,90,86;;;104,108,113 //135,136,132
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -114,7 +114,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test40(){
-        //1000000=>48,56,48
+        //1000000=>48,56,48 //65,60,55
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -138,7 +138,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test41(){
-        //1000000=>325,321,319;;;230,219,250
+        //1000000=>325,321,319;;;230,219,250 //218,239,220
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -184,7 +184,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test5(){
-        //1000000=>60,58,58
+        //1000000=>60,58,58 //74,67,65
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -208,7 +208,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test6(){
-        //不支持*;;;;331,340,315
+        //不支持*;;;;331,340,315 //294,301,299
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -258,7 +258,7 @@ public class SpeedFastjsonJsonPathTest {
 
     @Test
     public void test8(){
-        //不支持;;;389,385,404
+        //不支持;;;389,385,404 //361,362,361
         //
         //1.加载json
         String text = ("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");

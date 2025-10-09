@@ -12,7 +12,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test1(){
-        //1000000=>2658,2633,2590
+        //1000000=>2658,2633,2590 //2916,3303,2957
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -36,7 +36,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test2(){
-        //1000000=>3227,3220,3156
+        //1000000=>3227,3220,3156 //4112,4516,4292
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
         ReadContext context = JsonPath.parse(text);
@@ -59,7 +59,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test3(){
-        //1000000=>782,798,776
+        //1000000=>782,798,776 //796,772,783
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
         ReadContext context = JsonPath.parse(text);
@@ -82,7 +82,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test4(){
-        //1000000=>941,899,947
+        //1000000=>941,899,947 //880,958,954
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -106,7 +106,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test40(){
-        //1000000=>704,663,655
+        //1000000=>704,663,655 //730,722,789
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -130,7 +130,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test41(){
-        //1000000=>2522,2551,2591
+        //1000000=>2522,2551,2591 //2468,2546,2508
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -154,7 +154,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test42() {
-        //1000000=>5494,5326,5483
+        //1000000=>5494,5326,5483 //5803,5936,6038
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -188,7 +188,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test5(){
-        //1000000=>929,826,837
+        //1000000=>929,826,837 //809,852,759
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -211,7 +211,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test6(){
-        //1000000=>1105,1025,1050
+        //1000000=>1105,1025,1050 //1014,1061,1069
         //
         //1.加载json
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -234,7 +234,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test7(){
-        //1000000=>5628,5739,5636
+        //1000000=>5628,5739,5636 //3305,3471,3360
         //
         //1.加载json
         String text = ("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
@@ -257,6 +257,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test8(){
+        //....      //3278,3324,3250
         //运行会出错
         //1.加载json
         String text =("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
@@ -279,7 +280,7 @@ public class SpeedJaywayJsonPathTest {
 
     @Test
     public void test9(){
-        //1000000=>3575,3591,3813
+        //1000000=>3575,3591,3813  //1918,1927,1854
         //
         //1.加载json
         String text = ("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
