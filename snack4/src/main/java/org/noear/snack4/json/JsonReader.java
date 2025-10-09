@@ -288,17 +288,27 @@ public class JsonReader {
                     case 't':
                         sb.append('\t');
                         break;
-                    case 'u':
-                        char[] hex = new char[4];
+                    case 'u': {
+                        int val = 0;
                         for (int i = 0; i < 4; i++) {
-                            hex[i] = state.nextChar();
-                            if (!isHex(hex[i])) throw state.error("Invalid Unicode escape");
+                            char hex_char = state.nextChar();
+                            val <<= 4; // val = val * 16
+                            if (hex_char >= '0' && hex_char <= '9') {
+                                val += hex_char - '0';
+                            } else if (hex_char >= 'a' && hex_char <= 'f') {
+                                val += hex_char - 'a' + 10;
+                            } else if (hex_char >= 'A' && hex_char <= 'F') {
+                                val += hex_char - 'A' + 10;
+                            } else {
+                                throw state.error("Invalid Unicode escape");
+                            }
                         }
-                        sb.append((char) Integer.parseInt(new String(hex), 16));
+                        sb.append((char) val);
                         break;
-                    default:
-                        if(c >= '0' && c <= '7') {
-                            sb.append(IoUtil.CHARS_MARK_REV[(int)c]);
+                    }
+                    default: {
+                        if (c >= '0' && c <= '7') {
+                            sb.append(IoUtil.CHARS_MARK_REV[(int) c]);
                         } else if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
                             sb.append(c);
                         } else if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
@@ -307,6 +317,7 @@ public class JsonReader {
                             //RFC 8259
                             throw state.error("Invalid escape character: \\" + c);
                         }
+                    }
                 }
             } else {
                 if (c < 0x20) {
@@ -438,6 +449,7 @@ public class JsonReader {
         private final char[] buffer = new char[BUFFER_SIZE];
         private int bufferPosition;
         private int bufferLimit;
+        private int cachedPosition;
 
         public ParserState(Reader reader) {
             this.reader = reader;
