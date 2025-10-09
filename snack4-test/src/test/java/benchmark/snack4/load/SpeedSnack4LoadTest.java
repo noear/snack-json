@@ -7,7 +7,7 @@ import org.noear.snack4.ONode;
 
 import java.util.*;
 
-public class LoadSpeedTest {
+public class SpeedSnack4LoadTest {
 
     /** 测试性能（大json） */
     @Test

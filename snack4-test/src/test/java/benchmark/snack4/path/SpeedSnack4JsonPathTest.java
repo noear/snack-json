@@ -1,9 +1,9 @@
-package benchmark.snack3.jsonpath;
+package benchmark.snack4.path;
 
 import org.junit.jupiter.api.Test;
-import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 
-public class SpeedJsonPathTest {
+public class SpeedSnack4JsonPathTest {
 
     /**
      * 是否使用标准模式解析
@@ -15,15 +15,15 @@ public class SpeedJsonPathTest {
         //1000000=>225,225,232
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$..a", useStandard);
+        ONode tmp = n.select("$..a");
         System.out.println(tmp);//打印
-        assert tmp.count()==2;
+        assert tmp.size()==2;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..a", useStandard);
+            n.select("$..a");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -38,15 +38,15 @@ public class SpeedJsonPathTest {
         //1000000=>277,292,275
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$..*", useStandard);
+        ONode tmp = n.select("$..*");
         System.out.println(tmp);//打印
-        assert tmp.count()==16;
+        assert tmp.size()==16;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..*", useStandard);
+            n.select("$..*");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -61,15 +61,15 @@ public class SpeedJsonPathTest {
         //1000000=>133,137,131
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$.data.list[1,4]", useStandard);
+        ONode tmp = n.select("$.data.list[1,4]");
         System.out.println(tmp);//打印
-        assert tmp.count() == 2;
+        assert tmp.size() == 2;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[1,4]", useStandard);
+            n.select("$.data.list[1,4]");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -84,15 +84,15 @@ public class SpeedJsonPathTest {
         //1000000=>143,145,146
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$.data.list[1:4]", useStandard);
+        ONode tmp = n.select("$.data.list[1:4]");
         System.out.println(tmp);//打印
-        assert tmp.count() == 3;
+        assert tmp.size() == 3;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[1:4]", useStandard);
+            n.select("$.data.list[1:4]");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -107,15 +107,15 @@ public class SpeedJsonPathTest {
         //1000000=>97,100,97
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$.data.ary2[0].a", useStandard);
+        ONode tmp = n.select("$.data.ary2[0].a");
         System.out.println(tmp);//打印
         assert tmp.getInt() == 2;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[0].a)", useStandard);
+            n.select("$.data.ary2[0].a)");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -130,15 +130,15 @@ public class SpeedJsonPathTest {
         //1000000=>310,311,314
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$..ary2[0].a", useStandard);
+        ONode tmp = n.select("$..ary2[0].a");
         System.out.println(tmp);//打印
-        assert tmp.count() == 1;
+        assert tmp.size() == 1;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..ary2[0].a)", useStandard);
+            n.select("$..ary2[0].a)");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -153,17 +153,17 @@ public class SpeedJsonPathTest {
         //1000000=>678,674,667
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp30 = n.select("$..ary2[0].a", useStandard);
-        assert tmp30.count() == 1;
+        ONode tmp30 = n.select("$..ary2[0].a");
+        assert tmp30.size() == 1;
 
-        ONode tmp3 = n.select("$.data.list[?(@ in $..ary2[0].a)]", useStandard);
-        assert tmp3.count() == 1;
+        ONode tmp3 = n.select("$.data.list[?(@ in $..ary2[0].a)]");
+        assert tmp3.size() == 1;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[?(@ in $..ary2[0].a)]", useStandard);
+            n.select("$.data.list[?(@ in $..ary2[0].a)]");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -178,14 +178,14 @@ public class SpeedJsonPathTest {
         //1000000=>84,86,80
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        ONode tmp = n.select("$.data.ary2[1].b.c", useStandard);
+        ONode tmp = n.select("$.data.ary2[1].b.c");
         assert "ddd".equals(tmp.getString());
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[1].b.c", useStandard);
+            n.select("$.data.ary2[1].b.c");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -200,14 +200,14 @@ public class SpeedJsonPathTest {
         //1000000=>173,152,155;;;239,235,237
         //
         //1.加载json
-        ONode n = ONode.load("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
         long start = System.currentTimeMillis();
 
-        ONode tmp = n.select("$.data.ary2[*].b.c", useStandard);
-        assert tmp.count() == 1;
+        ONode tmp = n.select("$.data.ary2[*].b.c");
+        assert tmp.size() == 1;
 
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[*].b.c", useStandard);
+            n.select("$.data.ary2[*].b.c");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -222,14 +222,14 @@ public class SpeedJsonPathTest {
         //1000000=>580,535,532
         //
         //1.加载json
-        ONode n = ONode.load("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
+        ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
         long start = System.currentTimeMillis();
 
-        ONode tmp = n.select("$..b[?(@.c == 12)]", useStandard);
-        assert tmp.count() == 0;
+        ONode tmp = n.select("$..b[?(@.c == 12)]");
+        assert tmp.size() == 0;
 
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..b[?(@.c == 12)]", useStandard);
+            n.select("$..b[?(@.c == 12)]");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -244,24 +244,24 @@ public class SpeedJsonPathTest {
         //1000000=>279,282,285
         //
         //1.加载json
-        ONode n = ONode.load("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
+        ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
-        ONode tmp = n.select("$..c", useStandard);
-        assert tmp.count() == 3;
+        ONode tmp = n.select("$..c");
+        assert tmp.size() == 3;
 
 
-        ONode tmp1 = n.select("$..c.min()", useStandard);
+        ONode tmp1 = n.select("$..c.min()");
         System.out.println(tmp1);
 
         if(useStandard) {
-            assert tmp1.count() == 0;
+            assert tmp1.size() == 0;
         }else{
             assert tmp1.isValue();
         }
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..c.min()", useStandard);
+            n.select("$..c.min()");
         }
 
         long times = System.currentTimeMillis() - start;
@@ -276,15 +276,15 @@ public class SpeedJsonPathTest {
         //1000000=>444,423,429
         //
         //1.加载json
-        ONode n = ONode.load("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
+        ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
-        ONode tmp = n.select("$[?(@.c =~ /.*a+/)]", useStandard);
+        ONode tmp = n.select("$[?(@.c =~ /.*a+/)]");
         System.out.println(tmp);
-        assert tmp.count() == 2;
+        assert tmp.size() == 2;
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$[?(@.c =~ /a+/)]", useStandard);
+            n.select("$[?(@.c =~ /a+/)]");
         }
 
         long times = System.currentTimeMillis() - start;

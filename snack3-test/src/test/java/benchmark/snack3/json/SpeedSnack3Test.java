@@ -11,7 +11,7 @@ import org.noear.snack.from.JsonFromer;
 
 import java.util.*;
 
-public class SpeedTest {
+public class SpeedSnack3Test {
 
     /** 测试性能（大json） */
     @Test
