@@ -13,13 +13,17 @@ public class Issue_ICR97M {
     public void case1() {
         String jsonpath = "$.simpleReportList[?(@.reportStyle == \"1\")].rows[?(@.projectCode == \"BS010101\")].columns[?(@.columnCode == \"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\")].value";
 
-        ONode result = ONode.ofJson("{}").create(jsonpath);
+        ONode oNode = new ONode();
+        oNode.create(jsonpath).then(e -> e.get(0).setValue("1"));
 
-        System.out.println(result);
-        assert result != null;
-        assert result.isObject();
-        assert result.get("simpleReportList").isObject();
-        assert result.get("simpleReportList").get(0).get("rows").isArray();
-        assert result.get("simpleReportList").get(0).get("rows").get(0).get("columns").isObject();
+        System.out.println(oNode.toJson());
+
+        assert oNode != null;
+        assert oNode.isObject();
+        assert oNode.get("simpleReportList").isArray();
+        assert oNode.get("simpleReportList").get(0).get("rows").isArray();
+        assert oNode.get("simpleReportList").get(0).get("rows").get(0).get("columns").isArray();
+
+        assert "{\"simpleReportList\":[{\"reportStyle\":\"1\",\"rows\":[{\"projectCode\":\"BS010101\",\"columns\":[{\"columnCode\":\"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\",\"value\":\"1\"}]}]}]}".equals(oNode.toJson());
     }
 }

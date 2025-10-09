@@ -58,8 +58,18 @@ public class FilterSegment implements Segment {
             //还未偏平化
             List<ONode> result = new ArrayList<>();
 
-            for (ONode n : currentNodes) {
-                flattenResolve(n, context, result);
+            if (context.mode == QueryMode.CREATE && currentNodes.size() == 1) {
+                for (ONode n : currentNodes) {
+                    if (n.isNull()) {
+                        n.asArray().addNew();
+                    }
+
+                    flattenResolve(n, context, result);
+                }
+            } else {
+                for (ONode n : currentNodes) {
+                    flattenResolve(n, context, result);
+                }
             }
 
             return result;

@@ -168,6 +168,13 @@ public class OperationLib {
                 } else if (leftNode.isNull()) {
                     return compareNumber(condition.getOp(), 0, 0);
                 }
+            } else {
+                if (context.mode == QueryMode.CREATE && leftNode.isNull()) {
+                    if ("==".equals(condition.getOp())) {
+                        leftNode.fill(rightNode);
+                        return true;
+                    }
+                }
             }
 
             return false;

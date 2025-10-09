@@ -163,11 +163,20 @@ public class Condition {
             }
 
             if (current.isObject()) {
-                current = current.getOrNull(key);
+                if (context.mode == QueryMode.CREATE) {
+                    current = current.getOrNew(key);
+                } else {
+                    current = current.getOrNull(key);
+                }
             } else if (current.isArray()) {
                 try {
                     int index = Integer.parseInt(key);
-                    current = current.getOrNull(index);
+
+                    if (context.mode == QueryMode.CREATE) {
+                        current = current.getOrNew(index);
+                    } else {
+                        current = current.getOrNull(index);
+                    }
                 } catch (NumberFormatException e) {
                     return null;
                 }
