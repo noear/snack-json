@@ -93,30 +93,14 @@ public class RangeIndexSegment implements Segment {
             if (step > 0) {
                 int i = bounds.getLower();
                 while (i < bounds.getUpper()) {
-                    ONode n1 = ctx.getNodeAt(node, i);
-
-                    if (n1 != null) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, null, i);
-                        }
-
-                        result.add(n1);
-                    }
+                    IndexUtil.forIndexUnsafe(ctx, node, i, result);
 
                     i += step;
                 }
             } else {
                 int i = bounds.getUpper();
                 while (bounds.getLower() < i) {
-                    ONode n1 = ctx.getNodeAt(node, i);
-
-                    if (n1 != null) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, null, i);
-                        }
-
-                        result.add(n1);
-                    }
+                    IndexUtil.forIndexUnsafe(ctx, node, i, result);
 
                     i += step;
                 }

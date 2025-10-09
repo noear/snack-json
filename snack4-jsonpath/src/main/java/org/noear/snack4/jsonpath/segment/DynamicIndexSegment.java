@@ -16,8 +16,6 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
@@ -50,58 +48,12 @@ public class DynamicIndexSegment implements Segment {
             ONode dynamicResult = Condition.resolveNestedPath(ctx, node, segmentStr);
 
             if (dynamicResult.isNumber()) {
-                forIndex(ctx, node, dynamicResult.getInt(), results);
+                IndexUtil.forIndex(ctx, node, dynamicResult.getInt(), results);
             } else if (dynamicResult.isString()) {
-                forKey(ctx, node, dynamicResult.getString(), results);
+                IndexUtil.forKey(ctx, node, dynamicResult.getString(), results);
             }
         }
 
         return results;
-    }
-
-    private void forKey(QueryContext ctx, ONode node, String key, List<ONode> result) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            node.asObject();
-        }
-
-        if (node.isObject() == false) {
-            return;
-        }
-
-        ONode n1 = ctx.getNodeBy(node, key);
-
-        if (n1 != null) {
-            if (n1.source == null) {
-                n1.source = new PathSource(node, key, 0);
-            }
-
-            result.add(n1);
-        }
-    }
-
-    private void forIndex(QueryContext ctx, ONode arr, int index, List<ONode> result) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            arr.asArray();
-        }
-
-        if (arr.isArray() == false) {
-            return;
-        }
-
-
-        int idx = index;
-        if (idx < 0) {
-            idx = arr.size() + idx;
-        }
-
-        ONode n1 = ctx.getNodeAt(arr, idx);
-
-        if (n1 != null) {
-            if (n1.source == null) {
-                n1.source = new PathSource(arr, null, idx);
-            }
-
-            result.add(n1);
-        }
     }
 }

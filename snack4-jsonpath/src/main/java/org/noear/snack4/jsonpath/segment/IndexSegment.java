@@ -59,57 +59,12 @@ public class IndexSegment implements Segment {
 
         for (ONode node : currentNodes) {
             if (key != null) {
-                forKey(ctx, node, result);
+                IndexUtil.forKey(ctx, node, key, result);
             } else {
-                forIndex(ctx, node, result);
+                IndexUtil.forIndex(ctx, node, index, result);
             }
         }
 
         return result;
-    }
-
-    private void forKey(QueryContext ctx, ONode node, List<ONode> result) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            node.asObject();
-        }
-
-        if (node.isObject() == false) {
-            return;
-        }
-
-        ONode n1 = ctx.getNodeBy(node, key);
-
-        if (n1 != null) {
-            if (n1.source == null) {
-                n1.source = new PathSource(node, key, 0);
-            }
-
-            result.add(n1);
-        }
-    }
-
-    private void forIndex(QueryContext ctx, ONode node, List<ONode> result) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            node.asArray();
-        }
-
-        if (node.isArray() == false) {
-            return;
-        }
-
-        int idx = index;
-        if (idx < 0) {
-            idx += node.size();
-        }
-
-        ONode n1 = ctx.getNodeAt(node, idx);
-
-        if (n1 != null) {
-            if (n1.source == null) {
-                n1.source = new PathSource(node, null, idx);
-            }
-
-            result.add(n1);
-        }
     }
 }

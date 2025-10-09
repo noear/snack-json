@@ -102,15 +102,7 @@ public class MultiIndexSegment implements Segment {
 
             if (node.isObject()) {
                 for (String key : keys) {
-                    ONode n1 = ctx.getNodeBy(node, key);
-
-                    if (n1 != null) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, key, 0);
-                        }
-
-                        result.add(n1);
-                    }
+                    IndexUtil.forKeyUnsafe(ctx, node, key, result);
                 }
             }
         } else {
@@ -120,19 +112,7 @@ public class MultiIndexSegment implements Segment {
 
             if (node.isArray()) {
                 for (Integer idx : indices) {
-                    if (idx < 0) {
-                        idx += node.size();
-                    }
-
-                    ONode n1 = ctx.getNodeAt(node, idx);
-
-                    if (n1 != null) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, null, idx);
-                        }
-
-                        result.add(n1);
-                    }
+                    IndexUtil.forIndexUnsafe(ctx, node, idx, result);
                 }
             }
         }
