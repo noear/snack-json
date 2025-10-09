@@ -152,7 +152,7 @@ public class OperationLib {
         if (leftNode.isValue()) {
             if (rightNode.isString()) {
                 String v = rightNode.getString();//.replace("\\/", "/");
-                found = Condition.parseJsRegex(v).matcher(leftNode.toString()).find();
+                found = Condition.parseJsRegex(v).matcher(leftNode.getString()).find();
             }
         }
 

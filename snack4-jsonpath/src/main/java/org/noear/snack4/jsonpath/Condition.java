@@ -146,20 +146,19 @@ public class Condition {
      * 分析内嵌路径
      */
     public static ONode resolveNestedPath(QueryContext ctx, ONode node, String keyPath) {
-        if(ctx.getMode() == QueryMode.CREATE){
+        if (ctx.getMode() == QueryMode.CREATE) {
             if (keyPath.startsWith("$")) {
                 return JsonPath.create(ctx.getRoot(), keyPath);
             }
 
             return JsonPath.create(node, keyPath);
-        }else {
+        } else {
             if (keyPath.startsWith("$")) {
                 return JsonPath.select(ctx.getRoot(), keyPath);
             }
 
             return JsonPath.select(node, keyPath);
         }
-
 
 
 //        String[] keys = keyPath.split("\\.|\\[");
@@ -209,7 +208,13 @@ public class Condition {
     /**
      * 解析 js 正则
      */
+    private static Map<String, Pattern> patternCached = new ConcurrentHashMap<>();
+
     public static Pattern parseJsRegex(String jsRegex) {
+        return patternCached.computeIfAbsent(jsRegex, k -> doParseJsRegex(k));
+    }
+
+    private static Pattern doParseJsRegex(String jsRegex) {
         // 1. 检查输入是否以 / 开头和结尾
         if (!jsRegex.startsWith("/") || !jsRegex.contains("/")) {
             throw new IllegalArgumentException("Invalid JavaScript regex format: " + jsRegex);
