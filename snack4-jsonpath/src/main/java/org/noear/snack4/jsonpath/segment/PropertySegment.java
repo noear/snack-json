@@ -50,7 +50,10 @@ public class PropertySegment implements Segment {
         ONode n1 = null;
 
         if (context.mode == QueryMode.CREATE) {
-            n1 = node.getOrNew(key);
+            node.asObject();
+            if (node.isObject()) {
+                n1 = node.getOrNew(key);
+            }
         } else {
             if (node.isObject()) {
                 n1 = node.getOrNull(key);
