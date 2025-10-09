@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath;
 
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
 import java.util.Map;
 import java.util.Objects;
@@ -152,7 +153,7 @@ public class OperationLib {
         if (leftNode.isValue()) {
             if (rightNode.isString()) {
                 String v = rightNode.getString();//.replace("\\/", "/");
-                found = Condition.parseJsRegex(v).matcher(leftNode.getString()).find();
+                found = JsRegexUtil.of(v).matcher(leftNode.getString()).find();
             }
         }
 

@@ -18,6 +18,10 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 /**
  * 查询上下文
  *
@@ -52,5 +56,19 @@ public class QueryContext {
 
     public Options getOptions() {
         return options;
+    }
+
+    private Map<String, Object> attach;
+
+    private Map<String, Object> getAttach() {
+        if (attach == null) {
+            attach = new HashMap<>();
+        }
+
+        return attach;
+    }
+
+    public <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction) {
+        return (T) getAttach().computeIfAbsent(key, mappingFunction);
     }
 }

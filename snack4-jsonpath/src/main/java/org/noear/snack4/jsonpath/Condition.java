@@ -146,17 +146,13 @@ public class Condition {
      * 分析内嵌路径
      */
     public static ONode resolveNestedPath(QueryContext ctx, ONode node, String keyPath) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            if (keyPath.startsWith("$")) {
-                return JsonPath.create(ctx.getRoot(), keyPath);
-            }
+        if (keyPath.startsWith("$")) {
+            return ctx.cacheIfAbsent(keyPath, k -> JsonPath.select(ctx.getRoot(), k));
+        }
 
+        if (ctx.getMode() == QueryMode.CREATE) {
             return JsonPath.create(node, keyPath);
         } else {
-            if (keyPath.startsWith("$")) {
-                return JsonPath.select(ctx.getRoot(), keyPath);
-            }
-
             return JsonPath.select(node, keyPath);
         }
 
@@ -204,49 +200,4 @@ public class Condition {
     }
 
     //static final ONode NULL_NODE = new ONode(null);
-
-    /**
-     * 解析 js 正则
-     */
-    private static Map<String, Pattern> patternCached = new ConcurrentHashMap<>();
-
-    public static Pattern parseJsRegex(String jsRegex) {
-        return patternCached.computeIfAbsent(jsRegex, k -> doParseJsRegex(k));
-    }
-
-    private static Pattern doParseJsRegex(String jsRegex) {
-        // 1. 检查输入是否以 / 开头和结尾
-        if (!jsRegex.startsWith("/") || !jsRegex.contains("/")) {
-            throw new IllegalArgumentException("Invalid JavaScript regex format: " + jsRegex);
-        }
-
-        // 2. 分离正则主体和修饰符
-        int lastSlashIndex = jsRegex.lastIndexOf('/');
-        String regexBody = jsRegex.substring(1, lastSlashIndex);
-        String flags = jsRegex.substring(lastSlashIndex + 1);
-
-        // 3. 转换修饰符为 Java 的 Pattern 标志
-        int javaFlags = 0;
-        for (char flag : flags.toCharArray()) {
-            switch (flag) {
-                case 'i':
-                    javaFlags |= Pattern.CASE_INSENSITIVE;
-                    break;
-                case 'm':
-                    javaFlags |= Pattern.MULTILINE;
-                    break;
-                case 's':
-                    javaFlags |= Pattern.DOTALL;
-                    break;
-                // 忽略 g（全局匹配），Java 通过 Matcher 循环实现
-                case 'g':
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported flag: " + flag);
-            }
-        }
-
-        // 4. 创建 Pattern
-        return Pattern.compile(regexBody, javaFlags);
-    }
 }

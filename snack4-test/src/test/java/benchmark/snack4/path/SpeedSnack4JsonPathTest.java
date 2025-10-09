@@ -6,7 +6,7 @@ import org.noear.snack4.ONode;
 public class SpeedSnack4JsonPathTest {
     @Test
     public void test1(){
-        //1000000=>225,225,232  //592,665,575
+        //1000000=>225,225,232  //433,438,428
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -30,7 +30,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test2(){
-        //1000000=>277,292,275 //429,526,479
+        //1000000=>277,292,275 //341,328,331
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -53,7 +53,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test3(){
-        //1000000=>133,137,131 //272,269,268
+        //1000000=>133,137,131 //222,238,237
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -76,7 +76,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test4(){
-        //1000000=>143,145,146 //233,398,290
+        //1000000=>143,145,146 //254,237,262
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -99,7 +99,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test40(){
-        //1000000=>97,100,97 //364,426,443
+        //1000000=>97,100,97 //243,229,229
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -122,7 +122,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test41(){
-        //1000000=>310,311,314 //618,601,664
+        //1000000=>310,311,314 //495,499,496
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
@@ -145,7 +145,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test42(){
-        //1000000=>678,674,667 //3467,3648,3381
+        //1000000=>678,674,667 //1560,1668,1567
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
