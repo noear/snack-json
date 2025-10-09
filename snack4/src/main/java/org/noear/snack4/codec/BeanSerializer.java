@@ -118,8 +118,8 @@ public class BeanSerializer {
                 tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
             }
 
-            boolean useOnlyGetter = opts.hasFeature(Feature.Read_UseOnlyGetter);
-            boolean useGetter = useOnlyGetter || opts.hasFeature(Feature.Read_UseGetter);
+            boolean useOnlyGetter = opts.hasFeature(Feature.Read_OnlyUseGetter);
+            boolean useGetter = useOnlyGetter || opts.hasFeature(Feature.Read_AllowUseGetter);
 
             ClassWrap classWrap = ClassWrap.from(TypeWrap.from(bean.getClass()));
 

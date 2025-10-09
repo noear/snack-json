@@ -31,56 +31,63 @@ public enum Feature {
     Read_FailOnUnknownProperties(false),
 
     /**
-     * 允许使用注释
+     * 读取时允许使用注释
      */
     Read_AllowComment(false),
+
     /**
-     * 允许单引号字符串
+     * 读取时禁止单引号字符串
      */
     Read_DisableSingleQuotes(false),
+
     /**
-     * 允许未用引号包裹的键名
+     * 读取时禁止未用引号包裹的键名
      */
     Read_DisableUnquotedKeys(false),
+
     /**
-     * 允许未空的键名
+     * 读取时允许未空的键名
      */
     Read_AllowEmptyKeys(false),
+
     /**
-     * 允许JavaScript风格的十六进制数字 (如 0x1F)
+     * 读取时允许JavaScript风格的十六进制数字 (如 0x1F)
      */
     Read_AllowHexNumbers(false),
+
     /**
-     * 允许零开头的数字
+     * 读取时允许零开头的数字
      */
     Read_AllowZeroLeadingNumbers(false),
+
     /**
-     * 允许特殊浮点值 (Infinity, -Infinity, NaN)
+     * 读取时允许特殊浮点值 (Infinity, -Infinity, NaN)
      */
     Read_AllowSpecialFloats(false),
+
     /**
-     * 自动转换字段命名风格（默认不转换）
+     * 读取时自动转换字段命名风格（默认不转换）
      */
     Read_ConvertUnderlineStyle(false),
+
     /**
-     * 自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
+     * 读取时自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
      */
     Read_UnwrapJsonString(false),
 
     /**
-     * 允许对任何字符进行反斜杠转义
-     *
+     * 读取时允许对任何字符进行反斜杠转义
      */
     Read_AllowBackslashEscapingAnyCharacter(false),
 
     /**
-     * 允许无效的转义符
-     * */
+     * 读取时允许无效的转义符
+     */
     Read_AllowInvalidEscapeCharacter(false),
 
     /**
-     * 允许未编码的控制符
-     * */
+     * 读取时允许未编码的控制符
+     */
     Read_AllowUnescapedControlCharacters(false),
 
     /**
@@ -89,18 +96,28 @@ public enum Feature {
     Read_UseBigNumberMode(false),
 
     /**
-     * 浏览器兼容模式（转义非 ASCII 字符）
+     * 读取时用浏览器兼容模式（转义非 ASCII 字符）
      */
     Read_BrowserCompatible(false),
 
     /**
-     * 使用日期格式化（默认使用时间戳）
+     * 读取时用日期格式化（默认使用时间戳）
      */
     Read_UseDateFormat(false),
 
+    /**
+     * 读取时允许使用获取器
+     */
+    Read_AllowUseGetter(false),
 
-    Read_UseGetter(false),
-    Read_UseOnlyGetter(false),
+    /**
+     * 读取时只能使用获取器
+     */
+    Read_OnlyUseGetter(false),
+
+    /**
+     * 读取时禁止类名读取
+     */
     Read_DisableClassName(false),
 
 
@@ -108,37 +125,70 @@ public enum Feature {
     // 写入（序列化）
     //-----------------------------
 
-    //写入 无引号字段名
+    /**
+     * 写入用无引号字段名
+     *
+     */
     Write_UnquotedFieldNames(false),
-    //写入 null
-    Write_Nulls(false),
-
-    Write_StringNullAsEmpty(false),
-    Write_BooleanNullAsFalse(false),
-    Write_NumberNullAsZero(false),
-
-    Write_UseSetter(false),
-    Write_UseOnlySetter(false),
 
     /**
-     * 输出时使用漂亮格式（带缩进）
+     * 写入 null
+     *
+     */
+    Write_Nulls(false),
+
+    /**
+     * 写入字符串为 null 时转为空
+     *
+     */
+    Write_StringNullAsEmpty(false),
+
+    /**
+     * 写入布尔为 null 时转为 false
+     *
+     */
+    Write_BooleanNullAsFalse(false),
+
+    /**
+     * 写入数字为 null 时转为 0
+     *
+     */
+    Write_NumberNullAsZero(false),
+
+    /**
+     * 写入允许使用设置器（默认为字段模式）
+     *
+     */
+    Write_AllowUseSetter(false),
+    /**
+     * 写入只能使用设置器
+     *
+     */
+    Write_OnlyUseOnlySetter(false),
+
+    /**
+     * 写入时使用漂亮格式（带缩进和换行）
      */
     Write_PrettyFormat(false),
 
     /**
-     * 序列化时使用单引号
+     * 写入时使用单引号
      */
     Write_UseSingleQuotes(false),
 
     /**
-     * 输出字段使用下划线风格
+     * 写入时字段使用下划线风格
      */
     Write_UseUnderlineStyle(false),
 
     /**
-     * 输出枚举使用名称（默认使用名称）
+     * 写入时枚举使用名称（默认使用名称）
      */
     Write_EnumUsingName(true),
+
+    /**
+     * 写入时枚举使用 toString
+     */
     Write_EnumUsingToString(false),
 
     /**
@@ -146,30 +196,41 @@ public enum Feature {
      */
     Write_ClassName(false),
 
+    /**
+     * 写入数组类名
+     */
     Write_ArrayClassName(false),
 
+    /**
+     * 写入映射类名
+     */
     Write_MapClassName(false),
 
+    /**
+     * 不写入根类名
+     */
     Write_NotRootClassName(false),
 
     /**
-     * 使用原始反斜杠（`\\` 不会转为 `\\\\`）
-     * */
+     * 写入使用原始反斜杠（`\\` 不会转为 `\\\\`）
+     */
     Write_UseRawBackslash(false),
 
     /**
-     * 兼容浏览器显示（转义非 ASCII 字符）
+     * 写入兼容浏览器显示（转义非 ASCII 字符）
      */
     Write_BrowserCompatible(false),
 
     /**
-     * 使用日期格式化（默认使用时间戳）
+     * 写入使用日期格式化（默认使用时间戳）
      */
     Write_UseDateFormat(false),
+
     /**
      * 写入数字时使用字符串模式
-     * */
+     */
     Write_NumbersAsString(false),
+
     /**
      * 写入大数字时使用字符串模式（避免精度丢失）
      */

@@ -140,8 +140,8 @@ public class BeanDeserializer {
     }
 
     private static Object convertToBean(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
-        boolean useOnlySetter = opts.hasFeature(Feature.Write_UseOnlySetter);
-        boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_UseSetter);
+        boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseOnlySetter);
+        boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
         ClassWrap classWrap = ClassWrap.from(typeWrap);
 

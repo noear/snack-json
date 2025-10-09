@@ -12,7 +12,7 @@ public class SpeedSnack4LoadTest {
     /** 测试性能（大json） */
     @Test
     public void test00() throws Exception {
-        //10000=>2377,2190,2285
+        //10000=>2377,2190,2285 //3325,3577,3473
         //
         //
         //62kb
@@ -35,7 +35,7 @@ public class SpeedSnack4LoadTest {
     /** 测试性能（小json） */
     @Test
     public void test0() throws Exception {
-        //100000=>950,931,939    //100=>.95
+        //100000=>950,931,939    //100=>.95 //1462,1456,1459
         //
         //1kb
         //
@@ -56,7 +56,7 @@ public class SpeedSnack4LoadTest {
 
     @Test
     public void test1() throws Exception {
-        //1000000=>1695,1713,1738
+        //1000000=>1695,1713,1738 //2994,2960,2801
         //
         //
         Map<String, Object> obj = new LinkedHashMap<>();
@@ -90,7 +90,7 @@ public class SpeedSnack4LoadTest {
 
     @Test
     public void test2() throws Exception {
-        //100000=>1473,1493,1494
+        //100000=>1473,1493,1494 //2367,2367,2441
         //
         //
         UserGroupModel group = new UserGroupModel();
@@ -134,7 +134,7 @@ public class SpeedSnack4LoadTest {
         //
         //10000000=>72s,71s,72s
         //1000000=>7.9s,7.8s
-        //100000=>1.6s,1.6s,1.5s
+        //100000=>1.6s,1.6s,1.5s //1427,1439,1437
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -177,7 +177,7 @@ public class SpeedSnack4LoadTest {
         //
         //10000000=>6.3s,6.4s
         //1000000=>6.8s
-        //100000=>958
+        //100000=>958  //1385,1394,1392
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -221,7 +221,7 @@ public class SpeedSnack4LoadTest {
         //
         //10000000=>19s,19s
         //1000000=>3.1s
-        //100000=>1.2s
+        //100000=>1.2s  //956,909,911
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -266,7 +266,7 @@ public class SpeedSnack4LoadTest {
         //
         //10000000=>9.6s,9.7s
         //1000000=>1.3s
-        //100000=>161,166,163
+        //100000=>161,166,163 //837,858,824
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -309,7 +309,7 @@ public class SpeedSnack4LoadTest {
 
     @Test
     public void test12() throws Exception {
-        //100000=>433,403,424
+        //100000=>433,403,424  //502,409,445
         //
         //
         Map<String, Object> obj = new LinkedHashMap<String, Object>();
@@ -346,7 +346,7 @@ public class SpeedSnack4LoadTest {
 
     @Test
     public void test12_1() throws Exception {
-        //100000=>168,163,186
+        //100000=>168,163,186 //233,250,267
         //
         //
         Map<String, Object> obj = new LinkedHashMap<String, Object>();
@@ -381,7 +381,7 @@ public class SpeedSnack4LoadTest {
 
     @Test
     public void test12_2() throws Exception {
-        //100000=>168,163,186
+        //100000=>168,163,186 //333,341,335
         //
         //
         Map<String, Object> obj = new LinkedHashMap<String, Object>();
