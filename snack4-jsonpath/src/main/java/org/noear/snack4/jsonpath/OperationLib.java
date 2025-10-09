@@ -72,7 +72,7 @@ public class OperationLib {
 
         if (leftNode.isString()) {
             ONode rightNode = condition.getRightNode(ctx, node);
-            if (rightNode == null) {
+            if (rightNode.isNull()) {
                 return false;
             }
 
@@ -86,7 +86,7 @@ public class OperationLib {
 
         if (leftNode.isString()) {
             ONode rightNode = condition.getRightNode(ctx, node);
-            if (rightNode == null) {
+            if (rightNode.isArray()) {
                 return false;
             }
 
@@ -119,7 +119,7 @@ public class OperationLib {
 
         if (leftNode.isNull() == false) {
             ONode rightNode = condition.getRightNode(ctx, node);
-            if (rightNode == null && rightNode.isArray() == false) {
+            if (rightNode.isArray() == false) {
                 return false;
             }
 
@@ -134,7 +134,7 @@ public class OperationLib {
 
         if (leftNode.isNull() == false) {
             ONode rightNode = condition.getRightNode(ctx, node);
-            if (rightNode == null || rightNode.isArray() == false) {
+            if (rightNode.isArray() == false) {
                 return false;
             }
 
@@ -162,7 +162,6 @@ public class OperationLib {
     private static boolean compare(QueryContext ctx, ONode node, Condition condition) {
         ONode leftNode = condition.getLeftNode(ctx, node);
         ONode rightNode = condition.getRightNode(ctx, node);
-
 
         // 类型判断逻辑
         if (condition.getRight().startsWith("'")) {

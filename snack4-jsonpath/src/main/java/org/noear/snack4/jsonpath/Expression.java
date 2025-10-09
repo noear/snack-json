@@ -170,8 +170,7 @@ public class Expression {
         // 单元操作（如 @.price）
         if (condition.getRight() == null) {
             if (condition.getOp() == null) {
-                ONode tmp = condition.getLeftNode(ctx, node);
-                return tmp != null && !tmp.isNull();
+                return !condition.getLeftNode(ctx, node).isNull();
             } else {
                 return false;
             }
