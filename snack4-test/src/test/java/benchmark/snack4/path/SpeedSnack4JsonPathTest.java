@@ -4,12 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
 public class SpeedSnack4JsonPathTest {
-
-    /**
-     * 是否使用标准模式解析
-     * */
-    private boolean useStandard = false;
-
     @Test
     public void test1(){
         //1000000=>225,225,232
@@ -253,11 +247,7 @@ public class SpeedSnack4JsonPathTest {
         ONode tmp1 = n.select("$..c.min()");
         System.out.println(tmp1);
 
-        if(useStandard) {
-            assert tmp1.size() == 0;
-        }else{
-            assert tmp1.isValue();
-        }
+        assert tmp1.isValue();
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
