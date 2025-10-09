@@ -757,7 +757,21 @@ public final class ONode {
 
     public List<String> pathList() {
         List<String> paths = new ArrayList<>();
-        PathSource.extractPath(paths, this);
+        String tmp = this.path();
+
+        if (tmp != null) {
+            paths.add(tmp);
+        }
+
+        if (isArray()) {
+            for (ONode node : getArray()) {
+                tmp = node.path();
+                if (tmp != null) {
+                    paths.add(tmp);
+                }
+            }
+        }
+
         return paths;
     }
 

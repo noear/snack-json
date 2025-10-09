@@ -117,25 +117,31 @@ public class OperationLib {
     private static boolean in(QueryContext ctx, ONode node, Condition condition) {
         ONode leftNode = condition.getLeftNode(ctx, node);
 
-        ONode rightNode = condition.getRightNode(ctx, node);
-        if (rightNode == null && rightNode.isArray() == false) {
-            return false;
+        if (leftNode.isNull() == false) {
+            ONode rightNode = condition.getRightNode(ctx, node);
+            if (rightNode == null && rightNode.isArray() == false) {
+                return false;
+            }
+
+            return rightNode.getArray().stream().anyMatch(v -> isValueMatch(leftNode, v));
         }
 
-        boolean rst = rightNode.getArray().stream().anyMatch(v -> isValueMatch(leftNode, v));
-        return rst;
+        return false;
     }
 
     private static boolean nin(QueryContext ctx, ONode node, Condition condition) {
         ONode leftNode = condition.getLeftNode(ctx, node);
 
-        ONode rightNode = condition.getRightNode(ctx, node);
-        if (rightNode == null && rightNode.isArray() == false) {
-            return false;
+        if (leftNode.isNull() == false) {
+            ONode rightNode = condition.getRightNode(ctx, node);
+            if (rightNode == null || rightNode.isArray() == false) {
+                return false;
+            }
+
+            return rightNode.getArray().stream().noneMatch(v -> isValueMatch(leftNode, v));
         }
 
-        boolean rst = rightNode.getArray().stream().noneMatch(v -> isValueMatch(leftNode, v));
-        return rst;
+        return false;
     }
 
     private static boolean matches(QueryContext ctx, ONode node, Condition condition) {

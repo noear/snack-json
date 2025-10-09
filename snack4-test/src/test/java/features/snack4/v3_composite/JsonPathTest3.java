@@ -96,10 +96,10 @@ public class JsonPathTest3 {
         ONode n = ONode.ofBean(entities);
 
         ONode rst = n.select("$[?(@.id in [1001,1002])]");
-        assert rst.size() == 2;
+        System.out.println(rst);
 
-        System.out.println(n.select("$[?(@.id in [1001,1002])]"));
-        assert n.select("$[?(@.id in [1001,1002])]").pathList().size() == 2;
+        assert rst.size() == 2;
+        assert rst.pathList().size() == 2;
     }
 
     @Test
@@ -172,8 +172,7 @@ public class JsonPathTest3 {
         System.out.println("books=::" + books);
         assert books.isArray();
         assert books.size() == 2;
-        System.out.println(o.select("$.store.book"));
-        assert o.select("$.store.book").pathList().size() == 1;
+        assert books.pathList().size() == 1;
 
 
         //得到所有的书名

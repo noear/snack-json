@@ -146,57 +146,61 @@ public class Condition {
      * 分析内嵌路径
      */
     public static ONode resolveNestedPath(QueryContext ctx, ONode node, String keyPath) {
-        if (keyPath.startsWith("$")) {
-            return JsonPath.select(ctx.getRoot(), keyPath);
+        if(ctx.getMode() == QueryMode.CREATE){
+            if (keyPath.startsWith("$")) {
+                return JsonPath.create(ctx.getRoot(), keyPath);
+            }
+
+            return JsonPath.create(node, keyPath);
+        }else {
+            if (keyPath.startsWith("$")) {
+                return JsonPath.select(ctx.getRoot(), keyPath);
+            }
+
+            return JsonPath.select(node, keyPath);
         }
 
-//        if (keyPath.startsWith("@")) {
-//            return JsonPath.select(node, keyPath);
-//        } else {
-//            throw new JsonPathException("Unsupported path: " + keyPath);
+
+//        String[] keys = keyPath.split("\\.|\\[");
+//        ONode current = node;
+//        for (String key : keys) {
+//            if (key.length() == 1 && '@' == key.charAt(0)) {
+//                continue;
+//            }
+//
+//            if (key.endsWith("]")) {
+//                key = key.substring(0, key.length() - 1).trim();
+//
+//                //如果有单引号
+//                if (key.length() > 2 && key.charAt(0) == '\'') {
+//                    key = key.substring(1, key.length() - 1);
+//                }
+//            }
+//
+//            if (current.isObject()) {
+//                if (ctx.getMode() == QueryMode.CREATE) {
+//                    current = current.getOrNew(key);
+//                } else {
+//                    current = current.getOrNull(key);
+//                }
+//            } else if (current.isArray()) {
+//                try {
+//                    int index = Integer.parseInt(key);
+//
+//                    if (ctx.getMode() == QueryMode.CREATE) {
+//                        current = current.getOrNew(index);
+//                    } else {
+//                        current = current.getOrNull(index);
+//                    }
+//                } catch (NumberFormatException e) {
+//                    return null;
+//                }
+//            } else {
+//                return null;
+//            }
+//            if (current == null) return null;
 //        }
-
-
-        String[] keys = keyPath.split("\\.|\\[");
-        ONode current = node;
-        for (String key : keys) {
-            if (key.length() == 1 && '@' == key.charAt(0)) {
-                continue;
-            }
-
-            if (key.endsWith("]")) {
-                key = key.substring(0, key.length() - 1).trim();
-
-                //如果有单引号
-                if (key.length() > 2 && key.charAt(0) == '\'') {
-                    key = key.substring(1, key.length() - 1);
-                }
-            }
-
-            if (current.isObject()) {
-                if (ctx.getMode() == QueryMode.CREATE) {
-                    current = current.getOrNew(key);
-                } else {
-                    current = current.getOrNull(key);
-                }
-            } else if (current.isArray()) {
-                try {
-                    int index = Integer.parseInt(key);
-
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        current = current.getOrNew(index);
-                    } else {
-                        current = current.getOrNull(index);
-                    }
-                } catch (NumberFormatException e) {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-            if (current == null) return null;
-        }
-        return current;
+//        return current;
     }
 
     /**

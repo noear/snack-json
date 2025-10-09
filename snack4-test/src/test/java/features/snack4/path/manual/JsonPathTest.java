@@ -169,7 +169,7 @@ public class JsonPathTest {
         ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
         ONode t6 = n.select("$..b[?(!@.c in [1,2])]");
-        assert  t6.size()==1;
+        assert  t6.size()==2;
     }
 
     @Test

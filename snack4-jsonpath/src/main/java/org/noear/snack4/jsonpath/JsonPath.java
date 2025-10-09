@@ -36,7 +36,7 @@ public class JsonPath {
     public JsonPath(String path, List<Segment> segments) {
         this.path = path;
         this.segments = segments;
-        this.multiple = ((path.indexOf('?') < 0 && path.indexOf('*') < 0 && path.indexOf("..") < 0 && path.indexOf(",") < 0 && path.indexOf(":") < 0) || path.indexOf("()") > 0);
+        this.multiple = (path.indexOf('*') > 0 || path.indexOf("..") > 0 || path.indexOf(',') > 0 || path.indexOf(':') > 0 || path.indexOf('?') > 0) && (path.indexOf("()") < 0);
     }
 
     public ONode select(ONode root) {
@@ -51,13 +51,13 @@ public class JsonPath {
             return new ONode(root.options(), currentNodes);
         } else {
             if (multiple) {
+                return new ONode(root.options(), currentNodes);
+            } else {
                 if (currentNodes.size() > 0) {
                     return currentNodes.get(0);
                 } else {
                     return new ONode(root.options());
                 }
-            } else {
-                return new ONode(root.options(), currentNodes);
             }
         }
     }
@@ -74,13 +74,13 @@ public class JsonPath {
             return new ONode(root.options(), currentNodes);
         } else {
             if (multiple) {
+                return new ONode(root.options(), currentNodes);
+            } else {
                 if (currentNodes.size() > 0) {
                     return currentNodes.get(0);
                 } else {
                     return new ONode(root.options());
                 }
-            } else {
-                return new ONode(root.options(), currentNodes);
             }
         }
     }
