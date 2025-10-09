@@ -170,7 +170,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test5(){
-        //1000000=>84,86,80 //401,432,515
+        //1000000=>84,86,80 //297,341,294
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");

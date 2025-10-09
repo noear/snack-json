@@ -47,74 +47,75 @@ public class IndexSegment implements Segment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        if (key != null) {
-            forKey(ctx, currentNodes, result);
-        } else {
-            forIndex(ctx, currentNodes, result);
+        for (ONode node : currentNodes) {
+            if (key != null) {
+                forKey(ctx, node, result);
+            } else {
+                forIndex(ctx, node, result);
+            }
         }
 
         return result;
     }
 
-    private void forKey(QueryContext ctx, List<ONode> currentNodes, List<ONode> result) {
-        currentNodes.stream()
-                .filter(o -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        o.asObject();
-                        return true;
-                    } else {
-                        return o.isObject();
-                    }
-                })
-                .map(obj -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        obj.getOrNew(key);
-                    }
+    private void forKey(QueryContext ctx, ONode node, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            node.asObject();
+        }
 
-                    ONode n1 = obj.getOrNull(key);
-                    if (n1.source == null) {
-                        n1.source = new PathSource(obj, key, 0);
-                    }
+        if (node.isObject() == false) {
+            return;
+        }
 
-                    return n1;
-                })
-                .forEach(result::add);
+        ONode n1 = null;
+        if (ctx.getMode() == QueryMode.CREATE) {
+            n1 = node.getOrNew(key);
+        } else {
+            n1 = node.getOrNull(key);
+        }
+
+        if (n1 != null) {
+            if (n1.source == null) {
+                n1.source = new PathSource(node, key, 0);
+            }
+
+            result.add(n1);
+        }
     }
 
-    private void forIndex(QueryContext ctx, List<ONode> currentNodes, List<ONode> result) {
-        currentNodes.stream()
-                .filter(o -> {
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        o.asArray();
-                        return true;
-                    } else {
-                        return o.isArray();
-                    }
-                })
-                .map(arr -> {
-                    int idx = index;
-                    if (idx < 0) {
-                        idx = arr.size() + idx;
-                    }
+    private void forIndex(QueryContext ctx, ONode node, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            node.asArray();
+        }
 
-                    if (ctx.getMode() == QueryMode.CREATE) {
-                        int count = idx + 1 - arr.size();
-                        for (int i = 0; i < count; i++) {
-                            arr.add(new ONode(arr.options()));
-                        }
-                    }
+        if (node.isArray() == false) {
+            return;
+        }
 
-                    if (idx < 0 || idx >= arr.size()) {
-                        throw new JsonPathException("Index out of bounds: " + idx);
-                    }
+        int idx = index;
+        if (idx < 0) {
+            idx = node.size() + idx;
+        }
 
-                    ONode n1 = arr.getOrNull(idx);
-                    if (n1.source == null) {
-                        n1.source = new PathSource(arr, null, idx);
-                    }
+        if (ctx.getMode() == QueryMode.CREATE) {
+            int count = idx + 1 - node.size();
+            for (int i = 0; i < count; i++) {
+                node.add(new ONode(node.options()));
+            }
+        }
 
-                    return n1;
-                })
-                .forEach(result::add);
+        if (idx < 0 || idx >= node.size()) {
+            throw new JsonPathException("Index out of bounds: " + idx);
+        }
+
+        ONode n1 = node.getOrNull(idx);
+
+        if (n1 != null) {
+            if (n1.source == null) {
+                n1.source = new PathSource(node, null, idx);
+            }
+
+            result.add(n1);
+        }
     }
 }
