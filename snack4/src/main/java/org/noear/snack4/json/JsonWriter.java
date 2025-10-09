@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -158,6 +157,18 @@ public class JsonWriter {
             writer.write('"' + num.toString() + '"');
         } else {
             writer.write(num.toString());
+
+            if (opts.hasFeature(Feature.Write_NumberType)) {
+                if (num instanceof BigDecimal) {
+                    writer.write('M');
+                } else if (num instanceof Double) {
+                    writer.write('D');
+                } else if (num instanceof Float) {
+                    writer.write('F');
+                } else if (num instanceof Long) {
+                    writer.write('L');
+                }
+            }
         }
     }
 

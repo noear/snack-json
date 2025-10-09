@@ -235,6 +235,11 @@ public enum Feature {
      * 写入大数字时使用字符串模式（避免精度丢失）
      */
     Write_BigNumbersAsString(false),
+    /**
+     * 写入数字类型
+     *
+     */
+    Write_NumberType(false),
     ;
 
 
