@@ -145,7 +145,7 @@ public class SpeedSnack3Test {
         //
         //10000000=>72s,71s,72s
         //1000000=>7.9s,7.8s
-        //100000=>1.6s,1.6s,1.5s //2394,2546,2440
+        //100000=>1.6s,1.6s,1.5s //2528,2518,2464
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;

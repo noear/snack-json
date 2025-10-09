@@ -3,6 +3,7 @@ package benchmark.snack4.load;
 import benchmark.snack4.load._models.UserGroupModel;
 import benchmark.snack4.load._models.UserModel;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 import java.util.*;
@@ -72,12 +73,12 @@ public class SpeedSnack4LoadTest {
 
         obj.put("list", list);
 
-        String tmp = ONode.ofBean(obj).toJson();
+        String tmp = ONode.serialize(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            ONode.ofBean(obj).toJson();
+            ONode.serialize(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
             //String json = context.node.toJson();
         }
         long times = System.currentTimeMillis() - start;
@@ -113,12 +114,12 @@ public class SpeedSnack4LoadTest {
             group.ids[i] = i;
         }
 
-        String tmp = ONode.ofBean(group).toJson();
+        String tmp = ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.ofBean(group).toJson();
+            ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -134,7 +135,7 @@ public class SpeedSnack4LoadTest {
         //
         //10000000=>72s,71s,72s
         //1000000=>7.9s,7.8s
-        //100000=>1.6s,1.6s,1.5s //1427,1439,1437
+        //100000=>1.6s,1.6s,1.5s //2976,2934,2917
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -155,14 +156,14 @@ public class SpeedSnack4LoadTest {
             group.ids[i] = i;
         }
 
-        String json =ONode.ofBean(group).toJson();
+        String json = ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
         System.out.println(json);
 
-        ONode.ofJson(json).toBean(UserGroupModel.class);
+        ONode.deserialize(json, UserGroupModel.class);
 
         long start = System.currentTimeMillis();
         for(int i=0,len=100000; i<len; i++) {
-            ONode.ofJson(json).toBean(UserGroupModel.class);
+            ONode.deserialize(json, UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
 

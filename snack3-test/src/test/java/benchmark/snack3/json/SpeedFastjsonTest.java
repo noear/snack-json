@@ -14,7 +14,7 @@ public class SpeedFastjsonTest {
     /** 测试性能（大json） */
     @Test
     public void test00() throws IOException {
-        //10000=>1581,1632,1662
+        //10000=>1581,1632,1662 //2185,2094,2152
         //
         //62kb
         //
@@ -37,7 +37,7 @@ public class SpeedFastjsonTest {
     /** 测试性能（小json） */
     @Test
     public void test0() throws IOException {
-        //100000=>861,855,920
+        //100000=>861,855,920 //1290,1255,1090
         //
         //1kb
         //
@@ -59,7 +59,7 @@ public class SpeedFastjsonTest {
 
     @Test
     public void test1() throws Exception {
-        //1000000=>742,706,760
+        //1000000=>742,706,760  //949,1042,982
         //
         //
         Map<String, Object> obj = new LinkedHashMap<>();
@@ -93,7 +93,7 @@ public class SpeedFastjsonTest {
 
     @Test
     public void test2() throws Exception {
-        //100000=>508,546,543
+        //100000=>508,546,543  //846,921,874
         //
         //
         UserGroupModel group = new UserGroupModel();
@@ -140,7 +140,7 @@ public class SpeedFastjsonTest {
         //
         //10000000=>76s,47s,47s
         //1000000=>5.3s
-        //100000=>783,823,811
+        //100000=>783,823,811  //958,933,918
         //
         UserGroupModel group = new UserGroupModel();
         group.id = 9999;
@@ -183,7 +183,7 @@ public class SpeedFastjsonTest {
 
     @Test
     public void test12() throws Exception {
-        //100000=>232,219,220
+        //100000=>232,219,220 //551,478,467
         //
         Map<String, Object> obj = new LinkedHashMap<String, Object>();
 
