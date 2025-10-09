@@ -63,6 +63,22 @@ public class JsonPathCompatibleTest4 {
         //compatible_do("5", json, "$.school[?(@.name == '清华')].grade[1][?(@.class == '一班')].manSum.sum()"); //jayway 会出错
     }
 
+    @Test
+    public void case6(){
+        //1.加载json
+        String json = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5],b:2,ary2:[{a:2,b:8},{a:3,b:{c:'ddd',b:23}}]}}").toJson();
+
+        compatible_do("1", json, "$..b");
+        compatible_do("2", json, "$..b.min()");
+        compatible_do("3", json, "$..b.max()");
+        compatible_do("4", json, "$..b.avg()");
+
+        compatible_do("11", json, "$..list");
+        compatible_do("12", json, "$..list[*].min()");
+        compatible_do("13", json, "$..list[*].max()");
+        compatible_do("14", json, "$..list[*].avg()");
+    }
+
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 

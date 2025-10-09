@@ -76,14 +76,56 @@ public class FunctionLib {
             return new ONode(ctx.getOptions());
         }
 
-        DoubleStream stream = nodes.stream()
-                .flatMap(n -> flattenDo(n)) // 使用统一的展开方法
-                .filter(ONode::isNumber)
-                .mapToDouble(ONode::getDouble);
+        double ref = 0D;
+        int count = 0;
+        for (ONode n : nodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        ref += o.getDouble();
+                        count++;
+                    }
+                }
+            } else if (n.isNumber()) {
+                ref += n.getDouble();
+                count++;
+            }
+        }
 
-        return new ONode(ctx.getOptions(), stream.sum());
+        if (count == 0) {
+            return new ONode(ctx.getOptions());
+        } else {
+            return new ONode(ctx.getOptions(), ref);
+        }
     }
 
+    static ONode avg(QueryContext ctx, List<ONode> nodes) {
+        if (nodes.isEmpty()) {
+            return new ONode(ctx.getOptions());
+        }
+
+        double ref = 0D;
+        int count = 0;
+        for (ONode n : nodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        ref += o.getDouble();
+                        count++;
+                    }
+                }
+            } else if (n.isNumber()) {
+                ref += n.getDouble();
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            return new ONode(ctx.getOptions());
+        } else {
+            return new ONode(ctx.getOptions(), ref / count);
+        }
+    }
 
     static ONode min(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
@@ -93,19 +135,19 @@ public class FunctionLib {
         Double ref = null;
         for (ONode n : nodes) {
             if (n.isArray()) {
-                for (ONode n1 : n.getArray()) {
-                    if (n1.isNumber()) {
-                        if (ref == null) {
-                            ref = n1.getDouble();
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        if(ref == null){
+                            ref = o.getDouble();
                         } else {
-                            if (ref > n1.getDouble()) {
-                                ref = n1.getDouble();
+                            if (ref > o.getDouble()) {
+                                ref = o.getDouble();
                             }
                         }
                     }
                 }
             } else if (n.isNumber()) {
-                if (ref == null) {
+                if(ref == null){
                     ref = n.getDouble();
                 } else {
                     if (ref > n.getDouble()) {
@@ -123,19 +165,32 @@ public class FunctionLib {
             return new ONode(ctx.getOptions());
         }
 
-        OptionalDouble max = collectNumbersDo(nodes).max();
-        return max.isPresent() ? new ONode(ctx.getOptions(), max.getAsDouble()) : new ONode(ctx.getOptions());
-    }
-
-    static ONode avg(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
+        Double ref = null;
+        for (ONode n : nodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        if (ref == null) {
+                            ref = o.getDouble();
+                        } else {
+                            if (ref < o.getDouble()) {
+                                ref = o.getDouble();
+                            }
+                        }
+                    }
+                }
+            } else if (n.isNumber()) {
+                if (ref == null) {
+                    ref = n.getDouble();
+                } else {
+                    if (ref < n.getDouble()) {
+                        ref = n.getDouble();
+                    }
+                }
+            }
         }
 
-        DoubleSummaryStatistics stats = collectNumbersDo(nodes).summaryStatistics();
-        return stats.getCount() > 0 ?
-                new ONode(ctx.getOptions(), stats.getAverage()) :
-                new ONode(ctx.getOptions(), null);
+        return new ONode(ctx.getOptions(), ref);
     }
 
     static ONode first(QueryContext ctx, List<ONode> nodes) {

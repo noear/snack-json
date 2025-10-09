@@ -89,11 +89,10 @@ public class JsonPathCompatibleTest1 {
     public void test6() {
         String json = "{\"numbers\":[1,3,4,7,-1]}";
 
-        String jsonpathStr1 = "$.numbers.sum()";
-        compatible_do("1", json, jsonpathStr1);
-
-        String jsonpathStr2 = "$.numbers.avg()";
-        compatible_do("2", json, jsonpathStr2);
+        compatible_do("1", json, "$.numbers.sum()");
+        compatible_do("2", json, "$.numbers.avg()");
+        compatible_do("3", json, "$.numbers.min()");
+        compatible_do("4", json, "$.numbers.max()");
     }
 
 
