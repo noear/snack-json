@@ -46,6 +46,15 @@ public class JsonWriter {
     private final Options opts;
     private final Writer writer;
     private int depth = 0;
+    private StringBuilder stringBuilder;
+    private StringBuilder getStringBuilder() {
+        if (stringBuilder == null) {
+            stringBuilder = new StringBuilder(32);
+        } else {
+            stringBuilder.setLength(0);
+        }
+        return stringBuilder;
+    }
 
     public JsonWriter(Options opts, Writer writer) {
         this.writer = writer;
@@ -167,8 +176,12 @@ public class JsonWriter {
         writer.write(quoteChar);
     }
 
-    private static String escapeString(String s, char quoteChar, Options opts) {
-        StringBuilder sb = new StringBuilder(s.length() * 2);
+    private String escapeString(String s, char quoteChar, Options opts) {
+        if (s.isEmpty()) {
+            return s;
+        }
+
+        StringBuilder sb = getStringBuilder();
         for (char c : s.toCharArray()) {
             if (c >= '\0' && c <= '\7') {
                 sb.append("\\u000");
@@ -202,7 +215,7 @@ public class JsonWriter {
     }
 
     private String toUnderlineName(String camelName) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = getStringBuilder();
         for (int i = 0; i < camelName.length(); i++) {
             char c = camelName.charAt(i);
             if (Character.isUpperCase(c)) {
