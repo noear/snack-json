@@ -85,12 +85,12 @@ public class Condition {
         return right;
     }
 
-    public ONode getLeftNode(ONode node, QueryContext context) {
+    public ONode getLeftNode(QueryContext context, ONode node) {
         if (Asserts.isEmpty(left)) {
             return null;
         } else {
             if (leftValue == null) {
-                return resolveNestedPath(node, left, context);
+                return resolveNestedPath(context, node, left);
             } else {
                 return leftValue;
             }
@@ -98,12 +98,12 @@ public class Condition {
     }
 
 
-    public ONode getRightNode(ONode node, QueryContext context) {
+    public ONode getRightNode(QueryContext context, ONode node) {
         if (Asserts.isEmpty(right)) {
             return null;
         } else {
             if (rightValue == null) {
-                return resolveNestedPath(node, right, context);
+                return resolveNestedPath(context, node, right);
             } else {
                 return rightValue;
             }
@@ -145,9 +145,9 @@ public class Condition {
     /**
      * 分析内嵌路径
      */
-    public static ONode resolveNestedPath(ONode node, String keyPath, QueryContext context) {
+    public static ONode resolveNestedPath(QueryContext ctx, ONode node, String keyPath) {
         if (keyPath.startsWith("$")) {
-            return JsonPath.select(context.root, keyPath);
+            return JsonPath.select(ctx.getRoot(), keyPath);
         }
 
 
@@ -160,10 +160,15 @@ public class Condition {
 
             if (key.endsWith("]")) {
                 key = key.substring(0, key.length() - 1).trim();
+
+                //如果有单引号
+                if (key.length() > 2 && key.charAt(0) == '\'') {
+                    key = key.substring(1, key.length() - 1);
+                }
             }
 
             if (current.isObject()) {
-                if (context.mode == QueryMode.CREATE) {
+                if (ctx.getMode() == QueryMode.CREATE) {
                     current = current.getOrNew(key);
                 } else {
                     current = current.getOrNull(key);
@@ -172,7 +177,7 @@ public class Condition {
                 try {
                     int index = Integer.parseInt(key);
 
-                    if (context.mode == QueryMode.CREATE) {
+                    if (ctx.getMode() == QueryMode.CREATE) {
                         current = current.getOrNew(index);
                     } else {
                         current = current.getOrNull(index);

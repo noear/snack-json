@@ -13,5 +13,5 @@ import java.util.function.BiFunction;
  * @since 4.0
  */
 @FunctionalInterface
-public interface Function extends BiFunction<Options, List<ONode>, ONode> {
+public interface Function extends BiFunction<QueryContext, List<ONode>, ONode> {
 }

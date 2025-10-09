@@ -43,7 +43,7 @@ public class DynamicIndexSegment implements Segment {
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = Condition.resolveNestedPath(node, dynamicPath, context);
+            ONode dynamicResult = Condition.resolveNestedPath(context, node, dynamicPath);
 
             if (dynamicResult.isNumber()) {
                 forIndex(Arrays.asList(node), dynamicResult.getInt(), context, results);
@@ -58,7 +58,7 @@ public class DynamicIndexSegment implements Segment {
     private void forKey(List<ONode> currentNodes, String key, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -66,7 +66,7 @@ public class DynamicIndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
@@ -83,7 +83,7 @@ public class DynamicIndexSegment implements Segment {
     private void forIndex(List<ONode> currentNodes, int index, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -96,7 +96,7 @@ public class DynamicIndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));

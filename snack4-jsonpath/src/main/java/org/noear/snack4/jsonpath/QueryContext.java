@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
 /**
  * 查询上下文
@@ -25,11 +26,31 @@ import org.noear.snack4.ONode;
  * */
 public class QueryContext {
     public boolean flattened = false;
-    public final ONode root;
-    public final QueryMode mode;
 
-    public QueryContext(ONode root, QueryMode  mode) {
+    private final ONode root;
+    private final QueryMode mode;
+    private final Options options;
+
+    public QueryContext(ONode root, QueryMode mode) {
         this.root = root;
         this.mode = mode;
+
+        if (root != null) {
+            this.options = root.options();
+        } else {
+            this.options = Options.DEF_OPTIONS;
+        }
+    }
+
+    public ONode getRoot() {
+        return root;
+    }
+
+    public QueryMode getMode() {
+        return mode;
+    }
+
+    public Options getOptions() {
+        return options;
     }
 }

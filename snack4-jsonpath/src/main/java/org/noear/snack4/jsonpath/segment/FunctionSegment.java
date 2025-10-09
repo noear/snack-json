@@ -40,7 +40,7 @@ public class FunctionSegment implements Segment {
     @Override
     public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
         return Collections.singletonList(
-                FunctionLib.get(funcName).apply(context.root.options(), currentNodes) // 传入节点列表
+                FunctionLib.get(funcName).apply(context, currentNodes) // 传入节点列表
         );
     }
 }

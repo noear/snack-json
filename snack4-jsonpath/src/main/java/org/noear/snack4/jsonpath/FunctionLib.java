@@ -16,7 +16,6 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -72,9 +71,9 @@ public class FunctionLib {
 
     /// /////////////////
 
-    static ONode sum(Options opts, List<ONode> nodes) {
+    static ONode sum(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         DoubleStream stream = nodes.stream()
@@ -82,56 +81,56 @@ public class FunctionLib {
                 .filter(ONode::isNumber)
                 .mapToDouble(ONode::getDouble);
 
-        return new ONode(opts, stream.sum());
+        return new ONode(ctx.getOptions(), stream.sum());
     }
 
 
-    static ONode min(Options opts, List<ONode> nodes) {
+    static ONode min(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         OptionalDouble min = collectNumbersDo(nodes).min();
-        return min.isPresent() ? new ONode(opts, min.getAsDouble()) : new ONode(opts);
+        return min.isPresent() ? new ONode(ctx.getOptions(), min.getAsDouble()) : new ONode(ctx.getOptions());
     }
 
-    static ONode max(Options opts, List<ONode> nodes) {
+    static ONode max(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         OptionalDouble max = collectNumbersDo(nodes).max();
-        return max.isPresent() ? new ONode(opts, max.getAsDouble()) : new ONode(opts);
+        return max.isPresent() ? new ONode(ctx.getOptions(), max.getAsDouble()) : new ONode(ctx.getOptions());
     }
 
-    static ONode avg(Options opts, List<ONode> nodes) {
+    static ONode avg(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         DoubleSummaryStatistics stats = collectNumbersDo(nodes).summaryStatistics();
         return stats.getCount() > 0 ?
-                new ONode(opts, stats.getAverage()) :
-                new ONode(opts, null);
+                new ONode(ctx.getOptions(), stats.getAverage()) :
+                new ONode(ctx.getOptions(), null);
     }
 
-    static ONode first(Options opts, List<ONode> nodes) {
+    static ONode first(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         return nodes.get(0);
     }
 
-    static ONode last(Options opts, List<ONode> nodes) {
+    static ONode last(QueryContext ctx, List<ONode> nodes) {
         if (nodes.isEmpty()) {
-            return new ONode(opts);
+            return new ONode(ctx.getOptions());
         }
 
         return nodes.get(nodes.size() - 1);
     }
 
-    static ONode keys(Options opts, List<ONode> nodes) {
+    static ONode keys(QueryContext ctx, List<ONode> nodes) {
         if (nodes.size() == 1) {
             ONode node = nodes.get(0);
 
@@ -145,42 +144,42 @@ public class FunctionLib {
         }
     }
 
-    static ONode size(Options opts, List<ONode> nodes) {
+    static ONode size(QueryContext ctx, List<ONode> nodes) {
         int size = nodes.stream()
                 .filter(n -> n.isArray() || n.isObject())
                 .mapToInt(n -> n.size())
                 .sum();
 
-        return new ONode(opts, size);
+        return new ONode(ctx.getOptions(), size);
     }
 
     /* 字符串函数实现 */
-    static ONode length(Options opts, List<ONode> nodes) {
+    static ONode length(QueryContext ctx, List<ONode> nodes) {
         if (nodes.size() == 1) {
             ONode n = nodes.get(0);
-            if (n.isString()) return new ONode(opts, n.getString().length());
-            if (n.isArray()) return new ONode(opts, n.size());
-            if (n.isObject()) return new ONode(opts, n.getObject().size());
+            if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
+            if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
+            if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
         }
-        return new ONode(opts, 0);
+        return new ONode(ctx.getOptions(), 0);
     }
 
 
-    static ONode upper(Options opts, List<ONode> nodes) {
-        return processStrings(opts, nodes, String::toUpperCase);
+    static ONode upper(QueryContext ctx, List<ONode> nodes) {
+        return processStrings(ctx, nodes, String::toUpperCase);
     }
 
-    static ONode lower(Options opts, List<ONode> nodes) {
-        return processStrings(opts, nodes, String::toLowerCase);
+    static ONode lower(QueryContext ctx, List<ONode> nodes) {
+        return processStrings(ctx, nodes, String::toLowerCase);
     }
 
-    static ONode trim(Options opts, List<ONode> nodes) {
-        return processStrings(opts, nodes, String::trim);
+    static ONode trim(QueryContext ctx, List<ONode> nodes) {
+        return processStrings(ctx, nodes, String::trim);
     }
 
     /// ///////////////// 工具方法 //////////////////
 
-    private static Stream<ONode> flatten(Options opts, ONode node) {
+    private static Stream<ONode> flatten(QueryContext ctx, ONode node) {
         return flattenDo(node);
     }
 
@@ -201,7 +200,7 @@ public class FunctionLib {
                 .mapToDouble(ONode::getDouble);
     }
 
-    private static ONode processStrings(Options opts, List<ONode> nodes, java.util.function.Function<String, String> processor) {
+    private static ONode processStrings(QueryContext ctx, List<ONode> nodes, java.util.function.Function<String, String> processor) {
         List<String> results = nodes.stream()
                 .flatMap(n -> {
                     if (n.isString()) {
@@ -217,7 +216,7 @@ public class FunctionLib {
                 .collect(Collectors.toList());
 
         return results.size() == 1 ?
-                new ONode(opts, results.get(0)) :
+                new ONode(ctx.getOptions(), results.get(0)) :
                 ONode.ofBean(results);
     }
 }

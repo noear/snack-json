@@ -58,7 +58,7 @@ public class FilterSegment implements Segment {
             //还未偏平化
             List<ONode> result = new ArrayList<>();
 
-            if (context.mode == QueryMode.CREATE && currentNodes.size() == 1) {
+            if (context.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) {
                     if (n.isNull()) {
                         n.asArray().addNew();
@@ -89,7 +89,7 @@ public class FilterSegment implements Segment {
                 idx++;
             }
         } else {
-            if (context.mode == QueryMode.CREATE) {
+            if (context.getMode() == QueryMode.CREATE) {
                 if (node.isNull()) {
                     node.asObject();
                 }

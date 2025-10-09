@@ -28,5 +28,5 @@ public interface Operation {
     /**
      * 应用
      */
-    boolean apply(ONode node, Condition condition, QueryContext context);
+    boolean apply(QueryContext ctx, ONode node, Condition condition);
 }

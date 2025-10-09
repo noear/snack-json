@@ -44,12 +44,12 @@ public class Expression {
     }
 
     // 评估逆波兰式
-    public boolean test(ONode node, QueryContext context) {
+    public boolean test(ONode node, QueryContext ctx) {
         try {
             Deque<Boolean> stack = new ArrayDeque<>();
             for (Token token : rpn) {
                 if (token.type == TokenType.ATOM) {
-                    stack.push(evaluateSingleCondition(node, token.value, context));
+                    stack.push(evaluateSingleCondition(node, token.value, ctx));
                 } else if (token.type == TokenType.AND || token.type == TokenType.OR) {
                     boolean b = stack.pop();
                     boolean a = stack.pop();
@@ -154,10 +154,10 @@ public class Expression {
     }
 
 
-    private boolean evaluateSingleCondition(ONode node, String conditionStr, QueryContext context) {
+    private boolean evaluateSingleCondition(ONode node, String conditionStr, QueryContext ctx) {
         if (conditionStr.startsWith("!")) {
             //非运行
-            return !evaluateSingleCondition(node, conditionStr.substring(1), context);
+            return !evaluateSingleCondition(node, conditionStr.substring(1), ctx);
         }
 
         Condition condition = Condition.get(conditionStr);
@@ -170,7 +170,7 @@ public class Expression {
         // 单元操作（如 @.price）
         if (condition.getRight() == null) {
             if (condition.getOp() == null) {
-                return condition.getLeftNode(node, context) != null;
+                return condition.getLeftNode(ctx, node) != null;
             } else {
                 return false;
             }
@@ -182,7 +182,7 @@ public class Expression {
             throw new JsonPathException("Unsupported operator : " + condition.getOp());
         }
 
-        return operation.apply(node, condition, context);
+        return operation.apply(ctx, node, condition);
     }
 
     private enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}

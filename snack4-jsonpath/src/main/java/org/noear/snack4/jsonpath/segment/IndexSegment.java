@@ -59,7 +59,7 @@ public class IndexSegment implements Segment {
     private void forKey(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -67,7 +67,7 @@ public class IndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
@@ -84,7 +84,7 @@ public class IndexSegment implements Segment {
     private void forIndex(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -97,7 +97,7 @@ public class IndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (context.mode == QueryMode.CREATE) {
+                    if (context.getMode() == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));

@@ -49,7 +49,7 @@ public class PropertySegment implements Segment {
     private void getChild(ONode node, String key, QueryContext context, List<ONode> result) {
         ONode n1 = null;
 
-        if (context.mode == QueryMode.CREATE) {
+        if (context.getMode() == QueryMode.CREATE) {
             node.asObject();
             if (node.isObject()) {
                 n1 = node.getOrNew(key);
