@@ -84,8 +84,8 @@ public class RangeIndexSegment implements Segment {
                             n1.source = new PathSource(arr, null, i);
                         }
 
-                        result.add(n1);
                         i += step;
+                        result.add(n1);
                     }
                 } else {
                     int i = bounds.getUpper();
@@ -95,8 +95,8 @@ public class RangeIndexSegment implements Segment {
                             n1.source = new PathSource(arr, null, i);
                         }
 
-                        result.add(n1);
                         i += step;
+                        result.add(n1);
                     }
                 }
             }

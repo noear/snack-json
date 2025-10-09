@@ -85,8 +85,8 @@ public class FilterSegment implements Segment {
                     n1.source = new PathSource(node, null, idx);
                 }
 
-                flattenResolve(ctx, n1, result);
                 idx++;
+                flattenResolve(ctx, n1, result);
             }
         } else {
             if (ctx.getMode() == QueryMode.CREATE) {

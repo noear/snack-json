@@ -71,8 +71,8 @@ public class MultiIndexSegment implements Segment {
                             n1.source = new PathSource(n, null, idx);
                         }
 
-                        result.add(n1);
                         idx++;
+                        result.add(n1);
                     }
                 } else if (n.isObject()) {
                     for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {

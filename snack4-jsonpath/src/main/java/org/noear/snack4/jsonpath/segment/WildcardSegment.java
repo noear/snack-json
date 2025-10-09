@@ -56,8 +56,8 @@ public class WildcardSegment implements Segment {
                         n1.source = new PathSource(n, null, idx);
                     }
 
-                    childs.add(n1);
                     idx++;
+                    childs.add(n1);
                 }
             } else if (n.isObject()) {
                 for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {

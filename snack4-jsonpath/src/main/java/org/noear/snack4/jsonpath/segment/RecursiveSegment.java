@@ -51,9 +51,9 @@ public class RecursiveSegment implements Segment {
                     n1.source = new PathSource(node, null, idx);
                 }
 
+                idx++;
                 results.add(n1);
                 collectRecursive(n1, results);
-                idx++;
             }
         } else if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
