@@ -160,13 +160,6 @@ public class SpeedJaywayJsonPathTest {
         String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
         ReadContext context = JsonPath.parse(text);
 
-//        Object tmp00 = JsonPath.read(obj,"$..ary2");
-//        Object tmp01 = JsonPath.read(obj,"$..list[2]");
-//        Object tmp0 = JsonPath.read(obj,"$..list[-2:]");
-//        Object tmp1 = JsonPath.read(obj,"$..ary2[0].a");
-//
-//        Object tmp2 = JsonPath.read(obj,"$.data.list[?(@ == $..ary2[0].a.min())]");
-
         JSONArray tmp30 = context.read("$..ary2[0].a");
         assert tmp30.size() == 1;
 
