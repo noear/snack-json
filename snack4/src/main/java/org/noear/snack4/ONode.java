@@ -19,12 +19,11 @@ import org.noear.snack4.codec.BeanDeserializer;
 import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.codec.CodecException;
 import org.noear.snack4.json.JsonReader;
-import org.noear.snack4.jsonpath.JsonPathProviderWarn;
-import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.json.JsonType;
 import org.noear.snack4.json.JsonWriter;
+import org.noear.snack4.jsonpath.JsonPathProviderWarn;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
 
@@ -148,7 +147,7 @@ public final class ONode {
         } else if (isNumber()) {
             return getNumber().longValue() > 0;
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
@@ -187,10 +186,10 @@ public final class ONode {
             try {
                 return DateUtil.parse(getString());
             } catch (ParseException ex) {
-                throw new CodecException(ex);
+                throw new SnackException(ex);
             }
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
@@ -248,7 +247,7 @@ public final class ONode {
         } else if (isString()) {
             return Integer.parseInt(getString());
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
@@ -264,7 +263,7 @@ public final class ONode {
         } else if (isString()) {
             return Long.getLong(getString());
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
@@ -280,7 +279,7 @@ public final class ONode {
         } else if (isString()) {
             return Float.parseFloat(getString());
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
@@ -296,7 +295,7 @@ public final class ONode {
         } else if (isString()) {
             return Double.parseDouble(getString());
         } else {
-            throw new CodecException("Not supported for automatic conversion");
+            throw new SnackException("Not supported for automatic conversion");
         }
     }
 
