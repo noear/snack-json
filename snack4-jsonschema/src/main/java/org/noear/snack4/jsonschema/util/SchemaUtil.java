@@ -52,9 +52,9 @@ public class SchemaUtil {
     }
 
     /**
-     * 构建参数申明
+     * 属性申明
      * */
-    public static PropertyDesc paramOf(AnnotatedElement ae) {
+    public static PropertyDesc propertyOf(AnnotatedElement ae) {
         ONodeAttr p1Anno = ae.getAnnotation(ONodeAttr.class);
         if (p1Anno == null) {
             return null;
@@ -124,10 +124,6 @@ public class SchemaUtil {
 
     /**
      * 构建类型的架构节点
-     *
-     * @since 3.1
-     * @since 3.3
-     * @since 3.5
      */
     public static ONode buildTypeSchemaNode(Type type, String description, ONode schemaNode) {
         if (type instanceof ParameterizedType) {
@@ -176,8 +172,6 @@ public class SchemaUtil {
 
     /**
      * 处理 ParameterizedType 类型（如 Result<T>、List<T>、Map<K,V> 等），并自动识别并解析带泛型字段的包装类（保留结构并替换泛型类型）
-     *
-     * @since 3.3
      */
     private static void handleParameterizedType(ParameterizedType pt, String description, ONode schemaNode) {
         Type rawType = pt.getRawType();
@@ -221,8 +215,6 @@ public class SchemaUtil {
 
     /**
      * 解析带泛型的类结构（如 Result<T>）：
-     *
-     * @since 3.3
      */
     private static void resolveGenericClassWithTypeArgs(Class<?> clazz, Type[] actualTypes, ONode schemaNode) {
         TypeVariable<?>[] typeParams = clazz.getTypeParameters();
@@ -352,8 +344,6 @@ public class SchemaUtil {
 
     /**
      * 处理 POJO 类型（含字段映射）
-     *
-     * @since 3.3
      */
     private static void handleObjectType(Class<?> clazz, ONode schemaNode) {
         String typeStr = jsonTypeOfJavaType(clazz);
@@ -369,7 +359,7 @@ public class SchemaUtil {
             propertiesNode.asObject();
 
             for (Map.Entry<String, FieldWrap> entry : ClassWrap.from(TypeWrap.from(clazz)).getFieldWraps().entrySet()) {
-                PropertyDesc fp = paramOf(entry.getValue().getField());
+                PropertyDesc fp = propertyOf(entry.getValue().getField());
 
                 if (fp != null) {
                     propertiesNode.getOrNew(fp.name()).then(paramNode -> {
@@ -389,8 +379,6 @@ public class SchemaUtil {
 
     /**
      * 判断是否为 Optional 类型
-     *
-     * @since 3.3
      */
     private static boolean isOptionalType(Type rawType) {
         return rawType.getTypeName().startsWith("java.util.Optional");
@@ -415,8 +403,6 @@ public class SchemaUtil {
 
     /**
      * 获取原始类型
-     *
-     * @since 3.3
      */
     public static Class<?> getRawClass(Type type) {
         if (type instanceof ParameterizedType) {
@@ -426,19 +412,5 @@ public class SchemaUtil {
         } else {
             throw new IllegalArgumentException("Unsupported type: " + type);
         }
-    }
-
-    /// ////
-
-    /**
-     * 主入口方法：构建 Schema 节点（递归处理）
-     *
-     * @since 3.1
-     * @since 3.3
-     * @deprecated 3.5
-     */
-    @Deprecated
-    public static void buildToolParamNode(Type type, String description, ONode schemaNode) {
-        buildTypeSchemaNode(type, description, schemaNode);
     }
 }
