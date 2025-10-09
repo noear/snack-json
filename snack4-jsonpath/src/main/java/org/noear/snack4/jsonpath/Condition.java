@@ -161,6 +161,7 @@ public class Condition {
         }
 
 
+
 //        String[] keys = keyPath.split("\\.|\\[");
 //        ONode current = node;
 //        for (String key : keys) {
@@ -193,15 +194,17 @@ public class Condition {
 //                        current = current.getOrNull(index);
 //                    }
 //                } catch (NumberFormatException e) {
-//                    return null;
+//                    return NULL_NODE;
 //                }
 //            } else {
-//                return null;
+//                return NULL_NODE;
 //            }
-//            if (current == null) return null;
+//            if (current == null) return NULL_NODE;
 //        }
 //        return current;
     }
+
+    //static final ONode NULL_NODE = new ONode(null);
 
     /**
      * 解析 js 正则
