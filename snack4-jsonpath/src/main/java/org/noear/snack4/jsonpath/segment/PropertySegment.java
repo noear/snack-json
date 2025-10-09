@@ -17,11 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,40 +36,33 @@ public class PropertySegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
         List<ONode> result = new ArrayList<>();
 
         for (ONode n : currentNodes) {
-            getChild(n, key, mode, result);
+            getChild(n, key, context, result);
         }
 
         return result;
     }
 
-    private void getChild(ONode node, String key, QueryMode mode, List<ONode> result) {
-        if (mode == QueryMode.CREATE) {
-            node.asObject();
+    private void getChild(ONode node, String key, QueryContext context, List<ONode> result) {
+        ONode n1 = null;
+
+        if (context.mode == QueryMode.CREATE) {
+            n1 = node.getOrNew(key);
+        } else {
+            if (node.isObject()) {
+                n1 = node.getOrNull(key);
+            }
         }
 
-        if (node.isObject()) {
-            ONode n1 = node.getOrNull(key);
-
-            if (n1 == null) {
-                if (mode == QueryMode.CREATE) {
-                    n1 = new ONode(node.options());
-                    node.set(key, n1);
-                } else if (false) {
-                    throw new JsonPathException("Missing key '" + key + "'");
-                }
+        if (n1 != null) {
+            if (n1.source == null) {
+                n1.source = new PathSource(node, key, 0);
             }
 
-            if (n1 != null) {
-                if (n1.source == null) {
-                    n1.source = new PathSource(node, key, 0);
-                }
-
-                result.add(n1);
-            }
+            result.add(n1);
         }
     }
 }

@@ -67,11 +67,11 @@ public class OperationLib {
 
     /// /////////////////
 
-    private static boolean startsWith(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
+    private static boolean startsWith(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
 
         if (leftNode.isString()) {
-            ONode rightNode = condition.getRightNode(node, root);
+            ONode rightNode = condition.getRightNode(node, context);
             if (rightNode == null) {
                 return false;
             }
@@ -81,11 +81,11 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean endsWith(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
+    private static boolean endsWith(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
 
         if (leftNode.isString()) {
-            ONode rightNode = condition.getRightNode(node, root);
+            ONode rightNode = condition.getRightNode(node, context);
             if (rightNode == null) {
                 return false;
             }
@@ -95,10 +95,10 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean contains(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
+    private static boolean contains(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
 
-        ONode expectedNode = condition.getRightNode(node, root);
+        ONode expectedNode = condition.getRightNode(node, context);
 
         // 支持多类型包含检查
         if (leftNode.isArray()) {
@@ -114,10 +114,10 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean in(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
+    private static boolean in(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
 
-        ONode rightNode = condition.getRightNode(node, root);
+        ONode rightNode = condition.getRightNode(node, context);
         if (rightNode == null && rightNode.isArray() == false) {
             return false;
         }
@@ -126,10 +126,10 @@ public class OperationLib {
         return rst;
     }
 
-    private static boolean nin(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
+    private static boolean nin(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
 
-        ONode rightNode = condition.getRightNode(node, root);
+        ONode rightNode = condition.getRightNode(node, context);
         if (rightNode == null && rightNode.isArray() == false) {
             return false;
         }
@@ -138,9 +138,9 @@ public class OperationLib {
         return rst;
     }
 
-    private static boolean matches(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
-        ONode rightNode = condition.getRightNode(node, root);
+    private static boolean matches(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
+        ONode rightNode = condition.getRightNode(node, context);
 
         boolean found = false;
         if (leftNode.isValue()) {
@@ -153,9 +153,9 @@ public class OperationLib {
         return found;
     }
 
-    private static boolean compare(ONode node, Condition condition, ONode root) {
-        ONode leftNode = condition.getLeftNode(node, root);
-        ONode rightNode = condition.getRightNode(node, root);
+    private static boolean compare(ONode node, Condition condition, QueryContext context) {
+        ONode leftNode = condition.getLeftNode(node, context);
+        ONode rightNode = condition.getRightNode(node, context);
 
 
         // 类型判断逻辑

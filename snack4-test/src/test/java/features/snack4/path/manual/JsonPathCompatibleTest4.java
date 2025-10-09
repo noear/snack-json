@@ -1,7 +1,7 @@
 package features.snack4.path.manual;
 
 import com.jayway.jsonpath.JsonPath;
-import features.snack4.composite.JsonPathTest3;
+import features.snack4.v3_composite.JsonPathTest3;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 

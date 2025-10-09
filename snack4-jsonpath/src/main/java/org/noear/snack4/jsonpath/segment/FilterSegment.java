@@ -44,12 +44,12 @@ public class FilterSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
         if (this.flattened) {
             //已经偏平化
             List<ONode> result = new ArrayList<>();
             for (ONode n1 : currentNodes) {
-                if (expression.test(n1, context.root)) {
+                if (expression.test(n1, context)) {
                     result.add(n1);
                 }
             }
@@ -71,15 +71,21 @@ public class FilterSegment implements Segment {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
-                if(n1.source == null) {
+                if (n1.source == null) {
                     n1.source = new PathSource(node, null, idx);
                 }
 
                 flattenResolve(n1, context, result);
                 idx++;
             }
-        } else if (node.isNull() == false) {
-            if (expression.test(node, context.root)) {
+        } else {
+            if (context.mode == QueryMode.CREATE) {
+                if (node.isNull()) {
+                    node.asObject();
+                }
+            }
+
+            if (expression.test(node, context)) {
                 result.add(node);
             }
         }

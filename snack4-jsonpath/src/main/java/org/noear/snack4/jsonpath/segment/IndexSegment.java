@@ -44,22 +44,22 @@ public class IndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
         List<ONode> result = new ArrayList<>();
 
         if (key != null) {
-            forKey(currentNodes, mode, result);
+            forKey(currentNodes, context, result);
         } else {
-            forIndex(currentNodes, mode, result);
+            forIndex(currentNodes, context, result);
         }
 
         return result;
     }
 
-    private void forKey(List<ONode> currentNodes, QueryMode mode, List<ONode> result) {
+    private void forKey(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -67,7 +67,7 @@ public class IndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
@@ -81,10 +81,10 @@ public class IndexSegment implements Segment {
                 .forEach(result::add);
     }
 
-    private void forIndex(List<ONode> currentNodes, QueryMode mode, List<ONode> result) {
+    private void forIndex(List<ONode> currentNodes, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -97,7 +97,7 @@ public class IndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));

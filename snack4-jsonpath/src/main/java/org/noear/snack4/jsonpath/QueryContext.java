@@ -26,8 +26,10 @@ import org.noear.snack4.ONode;
 public class QueryContext {
     public boolean flattened = false;
     public final ONode root;
+    public final QueryMode mode;
 
-    public QueryContext(ONode root) {
+    public QueryContext(ONode root, QueryMode  mode) {
         this.root = root;
+        this.mode = mode;
     }
 }

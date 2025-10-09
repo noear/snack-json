@@ -31,7 +31,6 @@ public interface Segment {
      *
      * @param currentNodes 当前节点
      * @param context      查询上下文
-     * @param mode         查询模式
      */
-    List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode);
+    List<ONode> resolve(List<ONode> currentNodes, QueryContext context);
 }

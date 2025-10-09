@@ -85,12 +85,12 @@ public class Condition {
         return right;
     }
 
-    public ONode getLeftNode(ONode node, ONode root) {
+    public ONode getLeftNode(ONode node, QueryContext context) {
         if (Asserts.isEmpty(left)) {
             return null;
         } else {
             if (leftValue == null) {
-                return resolveNestedPath(node, left, root);
+                return resolveNestedPath(node, left, context);
             } else {
                 return leftValue;
             }
@@ -98,12 +98,12 @@ public class Condition {
     }
 
 
-    public ONode getRightNode(ONode node, ONode root) {
+    public ONode getRightNode(ONode node, QueryContext context) {
         if (Asserts.isEmpty(right)) {
             return null;
         } else {
             if (rightValue == null) {
-                return resolveNestedPath(node, right, root);
+                return resolveNestedPath(node, right, context);
             } else {
                 return rightValue;
             }
@@ -145,9 +145,9 @@ public class Condition {
     /**
      * 分析内嵌路径
      */
-    public static ONode resolveNestedPath(ONode node, String keyPath, ONode root) {
+    public static ONode resolveNestedPath(ONode node, String keyPath, QueryContext context) {
         if (keyPath.startsWith("$")) {
-            return JsonPath.select(root, keyPath);
+            return JsonPath.select(context.root, keyPath);
         }
 
 

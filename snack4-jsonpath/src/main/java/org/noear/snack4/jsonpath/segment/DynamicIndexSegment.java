@@ -38,27 +38,27 @@ public class DynamicIndexSegment implements Segment {
     }
 
     @Override
-    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context, QueryMode mode) {
+    public List<ONode> resolve(List<ONode> currentNodes, QueryContext context) {
         List<ONode> results = new ArrayList<>();
 
         for (ONode node : currentNodes) {
             // 1. 在当前节点上执行动态路径查询
-            ONode dynamicResult = Condition.resolveNestedPath(node, dynamicPath, context.root);
+            ONode dynamicResult = Condition.resolveNestedPath(node, dynamicPath, context);
 
             if (dynamicResult.isNumber()) {
-                forIndex(Arrays.asList(node), dynamicResult.getInt(), mode, results);
+                forIndex(Arrays.asList(node), dynamicResult.getInt(), context, results);
             } else if (dynamicResult.isString()) {
-                forKey(Arrays.asList(node), dynamicResult.getString(), mode, results);
+                forKey(Arrays.asList(node), dynamicResult.getString(), context, results);
             }
         }
 
         return results;
     }
 
-    private void forKey(List<ONode> currentNodes, String key, QueryMode mode, List<ONode> result) {
+    private void forKey(List<ONode> currentNodes, String key, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         o.asObject();
                         return true;
                     } else {
@@ -66,7 +66,7 @@ public class DynamicIndexSegment implements Segment {
                     }
                 })
                 .map(obj -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         obj.getOrNew(key);
                     }
 
@@ -80,10 +80,10 @@ public class DynamicIndexSegment implements Segment {
                 .forEach(result::add);
     }
 
-    private void forIndex(List<ONode> currentNodes, int index, QueryMode mode, List<ONode> result) {
+    private void forIndex(List<ONode> currentNodes, int index, QueryContext context, List<ONode> result) {
         currentNodes.stream()
                 .filter(o -> {
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         o.asArray();
                         return true;
                     } else {
@@ -96,7 +96,7 @@ public class DynamicIndexSegment implements Segment {
                         idx = arr.size() + idx;
                     }
 
-                    if (mode == QueryMode.CREATE) {
+                    if (context.mode == QueryMode.CREATE) {
                         int count = idx + 1 - arr.size();
                         for (int i = 0; i < count; i++) {
                             arr.add(new ONode(arr.options()));

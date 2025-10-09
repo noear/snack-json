@@ -46,7 +46,7 @@ public class JsonPathCompiler {
     private JsonPath doCompile() {
         index = 0; // 起始位置为 $ 符号
         index++;
-        QueryContext context = new QueryContext(null); //记录分析中的 flattened 变化
+        QueryContext context = new QueryContext(null, QueryMode.SELECT); //记录分析中的 flattened 变化
 
         while (index < path.length()) {
             skipWhitespace();
