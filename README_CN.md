@@ -40,6 +40,10 @@
 
 <hr />
 
+##### 语言： 中文 | [English](README.md) 
+
+<hr />
+
 基于jdk8。支持：Json Dom 的构建、编码解转换、获取、JsonPath 查询、JsonSchema 验证。
 
 ```xml

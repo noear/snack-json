@@ -5,7 +5,7 @@
 	<strong>A Json Dom & JsonPath Framework (for Java)</strong>
 </p>
 <p align="center">
-	Compatible with JsonPath IETF RFC 9535 standard
+	Compatible JsonPath IETF RFC 9535
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -37,6 +37,10 @@
         <img src="https://img.shields.io/github/stars/noear/snack3.svg?style=flat&logo=github" alt="github star"/>
     </a>
 </p>
+
+<hr />
+
+##### Language: English | [中文](README_CN.md) 
 
 <hr />
 
