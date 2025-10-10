@@ -180,9 +180,9 @@ public enum Feature {
     Write_ClassName,
 
     /**
-     * 写入映射类名
+     * 不写入Map类名
      */
-    Write_MapClassName,
+    Write_NotMapClassName,
 
     /**
      * 不写入根类名
@@ -215,7 +215,6 @@ public enum Feature {
     Write_BigNumbersAsString,
     /**
      * 写入数字类型
-     *
      */
     Write_NumberTypeSuffix,
     ;

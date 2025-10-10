@@ -1,4 +1,4 @@
-package features.snack4.path.manual;
+package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ * https://www.rfc-editor.org/rfc/rfc9535.html
+ *
  * @author noear 2025/5/6 created
  */
 public class RFC9535FilterTest {

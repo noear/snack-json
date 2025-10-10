@@ -1,9 +1,11 @@
-package features.snack4.path.manual;
+package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
 /**
+ * https://www.rfc-editor.org/rfc/rfc9535.html
+ *
  * @author noear 2025/5/5 created
  */
 public class RFC9535QueryTest {

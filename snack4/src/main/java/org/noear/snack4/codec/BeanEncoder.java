@@ -251,13 +251,18 @@ public class BeanEncoder {
     }
 
     private static boolean isWriteClassName(Options opts, Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
         if (opts.hasFeature(Feature.Write_ClassName) == false) {
             return false;
         }
 
-        if (obj == null) {
+        if (obj instanceof Map && opts.hasFeature(Feature.Write_NotMapClassName)) {
             return false;
         }
+
 
         return true;
     }
