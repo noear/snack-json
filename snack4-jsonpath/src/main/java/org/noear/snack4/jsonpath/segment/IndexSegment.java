@@ -16,34 +16,31 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.PathSource;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理精确索引，支持负数反选（如 $.list[1], $.list[-1]）
+ * 索引选择器（如 $.list[1], $.list[-1], $.user['name'], $.user[$.label]）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
  */
 public class IndexSegment implements Segment {
     private final String segmentStr;
-    private final String key;
-    private final int index;
+    private String query;
+    private String key;
+    private int index;
 
     public IndexSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
-        if (segmentStr.indexOf('\'') < 0) {
+        if (segmentStr.startsWith("$.") || segmentStr.startsWith("@.")) {
+            query = segmentStr;
+        } else if (segmentStr.indexOf('\'') < 0) {
             index = Integer.parseInt(segmentStr);
-            key = null;
         } else {
-            index = 0;
             key = segmentStr.substring(1, segmentStr.length() - 1);
         }
     }
@@ -58,7 +55,15 @@ public class IndexSegment implements Segment {
         List<ONode> result = new ArrayList<>();
 
         for (ONode node : currentNodes) {
-            if (key != null) {
+            if (query != null) {
+                ONode dynamicResult = Condition.resolveNestedPath(ctx, node, query);
+
+                if (dynamicResult.isNumber()) {
+                    IndexUtil.forIndex(ctx, node, dynamicResult.getInt(), result);
+                } else if (dynamicResult.isString()) {
+                    IndexUtil.forKey(ctx, node, dynamicResult.getString(), result);
+                }
+            } else if (key != null) {
                 IndexUtil.forKey(ctx, node, key, result);
             } else {
                 IndexUtil.forIndex(ctx, node, index, result);

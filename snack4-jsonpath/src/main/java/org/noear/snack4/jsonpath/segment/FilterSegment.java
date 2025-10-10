@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理过滤器（如 [?(@.price > 10)] ）
+ * 过滤选择器：使用逻辑表达式选择特定的子项（如 [?(@.price > 10)] ）
  *
  * @author noear 2025/10/3 created
  * @since 4.0

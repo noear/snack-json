@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 处理多索引选择（如 $.list[1,4], ['a','b']）
+ * 多索引选择器（如 $.list[1,4], ['a','b']）
  *
  * @author noear 2025/10/3 created
  * @since 4.0

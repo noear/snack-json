@@ -23,6 +23,7 @@ import org.noear.snack4.jsonpath.QueryMode;
 import java.util.List;
 
 /**
+ * 索引器工具
  *
  * @author noear 2025/10/9 created
  * @since 4.0

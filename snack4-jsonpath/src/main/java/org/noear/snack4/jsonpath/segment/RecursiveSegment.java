@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 处理递归搜索（如 $..a ）
+ * 后代段：选择节点的零个或多个后代（如 $..a, $..*, $..[?@a] ）
  *
  * @author noear 2025/10/3 created
  * @since 4.0

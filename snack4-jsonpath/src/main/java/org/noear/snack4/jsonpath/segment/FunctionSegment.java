@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 处理函数（如 $.list.last() ）
+ * 聚合函数（如 $.list.last() ）
  *
  * @author noear
  * @since 4.0

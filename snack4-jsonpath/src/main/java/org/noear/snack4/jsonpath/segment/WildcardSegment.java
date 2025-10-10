@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 处理通配符，相当于偏平化（如 $.list.*）
+ * 通配符选择器：选择节点的所有子节点（如 $.list.*）
  *
  * @author noear 2025/10/3 created
  * @since 4.0

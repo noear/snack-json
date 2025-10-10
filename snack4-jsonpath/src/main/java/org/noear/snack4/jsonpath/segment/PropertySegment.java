@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理属性获取（如 $.demo, $.demo.user）
+ * 名称选择器：选择对象的命名子对象（如 $.demo, $.demo.user）
  *
  * @author noear
  * @since 4.0
