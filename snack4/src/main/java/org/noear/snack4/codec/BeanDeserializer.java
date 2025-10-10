@@ -155,7 +155,7 @@ public class BeanDeserializer {
                         Property property = propertyWrap.getSetterWrap();
                         setValueForProperty(node, property, target, visited, opts);
                     }
-                } else if (opts.hasFeature(Feature.Read_FailOnUnknownProperties)) {
+                } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
                     throw new SnackException("Unknown property : " + entry.getKey());
                 }
             }

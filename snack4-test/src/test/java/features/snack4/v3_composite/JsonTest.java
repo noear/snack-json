@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.json.JsonParseException;
-import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -164,11 +163,15 @@ public class JsonTest {
     @Test
     public void test42() throws IOException {
         Assertions.assertThrows(Throwable.class, () -> {
-            ONode.ofJson("{aaa:1,bbb:2}", Feature.Read_FailOnUnknownProperties).toBean(Test42Bean.class);
+            ONode.ofJson("{aaa:1,bbb:2}", Feature.Write_FailOnUnknownProperties, Feature.Write_OnlyUseOnlySetter).toBean(Test42Bean.class);
         });
     }
 
     static class Test42Bean {
         int aaa;
+
+        public void setAaa(int aaa) {
+            this.aaa = aaa;
+        }
     }
 }
