@@ -15,12 +15,12 @@ public class FeatureTest {
         ONode oNode = new ONode(options);
 
         System.out.println(options.getFeatures());
-        assert options.hasFeature(Feature.Write_StringNullAsEmpty) == false;
+        assert options.hasFeature(Feature.Write_NullStringAsEmpty) == false;
         assert oNode.get("name").getString() == null;
 
-        options.addFeature(Feature.Write_StringNullAsEmpty);
+        options.addFeature(Feature.Write_NullStringAsEmpty);
         System.out.println(options.getFeatures());
-        assert options.hasFeature(Feature.Write_StringNullAsEmpty);
+        assert options.hasFeature(Feature.Write_NullStringAsEmpty);
         assert oNode.get("name").getString() != null;
     }
 }

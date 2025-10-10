@@ -26,7 +26,7 @@ public class FeatureDemo {
         String json = ONode.serialize(data, options);
         System.out.println(json); //{"a":1,"b":"2","c":3.0,"d":"4.0"} //b 和 d 变成字符串了
 
-        json = ONode.serialize(data, Feature.Write_NumberType);
+        json = ONode.serialize(data, Feature.Write_NumberTypeSuffix);
         System.out.println(json); //{"a":1,"b":2L,"c":3.0F,"d":4.0D} //带了数字类型（有些框架不支持）
 
         //带数字类型符号的，可以还原数字类型

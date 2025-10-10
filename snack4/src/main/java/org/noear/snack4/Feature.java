@@ -133,31 +133,28 @@ public enum Feature {
 
     /**
      * 写入 null
-     *
      */
     Write_Nulls(false),
 
     /**
      * 写入字符串为 null 时转为空
-     *
      */
-    Write_StringNullAsEmpty(false),
+    Write_NullStringAsEmpty(false),
 
     /**
      * 写入布尔为 null 时转为 false
      *
      */
-    Write_BooleanNullAsFalse(false),
+    Write_NullBooleanAsFalse(false),
 
     /**
      * 写入数字为 null 时转为 0
      *
      */
-    Write_NumberNullAsZero(false),
+    Write_NullNumberAsZero(false),
 
     /**
      * 写入允许使用设置器（默认为字段模式）
-     *
      */
     Write_AllowUseSetter(false),
     /**
@@ -239,7 +236,7 @@ public enum Feature {
      * 写入数字类型
      *
      */
-    Write_NumberType(false),
+    Write_NumberTypeSuffix(false),
     ;
 
 

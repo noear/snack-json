@@ -167,7 +167,7 @@ public final class ONode {
         if (isString()) {
             return (String) value;
         } else if (isNull()) {
-            if (options.hasFeature(Feature.Write_StringNullAsEmpty)) {
+            if (options.hasFeature(Feature.Write_NullStringAsEmpty)) {
                 return "";
             } else {
                 return null;

@@ -158,7 +158,7 @@ public class JsonWriter {
         } else {
             writer.write(num.toString());
 
-            if (opts.hasFeature(Feature.Write_NumberType)) {
+            if (opts.hasFeature(Feature.Write_NumberTypeSuffix)) {
                 if (num instanceof BigDecimal) {
                     writer.write('M');
                 } else if (num instanceof Double) {

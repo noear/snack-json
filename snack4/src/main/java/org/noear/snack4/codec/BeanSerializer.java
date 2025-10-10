@@ -154,15 +154,15 @@ public class BeanSerializer {
                     }
 
                     if (property.getTypeWrap().isString()) {
-                        if ((opts.hasFeature(Feature.Write_StringNullAsEmpty) || property.getAttr().hasSerializeFeature(Feature.Write_StringNullAsEmpty))) {
+                        if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || property.getAttr().hasSerializeFeature(Feature.Write_NullStringAsEmpty))) {
                             propertyValue = "";
                         }
                     } else if (property.getTypeWrap().isBoolean()) {
-                        if ((opts.hasFeature(Feature.Write_BooleanNullAsFalse) || property.getAttr().hasSerializeFeature(Feature.Write_BooleanNullAsFalse))) {
+                        if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || property.getAttr().hasSerializeFeature(Feature.Write_NullBooleanAsFalse))) {
                             propertyValue = false;
                         }
                     } else if (property.getTypeWrap().isNumber()) {
-                        if ((opts.hasFeature(Feature.Write_NumberNullAsZero) || property.getAttr().hasSerializeFeature(Feature.Write_NumberNullAsZero))) {
+                        if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || property.getAttr().hasSerializeFeature(Feature.Write_NullNumberAsZero))) {
                             if (property.getTypeWrap().getType() == Long.class) {
                                 propertyValue = 0L;
                             } else if (property.getTypeWrap().getType() == Double.class) {
