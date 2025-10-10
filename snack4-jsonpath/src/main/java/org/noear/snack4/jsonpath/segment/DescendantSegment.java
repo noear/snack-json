@@ -30,7 +30,7 @@ import java.util.Map;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class RecursiveSegment implements Segment {
+public class DescendantSegment implements Segment {
     @Override
     public String toString() {
         return "..";

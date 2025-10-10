@@ -71,7 +71,7 @@ public class JsonPathCompiler {
     private void resolveDot(QueryContext context) {
         position++;
         if (position < path.length() && path.charAt(position) == '.') {
-            segments.add(new RecursiveSegment());
+            segments.add(new DescendantSegment());
 
             while (position < path.length()) {
                 skipWhitespace();
