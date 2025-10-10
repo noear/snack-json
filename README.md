@@ -5,7 +5,7 @@
 	<strong>A Json Dom & JsonPath Framework (for Java)</strong>
 </p>
 <p align="center">
-	Compatible with `jayway.jsonpath` and <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a>
+	Compatible with `jayway.jsonpath` and <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JSONPath IETF RFC 9535</a> standards
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">

@@ -5,7 +5,7 @@
 	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
 </p>
 <p align="center">
-	同时兼容 `jayway.jsonpath` 和 <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a> 标准
+	同时兼容 `jayway.jsonpath` 和 <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JSONPath IETF RFC 9535</a> 标准
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
