@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath;
 
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.filter.Condition;
 import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
 import java.util.Map;
@@ -165,7 +166,7 @@ public class OperationLib {
         ONode rightNode = condition.getRightNode(ctx, node);
 
         // 类型判断逻辑
-        if (condition.getRight().startsWith("'")) {
+        if (rightNode.isString()) {
             return compareString(condition.getOp(), leftNode, rightNode);
         } else {
             if (leftNode.getType() == rightNode.getType()) {

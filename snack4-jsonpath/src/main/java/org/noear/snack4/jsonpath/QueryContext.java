@@ -87,4 +87,19 @@ public class QueryContext {
     public <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction) {
         return (T) getAttach().computeIfAbsent(key, mappingFunction);
     }
+
+    /**
+     * 内嵌查询
+     */
+    public ONode nestedQuery(ONode target, JsonPath query) {
+        if (query.isRooted()) {
+            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()));
+        }
+
+        if (getMode() == QueryMode.CREATE) {
+            return query.create(target);
+        } else {
+            return query.select(target);
+        }
+    }
 }

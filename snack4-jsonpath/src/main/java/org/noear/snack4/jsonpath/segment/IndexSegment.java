@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class IndexSegment implements Segment {
     private final String segmentStr;
-    private String query;
+    private JsonPath query;
     private String key;
     private int index;
 
@@ -37,7 +37,7 @@ public class IndexSegment implements Segment {
         this.segmentStr = segmentStr;
 
         if (segmentStr.startsWith("$.") || segmentStr.startsWith("@.")) {
-            query = segmentStr;
+            query = JsonPath.compile(segmentStr);
         } else if (segmentStr.indexOf('\'') < 0) {
             index = Integer.parseInt(segmentStr);
         } else {
@@ -56,12 +56,12 @@ public class IndexSegment implements Segment {
 
         for (ONode node : currentNodes) {
             if (query != null) {
-                ONode dynamicResult = Condition.resolveNestedPath(ctx, node, query);
+                ONode dynamicIdx = ctx.nestedQuery(node, query);
 
-                if (dynamicResult.isNumber()) {
-                    IndexUtil.forIndex(ctx, node, dynamicResult.getInt(), result);
-                } else if (dynamicResult.isString()) {
-                    IndexUtil.forKey(ctx, node, dynamicResult.getString(), result);
+                if (dynamicIdx.isNumber()) {
+                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
+                } else if (dynamicIdx.isString()) {
+                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
                 }
             } else if (key != null) {
                 IndexUtil.forKey(ctx, node, key, result);

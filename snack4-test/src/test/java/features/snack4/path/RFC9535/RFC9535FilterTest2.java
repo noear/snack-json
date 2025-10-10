@@ -2,9 +2,6 @@ package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.Expression;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

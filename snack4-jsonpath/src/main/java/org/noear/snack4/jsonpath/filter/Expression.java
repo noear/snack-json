@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.filter;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.util.Asserts;
+import org.noear.snack4.jsonpath.JsonPathException;
+import org.noear.snack4.jsonpath.Operation;
+import org.noear.snack4.jsonpath.OperationLib;
+import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -163,7 +166,7 @@ public class Expression {
         Condition condition = Condition.get(conditionStr);
 
         // 过滤空条件（操作符处理时，就不需要再过滤了）
-        if (Asserts.isEmpty(condition.getLeft())) {
+        if (condition.getLeft().getNode().isUndefined()) {
             return false;
         }
 

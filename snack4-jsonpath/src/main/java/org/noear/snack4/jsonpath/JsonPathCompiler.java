@@ -112,11 +112,6 @@ public class JsonPathCompiler {
             position++;
         }
 
-//        if (segment.startsWith("$.") || segment.startsWith("@.")) {
-//            segments.add(new DynamicIndexSegment(segment));
-//            return;
-//        }
-
         if (segment.equals("*")) {
             // 全选
             segments.add(new WildcardSegment());

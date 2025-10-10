@@ -29,20 +29,34 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 4.0
  */
 public class JsonPath {
-    private final String path;
+    private final String expression;
+    private final boolean rooted;
     private final List<Segment> segments;
     private final boolean multiple;
 
-    public JsonPath(String path, List<Segment> segments) {
-        this.path = path;
+    public JsonPath(String expression, List<Segment> segments) {
+        this.expression = expression;
         this.segments = segments;
-        this.multiple = (path.indexOf('*') > 0 || path.indexOf("..") > 0 || path.indexOf(',') > 0 || path.indexOf(':') > 0 || path.indexOf('?') > 0) && (path.indexOf("()") < 0);
+        this.rooted = expression.charAt(0) == '$';
+        this.multiple = (expression.indexOf('*') > 0 || expression.indexOf("..") > 0 || expression.indexOf(',') > 0 || expression.indexOf(':') > 0 || expression.indexOf('?') > 0) && (expression.indexOf("()") < 0);
+    }
+
+    public boolean isRooted() {
+        return rooted;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public List<Segment> getSegments() {
+        return Collections.unmodifiableList(segments);
     }
 
     @Override
     public String toString() {
         return "JsonPath{" +
-                "path='" + path + '\'' +
+                "path='" + expression + '\'' +
                 ", segments=" + segments +
                 ", multiple=" + multiple +
                 '}';
