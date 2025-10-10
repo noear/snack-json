@@ -111,7 +111,7 @@ public class JsonWriter {
             }
             writeIndentation();
 
-            String key = opts.hasFeature(Feature.Write_UseUnderlineStyle) ?
+            String key = opts.hasFeature(Feature.Write_UseSnakeStyle) ?
                     toUnderlineName(entry.getKey()) : entry.getKey();
             writeKey(key);
             writer.write(':');

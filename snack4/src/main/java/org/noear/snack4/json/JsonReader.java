@@ -213,14 +213,57 @@ public class JsonReader {
     }
 
     private String parseKey() throws IOException {
+        String key;
         if (opts.hasFeature(Feature.Read_DisableUnquotedKeys) == false) {
             char c = state.peekChar();
             if (c != '"' && c != '\'') {
-                return parseUnquotedString();
+                key = parseUnquotedString();
+            } else {
+                key = parseString();
+            }
+        } else {
+            key = parseString();
+        }
+
+        // 如果启用了蛇形转驼峰特性，则进行转换
+        if (opts.hasFeature(Feature.Read_ConvertSnakeToCamel)) {
+            key = convertSnakeToCamel(key);
+        }
+        return key;
+    }
+
+    private String convertSnakeToCamel(String snakeCase) {
+        if (snakeCase == null || snakeCase.isEmpty()) {
+            return snakeCase;
+        }
+
+        StringBuilder result = new StringBuilder(snakeCase.length());
+        boolean toUpperCase = false;
+        boolean firstChar = true;
+
+        for (int i = 0; i < snakeCase.length(); i++) {
+            char c = snakeCase.charAt(i);
+
+            if (c == '_') {
+                // 下划线标记下一个字符需要大写
+                toUpperCase = true;
+            } else {
+                if (toUpperCase) {
+                    result.append(Character.toUpperCase(c));
+                    toUpperCase = false;
+                } else {
+                    // 第一个字符保持小写，其他字符保持原样
+                    if (firstChar) {
+                        result.append(Character.toLowerCase(c));
+                    } else {
+                        result.append(c);
+                    }
+                }
+                firstChar = false;
             }
         }
 
-        return parseString();
+        return result.toString();
     }
 
     private String parseUnquotedString() throws IOException {

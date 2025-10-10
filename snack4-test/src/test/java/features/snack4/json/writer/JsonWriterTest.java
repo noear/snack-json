@@ -4,10 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.BeanSerializer;
 import org.noear.snack4.Feature;
+import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.Options;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -156,13 +158,20 @@ public class JsonWriterTest {
     }
 
     @Test
-    public void testWriteUseUnderlineStyle() throws IOException {
+    public void testWriteUseSnakeStyle() throws IOException {
         ONode node = new ONode();
         node.set("firstName", new ONode("John"));
-        Options opts = Options.of(Feature.Write_UseUnderlineStyle);
+        Options opts = Options.of(Feature.Write_UseSnakeStyle);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("{\"first_name\":\"John\"}", writer.toString());
+    }
+
+    @Test
+    public void testConvertSnakeToCamel() throws IOException {
+        StringReader reader = new StringReader("{\"first_name\":\"John\"}");
+        ONode oNode = new JsonReader(reader, Options.of(Feature.Read_ConvertSnakeToCamel)).read();
+        assertEquals("{\"firstName\":\"John\"}", oNode.toJson());
     }
 
     @Test

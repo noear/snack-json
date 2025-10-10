@@ -87,7 +87,7 @@ public class EscapeTest {
      */
     @Test
     public void case5() throws IOException {
-        ONode c = ONode.ofJson("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Read_BrowserCompatible, Feature.Write_BrowserCompatible);
+        ONode c = ONode.ofJson("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", Feature.Write_BrowserCompatible);
 
         assert "'👌\t\n".equals(c.get("a").getString());
 

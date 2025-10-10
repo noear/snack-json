@@ -53,9 +53,9 @@ public enum Feature {
 
 
     /**
-     * 读取时自动转换字段命名风格（默认不转换）
+     * 读取时小蛇转为驼峰风格
      */
-    //Read_ConvertUnderlineStyle,
+    Read_ConvertSnakeToCamel,
 
     /**
      * 读取时自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
@@ -78,14 +78,9 @@ public enum Feature {
     Read_AllowUnescapedControlCharacters,
 
     /**
-     * 读取大数字时使用字符串模式（避免精度丢失）
+     * 读取大数字时使用字符串模式（避免精度丢失），用 BigDecimal 替代 Double, 用 BigInteger 替代 Long
      */
     Read_UseBigNumberMode,
-
-    /**
-     * 读取时用浏览器兼容模式（转义非 ASCII 字符）
-     */
-    Read_BrowserCompatible,
 
     /**
      * 读取时允许使用获取器
@@ -160,9 +155,9 @@ public enum Feature {
     Write_UseSingleQuotes,
 
     /**
-     * 写入时字段使用下划线风格
+     * 写入时名字使用小蛇风格
      */
-    Write_UseUnderlineStyle,
+    Write_UseSnakeStyle,
 
     /**
      * 写入时枚举使用名称（默认使用名称）
