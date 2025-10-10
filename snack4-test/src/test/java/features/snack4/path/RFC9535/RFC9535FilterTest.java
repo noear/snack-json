@@ -6,87 +6,63 @@ import org.noear.snack4.jsonpath.Expression;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * https://www.rfc-editor.org/rfc/rfc9535.html
- *
  * @author noear 2025/5/6 created
  */
 public class RFC9535FilterTest {
-    static final String json1 = "{\n" +
+    // https://www.rfc-editor.org/rfc/rfc9535.html
+
+    static final String comparisonJson = "{\n" +
             "  \"obj\": {\"x\": \"y\"},\n" +
             "  \"arr\": [2, 3]\n" +
             "}";
 
     @Test
-    public void case1_1() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("$.absent1 == $.absent2").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertTrue(rst);
+    public void comparisonTest() {
+        //https://www.rfc-editor.org/rfc/rfc9535.html#filter-selector
+
+        comparisonAssert("$.absent1 == $.absent2", true); //Empty nodelists
+        comparisonAssert("$.absent1 <= $.absent2", true); //== implies <=
+        comparisonAssert("$.absent == 'g'", false);
+        comparisonAssert("$.absent1 != $.absent2", false);
+        comparisonAssert("$.absent != 'g'", true);
+
+        comparisonAssert("1 <= 2", true);
+        comparisonAssert("1 > 2", false);
+        comparisonAssert("13 == '13'", false);
+        comparisonAssert("'a' <= 'b'", true);
+        comparisonAssert("'a' > 'b'", false);
+
+        comparisonAssert("$.obj == $.arr", false);
+        comparisonAssert("$.obj != $.arr", true);
+        comparisonAssert("$.obj == $.obj", true);
+        comparisonAssert("$.obj != $.obj", false);
+        comparisonAssert("$.arr == $.arr", true);
+        comparisonAssert("$.arr != $.arr", false);
+
+        comparisonAssert("$.obj == 17", false);
+        comparisonAssert("$.obj != 17", true);
+
+        comparisonAssert("$.obj <= $.arr", false);
+        comparisonAssert("$.obj < $.arr", false);
+        comparisonAssert("$.obj <= $.obj", true);
+        comparisonAssert("$.arr <= $.arr", true);
+
+        comparisonAssert("1 <= $.arr", false);
+        comparisonAssert("1 >= $.arr", false);
+        comparisonAssert("1 > $.arr", false);
+        comparisonAssert("1 < $.arr", false);
+
+        comparisonAssert("true <= true", true);
+        comparisonAssert("true > true", false);
     }
 
-    @Test
-    public void case1_2() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("$.absent1 <= $.absent2").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertTrue(rst);
-    }
 
-    @Test
-    public void case1_3() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("$.absent == 'g'").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertFalse(rst);
-    }
-
-    @Test
-    public void case1_4() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("$.absent1 != $.absent2").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertFalse(rst);
-    }
-
-    @Test
-    public void case1_5() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("$.absent != 'g'").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertTrue(rst);
-    }
-
-    @Test
-    public void case1_6() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("1 <= 2").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertTrue(rst);
-    }
-
-    @Test
-    public void case1_7() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("1 > 2").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertFalse(rst);
-    }
-
-    @Test
-    public void case1_8() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("13 == '13'").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertFalse(rst);
-    }
-
-    @Test
-    public void case1_9() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("'a' <= 'b'").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertTrue(rst);
-    }
-
-    @Test
-    public void case1_10() {
-        ONode node = ONode.ofJson(json1);
-        boolean rst = Expression.get("'a' > 'b'").test(node, new QueryContext(node, QueryMode.SELECT));
-        assertFalse(rst);
+    private void comparisonAssert(String expr, boolean expected) {
+        ONode node = ONode.ofJson(comparisonJson);
+        boolean actual = Expression.get(expr).test(node, new QueryContext(node, QueryMode.SELECT));
+        assertEquals(expected, actual);
     }
 }

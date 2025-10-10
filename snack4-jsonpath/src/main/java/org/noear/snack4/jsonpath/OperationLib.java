@@ -170,9 +170,16 @@ public class OperationLib {
         } else {
             if (leftNode.getType() == rightNode.getType()) {
                 if (leftNode.isNumber()) {
+                    //都是数字
                     return compareNumber(condition.getOp(), leftNode.getDouble(), rightNode.getDouble());
                 } else if (leftNode.isNull()) {
                     return compareNumber(condition.getOp(), 0, 0);
+                } else {
+                    if ("!=".equals(condition.getOp())) {
+                        return leftNode.equals(rightNode) == false;
+                    } else if (condition.getOp().indexOf('=') >= 0) {
+                        return leftNode.equals(rightNode);
+                    }
                 }
             } else {
                 if (ctx.getMode() == QueryMode.CREATE && leftNode.isNull()) {
@@ -180,6 +187,10 @@ public class OperationLib {
                         leftNode.fill(rightNode);
                         return true;
                     }
+                }
+
+                if ("!=".equals(condition.getOp())) {
+                    return true;
                 }
             }
 

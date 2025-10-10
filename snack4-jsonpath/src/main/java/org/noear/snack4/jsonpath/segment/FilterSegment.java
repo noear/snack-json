@@ -66,7 +66,7 @@ public class FilterSegment implements Segment {
             List<ONode> result = new ArrayList<>();
 
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
-                for (ONode n : currentNodes) {
+                for (ONode n : currentNodes) { //其实只有一条
                     if (n.isNull()) {
                         n.asArray().addNew();
                     }
