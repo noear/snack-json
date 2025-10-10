@@ -7,6 +7,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.json.JsonParseException;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -83,67 +84,169 @@ public class FeatureTest {
 
     @Test
     public void Read_AllowBackslashEscapingAnyCharacter() {
-        throw new UnsupportedOperationException();
+        String json0 = "{'a':'\\a'}";
+
+        String json = ONode.ofJson(json0, Feature.Read_AllowBackslashEscapingAnyCharacter).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":\"\\\\a\"}", json);
+
+        Assertions.assertThrows(JsonParseException.class, () -> {
+            ONode.ofJson(json0);
+        });
     }
 
     @Test
     public void Read_AllowInvalidEscapeCharacter() {
-        throw new UnsupportedOperationException();
+        String json0 = "{'a':'\\a'}";
+
+        String json = ONode.ofJson(json0, Feature.Read_AllowInvalidEscapeCharacter).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":\"a\"}", json);
+
+        Assertions.assertThrows(JsonParseException.class, () -> {
+            ONode.ofJson(json0);
+        });
     }
 
     @Test
     public void Read_AllowUnescapedControlCharacters() {
-        throw new UnsupportedOperationException();
+        String json0 = "{'a':'\1'}";
+
+        String json = ONode.ofJson(json0, Feature.Read_AllowUnescapedControlCharacters).toJson();
+        System.out.println(json);
+
+        Assertions.assertThrows(JsonParseException.class, () -> {
+            ONode.ofJson(json0);
+        });
     }
 
     @Test
     public void Read_UseBigNumberMode() {
-        throw new UnsupportedOperationException();
+        String json = "{'a':1}";
+
+        Map data = ONode.ofJson(json).toBean();
+        System.out.println(data.get("a").getClass());
+        Assertions.assertEquals(Integer.class, data.get("a").getClass());
+
+        data = ONode.ofJson(json, Feature.Read_UseBigNumberMode).toBean();
+        System.out.println(data.get("a").getClass());
+        Assertions.assertEquals(BigInteger.class, data.get("a").getClass());
     }
 
     @Test
     public void Read_AllowUseGetter() {
-        throw new UnsupportedOperationException();
+        NumberBean bean = new NumberBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":1,\"b\":2,\"c\":3.0,\"d\":4.0}", json);
+
+        json = ONode.ofBean(bean, Feature.Read_AllowUseGetter).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":101,\"b\":2,\"c\":3.0,\"d\":4.0}", json);
     }
 
     @Test
     public void Read_OnlyUseGetter() {
-        throw new UnsupportedOperationException();
+        NumberBean bean = new NumberBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":1,\"b\":2,\"c\":3.0,\"d\":4.0}", json);
+
+        json = ONode.ofBean(bean, Feature.Read_OnlyUseGetter).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":101}", json);
     }
 
     @Test
     public void Read_AutoType() {
-        throw new UnsupportedOperationException();
+        Map<String, Object> data = new HashMap<>();
+        data.put("user", new NumberBean());
+
+        String json = ONode.ofBean(data, Feature.Write_ClassName).toJson();
+
+        data = ONode.deserialize(json, Map.class);
+        System.out.println(data);
+        Assertions.assertEquals("{@type=java.util.HashMap, user={@type=features.snack4.codec.FeatureTest$NumberBean, a=1, b=2, c=3.0, d=4.0}}", data.toString());
+
+        data = ONode.deserialize(json, Map.class, Feature.Read_AutoType);
+        System.out.println(data);
+        Assertions.assertEquals("{user=NumberBean{a=1, b=2, c=3.0, d=4.0}}", data.toString());
     }
 
     @Test
     public void Write_FailOnUnknownProperties() {
-        throw new UnsupportedOperationException();
+        String json = "{name:'aaa'}";
+
+        ONode.deserialize(json, NumberBean.class);
+
+        Assertions.assertThrows(Throwable.class, () -> {
+            ONode.deserialize(json, NumberBean.class, Feature.Write_OnlyUseOnlySetter, Feature.Write_FailOnUnknownProperties);
+        });
     }
 
     @Test
     public void Write_UnquotedFieldNames() {
-        throw new UnsupportedOperationException();
+        NumberBean bean = new NumberBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+
+        json = ONode.ofBean(bean, Feature.Write_UnquotedFieldNames).toJson();
+        System.out.println(json);
     }
 
     @Test
     public void Write_Nulls() {
-        throw new UnsupportedOperationException();
+        NullBean bean = new NullBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{}", json);
+
+        json = ONode.ofBean(bean, Feature.Write_Nulls).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"name\":null,\"age\":null,\"items\":null,\"isMan\":null}", json);
     }
 
     @Test
     public void Write_NullListAsEmpty() {
-        throw new UnsupportedOperationException();
+        NullBean bean = new NullBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{}", json);
+
+        json = ONode.ofBean(bean, Feature.Write_Nulls, Feature.Write_NullListAsEmpty).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"name\":null,\"age\":null,\"items\":[],\"isMan\":null}", json);
     }
 
     @Test
     public void Write_NullStringAsEmpty() {
-        throw new UnsupportedOperationException();
+        NullBean bean = new NullBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{}", json);
+
+        json = ONode.ofBean(bean, Feature.Write_Nulls, Feature.Write_NullStringAsEmpty).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"name\":\"\",\"age\":null,\"items\":null,\"isMan\":null}", json);
     }
 
     @Test
     public void Write_NullBooleanAsFalse() {
-        throw new UnsupportedOperationException();
+        NullBean bean = new NullBean();
+
+        String json = ONode.ofBean(bean).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{}", json);
+
+        json = ONode.ofBean(bean, Feature.Write_Nulls, Feature.Write_NullBooleanAsFalse).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"name\":null,\"age\":null,\"items\":null,\"isMan\":false}", json);
     }
 
     @Test
@@ -152,9 +255,11 @@ public class FeatureTest {
 
         String json = ONode.ofBean(bean).toJson();
         System.out.println(json);
+        Assertions.assertEquals("{}", json);
 
-        json = ONode.ofBean(bean, Feature.Write_NullNumberAsZero).toJson();
+        json = ONode.ofBean(bean, Feature.Write_Nulls, Feature.Write_NullNumberAsZero).toJson();
         System.out.println(json);
+        Assertions.assertEquals("{\"name\":null,\"age\":0,\"items\":null,\"isMan\":null}", json);
     }
 
     @Test
@@ -323,7 +428,7 @@ public class FeatureTest {
         private double d = 4;
 
         public int getA() {
-            return a;
+            return a + 100;
         }
 
         public void setA(int a) {
@@ -349,6 +454,7 @@ public class FeatureTest {
         String name;
         Integer age;
         List items;
+        Boolean isMan;
     }
 
     static enum Membership {
