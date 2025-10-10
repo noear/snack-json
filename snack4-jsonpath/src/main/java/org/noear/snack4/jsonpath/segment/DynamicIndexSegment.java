@@ -54,6 +54,7 @@ public class DynamicIndexSegment implements Segment {
             }
         }
 
+        ctx.flattened = false;
         return results;
     }
 }

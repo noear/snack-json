@@ -33,11 +33,12 @@ import java.util.Map;
 public class RecursiveSegment implements Segment {
     @Override
     public String toString() {
-        return "..[*]";
+        return "..";
     }
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
+        ctx.flattened = true;
         List<ONode> result = new ArrayList<>();
 
         for (ONode node : currentNodes) {

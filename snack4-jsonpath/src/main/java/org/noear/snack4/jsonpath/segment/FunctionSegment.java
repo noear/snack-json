@@ -46,6 +46,7 @@ public class FunctionSegment implements Segment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
+        ctx.flattened = false;
         return Collections.singletonList(
                 FunctionLib.get(funcName).apply(ctx, currentNodes) // 传入节点列表
         );

@@ -34,15 +34,13 @@ import java.util.List;
 public class FilterSegment implements Segment {
     private final String segmentStr;
     private final Expression expression;
-    private final boolean flattened;
 
     /**
      * @param segmentStr `?...`
      */
-    public FilterSegment(String segmentStr, boolean flattened) {
+    public FilterSegment(String segmentStr) {
         this.segmentStr = segmentStr;
         this.expression = Expression.get(segmentStr.substring(1));
-        this.flattened = flattened;
     }
 
     @Override
@@ -52,19 +50,17 @@ public class FilterSegment implements Segment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        if (this.flattened) {
+        List<ONode> result = new ArrayList<>();
+
+        if (ctx.flattened) {
             //已经偏平化
-            List<ONode> result = new ArrayList<>();
             for (ONode n1 : currentNodes) {
                 if (expression.test(n1, ctx)) {
                     result.add(n1);
                 }
             }
-            return result;
         } else {
             //还未偏平化
-            List<ONode> result = new ArrayList<>();
-
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) { //其实只有一条
                     if (n.isNull()) {
@@ -78,9 +74,10 @@ public class FilterSegment implements Segment {
                     flattenResolve(ctx, n, result);
                 }
             }
-
-            return result;
         }
+
+        ctx.flattened = false;
+        return result;
     }
 
     // 新增递归展开方法

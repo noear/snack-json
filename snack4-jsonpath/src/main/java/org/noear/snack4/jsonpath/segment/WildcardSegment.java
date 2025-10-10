@@ -18,7 +18,6 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.Segment;
 
 import java.util.ArrayList;
@@ -32,12 +31,6 @@ import java.util.Map;
  * @since 4.0
  */
 public class WildcardSegment implements Segment {
-    private boolean flattened;
-
-    public WildcardSegment(boolean flattened) {
-        this.flattened = flattened;
-    }
-
     @Override
     public String toString() {
         return "[*]";
@@ -45,7 +38,8 @@ public class WildcardSegment implements Segment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        if (flattened) {
+        if (ctx.flattened) {
+            ctx.flattened = false;
             return currentNodes;
         }
 

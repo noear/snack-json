@@ -71,14 +71,6 @@ public class JsonPathCompiler {
     private void resolveDot(QueryContext context) {
         position++;
         if (position < path.length() && path.charAt(position) == '.') {
-            position++;
-
-            if (path.charAt(position) == '*') {
-                position++;
-            } else {
-                context.flattened = true;
-            }
-
             segments.add(new RecursiveSegment());
 
             while (position < path.length()) {
@@ -97,15 +89,14 @@ public class JsonPathCompiler {
             }
 
             if (position < path.length() && path.charAt(position) != '.' && path.charAt(position) != '[') {
-                resolveKey(true);
-                context.flattened = false;
+                resolveKey();
             }
         } else {
             char ch = path.charAt(position);
             if (ch == '[') {
                 resolveBracket(context);
             } else {
-                resolveKey(false);
+                resolveKey();
             }
         }
     }
@@ -123,33 +114,28 @@ public class JsonPathCompiler {
 
         if (segment.startsWith("$.") || segment.startsWith("@.")) {
             segments.add(new DynamicIndexSegment(segment));
-            context.flattened = false;
             return;
         }
 
         if (segment.equals("*")) {
             // 全选
-            segments.add(new WildcardSegment(false));
+            segments.add(new WildcardSegment());
         } else {
-            try {
-                if (segment.startsWith("?")) {
-                    // 条件过滤，如 [?@id]
-                    // ..*[?...] 支持进一步深度展开
-                    // ..x[?...] 已展开过，但查询后是新的结果可以再展开
-                    // ..[?...] 已展开过，不需要再展开
-                    segments.add(new FilterSegment(segment, context.flattened));
-                } else if (segment.contains(",")) {
-                    // 多索引选择，如 [1,4], ['a','b']
-                    segments.add(new MultiIndexSegment(segment));
-                } else if (segment.contains(":")) {
-                    // 范围选择，如 [1:4]
-                    segments.add(new RangeIndexSegment(segment));
-                } else {
-                    // 属性选择
-                    segments.add(new IndexSegment(segment));
-                }
-            } finally {
-                context.flattened = false;
+            if (segment.startsWith("?")) {
+                // 条件过滤，如 [?@id]
+                // ..*[?...] 支持进一步深度展开
+                // ..x[?...] 已展开过，但查询后是新的结果可以再展开
+                // ..[?...] 已展开过，不需要再展开
+                segments.add(new FilterSegment(segment));
+            } else if (segment.contains(",")) {
+                // 多索引选择，如 [1,4], ['a','b']
+                segments.add(new MultiIndexSegment(segment));
+            } else if (segment.contains(":")) {
+                // 范围选择，如 [1:4]
+                segments.add(new RangeIndexSegment(segment));
+            } else {
+                // 属性选择
+                segments.add(new IndexSegment(segment));
             }
         }
     }
@@ -158,13 +144,13 @@ public class JsonPathCompiler {
      * 分析键名或函数操作符（如 "store" 或 "count()"）
      *
      */
-    private void resolveKey(boolean flattened) {
+    private void resolveKey() {
         String key = parseSegment('.', '[');
 
         if (key.endsWith("()")) {
             segments.add(new FunctionSegment(key));
         } else if (key.equals("*")) {
-            segments.add(new WildcardSegment(flattened));
+            segments.add(new WildcardSegment());
         } else {
             segments.add(new PropertySegment(key));
         }

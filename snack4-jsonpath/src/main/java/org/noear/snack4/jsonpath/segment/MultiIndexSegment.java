@@ -70,6 +70,7 @@ public class MultiIndexSegment implements Segment {
             doResolve(ctx, n, result);
         }
 
+        ctx.flattened = false;
         return result;
     }
 

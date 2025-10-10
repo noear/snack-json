@@ -65,6 +65,7 @@ public class IndexSegment implements Segment {
             }
         }
 
+        ctx.flattened = false;
         return result;
     }
 }

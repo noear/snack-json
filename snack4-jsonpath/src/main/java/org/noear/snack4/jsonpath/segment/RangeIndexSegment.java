@@ -78,6 +78,7 @@ public class RangeIndexSegment implements Segment {
             doResolve(ctx, arr, result);
         }
 
+        ctx.flattened = false;
         return result;
     }
 

@@ -50,6 +50,7 @@ public class PropertySegment implements Segment {
             IndexUtil.forKey(ctx, n, key, result);
         }
 
+        ctx.flattened = false;
         return result;
     }
 }
