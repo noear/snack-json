@@ -2,6 +2,7 @@ package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import features.snack4.path.manual.JsonPathTest3;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
@@ -121,6 +122,16 @@ public class JsonPathCompatibleTest5 {
 //
 //        compatible_do("1", json, jsonpathStr1);
 //    }
+
+
+    @Test
+    public void test10() {
+        JsonPathTest3.Entity entity = new JsonPathTest3.Entity(1001, "ljw2083");
+        String json = ONode.ofBean(entity).toJson();
+
+        compatible_do("1", json, "$[?(@.id == 1001)]");
+        compatible_do("2", json, "$[?(@.id == 1002)]");
+    }
 
 
     private void compatible_do(String hint, String json, String jsonpathStr) {

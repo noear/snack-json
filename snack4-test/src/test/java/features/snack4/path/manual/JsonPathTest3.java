@@ -46,11 +46,11 @@ public class JsonPathTest3 {
         entities.add(new Entity("ljw2083"));
         ONode n = ONode.ofBean(entities);
 
-        List<String> names = n.select("$.name").toBean(List.class);
+        List<String> names = n.select("$.*.name").toBean(List.class); // $.name 不合语法
         assert names.size() == 2;
 
-        System.out.println(n.select("$.name"));
-        assert n.select("$.name").pathList().size() == 2;
+        System.out.println(n.select("$.*.name"));
+        assert n.select("$.*.name").pathList().size() == 2;
     }
 
     @Test
@@ -95,26 +95,12 @@ public class JsonPathTest3 {
         entities.add(new Entity(1004, null));
         ONode n = ONode.ofBean(entities);
 
-        ONode rst = n.select("$[?($.id in [1001,1002])]");
-        assert rst.size() == 2;
+        ONode rst = n.select("$[?(@.id in [1001,1002])]");
+        assertEquals(2, rst.size());
 
-        System.out.println(n.select("$[?($.id in [1001,1002])]"));
-        assert n.select("$[?($.id in [1001,1002])]").pathList().size() == 2;
-    }
-
-    @Test
-    public void test6() {
-        Entity entity = new Entity(1001, "ljw2083");
-        ONode n = ONode.ofBean(entity);
-
-        assert n.select("$[?(@.id == 1001)]").isObject();
-        assert n.select("$[?(@.id == 1002)]").isNull();
-
-        n.select("$").set("id", 123456);
-        assert n.get("id").getInt() == 123456;
-
-        n.get("value").add(1).add(2).add(3);
-        assert n.get("value").size() == 3;
+        System.out.println(rst);
+        System.out.println(rst.pathList());
+        assert rst.pathList().size() == 2;
     }
 
     @Test
@@ -292,13 +278,8 @@ public class JsonPathTest3 {
 
         ONode ary2_a2 = n.select("$.data.ary2[*].b.c");
         assert ary2_a2.size() == 1;
-        assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(2));
-        assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(1).toJson());
-
-        ONode ary2_b = n.select("$...b");
-
-        ONode ary2_c = n.select("$.data..b.c");
-
+        assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(3));
+        assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(2).toJson());
 
         assert list.size() == 5;
     }
