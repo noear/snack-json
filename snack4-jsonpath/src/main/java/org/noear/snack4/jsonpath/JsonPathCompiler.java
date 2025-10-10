@@ -127,7 +127,7 @@ public class JsonPathCompiler {
                 segments.add(new MultiIndexSegment(segment));
             } else if (segment.contains(":")) {
                 // 范围选择，如 [1:4]
-                segments.add(new RangeIndexSegment(segment));
+                segments.add(new ArraySliceSegment(segment));
             } else {
                 // 属性选择
                 segments.add(new IndexSegment(segment));

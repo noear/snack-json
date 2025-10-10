@@ -62,12 +62,22 @@ public final class Options {
 
     private TimeZone timeZone = DEF_TIME_ZONE;
 
+    private boolean RFC9535 = false;
+
     private final boolean readonly;
 
     private Options(boolean readonly) {
         this.readonly = readonly;
     }
 
+    public boolean isRFC9535() {
+        return RFC9535;
+    }
+
+    public Options RFC9535(boolean RFC9535) {
+        this.RFC9535 = RFC9535;
+        return this;
+    }
 
     /**
      * 是否启用指定特性

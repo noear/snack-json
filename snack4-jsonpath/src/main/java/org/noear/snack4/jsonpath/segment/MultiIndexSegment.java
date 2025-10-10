@@ -32,28 +32,27 @@ import java.util.stream.Collectors;
  */
 public class MultiIndexSegment implements Segment {
     private final String segmentStr;
-    private boolean isWildcard; //是否为通配符？
-    private List<String> keys;
-    private List<Integer> indices;
+    private List<Object> chunks = new ArrayList<>();
 
     public MultiIndexSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
-        if (segmentStr.indexOf('*') >= 0) {
-            //通配符
-            isWildcard = true;
-        } else if (segmentStr.indexOf('\'') >= 0) {
-            //key
-            this.keys = Arrays.stream(segmentStr.split(","))
-                    .map(String::trim)
-                    .map(k -> k.substring(1, k.length() - 1))
-                    .collect(Collectors.toList());
-        } else {
-            //index
-            this.indices = Arrays.stream(segmentStr.split(","))
-                    .map(String::trim)
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toList());
+        for (String s : segmentStr.split(",")) {
+            String chunk = s.trim();
+
+            if (chunk.length() > 0) {
+                char ch = chunk.charAt(0);
+
+                if (ch == '*') {
+                    chunks.add(Boolean.TRUE);
+                } else if (ch == '$' || ch == '@') {
+                    chunks.add(JsonPath.compile(chunk));
+                } else if (ch == '\'') {
+                    chunks.add(chunk.substring(1, chunk.length() - 1));
+                } else {
+                    chunks.add(Integer.parseInt(chunk));
+                }
+            }
         }
     }
 
@@ -75,45 +74,55 @@ public class MultiIndexSegment implements Segment {
     }
 
     private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
-        if (isWildcard) { //本级偏平化
-            if (node.isArray()) {
-                int idx = 0;
-                for (ONode n1 : node.getArray()) {
-                    if (n1.source == null) {
-                        n1.source = new PathSource(node, null, idx);
+        for (Object c1 : chunks) {
+            if (c1 instanceof Boolean) {
+                //*
+                if (node.isArray()) {
+                    int idx = 0;
+                    for (ONode n1 : node.getArray()) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, null, idx);
+                        }
+
+                        idx++;
+                        result.add(n1);
                     }
+                } else if (node.isObject()) {
+                    for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+                        ONode n1 = entry.getValue();
+                        if (n1.source == null) {
+                            n1.source = new PathSource(node, entry.getKey(), 0);
+                        }
 
-                    idx++;
-                    result.add(n1);
-                }
-            } else if (node.isObject()) {
-                for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                    ONode n1 = entry.getValue();
-                    if (n1.source == null) {
-                        n1.source = new PathSource(node, entry.getKey(), 0);
+                        result.add(n1);
                     }
-
-                    result.add(n1);
                 }
-            }
-        } else if (keys != null) {
-            if (ctx.getMode() == QueryMode.CREATE) {
-                node.asObject();
-            }
+            } else if (c1 instanceof JsonPath) {
+                //$.x
+                ONode dynamicIdx = ctx.nestedQuery(node, (JsonPath) c1);
 
-            if (node.isObject()) {
-                for (String key : keys) {
-                    IndexUtil.forKeyUnsafe(ctx, node, key, result);
+                if (dynamicIdx.isNumber()) {
+                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
+                } else if (dynamicIdx.isString()) {
+                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
                 }
-            }
-        } else {
-            if (ctx.getMode() == QueryMode.CREATE) {
-                node.asArray();
-            }
+            } else if (c1 instanceof String) {
+                //'name'
+                if (ctx.getMode() == QueryMode.CREATE) {
+                    node.asObject();
+                }
 
-            if (node.isArray()) {
-                for (Integer idx : indices) {
-                    IndexUtil.forIndexUnsafe(ctx, node, idx, result);
+                if (node.isObject()) {
+                    IndexUtil.forKeyUnsafe(ctx, node, (String) c1, result);
+                }
+            } else if (c1 instanceof Integer) {
+                //idx
+                if (ctx.getMode() == QueryMode.CREATE) {
+                    node.asArray();
+                }
+
+                if (node.isArray()) {
+                    IndexUtil.forIndexUnsafe(ctx, node, (Integer) c1, result);
                 }
             }
         }

@@ -2,6 +2,7 @@ package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -32,10 +33,14 @@ public class RFC9535FilterTest2 {
         queryAssert("$.a[?@ < 2 || @.b == \"k\"]", "[1,{\"b\": \"k\"}]");
 
 
+        //Non-deterministic ordering
+        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
+
         queryAssert("$.o[?@ > 1 && @ < 4]", "[2,3]");
         queryAssert("$.o[?@.u || @.x]", "[{\"u\": 6}]");
         queryAssert("$.a[?@.b == $.x]", "[3,5,1,2,4,6]");
         queryAssert("$.a[?@ == @]", "[3,5,1,2,4,6,{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": {}},{\"b\": \"kilo\"}]");
+
 
     }
 
@@ -45,8 +50,7 @@ public class RFC9535FilterTest2 {
         queryAssert("$[?@.*]", "[{\"a\":[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}],\"o\":{\"p\": 1, \"q\": 2, \"r\": 3, \"s\": 5, \"t\": {\"u\": 6}}}]");
         //Nested filters
         queryAssert("$[?@[?@.b]]", "[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]");
-        //Non-deterministic ordering
-        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
+
 
         //Array value regular expression match
         queryAssert("$.a[?match(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"}]");
@@ -56,7 +60,7 @@ public class RFC9535FilterTest2 {
     }
 
     private void queryAssert(String expr, String expected) {
-        String actual = ONode.ofJson(queryJson).select(expr).toJson();
+        String actual = ONode.ofJson(queryJson, Options.of().RFC9535(true)).select(expr).toJson();
         String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
 
         assertEquals(expected2, actual);

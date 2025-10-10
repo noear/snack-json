@@ -56,6 +56,7 @@ public class IndexSegment implements Segment {
 
         for (ONode node : currentNodes) {
             if (query != null) {
+                //$.x
                 ONode dynamicIdx = ctx.nestedQuery(node, query);
 
                 if (dynamicIdx.isNumber()) {
@@ -64,8 +65,10 @@ public class IndexSegment implements Segment {
                     IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
                 }
             } else if (key != null) {
+                //'name'
                 IndexUtil.forKey(ctx, node, key, result);
             } else {
+                //idx
                 IndexUtil.forIndex(ctx, node, index, result);
             }
         }

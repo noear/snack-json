@@ -17,9 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.util.RangeUtil;
 import org.noear.snack4.jsonpath.Segment;
 
@@ -33,14 +31,14 @@ import java.util.List;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class RangeIndexSegment implements Segment {
+public class ArraySliceSegment implements Segment {
     //[start:end:step]
     private final String segmentStr;
     private Integer startRef;
     private Integer endRef;
     private int step;
 
-    public RangeIndexSegment(String segmentStr) {
+    public ArraySliceSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
         String[] parts = segmentStr.split(":", 3); //[start:end:step]

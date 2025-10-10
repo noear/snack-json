@@ -34,6 +34,7 @@ public class QueryContext {
     private final ONode root;
     private final QueryMode mode;
     private final Options options;
+    private final boolean RFC9535;
 
     public QueryContext(ONode root, QueryMode mode) {
         this.root = root;
@@ -44,10 +45,16 @@ public class QueryContext {
         } else {
             this.options = Options.DEF_OPTIONS;
         }
+
+        RFC9535 = options.isRFC9535();
     }
 
     public ONode getRoot() {
         return root;
+    }
+
+    public boolean isRFC9535() {
+        return RFC9535;
     }
 
     public QueryMode getMode() {
