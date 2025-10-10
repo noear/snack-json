@@ -45,7 +45,7 @@
 
 <hr />
 
-基于jdk8。支持：序列化反序列化、解析和转换、构建、查找、Json path 查询。
+基于jdk8。支持：Json Dom 的构建、编码解转换、获取、JsonPath 查询、JsonSchema 验证。
 
 ```xml
 <dependency>
@@ -57,10 +57,9 @@
 
 Snack-Json 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
 * 强调文档树的操控和构建能力
-* 高性能`Json path`查询（兼容性和性能很赞）
-* 可以 `Json Schema` 架构校验
-* 顺带支持`序列化、反序列化`
-* 基于 无参构造函数 + 字段 操作实现（因注入而触发动作的风险，不会有）
+* 高性能`Json path`查询（比 jayway.jsonpath 快很多）
+* 支持 `Json Schema` 架构校验
+* 优先使用 无参构造函数 + 字段 编解码（可避免注入而触发动作的风险）
 
 
 | 依赖包                           | 描述                   |  
@@ -88,20 +87,6 @@ oNode.get("layout").get(0).get("title").getString();
 oNode.getOrNew("list").fillJson("[1,2,3,4,5,6]");
 ```
 
-支持序列化、反序列化
-
-```java
-User user = new User();
-ONode.ofBean(user).toBean(User.class); //可以作为 bean 转换使用
-ONode.ofBean(user).toJson();
-
-ONode.ofJson("{}").toBean(User.class);
-ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
-
-//快捷方式
-String json = ONode.serialize(user);
-User user = ONode.deserialize(json, User.class);
-```
 
 支持 jsonpath 查询、构建、删除
 
@@ -124,6 +109,21 @@ JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'
 schema.validate(ONode.load("{userId:'1'}")); //校验格式
 ```
 
+
+支持序列化、反序列化
+
+```java
+User user = new User();
+ONode.ofBean(user).toBean(User.class); //可以作为 bean 转换使用
+ONode.ofBean(user).toJson();
+
+ONode.ofJson("{}").toBean(User.class);
+ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
+
+//快捷方式
+String json = ONode.serialize(user);
+User user = ONode.deserialize(json, User.class);
+```
 
 ## 路径树接口
 
