@@ -20,6 +20,7 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.Operation;
 import org.noear.snack4.jsonpath.OperationLib;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.util.Asserts;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -166,12 +167,12 @@ public class Expression {
         Condition condition = Condition.get(conditionStr);
 
         // 过滤空条件（操作符处理时，就不需要再过滤了）
-        if (condition.getLeft().getNode().isUndefined()) {
+        if (Asserts.isEmpty(condition.getLeft().getValue())) {
             return false;
         }
 
         // 单元操作（如 @.price）
-        if (condition.getRight() == null) {
+        if (Asserts.isEmpty(condition.getRight().getValue())) {
             if (condition.getOp() == null) {
                 ONode leftNode = condition.getLeftNode(ctx, node);
                 return !leftNode.isNull();

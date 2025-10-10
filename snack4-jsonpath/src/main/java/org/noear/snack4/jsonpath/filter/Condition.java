@@ -87,7 +87,7 @@ public class Condition {
 
 
     public ONode getRightNode(QueryContext ctx, ONode node) {
-        if (right.getQuery() == null) {
+        if (right.getQuery() != null) {
             return ctx.nestedQuery(node, right.getQuery());
         } else {
             return right.getNode();
