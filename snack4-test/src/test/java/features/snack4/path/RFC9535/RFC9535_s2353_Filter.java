@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author noear 2025/5/6 created
  */
 public class RFC9535_s2353_Filter {
-    // https://www.rfc-editor.org/rfc/rfc9535.html
+    // SQL/JSON Path (ISO/IEC 9075)
+    // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
     static final String queryJson = "{\n" +
             "  \"a\": [3, 5, 1, 2, 4, 6,\n" +

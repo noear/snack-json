@@ -9,6 +9,8 @@ import org.noear.snack4.ONode;
  *
  */
 public class RFC9535_s2323 {
+    // SQL/JSON Path (ISO/IEC 9075)
+    // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
     static final String json2 = "{\n" +
             "  \"o\": {\"j\": 1, \"k\": 2},\n" +

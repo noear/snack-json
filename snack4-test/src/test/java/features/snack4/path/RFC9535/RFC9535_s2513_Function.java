@@ -6,4 +6,6 @@ package features.snack4.path.RFC9535;
  *
  */
 public class RFC9535_s2513_Function {
+    // SQL/JSON Path (ISO/IEC 9075)
+    // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 }
