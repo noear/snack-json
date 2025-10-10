@@ -50,6 +50,7 @@ public class JsonReader {
     private final ParserState state;
 
     private StringBuilder stringBuilder;
+
     private StringBuilder getStringBuilder() {
         if (stringBuilder == null) {
             stringBuilder = new StringBuilder(32);
@@ -129,6 +130,7 @@ public class JsonReader {
 
     /**
      * 解析 JavaScript Date 对象: new Date(long)
+     *
      * @return ONode (Date)
      * @throws IOException
      */
@@ -447,9 +449,7 @@ public class JsonReader {
         String numStr = sb.toString();
         try {
             // 根据后缀类型解析数字
-            if (postfix == 'M') {
-                return new BigDecimal(numStr);
-            } else if (postfix == 'D') {
+            if (postfix == 'D') {
                 return Double.parseDouble(numStr);
             } else if (postfix == 'F') {
                 return Float.parseFloat(numStr);

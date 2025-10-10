@@ -46,6 +46,7 @@ public class JsonWriter {
     private final Writer writer;
     private int depth = 0;
     private StringBuilder stringBuilder;
+
     private StringBuilder getStringBuilder() {
         if (stringBuilder == null) {
             stringBuilder = new StringBuilder(32);
@@ -159,9 +160,7 @@ public class JsonWriter {
             writer.write(num.toString());
 
             if (opts.hasFeature(Feature.Write_NumberTypeSuffix)) {
-                if (num instanceof BigDecimal) {
-                    writer.write('M');
-                } else if (num instanceof Double) {
+                if (num instanceof Double) {
                     writer.write('D');
                 } else if (num instanceof Float) {
                     writer.write('F');
