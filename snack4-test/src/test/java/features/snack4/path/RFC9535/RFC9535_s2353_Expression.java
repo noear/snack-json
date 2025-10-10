@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author noear 2025/5/6 created
  */
-public class RFC9535ExpressionTest {
+public class RFC9535_s2353_Expression {
     // https://www.rfc-editor.org/rfc/rfc9535.html
 
     static final String comparisonJson = "{\n" +
