@@ -30,11 +30,11 @@
 		<img src="https://img.shields.io/badge/JDK-25-green.svg" alt="jdk-25" />
 	</a>
     <br />
-    <a target="_blank" href='https://gitee.com/noear/snack3/stargazers'>
-        <img src='https://gitee.com/noear/snack3/badge/star.svg' alt='gitee star'/>
+    <a target="_blank" href='https://gitee.com/noear/snack-jsonpath/stargazers'>
+        <img src='https://gitee.com/noear/snack-jsonpath/badge/star.svg' alt='gitee star'/>
     </a>
-    <a target="_blank" href='https://github.com/noear/snack3/stargazers'>
-        <img src="https://img.shields.io/github/stars/noear/snack3.svg?style=flat&logo=github" alt="github star"/>
+    <a target="_blank" href='https://github.com/noear/snack-jsonpath/stargazers'>
+        <img src="https://img.shields.io/github/stars/noear/snack-jsonpath.svg?style=flat&logo=github" alt="github star"/>
     </a>
 </p>
 
