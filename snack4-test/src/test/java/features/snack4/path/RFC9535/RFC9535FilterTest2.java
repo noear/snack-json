@@ -36,7 +36,7 @@ public class RFC9535FilterTest2 {
 
 
         queryAssert("$.o[?@ > 1 && @ < 4]", "[2,3]");
-        queryAssert("$.o[?@.u || @.x]", "{\"u\": 6}");
+        queryAssert("$.o[?@.u || @.x]", "[{\"u\": 6}]");
         queryAssert("$.a[?@.b == $.x]", "[3,5,1,2,4,6]");
         queryAssert("$.a[?@ == @]", "[3,5,1,2,4,6,{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": {}},{\"b\": \"kilo\"}]");
 

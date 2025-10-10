@@ -1,5 +1,6 @@
 package features.snack4.path.manual;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
@@ -142,25 +143,25 @@ public class JsonPathTest {
         ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
         ONode t0 = n.select("$..b");
-        assert  t0.size()==4;
+        Assertions.assertEquals(4, t0.size());
 
         ONode t1 = n.select("$..b[?(@.c)]");
-        assert  t1.size()==3;
+        Assertions.assertEquals(3, t1.size());
 
         ONode t2 = n.select("$..b[?(@.c == 1)]");
-        assert  t2.size()==1;
+        Assertions.assertEquals(1, t2.size());
 
         ONode t3 = n.select("$..b[?(@.c == 12)]");
-        assert  t3.size()==0;
+        Assertions.assertEquals(0, t3.size());
 
         ONode t4 = n.select("$..b[?(@.c > 1)]");
-        assert  t4.size()==2;
+        Assertions.assertEquals(2, t4.size());
 
         ONode t4_min = n.select("$..b[?(@.c > 1)].c.min()");
-        assert  t4_min.getInt()==2;
+        Assertions.assertEquals(2, t4_min.getInt());
 
         ONode t5 = n.select("$..b[?(@.c in [1,2])]");
-        assert  t5.size()==2;
+        Assertions.assertEquals(2, t5.size());
     }
 
     @Test
