@@ -36,7 +36,7 @@ public class JsonPathCompiler {
 
 
     private final String path;
-    private int index;
+    private int position;
     private List<Segment> segments = new ArrayList<>();
 
     private JsonPathCompiler(String path) {
@@ -44,20 +44,20 @@ public class JsonPathCompiler {
     }
 
     private JsonPath doCompile() {
-        index = 1; //Skip $, @
+        position = 1; //Skip $, @
         QueryContext ctx = new QueryContext(null, QueryMode.SELECT); //记录分析中的 flattened 变化
 
-        while (index < path.length()) {
+        while (position < path.length()) {
             skipWhitespace();
-            if (index >= path.length()) break;
+            if (position >= path.length()) break;
 
-            char ch = path.charAt(index);
+            char ch = path.charAt(position);
             if (ch == '.') {
                 resolveDot(ctx);
             } else if (ch == '[') {
                 resolveBracket(ctx);
             } else {
-                throw new JsonPathException("Unexpected character '" + ch + "' at index " + index);
+                throw new JsonPathException("Unexpected character '" + ch + "' at index " + position);
             }
         }
 
@@ -69,22 +69,22 @@ public class JsonPathCompiler {
      *
      */
     private void resolveDot(QueryContext context) {
-        index++;
-        if (index < path.length() && path.charAt(index) == '.') {
-            index++;
+        position++;
+        if (position < path.length() && path.charAt(position) == '.') {
+            position++;
 
-            if (path.charAt(index) == '*') {
-                index++;
+            if (path.charAt(position) == '*') {
+                position++;
             } else {
                 context.flattened = true;
             }
 
             segments.add(new RecursiveSegment());
 
-            while (index < path.length()) {
+            while (position < path.length()) {
                 skipWhitespace();
-                if (index >= path.length()) break;
-                char ch = path.charAt(index);
+                if (position >= path.length()) break;
+                char ch = path.charAt(position);
                 if (ch == '.' || ch == '[') {
                     if (ch == '.') {
                         resolveDot(context);
@@ -96,12 +96,12 @@ public class JsonPathCompiler {
                 }
             }
 
-            if (index < path.length() && path.charAt(index) != '.' && path.charAt(index) != '[') {
+            if (position < path.length() && path.charAt(position) != '.' && path.charAt(position) != '[') {
                 resolveKey(true);
                 context.flattened = false;
             }
         } else {
-            char ch = path.charAt(index);
+            char ch = path.charAt(position);
             if (ch == '[') {
                 resolveBracket(context);
             } else {
@@ -115,10 +115,10 @@ public class JsonPathCompiler {
      *
      */
     private void resolveBracket(QueryContext context) {
-        index++; // 跳过'['
+        position++; // 跳过'['
         String segment = parseSegment(']');
-        while (index < path.length() && path.charAt(index) == ']') {
-            index++;
+        while (position < path.length() && path.charAt(position) == ']') {
+            position++;
         }
 
         if (segment.startsWith("$.") || segment.startsWith("@.")) {
@@ -190,8 +190,8 @@ public class JsonPathCompiler {
         boolean parsingBracketContent = isTerminator(']', terminators);
         int bracketLevel = parsingBracketContent ? 1 : 0; // 如果解析方括号内容，初始级别为 1
 
-        while (index < path.length()) {
-            char ch = path.charAt(index);
+        while (position < path.length()) {
+            char ch = path.charAt(position);
 
             // 1. 处理引号内的内容
             if ((ch == '\'' || ch == '\"') && !inRegex) {
@@ -205,14 +205,14 @@ public class JsonPathCompiler {
                     quoteChar = ch;
                 }
                 sb.append(ch);
-                index++;
+                position++;
                 continue;
             }
 
             // 如果在引号内部，则除了上面的引号关闭逻辑，其他所有字符都只追加
             if (inQuote) {
                 sb.append(ch);
-                index++;
+                position++;
                 continue;
             }
 
@@ -220,19 +220,19 @@ public class JsonPathCompiler {
             if (ch == '/' && !inRegex) {
                 inRegex = true;
                 sb.append(ch);
-                index++;
+                position++;
                 continue;
             } else if (ch == '/' && inRegex) {
                 inRegex = false;
                 sb.append(ch);
-                index++;
+                position++;
                 continue;
             }
 
             // 如果在正则表达式内部，忽略终止符检查
             if (inRegex) {
                 sb.append(ch);
-                index++;
+                position++;
                 continue;
             }
 
@@ -244,7 +244,7 @@ public class JsonPathCompiler {
                 } else if (ch == ']') {
                     bracketLevel--;
                     if (bracketLevel == 0) {
-                        index++; // 跳过闭合的 ]
+                        position++; // 跳过闭合的 ]
                         break;
                     }
                 }
@@ -261,7 +261,7 @@ public class JsonPathCompiler {
             }
 
             sb.append(ch);
-            index++;
+            position++;
         }
 
         return sb.toString().trim();
@@ -276,8 +276,8 @@ public class JsonPathCompiler {
 
     // 跳过空白字符
     private void skipWhitespace() {
-        while (index < path.length() && Character.isWhitespace(path.charAt(index))) {
-            index++;
+        while (position < path.length() && Character.isWhitespace(path.charAt(position))) {
+            position++;
         }
     }
 }
