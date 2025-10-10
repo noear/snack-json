@@ -30,15 +30,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JsonPath {
     private final String expression;
-    private final boolean rooted;
     private final List<Segment> segments;
     private final boolean multiple;
+    private final boolean rooted;
 
     public JsonPath(String expression, List<Segment> segments) {
         this.expression = expression;
         this.segments = segments;
-        this.rooted = expression.charAt(0) == '$';
         this.multiple = (expression.indexOf('*') > 0 || expression.indexOf("..") > 0 || expression.indexOf(',') > 0 || expression.indexOf(':') > 0 || expression.indexOf('?') > 0) && (expression.indexOf("()") < 0);
+        this.rooted = expression.charAt(0) == '$';
     }
 
     public boolean isRooted() {
