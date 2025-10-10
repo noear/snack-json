@@ -2,7 +2,7 @@
   Snack
 </h1>
 <p align="center">
-	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
+	<strong>一个 Json Dom & JsonPath 的框架（for Java）。兼容 IETF RFC 9535 标准</strong>
 </p>
 
 <p align="center">
@@ -57,7 +57,7 @@
 
 Snack-Json 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
 * 强调文档树的操控和构建能力
-* 高性能`Json path`查询（比 jayway.jsonpath 快很多）
+* 高性能`Json path`查询（比 jayway.jsonpath 快很多），兼容 IETF RFC 9535 标准
 * 支持 `Json Schema` 架构校验
 * 优先使用 无参构造函数 + 字段 编解码（可避免注入而触发动作的风险）
 
