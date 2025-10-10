@@ -2,10 +2,10 @@
   Snack
 </h1>
 <p align="center">
-	<strong>A Json Dom & JsonPath Framework (for Java)</strong>
+	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
 </p>
 <p align="center">
-	Compatible with JsonPath IETF RFC 9535 standard
+	兼容 JsonPath IETF RFC 9535 标准
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -40,7 +40,7 @@
 
 <hr />
 
-jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, JsonPath query, JsonSchema validation.
+基于jdk8。支持：Json Dom 的构建、编码解转换、获取、JsonPath 查询、JsonSchema 验证。
 
 ```xml
 <dependency>
@@ -50,24 +50,24 @@ jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, Jso
 </dependency>
 ```
 
-Snach-jsonpath draws on the design of `Javascript` where all variables are declared with `var` and `Xml dom` where everything is `Node`. Everything underneath it is represented by an `ONode`, which stands for `One node` and can be converted to any type.
+Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
 
-* It emphasizes the ability to build and manipulate the document tree
-* High performance `Json path` queries (much faster than jayway.jsonpath), IETF RFC 9535 compliant
-* Supports `Json Schema` validation
-* Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
-
-
-| dependencies                        | description                                            |  
-|-------------------------------------|--------------------------------------------------------| 
-| `org.noear:snack4`                  | Provides basic support for `dom` construction and codec |   
-| `org.noear:snack4-jsonpath`         | Provides `json path` query support                     |   
-| `org.noear:snack4-jsonschema`       | Provides `json schema` validation support              |  
+* 强调文档树的构建和操控能力
+* 高性能`Json path`查询（比 jayway.jsonpath 快很多），兼容 IETF RFC 9535 标准
+* 支持 `Json schema` 架构校验
+* 优先使用 无参构造函数 + 字段 编解码（可减少注入而触发动作的风险）
 
 
-## examples
+| 依赖包                           | 描述                      |  
+|-------------------------------|-------------------------| 
+| `org.noear:snack4`            | 提供 `dom` 构建与编解码基础支持 |   
+| `org.noear:snack4-jsonpath`   | 提供 `json path` 查询支持     |   
+| `org.noear:snack4-jsonschema` | 提供 `json schema` 校验支持   |  
 
-Support `dom` manipulation
+
+## 放几个示例
+
+支持 `dom` 操控
 
 ```java
 ONode oNode = new ONode();
@@ -84,7 +84,7 @@ oNode.getOrNew("list").fillJson("[1,2,3,4,5,6]");
 ```
 
 
-Supports `json path` query, build, and delete
+支持 `json path` 查询、构建、删除
 
 ```java
 ONode.ofBean(store).select("$..book[?@.tags contains 'war'].first()").toBean(Book.class); //RFC9535 规范，可以没有括号
@@ -97,7 +97,7 @@ ONode.ofBean(store).delete("$..book[-1]");
 ```
 
 
-Supports `json schema` validation
+支持 `json schema` 校验
 
 ```java
 JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
@@ -106,7 +106,7 @@ schema.validate(ONode.load("{userId:'1'}")); //校验格式
 ```
 
 
-Supports serialization and deserialization
+支持序列化、反序列化
 
 ```java
 User user = new User();
@@ -121,7 +121,7 @@ String json = ONode.serialize(user);
 User user = ONode.deserialize(json, User.class);
 ```
 
-## Path tree interface
+## 路径树接口
 
 ```java
 ONode o = ONode.ofJson(json).usePaths(); //会为每个子节点，生成 path 属性
@@ -140,7 +140,7 @@ rst.parent();
 
 
 
-## Advanced customization
+## 高级定制
 
 
 ```java
