@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.noear</groupId>
-    <artifactId>snack-json</artifactId>
+    <artifactId>snack-jsonpath</artifactId>
     <version>dev</version>
     <packaging>pom</packaging>
 
