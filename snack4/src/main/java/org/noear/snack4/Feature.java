@@ -92,11 +92,6 @@ public enum Feature {
     Read_BrowserCompatible,
 
     /**
-     * 读取时用日期格式化（默认使用时间戳）
-     */
-    //Read_UseDateFormat,
-
-    /**
      * 读取时允许使用获取器
      */
     Read_AllowUseGetter,
@@ -107,9 +102,9 @@ public enum Feature {
     Read_OnlyUseGetter,
 
     /**
-     * 读取数据中的类名
+     * 读取数据中的类名（支持读取 @type 属性）
      */
-    Read_ClassName,
+    Read_AutoType,
 
 
     //-----------------------------

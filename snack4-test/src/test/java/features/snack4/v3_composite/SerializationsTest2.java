@@ -57,7 +57,7 @@ public class SerializationsTest2 {
     public void test02() {
         String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
         tmp = tmp.replaceAll("UserGroupModel", "UserGroupModel2");
-        UserGroupModel2 tmp2 = ONode.deserialize(tmp, UserGroupModel2.class, Feature.Read_ClassName);
+        UserGroupModel2 tmp2 = ONode.deserialize(tmp, UserGroupModel2.class, Feature.Read_AutoType);
 
         assert tmp2.users != null;
         assert tmp2.users.length > 2;

@@ -52,7 +52,7 @@ public class SerializationTest {
 
             NullPointerException ex2 = ONode.deserialize(json, NullPointerException.class);
 
-            Object ex22 = ONode.deserialize(json, Feature.Read_ClassName);
+            Object ex22 = ONode.deserialize(json, Feature.Read_AutoType);
             assert ex22 instanceof NullPointerException;
 
 
@@ -93,9 +93,9 @@ public class SerializationTest {
 
         String json = ONode.serialize(group, Feature.Write_ClassName);
         System.out.println(json);
-        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class, Feature.Read_ClassName);
+        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class, Feature.Read_AutoType);
 
-        Object group22 = ONode.deserialize(json, Feature.Read_ClassName);
+        Object group22 = ONode.deserialize(json, Feature.Read_AutoType);
         assert group22 instanceof UserGroupModel;
 
         Object group23 = ONode.deserialize(json);
@@ -169,7 +169,7 @@ public class SerializationTest {
 
         String json = ONode.serialize(obj, Feature.Write_ClassName);
         System.out.println(json);
-        Map<String, Object> obj2 = ONode.deserialize(json, LinkedHashMap.class, Feature.Read_ClassName);
+        Map<String, Object> obj2 = ONode.deserialize(json, LinkedHashMap.class, Feature.Read_AutoType);
         assert obj2 instanceof LinkedHashMap;
 
         Map<String, Object> obj22 = ONode.deserialize(json, Object.class);

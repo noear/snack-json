@@ -1,8 +1,11 @@
 package features.snack4.v3_composite;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
+import org.noear.snack4.json.JsonParseException;
+import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -20,13 +23,13 @@ public class JsonTest {
      */
     @Test
     public void test11() throws IOException {
-       ONode c =  ONode.ofJson("\"xxx\"");
+        ONode c = ONode.ofJson("\"xxx\"");
         assert "xxx".equals(c.getString());
 
         c = ONode.ofJson("'xxx'");
         assert "xxx".equals(c.getString());
 
-        c = ONode.ofJson( "true");
+        c = ONode.ofJson("true");
         assert c.getBoolean();
 
         c = ONode.ofJson("false");
@@ -41,7 +44,7 @@ public class JsonTest {
         c = ONode.ofJson("NaN");
         assert c.isNull();
 
-        c = ONode.ofJson( "undefined");
+        c = ONode.ofJson("undefined");
         assert c.isNull();
 
 //        long times = System.currentTimeMillis();
@@ -71,7 +74,7 @@ public class JsonTest {
 
     @Test
     public void test23() throws IOException {
-       ONode c = ONode.ofJson("{a:{b:{c:{d:{e:'f'}}}}}");
+        ONode c = ONode.ofJson("{a:{b:{c:{d:{e:'f'}}}}}");
 
         assert "f".equals(c.get("a").get("b").get("c").get("d").get("e").getString());
 
@@ -89,7 +92,7 @@ public class JsonTest {
 
     @Test
     public void test25() throws IOException {
-        ONode c= ONode.ofJson( "[{a:'b'},{c:'d'},[{e:'f'}]]");
+        ONode c = ONode.ofJson("[{a:'b'},{c:'d'},[{e:'f'}]]");
 
         assert "f".equals(c.get(2).get(0).get("e").getString());
 
@@ -117,7 +120,7 @@ public class JsonTest {
      */
     @Test
     public void test27() throws IOException {
-        ONode c = ONode.ofJson( "{\"a\":\"\\t\"}");
+        ONode c = ONode.ofJson("{\"a\":\"\\t\"}");
 
         assert "\t".equals(c.get("a").getString());
 
@@ -126,32 +129,46 @@ public class JsonTest {
     }
 
 
+    @Test
+    public void test40_Read_DisableUnquotedKeys() throws IOException {
+        Assertions.assertThrows(JsonParseException.class, () -> {
+            // `{"aaa"` 会被识为是无引号key
+            ONode.ofJson("{{\"aaa\":\"111\",\"bbb\":\"222\"}", Feature.Read_DisableUnquotedKeys); //格式错误
+        });
+
+        Assertions.assertThrows(Throwable.class, () -> {
+            ONode.ofJson("{aaa:1,bbb:2}", Feature.Read_DisableUnquotedKeys);
+        });
+
+        ONode.ofJson("{aaa:1,bbb:2}");
+    }
 
     @Test
-    public void test40() throws IOException {
-        Throwable err = null;
+    public void test40_Read_DisableSingleQuotes() throws IOException {
+        Assertions.assertThrows(Throwable.class, () -> {
+            ONode.ofJson("{'aaa':1,'bbb':2}", Feature.Read_DisableSingleQuotes);
+        });
 
-        try {
-            ONode.ofJson("{{\"aaa\":\"111\",\"bbb\":\"222\"}", Feature.Read_DisableUnquotedKeys);
-        } catch (Throwable e) {
-            err = e;
-            e.printStackTrace();
-        }
+        ONode.ofJson("{aaa:1,bbb:2}", Feature.Read_DisableSingleQuotes); //未涉及 '
 
-        assert err != null;
+        ONode.ofJson("{'aaa':1,'bbb':2}");
     }
 
     @Test
     public void test41() throws IOException {
-        Throwable err = null;
+        Assertions.assertThrows(JsonParseException.class, () -> {
+            ONode.ofJson("[\"\"aaa\",\"bbb\",\"ccc\"]");
+        });
+    }
 
-        try {
-            ONode c = ONode.ofJson("[\"\"aaa\",\"bbb\",\"ccc\"]");
-        } catch (Throwable e) {
-            err = e;
-            e.printStackTrace();
-        }
+    @Test
+    public void test42() throws IOException {
+        Assertions.assertThrows(Throwable.class, () -> {
+            ONode.ofJson("{aaa:1,bbb:2}", Feature.Read_FailOnUnknownProperties).toBean(Test42Bean.class);
+        });
+    }
 
-        assert err != null;
+    static class Test42Bean {
+        int aaa;
     }
 }

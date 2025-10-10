@@ -17,7 +17,7 @@ public class _test3 {
         String json = "{\"reportId\":\"N4293fAVK86Jq1Mf465B\",\"statusCode\":0,\"statusMessage\":\"E_SUCCESS\",\"IP\":\"122.224.92.122\",\"data\":{\"errorCode\":2000,\"errMessage\":\"E_OCR_SUCCESS\",\"cardType\":\"PAN_FRONT\",\"panCode\":\"MEUPS2579N\",\"panName\":\"YEKKALADEVI SUBRAMANYAM\",\"dateOfBirth\":\"05/03/1988\",\"fatherName\":\"YEKKALADEVI RAGHUNANDANA RAO\"}}";
 
 
-        ONode oNode = ONode.ofJson(json, Feature.Read_ClassName);
+        ONode oNode = ONode.ofJson(json, Feature.Read_AutoType);
         oNode.get("data").set("@type", PanOcrModel.class.getName());
 
         ShanYunResModel<PanOcrModel> tmp = oNode.toBean(ShanYunResModel.class);

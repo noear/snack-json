@@ -14,7 +14,7 @@ public class ClassLoaderTest {
     public void demo() {
         Message data = new Message();
 
-        Options options = Options.of(Feature.Write_ClassName, Feature.Read_ClassName);
+        Options options = Options.of(Feature.Write_ClassName, Feature.Read_AutoType);
         //指定类加载器
         options.classLoader(data.getClass().getClassLoader());
 

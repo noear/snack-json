@@ -146,9 +146,10 @@ public class BeanDeserializer {
         ClassWrap classWrap = ClassWrap.from(typeWrap);
 
         if (useOnlySetter) {
-            //只能用 setter
+            //只能用 setter （以数据为主，支持 Read_FailOnUnknownProperties）
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
                 PropertyWrap propertyWrap = classWrap.getPropertyWrap(entry.getKey());
+
                 if (propertyWrap != null) {
                     if (propertyWrap.getSetterWrap() != null) {
                         Property property = propertyWrap.getSetterWrap();
@@ -159,10 +160,11 @@ public class BeanDeserializer {
                 }
             }
         } else {
-            //允许用 setter
+            //允许用 setter （以类为主，支持 flat）
             for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
                 PropertyWrap propertyWrap = entry.getValue();
                 final Property property;
+
                 if (useSetter && propertyWrap.getSetterWrap() != null) {
                     property = propertyWrap.getSetterWrap();
                 } else {
@@ -389,7 +391,7 @@ public class BeanDeserializer {
      * 是否读取类名字
      */
     private static boolean isReadClassName(Options opts, ONode node) {
-        if (opts.hasFeature(Feature.Read_ClassName) == false) {
+        if (opts.hasFeature(Feature.Read_AutoType) == false) {
             return false;
         }
 
