@@ -40,12 +40,11 @@ public class ONodeAttrHolder {
 
     private boolean flat;
 
-    private boolean serialize = true;
-    private boolean deserialize = true;
-    private ObjectEncoder serializeEncoder;
-    private ObjectDecoder deserializeDecoder;
-    private int deserializeFeaturesValue;
-    private int serializeFeaturesValue;
+    private boolean encode = true;
+    private boolean decode = true;
+    private ObjectEncoder encoder;
+    private ObjectDecoder decoder;
+    private int featuresValue;
 
     public ONodeAttrHolder(ONodeAttr attrAnno, boolean isTransient) {
         if (attrAnno != null) {
@@ -58,24 +57,23 @@ public class ONodeAttrHolder {
             }
 
             flat = attrAnno.flat();
-            serialize = attrAnno.serialize();
-            deserialize = attrAnno.deserialize();
+            encode = attrAnno.encode();
+            decode = attrAnno.decode();
 
-            if (attrAnno.serializeEncoder().isInterface() == false) {
-                serializeEncoder = ClassUtil.newInstance(attrAnno.serializeEncoder());
+            if (attrAnno.encoder().isInterface() == false) {
+                encoder = ClassUtil.newInstance(attrAnno.encoder());
             }
 
-            if (attrAnno.deserializeDecoder().isInterface() == false) {
-                deserializeDecoder = ClassUtil.newInstance(attrAnno.deserializeDecoder());
+            if (attrAnno.decoder().isInterface() == false) {
+                decoder = ClassUtil.newInstance(attrAnno.decoder());
             }
 
-            deserializeFeaturesValue = Feature.addFeature(0, attrAnno.deserializeFeatures());
-            serializeFeaturesValue = Feature.addFeature(0, attrAnno.serializeFeatures());
+            featuresValue = Feature.addFeature(0, attrAnno.features());
         }
 
         if (isTransient) {
-            serialize = false;
-            deserialize = false;
+            encode = false;
+            decode = false;
         }
     }
 
@@ -107,27 +105,23 @@ public class ONodeAttrHolder {
         return flat;
     }
 
-    public boolean isSerialize() {
-        return serialize;
+    public boolean hasFeature(Feature feature) {
+        return Feature.hasFeature(featuresValue, feature);
     }
 
-    public boolean isDeserialize() {
-        return deserialize;
+    public boolean isEncode() {
+        return encode;
     }
 
-    public boolean hasSerializeFeature(Feature feature) {
-        return Feature.hasFeature(serializeFeaturesValue, feature);
+    public boolean isDecode() {
+        return decode;
     }
 
-    public boolean hasDeserializeFeature(Feature feature) {
-        return Feature.hasFeature(deserializeFeaturesValue, feature);
+    public ObjectEncoder getEncoder() {
+        return encoder;
     }
 
-    public ObjectEncoder getSerializeEncoder() {
-        return serializeEncoder;
-    }
-
-    public ObjectDecoder getDeserializeDecoder() {
-        return deserializeDecoder;
+    public ObjectDecoder getDecoder() {
+        return decoder;
     }
 }

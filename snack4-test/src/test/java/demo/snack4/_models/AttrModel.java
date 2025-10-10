@@ -6,7 +6,7 @@ import org.noear.snack4.annotation.ONodeAttr;
 
 public class AttrModel {
     public int id;
-    @ONodeAttr(serializeFeatures = Feature.Write_NumbersAsString)
+    @ONodeAttr(features = Feature.Write_NumbersAsString)
     public long traceId;
     public String name;
 

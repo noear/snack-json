@@ -15,8 +15,8 @@
  */
 package org.noear.snack4;
 
-import org.noear.snack4.codec.BeanDeserializer;
-import org.noear.snack4.codec.BeanSerializer;
+import org.noear.snack4.codec.BeanDecoder;
+import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.JsonReader;
@@ -361,9 +361,9 @@ public final class ONode {
         } else if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
-            oNode = BeanSerializer.serialize(value);
+            oNode = BeanEncoder.encode(value);
         } else if (value instanceof Map) {
-            oNode = BeanSerializer.serialize(value);
+            oNode = BeanEncoder.encode(value);
         } else {
             if (value.getClass().isArray()) {
                 oNode = new ONode(options).addAll(Arrays.asList((Object[]) value));
@@ -439,9 +439,9 @@ public final class ONode {
         if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
-            oNode = BeanSerializer.serialize(value);
+            oNode = BeanEncoder.encode(value);
         } else if (value instanceof Map) {
-            oNode = BeanSerializer.serialize(value);
+            oNode = BeanEncoder.encode(value);
         } else {
             oNode = new ONode(options, value);
         }
@@ -556,14 +556,14 @@ public final class ONode {
 
 
     public static ONode ofBean(Object bean, Options opts) {
-        return BeanSerializer.serialize(bean, opts);
+        return BeanEncoder.encode(bean, opts);
     }
 
     public static ONode ofBean(Object bean, Feature... features) {
         if (Asserts.isEmpty(features)) {
-            return BeanSerializer.serialize(bean, Options.DEF_OPTIONS);
+            return BeanEncoder.encode(bean, Options.DEF_OPTIONS);
         } else {
-            return BeanSerializer.serialize(bean, Options.of(features));
+            return BeanEncoder.encode(bean, Options.of(features));
         }
     }
 
@@ -633,11 +633,11 @@ public final class ONode {
     /// ///////////
 
     public <T> T bindTo(T target) {
-        return BeanDeserializer.deserialize(this, target.getClass(), target, options);
+        return BeanDecoder.decode(this, target.getClass(), target, options);
     }
 
     public <T> T toBean(Type type) {
-        return BeanDeserializer.deserialize(this, type, null, options);
+        return BeanDecoder.decode(this, type, null, options);
     }
 
 

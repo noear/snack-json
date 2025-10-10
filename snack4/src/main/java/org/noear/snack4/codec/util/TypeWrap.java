@@ -16,6 +16,7 @@
 package org.noear.snack4.codec.util;
 
 import java.lang.reflect.*;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,6 +107,10 @@ public class TypeWrap {
 
     public boolean isEnum(){
         return type.isEnum();
+    }
+
+    public boolean isList(){
+        return type == List.class;
     }
 
     public boolean isString(){

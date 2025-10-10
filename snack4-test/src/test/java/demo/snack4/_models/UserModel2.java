@@ -10,9 +10,9 @@ public class UserModel2 {
     public ObjectEncoder nodeEncoder;
 
     public int id;
-    @ONodeAttr(serialize = false)
+    @ONodeAttr(encode = false)
     public String name;
-    @ONodeAttr(deserialize = false)
+    @ONodeAttr(decode = false)
     public String note;
 
     @ONodeAttr(format = "yyyyMMdd")

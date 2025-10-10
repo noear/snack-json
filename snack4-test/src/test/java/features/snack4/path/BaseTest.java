@@ -2,8 +2,8 @@ package features.snack4.path;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.BeanDeserializer;
-import org.noear.snack4.codec.BeanSerializer;
+import org.noear.snack4.codec.BeanDecoder;
+import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.jsonpath.JsonPath;
 
@@ -44,11 +44,11 @@ public class BaseTest {
         Properties properties = new Properties();
         properties.setProperty("order.item[0].user", "1");
 
-        ONode node = BeanSerializer.serialize(properties);
+        ONode node = BeanEncoder.encode(properties);
         System.out.println(node.toJson()); // 输出: {"order":{"item":[{"user":"1"}]}}
         assert "{\"order\":{\"item\":[{\"user\":\"1\"}]}}".equals(node.toJson());
 
-        Properties deserializedProperties = BeanDeserializer.deserialize(node, Properties.class);
+        Properties deserializedProperties = BeanDecoder.decode(node, Properties.class);
         System.out.println(deserializedProperties.getProperty("order.item[0].user")); // 输出: 1
         assert "1".equals(deserializedProperties.getProperty("order.item[0].user"));
     }

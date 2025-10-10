@@ -30,13 +30,20 @@ import java.util.*;
  * @author noear 2025/3/16 created
  * @since 4.0
  */
-public class BeanSerializer {
-    // 序列化：对象转ONode
-    public static ONode serialize(Object value) {
-        return serialize(value, null);
+public class BeanEncoder {
+    /**
+     * Java Object 编码为 ONode
+     */
+    public static ONode encode(Object value) {
+        return encode(value, null);
     }
 
-    public static ONode serialize(Object value, Options opts) {
+    /**
+     * Java Object 编码为 ONode
+     *
+     * @param opts 选项
+     */
+    public static ONode encode(Object value, Options opts) {
         if (value == null) {
             return new ONode(opts, null);
         }
@@ -141,7 +148,7 @@ public class BeanSerializer {
                     }
                 }
 
-                if (property == null || property.getAttr().isSerialize() == false) {
+                if (property == null || property.getAttr().isEncode() == false) {
                     continue;
                 }
 
@@ -149,20 +156,24 @@ public class BeanSerializer {
 
                 if (propertyValue == null) {
                     if (opts.hasFeature(Feature.Write_Nulls) == false
-                            && property.getAttr().hasSerializeFeature(Feature.Write_Nulls) == false) {
+                            && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
                         continue;
                     }
 
-                    if (property.getTypeWrap().isString()) {
-                        if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || property.getAttr().hasSerializeFeature(Feature.Write_NullStringAsEmpty))) {
+                    if (property.getTypeWrap().isList()) {
+                        if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullListAsEmpty))) {
+                            propertyValue = new ArrayList<>();
+                        }
+                    } else if (property.getTypeWrap().isString()) {
+                        if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullStringAsEmpty))) {
                             propertyValue = "";
                         }
                     } else if (property.getTypeWrap().isBoolean()) {
-                        if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || property.getAttr().hasSerializeFeature(Feature.Write_NullBooleanAsFalse))) {
+                        if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || property.getAttr().hasFeature(Feature.Write_NullBooleanAsFalse))) {
                             propertyValue = false;
                         }
                     } else if (property.getTypeWrap().isNumber()) {
-                        if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || property.getAttr().hasSerializeFeature(Feature.Write_NullNumberAsZero))) {
+                        if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || property.getAttr().hasFeature(Feature.Write_NullNumberAsZero))) {
                             if (property.getTypeWrap().getType() == Long.class) {
                                 propertyValue = 0L;
                             } else if (property.getTypeWrap().getType() == Double.class) {

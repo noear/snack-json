@@ -118,6 +118,11 @@ public enum Feature {
     Write_Nulls,
 
     /**
+     * 写入列表为 null 时转为空
+     */
+    Write_NullListAsEmpty,
+
+    /**
      * 写入字符串为 null 时转为空
      */
     Write_NullStringAsEmpty,
@@ -173,11 +178,6 @@ public enum Feature {
      * 写入类名
      */
     Write_ClassName,
-
-    /**
-     * 写入数组类名
-     */
-    Write_ArrayClassName,
 
     /**
      * 写入映射类名

@@ -33,12 +33,25 @@ import java.util.*;
  * @author noear 2025/3/16 created
  * @since 4.0
  */
-public class BeanDeserializer {
-    public static <T> T deserialize(ONode node, Type type) {
-        return deserialize(node, type, null, null);
+public class BeanDecoder {
+    /**
+     * ONode 解码为 Java Object
+     *
+     * @param type 类型
+     *
+     */
+    public static <T> T decode(ONode node, Type type) {
+        return decode(node, type, null, null);
     }
 
-    public static <T> T deserialize(ONode node, Type type, Object target, Options opts) {
+    /**
+     * ONode 解码为 Java Object
+     *
+     * @param type 类型
+     * @[param opts 选项
+     *
+     */
+    public static <T> T decode(ONode node, Type type, Object target, Options opts) {
         if (node == null || type == null) {
             return null;
         }
@@ -171,7 +184,7 @@ public class BeanDeserializer {
                     property = propertyWrap.getFieldWrap();
                 }
 
-                if (property == null || property.getAttr().isDeserialize() == false) {
+                if (property == null || property.getAttr().isDecode() == false) {
                     continue;
                 }
 

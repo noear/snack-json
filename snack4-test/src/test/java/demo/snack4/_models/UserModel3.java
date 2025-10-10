@@ -1,6 +1,5 @@
 package demo.snack4._models;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectEncoder;
 
@@ -10,9 +9,9 @@ public class UserModel3 {
     public ObjectEncoder nodeEncoder;
 
     public int id;
-    @ONodeAttr(deserialize = false, serialize = false)
+    @ONodeAttr(decode = false, encode = false)
     public String name;
-    @ONodeAttr(deserialize = false, serialize = false)
+    @ONodeAttr(decode = false, encode = false)
     public String note;
 
     @ONodeAttr(format = "yyyyMMdd")

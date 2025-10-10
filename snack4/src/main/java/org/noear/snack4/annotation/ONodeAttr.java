@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.annotation;
 
-
 import org.noear.snack4.Feature;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
@@ -63,32 +62,27 @@ public @interface ONodeAttr {
     boolean flat() default false;
 
     /**
-     * 是否序列化
+     * 特性
      */
-    boolean serialize() default true;
+    Feature[] features() default {};
 
     /**
-     * 是否反序列化
+     * 是否编码（序列化）
      */
-    boolean deserialize() default true;
+    boolean encode() default true;
 
     /**
-     * 序列化特性
+     * 是否解码（反序列化）
      */
-    Feature[] serializeFeatures() default {};
+    boolean decode() default true;
 
     /**
-     * 反序列化特性
+     * 自定义编码器
      */
-    Feature[] deserializeFeatures() default {};
+    Class<? extends ObjectEncoder> encoder() default ObjectEncoder.class;
 
     /**
-     * 序列化编码器
+     * 自定义解码器
      */
-    Class<? extends ObjectEncoder> serializeEncoder() default ObjectEncoder.class;
-
-    /**
-     * 反序列化解码器
-     */
-    Class<? extends ObjectDecoder> deserializeDecoder() default ObjectDecoder.class;
+    Class<? extends ObjectDecoder> decoder() default ObjectDecoder.class;
 }
