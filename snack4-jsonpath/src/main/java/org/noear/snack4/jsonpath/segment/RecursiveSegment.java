@@ -33,7 +33,7 @@ import java.util.Map;
 public class RecursiveSegment implements Segment {
     @Override
     public String toString() {
-        return "..";
+        return "..[*]";
     }
 
     @Override

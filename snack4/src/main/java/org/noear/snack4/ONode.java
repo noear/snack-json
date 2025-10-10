@@ -781,13 +781,20 @@ public final class ONode {
             if (source == null) {
                 path = null;
             } else {
-                Object pathKey = (source.key == null ? source.index : source.key);
                 String parentPath = source.parent.path();
 
-                if (Asserts.isEmpty(parentPath)) {
-                    path = "$[" + pathKey + "]";
+                if (source.key == null) {
+                    if (Asserts.isEmpty(parentPath)) {
+                        path = "$[" + source.index + "]";
+                    } else {
+                        path = parentPath + "[" + source.index + "]";
+                    }
                 } else {
-                    path = parentPath + "[" + pathKey + "]";
+                    if (Asserts.isEmpty(parentPath)) {
+                        path = "$['" + source.key + "']";
+                    } else {
+                        path = parentPath + "['" + source.key + "']";
+                    }
                 }
             }
         }

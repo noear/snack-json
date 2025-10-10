@@ -40,7 +40,7 @@ public class WildcardSegment implements Segment {
 
     @Override
     public String toString() {
-        return "*";
+        return "[*]";
     }
 
     @Override

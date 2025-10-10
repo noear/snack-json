@@ -47,7 +47,7 @@ public class FilterSegment implements Segment {
 
     @Override
     public String toString() {
-        return segmentStr;
+        return "[" + segmentStr + "]";
     }
 
     @Override

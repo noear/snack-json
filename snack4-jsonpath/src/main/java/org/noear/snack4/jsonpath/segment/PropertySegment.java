@@ -39,7 +39,7 @@ public class PropertySegment implements Segment {
 
     @Override
     public String toString() {
-        return segmentStr;
+        return "['" + segmentStr + "']";
     }
 
     @Override
