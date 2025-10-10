@@ -165,38 +165,35 @@ public class OperationLib {
         ONode leftNode = condition.getLeftNode(ctx, node);
         ONode rightNode = condition.getRightNode(ctx, node);
 
-        // 类型判断逻辑
-        if (rightNode.isString()) {
-            return compareString(condition.getOp(), leftNode, rightNode);
-        } else {
-            if (leftNode.getType() == rightNode.getType()) {
-                if (leftNode.isNumber()) {
-                    //都是数字
-                    return compareNumber(condition.getOp(), leftNode.getDouble(), rightNode.getDouble());
-                } else if (leftNode.isNull()) {
-                    return compareNumber(condition.getOp(), 0, 0);
-                } else {
-                    if ("!=".equals(condition.getOp())) {
-                        return leftNode.equals(rightNode) == false;
-                    } else if (condition.getOp().indexOf('=') >= 0) {
-                        return leftNode.equals(rightNode);
-                    }
-                }
+        if (leftNode.getType() == rightNode.getType()) {
+            if (leftNode.isString()) {
+                return compareString(condition.getOp(), leftNode, rightNode);
+            } else if (leftNode.isNumber()) {
+                //都是数字
+                return compareNumber(condition.getOp(), leftNode.getDouble(), rightNode.getDouble());
+            } else if (leftNode.isNull()) {
+                return compareNumber(condition.getOp(), 0, 0);
             } else {
-                if (ctx.getMode() == QueryMode.CREATE && leftNode.isNull()) {
-                    if ("==".equals(condition.getOp())) {
-                        leftNode.fill(rightNode);
-                        return true;
-                    }
-                }
-
                 if ("!=".equals(condition.getOp())) {
+                    return leftNode.equals(rightNode) == false;
+                } else if (condition.getOp().indexOf('=') >= 0) {
+                    return leftNode.equals(rightNode);
+                }
+            }
+        } else {
+            if (ctx.getMode() == QueryMode.CREATE && leftNode.isNull()) {
+                if ("==".equals(condition.getOp())) {
+                    leftNode.fill(rightNode);
                     return true;
                 }
             }
 
-            return false;
+            if ("!=".equals(condition.getOp())) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /// ///////////////
@@ -205,17 +202,17 @@ public class OperationLib {
     private static boolean compareString(String op, ONode a, ONode b) {
         switch (op) {
             case "==":
-                return a.getType() == b.getType() && Objects.equals(a.getString(), b.getString());
+                return Objects.equals(a.getString(), b.getString());
             case "!=":
-                return a.getType() != b.getType() || !Objects.equals(a.getString(), b.getString());
+                return !Objects.equals(a.getString(), b.getString());
             case ">":
-                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) > 0;
+                return Objects.compare(a.getString(), b.getString(), String::compareTo) > 0;
             case "<":
-                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) < 0;
+                return Objects.compare(a.getString(), b.getString(), String::compareTo) < 0;
             case ">=":
-                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) >= 0;
+                return Objects.compare(a.getString(), b.getString(), String::compareTo) >= 0;
             case "<=":
-                return a.getType() == b.getType() && Objects.compare(a.getString(), b.getString(), String::compareTo) <= 0;
+                return Objects.compare(a.getString(), b.getString(), String::compareTo) <= 0;
 
             default:
                 throw new JsonPathException("Unsupported operator for string: " + op);
