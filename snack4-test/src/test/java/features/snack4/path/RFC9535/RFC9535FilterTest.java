@@ -2,11 +2,10 @@ package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.filter.Expression;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
+import org.noear.snack4.Options;
+import org.noear.snack4.jsonpath.JsonPath;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author noear 2025/5/6 created
@@ -14,55 +13,61 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RFC9535FilterTest {
     // https://www.rfc-editor.org/rfc/rfc9535.html
 
-    static final String comparisonJson = "{\n" +
-            "  \"obj\": {\"x\": \"y\"},\n" +
-            "  \"arr\": [2, 3]\n" +
+    static final String queryJson = "{\n" +
+            "  \"a\": [3, 5, 1, 2, 4, 6,\n" +
+            "        {\"b\": \"j\"},\n" +
+            "        {\"b\": \"k\"},\n" +
+            "        {\"b\": {}},\n" +
+            "        {\"b\": \"kilo\"}\n" +
+            "       ],\n" +
+            "  \"o\": {\"p\": 1, \"q\": 2, \"r\": 3, \"s\": 5, \"t\": {\"u\": 6}},\n" +
+            "  \"e\": \"f\"\n" +
             "}";
 
     @Test
-    public void comparisonTest() {
-        //https://www.rfc-editor.org/rfc/rfc9535.html#filter-selector
+    public void queryTest() {
+        queryAssert("$.a[?@.b == 'kilo']", "[{\"b\": \"kilo\"}]");
+        queryAssert("$.a[?(@.b == 'kilo')]", "[{\"b\": \"kilo\"}]");
+        queryAssert("$.a[?@ > 3.5]", "[5,4,6]");
+        queryAssert("$.a[?@.b]", "[{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": {}},{\"b\": \"kilo\"}]");
 
-        comparisonAssert("$.absent1 == $.absent2", true); //Empty nodelists
-        comparisonAssert("$.absent1 <= $.absent2", true); //== implies <=
-        comparisonAssert("$.absent == 'g'", false);
-        comparisonAssert("$.absent1 != $.absent2", false);
-        comparisonAssert("$.absent != 'g'", true);
+        queryAssert("$.a[?@ < 2 || @.b == \"k\"]", "[1,{\"b\": \"k\"}]");
 
-        comparisonAssert("1 <= 2", true);
-        comparisonAssert("1 > 2", false);
-        comparisonAssert("13 == '13'", false);
-        comparisonAssert("'a' <= 'b'", true);
-        comparisonAssert("'a' > 'b'", false);
+        queryAssert("$.o[?@ > 1 && @ < 4]", "[2,3]");
+        queryAssert("$.o[?@.u || @.x]", "[{\"u\": 6}]");
+        queryAssert("$.a[?@.b == $.x]", "[3,5,1,2,4,6]");
+        queryAssert("$.a[?@ == @]", "[3,5,1,2,4,6,{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": {}},{\"b\": \"kilo\"}]");
 
-        comparisonAssert("$.obj == $.arr", false);
-        comparisonAssert("$.obj != $.arr", true);
-        comparisonAssert("$.obj == $.obj", true);
-        comparisonAssert("$.obj != $.obj", false);
-        comparisonAssert("$.arr == $.arr", true);
-        comparisonAssert("$.arr != $.arr", false);
 
-        comparisonAssert("$.obj == 17", false);
-        comparisonAssert("$.obj != 17", true);
+        queryAssert("$.*", "[[3,5,1,2,4,6,{\"b\":\"j\"},{\"b\":\"k\"},{\"b\":{}},{\"b\":\"kilo\"}],{\"p\":1,\"q\":2,\"r\":3,\"s\":5,\"t\":{\"u\":6}},\"f\"]");
 
-        comparisonAssert("$.obj <= $.arr", false);
-        comparisonAssert("$.obj < $.arr", false);
-        comparisonAssert("$.obj <= $.obj", true);
-        comparisonAssert("$.arr <= $.arr", true);
+        //Existence of non-singular queries
+        queryAssert("$[?@.*]", "[[3,5,1,2,4,6,{\"b\":\"j\"},{\"b\":\"k\"},{\"b\":{}},{\"b\":\"kilo\"}],{\"p\":1,\"q\":2,\"r\":3,\"s\":5,\"t\":{\"u\":6}},\"f\"]");
 
-        comparisonAssert("1 <= $.arr", false);
-        comparisonAssert("1 >= $.arr", false);
-        comparisonAssert("1 > $.arr", false);
-        comparisonAssert("1 < $.arr", false);
 
-        comparisonAssert("true <= true", true);
-        comparisonAssert("true > true", false);
     }
 
+    @Test
+    public void queryTest2() {
+        //Nested filters
+        queryAssert("$[?@[?@.b]]", "[[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]]");
 
-    private void comparisonAssert(String expr, boolean expected) {
-        ONode node = ONode.ofJson(comparisonJson);
-        boolean actual = Expression.get(expr).test(node, new QueryContext(node, QueryMode.SELECT));
-        assertEquals(expected, actual);
+        //Non-deterministic ordering
+        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
+
+        //Array value regular expression match
+        queryAssert("$.a[?match(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"}]");
+        //Array value regular expression search
+        queryAssert("$.a[?search(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": \"kilo\"}]");
+
+    }
+
+    private void queryAssert(String expr, String expected) {
+        JsonPath jsonPath = JsonPath.compile(expr);
+
+        String actual = jsonPath.select(ONode.ofJson(queryJson, Options.of().RFC9535(true))).toJson();
+        String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
+        System.out.println("::" + expr);
+        assertEquals(expected2, actual);
     }
 }

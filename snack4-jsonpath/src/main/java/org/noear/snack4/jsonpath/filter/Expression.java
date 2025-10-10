@@ -39,12 +39,18 @@ public class Expression {
     }
 
     /// ///////////////////
-
+    private final String expressionStr;
     private final List<Token> rpn;
 
     private Expression(String expressionStr) {
+        this.expressionStr = expressionStr;
         List<Token> tokens = tokenize(expressionStr);
         this.rpn = convertToRPN(tokens);
+    }
+
+    @Override
+    public String toString() {
+        return expressionStr;
     }
 
     // 评估逆波兰式
