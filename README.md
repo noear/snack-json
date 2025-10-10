@@ -50,7 +50,7 @@
 ```xml
 <dependency>
   <groupId>org.noear</groupId>
-  <artifactId>snack4</artifactId>
+  <artifactId>snack4-jsonpath</artifactId>
   <version>4.0.0-SNAPSHOT</version>
 </dependency>
 ```
