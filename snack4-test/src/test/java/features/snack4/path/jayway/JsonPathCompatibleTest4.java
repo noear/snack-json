@@ -1,4 +1,4 @@
-package features.snack4.path.manual;
+package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.JsonPath;
 import features.snack4.v3_composite.JsonPathTest3;
