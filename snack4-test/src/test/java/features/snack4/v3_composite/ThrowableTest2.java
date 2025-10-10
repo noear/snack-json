@@ -13,7 +13,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test() {
-        Object tmp = ONode.deserialize(json);
+        Object tmp = ONode.deserialize(json, Feature.Read_ClassName);
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -26,7 +26,7 @@ public class ThrowableTest2 {
         System.out.println(json2);
 
 
-        tmp = ONode.deserialize(json2);
+        tmp = ONode.deserialize(json2, Feature.Read_ClassName);
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -43,7 +43,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test1() {
-        Object tmp = ONode.deserialize(json);
+        Object tmp = ONode.deserialize(json, Feature.Read_ClassName);
 
         assert tmp instanceof Throwable;
 
@@ -52,7 +52,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test2() {
-        Object tmp = ONode.deserialize(json, Point.class);
+        Object tmp = ONode.deserialize(json, Point.class, Feature.Read_ClassName);
 
         assert tmp instanceof Throwable;
 

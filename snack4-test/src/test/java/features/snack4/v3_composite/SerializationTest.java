@@ -52,11 +52,11 @@ public class SerializationTest {
 
             NullPointerException ex2 = ONode.deserialize(json, NullPointerException.class);
 
-            Object ex22 = ONode.deserialize(json);
+            Object ex22 = ONode.deserialize(json, Feature.Read_ClassName);
             assert ex22 instanceof NullPointerException;
 
 
-            Object ex23 = ONode.deserialize(json, Feature.Read_DisableClassName);
+            Object ex23 = ONode.deserialize(json);
             assert ex23 instanceof Map;
 
             ex2.printStackTrace();
@@ -93,12 +93,12 @@ public class SerializationTest {
 
         String json = ONode.serialize(group, Feature.Write_ClassName);
         System.out.println(json);
-        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class);
+        UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class, Feature.Read_ClassName);
 
-        Object group22 = ONode.deserialize(json);
+        Object group22 = ONode.deserialize(json, Feature.Read_ClassName);
         assert group22 instanceof UserGroupModel;
 
-        Object group23 = ONode.deserialize(json, Feature.Read_DisableClassName);
+        Object group23 = ONode.deserialize(json);
         assert group23 instanceof Map;
 
         assert group2.id == 9999;
@@ -169,7 +169,7 @@ public class SerializationTest {
 
         String json = ONode.serialize(obj, Feature.Write_ClassName);
         System.out.println(json);
-        Map<String, Object> obj2 = ONode.deserialize(json, LinkedHashMap.class);
+        Map<String, Object> obj2 = ONode.deserialize(json, LinkedHashMap.class, Feature.Read_ClassName);
         assert obj2 instanceof LinkedHashMap;
 
         Map<String, Object> obj22 = ONode.deserialize(json, Object.class);
@@ -199,7 +199,7 @@ public class SerializationTest {
         System.out.println(json);
         OrderModel order2 = ONode.deserialize(json, OrderModel.class);
         Object order22 = ONode.deserialize(json);
-        Map order23 = ONode.deserialize(json, Feature.Read_DisableClassName);
+        Map order23 = ONode.deserialize(json);
 
 
         assert 1111 == order2.user.id;

@@ -91,7 +91,7 @@ public class DataTest {
 
         Object g2 = ONode.ofJson(json);
 
-        ONode node = ONode.ofJson(json, Feature.Read_DisableClassName);
+        ONode node = ONode.ofJson(json);
 
         Object tmp = node.toBean();
 

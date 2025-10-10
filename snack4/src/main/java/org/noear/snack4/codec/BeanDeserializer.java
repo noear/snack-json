@@ -389,7 +389,7 @@ public class BeanDeserializer {
      * 是否读取类名字
      */
     private static boolean isReadClassName(Options opts, ONode node) {
-        if (opts.hasFeature(Feature.Read_DisableClassName)) {
+        if (opts.hasFeature(Feature.Read_ClassName) == false) {
             return false;
         }
 

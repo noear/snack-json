@@ -2,6 +2,7 @@ package features.snack4.v3_composite;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.SnackException;
 import org.noear.snack4.ONode;
 
@@ -17,7 +18,7 @@ public class JdbcRowSetImplTest {
         //
 
         Assertions.assertThrows(SnackException.class, () -> {
-            ONode.deserialize(json);
+            ONode.deserialize(json, Feature.Read_ClassName);
         });
 
 //        Object tmp = ONode.deserialize(json);

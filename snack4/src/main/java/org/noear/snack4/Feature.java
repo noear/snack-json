@@ -31,44 +31,35 @@ public enum Feature {
     Read_FailOnUnknownProperties(false),
 
     /**
-     * 读取时允许使用注释
+     * 读取时允许使用注释（只支持开头或结尾有注释）
      */
     Read_AllowComment(false),
 
     /**
-     * 读取时禁止单引号字符串
+     * 读取时禁止单引号字符串（默认支持）
      */
     Read_DisableSingleQuotes(false),
 
     /**
-     * 读取时禁止未用引号包裹的键名
+     * 读取时禁止未用引号包裹的键名（默认支持）
      */
     Read_DisableUnquotedKeys(false),
 
     /**
-     * 读取时允许未空的键名
+     * 读取时允许空的键名
      */
     Read_AllowEmptyKeys(false),
-
-    /**
-     * 读取时允许JavaScript风格的十六进制数字 (如 0x1F)
-     */
-    Read_AllowHexNumbers(false),
 
     /**
      * 读取时允许零开头的数字
      */
     Read_AllowZeroLeadingNumbers(false),
 
-    /**
-     * 读取时允许特殊浮点值 (Infinity, -Infinity, NaN)
-     */
-    Read_AllowSpecialFloats(false),
 
     /**
      * 读取时自动转换字段命名风格（默认不转换）
      */
-    Read_ConvertUnderlineStyle(false),
+    //Read_ConvertUnderlineStyle(false),
 
     /**
      * 读取时自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
@@ -103,7 +94,7 @@ public enum Feature {
     /**
      * 读取时用日期格式化（默认使用时间戳）
      */
-    Read_UseDateFormat(false),
+    //Read_UseDateFormat(false),
 
     /**
      * 读取时允许使用获取器
@@ -116,9 +107,9 @@ public enum Feature {
     Read_OnlyUseGetter(false),
 
     /**
-     * 读取时禁止类名读取
+     * 读取数据中的类名
      */
-    Read_DisableClassName(false),
+    Read_ClassName(false),
 
 
     //-----------------------------
