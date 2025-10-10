@@ -71,22 +71,23 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 
 ### JSONPath syntax reference([IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html)))
 
-| Syntax Element    | Description                                                   |
-|-------------------|---------------------------------------------------------------|
-| `$`               | root node identifier                                          |
-| `@`               | current node identifier (valid only within filter selectors)  |
-| `[<selectors>]`   | 	child segment: selects zero or more children of a node       |
-| `.name`           | shorthand for `['name']`                                      |
-| `.*`              | shorthand for `[*]`                                           |
-| `..[<selectors>]` | descendant segment: selects zero or more descendants of a node |
-| `..name`          | shorthand for `..['name']`                                    |
-| `..*`             | shorthand for `..[*]`                                         |
-| `'name'`          | name selector: selects a named child of an object             |
-| `*`               | wildcard selector: selects all children of a node             |
-| `3`               | index selector: selects an indexed child of an array (from 0) |
-| `0:100:5`         | array slice selector: `start:end:step` for arrays                                   |
-| `?<logical-expr>` | filter selector: selects particular children using a logical expression                                          |
-| `length(@.foo)`   | function extension: invokes a function in a filter expression                                              |
+| Syntax Element    | Description                                                             |
+|-------------------|-------------------------------------------------------------------------|
+| `$`               | root node identifier                                                    |
+| `@`               | current node identifier (valid only within filter selectors)            |
+| `[<selectors>]`   | 	child segment: selects zero or more children of a node                 |
+| `.name`           | shorthand for `['name']`                                                |
+| `.*`              | shorthand for `[*]`                                                     |
+| `..[<selectors>]` | descendant segment: selects zero or more descendants of a node          |
+| `..name`          | shorthand for `..['name']`                                              |
+| `..*`             | shorthand for `..[*]`                                                   |
+| `'name'`          | name selector: selects a named child of an object                       |
+| `*`               | wildcard selector: selects all children of a node                       |
+| `3`               | index selector: selects an indexed child of an array (from 0)           |
+| `0:100:5`         | array slice selector: `start:end:step` for arrays                       |
+| `?<logical-expr>` | filter selector: selects particular children using a logical expression |
+| `fun(@.foo)`      | filter function extension: invokes a function in a filter expression    |
+| `.fun()`          | aggregate function                                                      |
 
 Filter selector syntax reference:
 
