@@ -5,7 +5,7 @@
 	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
 </p>
 <p align="center">
-	兼容 <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a> 标准
+	同时兼容 `jayway.jsonpath` 和 <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a> 标准
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -57,7 +57,7 @@
 Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
 
 * 强调文档树的构建和操控能力
-* 高性能`Json path`查询（比 jayway.jsonpath 快很多），兼容 [IETF RFC 9535 标准](https://www.rfc-editor.org/rfc/rfc9535.html)
+* 高性能`Json path`查询（比 jayway.jsonpath 快很多），同时兼容 `jayway.jsonpath` 和 [IETF RFC 9535 标准](https://www.rfc-editor.org/rfc/rfc9535.html) (用 `options` 切换)
 * 支持 `Json schema` 架构校验
 * 优先使用 无参构造函数 + 字段 编解码（可减少注入而触发动作的风险）
 

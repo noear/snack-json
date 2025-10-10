@@ -5,7 +5,7 @@
 	<strong>A Json Dom & JsonPath Framework (for Java)</strong>
 </p>
 <p align="center">
-	Compatible <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a>
+	Compatible with `jayway.jsonpath` and <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a>
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -57,7 +57,7 @@ jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, Jso
 Snach-jsonpath draws on the design of `Javascript` where all variables are declared with `var` and `Xml dom` where everything is `Node`. Everything underneath it is represented by an `ONode`, which stands for `One node` and can be converted to any type.
 
 * It emphasizes the ability to build and manipulate the document tree
-* High performance `Json path` queries (much faster than jayway.jsonpath), [IETF RFC 9535](https://www.rfc-editor.org/rfc/rfc9535.html) compliant
+* High performance `Json path` queries (much faster than `jayway.jsonpath`), Compatible with `jayway.jsonpath` and [IETF RFC 9535](https://www.rfc-editor.org/rfc/rfc9535.html) standards (Switch with `optoins`)
 * Supports `Json Schema` validation
 * Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
 
