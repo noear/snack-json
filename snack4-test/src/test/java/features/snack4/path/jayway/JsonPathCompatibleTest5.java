@@ -1,4 +1,4 @@
-package features.snack4.v3_composite;
+package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
@@ -9,7 +9,7 @@ import org.noear.snack4.ONode;
 /**
  * @author noear 2023/11/3 created
  */
-public class JsonPathCompatibleTest1 {
+public class JsonPathCompatibleTest5 {
     @Test
     public void test1() {
         String json = "[{\"id\":0,\"treePath\":\"1\",\"a\":[{\"id\":1,\"treePath\":\"123\",\"subItem\":[{\"id\":3,\"treePath\":\"123\"}]}],\"b\":\"a\"},{\"id\":2}]";

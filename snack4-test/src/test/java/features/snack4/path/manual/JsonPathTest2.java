@@ -183,4 +183,11 @@ public class JsonPathTest2 {
 
         System.out.println(rst.toJson());
     }
+
+    @Test
+    public void test8(){
+        ONode rst1 = new ONode().create("$.columns[?(@.columnCode == '#YEAR(-1)#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#[None]#REPORT#PRCTotal')].first()");
+
+        System.out.println(rst1.toJson());
+    }
 }
