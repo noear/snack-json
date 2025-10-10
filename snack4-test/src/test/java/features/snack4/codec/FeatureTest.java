@@ -65,4 +65,13 @@ public class FeatureTest {
         assert ONode.ofJson("{user_info:'1'}")
                 .get("userInfo").isNull();
     }
+
+    @Test
+    public void Read_UnwrapJsonString() {
+        assert ONode.ofJson("{user_info:'{a:1,b:2}'}", Feature.Read_ConvertSnakeToCamel, Feature.Read_UnwrapJsonString)
+                .get("userInfo").isObject();
+
+        assert ONode.ofJson("{user_info:'{a:1,b:2}'}")
+                .get("user_info").isString();
+    }
 }
