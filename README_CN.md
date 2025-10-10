@@ -5,7 +5,7 @@
 	<strong>一个 Json Dom & JsonPath 的框架（for Java）</strong>
 </p>
 <p align="center">
-	兼容 JsonPath IETF RFC 9535 标准
+	兼容 <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a> 标准
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -57,7 +57,7 @@
 Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml dom` 一切都是 `Node` 的设计。其下一切数据都以`ONode`表示，`ONode`也即 `One node` 之意，代表任何类型，也可以转换为任何类型。
 
 * 强调文档树的构建和操控能力
-* 高性能`Json path`查询（比 jayway.jsonpath 快很多），兼容 IETF RFC 9535 标准
+* 高性能`Json path`查询（比 jayway.jsonpath 快很多），兼容 [IETF RFC 9535 标准](https://www.rfc-editor.org/rfc/rfc9535.html)
 * 支持 `Json schema` 架构校验
 * 优先使用 无参构造函数 + 字段 编解码（可减少注入而触发动作的风险）
 
@@ -69,7 +69,38 @@ Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml do
 | `org.noear:snack4-jsonschema` | 提供 `json schema` 校验支持   |  
 
 
-## 放几个示例
+### JSONPath 语法参考（[IETF RFC 9535]((https://www.rfc-editor.org/rfc/rfc9535.html))）
+
+| 语法元素              | 描述                         |
+|-------------------|----------------------------|
+| `$`               | 根节点标识符                     |
+| `@`               | 当前节点标识符（仅在过滤选择器中有效）        |
+| `[<selectors>]`   | 子段：选择节点的零个或多个子节点           |
+| `.name`           | 简写 `['name']`              |
+| `.*`              | 简写 `[*]`                   |
+| `..[<selectors>]` | 后代段：选择节点的零个或多个后代           |
+| `..name`          | 简写 `..['name']`            |
+| `..*`             | 简写 `..[*]`                 |
+| `'name'`          | 名称选择器：选择对象的命名子对象           |
+| `*`               | 通配符选择器：选择节点的所有子节点          |
+| `3`               | 索引选择器：选择数组的索引子项（从 0 开始）    |
+| `0:100:5`               | 数组切片选择器：数组的 start:end:step |
+| `?<logical-expr>`               | 过滤选择器：使用逻辑表达式选择特定的子项       |
+| `length(@.foo)`               | 函数扩展：在过滤表达式中调用函数           |
+
+过滤选择器语法参考：
+
+| 语法                          | 描述       | 优先级 |
+|-----------------------------|----------|-----|
+| `(...)`                     | 分组       | 5   |
+| `name(...)`                 | 函数扩展     | 5   |
+| `!`                         | 逻辑 `非`   | 4   |
+| `==`,`!=`,`<`,`<=`,`>`,`>=` | 关系比较符    | 3   |
+| `&&`                        | 逻辑 `与`   | 2   |
+| `\|\|`                      | 逻辑 `或`   | 1   |
+
+
+### 放几个示例
 
 支持 `dom` 操控
 
@@ -125,7 +156,7 @@ String json = ONode.serialize(user);
 User user = ONode.deserialize(json, User.class);
 ```
 
-## 路径树接口
+### 路径树接口
 
 ```java
 ONode o = ONode.ofJson(json).usePaths(); //会为每个子节点，生成 path 属性
@@ -144,7 +175,7 @@ rst.parent();
 
 
 
-## 高级定制
+### 高级定制
 
 
 ```java

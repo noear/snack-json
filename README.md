@@ -5,7 +5,7 @@
 	<strong>A Json Dom & JsonPath Framework (for Java)</strong>
 </p>
 <p align="center">
-	Compatible JsonPath IETF RFC 9535
+	Compatible <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">JsonPath IETF RFC 9535</a>
 </p>
 <p align="center">
     <a target="_blank" href="https://central.sonatype.com/artifact/org.noear/snack4">
@@ -57,7 +57,7 @@ jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, Jso
 Snach-jsonpath draws on the design of `Javascript` where all variables are declared with `var` and `Xml dom` where everything is `Node`. Everything underneath it is represented by an `ONode`, which stands for `One node` and can be converted to any type.
 
 * It emphasizes the ability to build and manipulate the document tree
-* High performance `Json path` queries (much faster than jayway.jsonpath), IETF RFC 9535 compliant
+* High performance `Json path` queries (much faster than jayway.jsonpath), [IETF RFC 9535](https://www.rfc-editor.org/rfc/rfc9535.html) compliant
 * Supports `Json Schema` validation
 * Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
 
@@ -69,7 +69,39 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 | `org.noear:snack4-jsonschema`       | Provides `json schema` validation support              |  
 
 
-## examples
+### JSONPath syntax reference([IETF RFC 9535]((https://www.rfc-editor.org/rfc/rfc9535.html)))
+
+| Syntax Element    | Description                                                   |
+|-------------------|---------------------------------------------------------------|
+| `$`               | root node identifier                                          |
+| `@`               | current node identifier (valid only within filter selectors)  |
+| `[<selectors>]`   | 	child segment: selects zero or more children of a node       |
+| `.name`           | shorthand for `['name']`                                      |
+| `.*`              | shorthand for `[*]`                                           |
+| `..[<selectors>]` | descendant segment: selects zero or more descendants of a node |
+| `..name`          | shorthand for `..['name']`                                    |
+| `..*`             | shorthand for `..[*]`                                         |
+| `'name'`          | name selector: selects a named child of an object             |
+| `*`               | wildcard selector: selects all children of a node             |
+| `3`               | index selector: selects an indexed child of an array (from 0) |
+| `0:100:5`         | array slice selector: `start:end:step` for arrays                                   |
+| `?<logical-expr>` | filter selector: selects particular children using a logical expression                                          |
+| `length(@.foo)`   | function extension: invokes a function in a filter expression                                              |
+
+Filter selector syntax reference:
+
+| Syntax                       | Description            | Precedence |
+|------------------------------|------------------------|------------|
+| `(...)`                      | Grouping               | 5          |
+| `name(...)`                  | Function Expressions   | 5          |
+| `!`                          | Logical NOT	           | 4          |
+| `==`,`!=`,`<`,`<=`,`>`,`>=`  | Relations              | 3          |
+| `&&`                         | Logical AND            | 2          |
+| `\|\|`                       | Logical OR	            | 1          |
+
+
+
+### examples
 
 Support `dom` manipulation
 
@@ -125,7 +157,7 @@ String json = ONode.serialize(user);
 User user = ONode.deserialize(json, User.class);
 ```
 
-## Path tree interface
+### Path tree interface
 
 ```java
 ONode o = ONode.ofJson(json).usePaths(); //会为每个子节点，生成 path 属性
@@ -144,7 +176,7 @@ rst.parent();
 
 
 
-## Advanced customization
+### Advanced customization
 
 
 ```java
