@@ -237,7 +237,7 @@ public class JsonReader {
             return snakeCase;
         }
 
-        StringBuilder result = new StringBuilder(snakeCase.length());
+        StringBuilder result = getStringBuilder();
         boolean toUpperCase = false;
         boolean firstChar = true;
 

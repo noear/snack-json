@@ -112,7 +112,7 @@ public class JsonWriter {
             writeIndentation();
 
             String key = opts.hasFeature(Feature.Write_UseSnakeStyle) ?
-                    toUnderlineName(entry.getKey()) : entry.getKey();
+                    toSnakeStyle(entry.getKey()) : entry.getKey();
             writeKey(key);
             writer.write(':');
             if (opts.hasFeature(Feature.Write_PrettyFormat)) {
@@ -225,7 +225,7 @@ public class JsonWriter {
         return sb.toString();
     }
 
-    private String toUnderlineName(String camelName) {
+    private String toSnakeStyle(String camelName) {
         StringBuilder sb = getStringBuilder();
         for (int i = 0; i < camelName.length(); i++) {
             char c = camelName.charAt(i);
