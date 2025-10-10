@@ -28,88 +28,88 @@ public enum Feature {
     /**
      * 遇到未知属性时是否抛出异常
      */
-    Read_FailOnUnknownProperties(false),
+    Read_FailOnUnknownProperties,
 
     /**
      * 读取时允许使用注释（只支持开头或结尾有注释）
      */
-    Read_AllowComment(false),
+    Read_AllowComment,
 
     /**
      * 读取时禁止单引号字符串（默认支持）
      */
-    Read_DisableSingleQuotes(false),
+    Read_DisableSingleQuotes,
 
     /**
      * 读取时禁止未用引号包裹的键名（默认支持）
      */
-    Read_DisableUnquotedKeys(false),
+    Read_DisableUnquotedKeys,
 
     /**
      * 读取时允许空的键名
      */
-    Read_AllowEmptyKeys(false),
+    Read_AllowEmptyKeys,
 
     /**
      * 读取时允许零开头的数字
      */
-    Read_AllowZeroLeadingNumbers(false),
+    Read_AllowZeroLeadingNumbers,
 
 
     /**
      * 读取时自动转换字段命名风格（默认不转换）
      */
-    //Read_ConvertUnderlineStyle(false),
+    //Read_ConvertUnderlineStyle,
 
     /**
      * 读取时自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
      */
-    Read_UnwrapJsonString(false),
+    Read_UnwrapJsonString,
 
     /**
      * 读取时允许对任何字符进行反斜杠转义
      */
-    Read_AllowBackslashEscapingAnyCharacter(false),
+    Read_AllowBackslashEscapingAnyCharacter,
 
     /**
      * 读取时允许无效的转义符
      */
-    Read_AllowInvalidEscapeCharacter(false),
+    Read_AllowInvalidEscapeCharacter,
 
     /**
      * 读取时允许未编码的控制符
      */
-    Read_AllowUnescapedControlCharacters(false),
+    Read_AllowUnescapedControlCharacters,
 
     /**
      * 读取大数字时使用字符串模式（避免精度丢失）
      */
-    Read_UseBigNumberMode(false),
+    Read_UseBigNumberMode,
 
     /**
      * 读取时用浏览器兼容模式（转义非 ASCII 字符）
      */
-    Read_BrowserCompatible(false),
+    Read_BrowserCompatible,
 
     /**
      * 读取时用日期格式化（默认使用时间戳）
      */
-    //Read_UseDateFormat(false),
+    //Read_UseDateFormat,
 
     /**
      * 读取时允许使用获取器
      */
-    Read_AllowUseGetter(false),
+    Read_AllowUseGetter,
 
     /**
      * 读取时只能使用获取器
      */
-    Read_OnlyUseGetter(false),
+    Read_OnlyUseGetter,
 
     /**
      * 读取数据中的类名
      */
-    Read_ClassName(false),
+    Read_ClassName,
 
 
     //-----------------------------
@@ -120,142 +120,125 @@ public enum Feature {
      * 写入用无引号字段名
      *
      */
-    Write_UnquotedFieldNames(false),
+    Write_UnquotedFieldNames,
 
     /**
      * 写入 null
      */
-    Write_Nulls(false),
+    Write_Nulls,
 
     /**
      * 写入字符串为 null 时转为空
      */
-    Write_NullStringAsEmpty(false),
+    Write_NullStringAsEmpty,
 
     /**
      * 写入布尔为 null 时转为 false
      *
      */
-    Write_NullBooleanAsFalse(false),
+    Write_NullBooleanAsFalse,
 
     /**
      * 写入数字为 null 时转为 0
      *
      */
-    Write_NullNumberAsZero(false),
+    Write_NullNumberAsZero,
 
     /**
      * 写入允许使用设置器（默认为字段模式）
      */
-    Write_AllowUseSetter(false),
+    Write_AllowUseSetter,
     /**
      * 写入只能使用设置器
      *
      */
-    Write_OnlyUseOnlySetter(false),
+    Write_OnlyUseOnlySetter,
 
     /**
      * 写入时使用漂亮格式（带缩进和换行）
      */
-    Write_PrettyFormat(false),
+    Write_PrettyFormat,
 
     /**
      * 写入时使用单引号
      */
-    Write_UseSingleQuotes(false),
+    Write_UseSingleQuotes,
 
     /**
      * 写入时字段使用下划线风格
      */
-    Write_UseUnderlineStyle(false),
+    Write_UseUnderlineStyle,
 
     /**
      * 写入时枚举使用名称（默认使用名称）
      */
-    Write_EnumUsingName(true),
+    Write_EnumUsingName,
 
     /**
      * 写入时枚举使用 toString
      */
-    Write_EnumUsingToString(false),
+    Write_EnumUsingToString,
 
     /**
      * 写入类名
      */
-    Write_ClassName(false),
+    Write_ClassName,
 
     /**
      * 写入数组类名
      */
-    Write_ArrayClassName(false),
+    Write_ArrayClassName,
 
     /**
      * 写入映射类名
      */
-    Write_MapClassName(false),
+    Write_MapClassName,
 
     /**
      * 不写入根类名
      */
-    Write_NotRootClassName(false),
+    Write_NotRootClassName,
 
     /**
      * 写入使用原始反斜杠（`\\` 不会转为 `\\\\`）
      */
-    Write_UseRawBackslash(false),
+    Write_UseRawBackslash,
 
     /**
      * 写入兼容浏览器显示（转义非 ASCII 字符）
      */
-    Write_BrowserCompatible(false),
+    Write_BrowserCompatible,
 
     /**
      * 写入使用日期格式化（默认使用时间戳）
      */
-    Write_UseDateFormat(false),
+    Write_UseDateFormat,
 
     /**
      * 写入数字时使用字符串模式
      */
-    Write_NumbersAsString(false),
+    Write_NumbersAsString,
 
     /**
      * 写入大数字时使用字符串模式（避免精度丢失）
      */
-    Write_BigNumbersAsString(false),
+    Write_BigNumbersAsString,
     /**
      * 写入数字类型
      *
      */
-    Write_NumberTypeSuffix(false),
+    Write_NumberTypeSuffix,
     ;
 
 
-    private final boolean _default;
     private final int _mask;
 
-    Feature(boolean def) {
-        _default = def;
+    Feature() {
         _mask = (1 << ordinal());
-    }
-
-    public boolean enabledByDefault() {
-        return _default;
     }
 
     public int mask() {
         return _mask;
-    }
-
-    public static int DEFAULT() {
-        int features = 0;
-        // 合并特性开关
-        for (Feature feat : Feature.values()) {
-            if (feat.enabledByDefault()) {
-                features |= feat.mask();
-            }
-        }
-        return features;
     }
 
     public static int addFeature(int ref, Feature... features) {

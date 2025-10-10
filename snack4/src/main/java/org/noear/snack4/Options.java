@@ -39,7 +39,7 @@ public final class Options {
     //默认时间格式器
     public static final String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     //默认特性
-    public static final int DEF_FEATURES = Feature.DEFAULT();
+    public static final int DEF_FEATURES = 0;
 
     //默认选项（私有）
     public static final Options DEF_OPTIONS = new Options(true);

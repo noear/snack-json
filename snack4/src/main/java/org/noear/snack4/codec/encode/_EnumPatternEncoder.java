@@ -43,8 +43,9 @@ public class _EnumPatternEncoder implements ObjectPatternEncoder<Enum> {
         if (o != null) {
             return target.setValue(o);
         } else {
-
-            if (ctx.getOptions().hasFeature(Feature.Write_EnumUsingName)) {
+            if (ctx.getOptions().hasFeature(Feature.Write_EnumUsingToString)) {
+                return target.setValue(value.toString());
+            } else if (ctx.getOptions().hasFeature(Feature.Write_EnumUsingName)) {
                 return target.setValue(value.name());
             } else {
                 return target.setValue(value.ordinal());
