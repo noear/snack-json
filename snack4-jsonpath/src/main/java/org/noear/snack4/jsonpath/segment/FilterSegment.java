@@ -24,6 +24,7 @@ import org.noear.snack4.jsonpath.Segment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 过滤选择器：使用逻辑表达式选择特定的子项（如 [?(@.price > 10)] ）
@@ -67,11 +68,19 @@ public class FilterSegment implements Segment {
                         n.asArray().addNew();
                     }
 
-                    flattenResolve(ctx, n, result);
+                    if (ctx.isRFC9535()) {
+                        flattenResolve2(ctx, n, result);
+                    } else {
+                        flattenResolve(ctx, n, result);
+                    }
                 }
             } else {
                 for (ONode n : currentNodes) {
-                    flattenResolve(ctx, n, result);
+                    if (ctx.isRFC9535()) {
+                        flattenResolve2(ctx, n, result);
+                    } else {
+                        flattenResolve(ctx, n, result);
+                    }
                 }
             }
         }
@@ -97,6 +106,42 @@ public class FilterSegment implements Segment {
                 node.asObject();
             }
 
+            if (expression.test(node, ctx)) {
+                result.add(node);
+            }
+        }
+    }
+
+    private void flattenResolve2(QueryContext ctx, ONode node, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            node.asObject();
+        }
+
+        if (node.isArray()) {
+            int idx = 0;
+            for (ONode n1 : node.getArray()) {
+                if (n1.source == null) {
+                    n1.source = new PathSource(node, null, idx);
+                }
+
+                idx++;
+                if (expression.test(n1, ctx)) {
+                    result.add(n1);
+                }
+            }
+        } else if (node.isObject()) {
+            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+                ONode n1 = entry.getValue();
+
+                if (n1.source == null) {
+                    n1.source = new PathSource(node, entry.getKey(), 0);
+                }
+
+                if (expression.test(n1, ctx)) {
+                    result.add(n1);
+                }
+            }
+        } else {
             if (expression.test(node, ctx)) {
                 result.add(node);
             }

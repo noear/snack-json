@@ -32,10 +32,6 @@ public class RFC9535FilterTest2 {
 
         queryAssert("$.a[?@ < 2 || @.b == \"k\"]", "[1,{\"b\": \"k\"}]");
 
-
-        //Non-deterministic ordering
-        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
-
         queryAssert("$.o[?@ > 1 && @ < 4]", "[2,3]");
         queryAssert("$.o[?@.u || @.x]", "[{\"u\": 6}]");
         queryAssert("$.a[?@.b == $.x]", "[3,5,1,2,4,6]");
@@ -51,6 +47,8 @@ public class RFC9535FilterTest2 {
         //Nested filters
         queryAssert("$[?@[?@.b]]", "[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]");
 
+        //Non-deterministic ordering
+        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
 
         //Array value regular expression match
         queryAssert("$.a[?match(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"}]");

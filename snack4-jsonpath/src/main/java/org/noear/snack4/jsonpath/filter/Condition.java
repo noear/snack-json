@@ -37,11 +37,15 @@ public class Condition {
     /// ///////////////////
 
 
+    private final String conditionStr;
+
     private final Factor left;
     private final String op;
     private final Factor right;
 
     private Condition(String conditionStr) {
+        this.conditionStr = conditionStr;
+
         String[] parts = new String[3];
 
         int spaceIdx = conditionStr.indexOf(' ');
@@ -97,10 +101,6 @@ public class Condition {
 
     @Override
     public String toString() {
-        return "Condition{" +
-                "left='" + left + '\'' +
-                ", op='" + op + '\'' +
-                ", right='" + right + '\'' +
-                '}';
+        return conditionStr;
     }
 }
