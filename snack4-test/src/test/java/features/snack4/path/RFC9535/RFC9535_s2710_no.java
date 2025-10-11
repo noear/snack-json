@@ -5,7 +5,7 @@ package features.snack4.path.RFC9535;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s2710 {
+public class RFC9535_s2710_no extends AbsRFC9535{
     public void case1() {
         queryAssert("$.a", "$['a']");
         queryAssert("$[1]", "$[1]");

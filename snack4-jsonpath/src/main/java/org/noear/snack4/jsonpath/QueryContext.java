@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class QueryContext {
             this.options = Options.DEF_OPTIONS;
         }
 
-        RFC9535 = options.isRFC9535();
+        RFC9535 = options.hasStandard(Standard.IETF_JSONPath_RFC_9535);
     }
 
     public ONode getRoot() {

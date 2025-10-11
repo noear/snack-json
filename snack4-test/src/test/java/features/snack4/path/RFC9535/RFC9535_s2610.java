@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s2610 {
+public class RFC9535_s2610 extends AbsRFC9535{
     @Test
     public void case1(){
         queryAssert("$.a", "null"); //对象值
@@ -29,8 +29,8 @@ public class RFC9535_s2610 {
     private void queryAssert(String expr, String expected) {
         JsonPath jsonPath = JsonPath.compile(expr);
 
-        String actual = jsonPath.select(ONode.ofJson(json, Options.of().RFC9535(true))).toJson();
-        String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
+        String actual = jsonPath.select(ofJson(json)).toJson();
+        String expected2 = ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
         assertEquals(expected2, actual);
     }

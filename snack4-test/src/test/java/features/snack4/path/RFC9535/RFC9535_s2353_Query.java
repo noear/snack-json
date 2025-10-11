@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author noear 2025/5/6 created
  */
-public class RFC9535_s2353_Query {
+public class RFC9535_s2353_Query extends AbsRFC9535{
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
@@ -58,8 +58,8 @@ public class RFC9535_s2353_Query {
     private void queryAssert(String expr, String expected) {
         JsonPath jsonPath = JsonPath.compile(expr);
 
-        String actual = jsonPath.select(ONode.ofJson(json, Options.of().RFC9535(true))).toJson();
-        String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
+        String actual = jsonPath.select(ofJson(json)).toJson();
+        String expected2 = ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
         assertEquals(expected2, actual);
     }

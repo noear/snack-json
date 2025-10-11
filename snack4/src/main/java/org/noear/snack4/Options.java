@@ -40,6 +40,8 @@ public final class Options {
     public static final String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     //默认特性
     public static final int DEF_FEATURES = 0;
+    //默认规范
+    public static final int DEF_STANDARDS = 0;
 
     //默认选项（私有）
     public static final Options DEF_OPTIONS = new Options(true);
@@ -47,22 +49,23 @@ public final class Options {
 
     //编码仓库
     private final CodecLib codecLib = CodecLib.newInstance();
-    // 特性开关（使用位掩码存储）
+    //特性开关（使用位掩码存储）
     private int featuresValue = DEF_FEATURES;
-    // 时间格式
+    //规范开关（使用位掩码存储）
+    private int standardsValue = DEF_STANDARDS;
+    //时间格式
     private String dateFormat = DEF_DATETIME_FORMAT;
-    // 书写缩进
+    //书写缩进
     private String writeIndent = "  ";
-    // 类型属性名
+    //类型属性名
     private String typePropertyName = DEF_TYPE_PROPERTY_NAME;
-    // 类加载器
+    //类加载器
     private ClassLoader classLoader;
-    // 允许安全类
+    //允许安全类
     private Locale locale = DEF_LOCALE;
 
     private TimeZone timeZone = DEF_TIME_ZONE;
 
-    private boolean RFC9535 = false;
 
     private final boolean readonly;
 
@@ -70,15 +73,19 @@ public final class Options {
         this.readonly = readonly;
     }
 
-    public boolean isRFC9535() {
-        return RFC9535;
-    }
 
     /**
      * 是否启用指定特性
      */
     public boolean hasFeature(Feature feature) {
         return Feature.hasFeature(this.featuresValue, feature);
+    }
+
+    /**
+     * 是否启用指定规范
+     */
+    public boolean hasStandard(Standard standard) {
+        return Standard.hasStandard(this.standardsValue, standard);
     }
 
     /**
@@ -150,14 +157,6 @@ public final class Options {
 
 
     /// /////////////
-    public Options RFC9535(boolean RFC9535) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.RFC9535 = RFC9535;
-        return this;
-    }
 
     /**
      * 设置日期格式
@@ -240,6 +239,30 @@ public final class Options {
         }
 
         this.featuresValue = Feature.removeFeature(this.featuresValue, features);
+        return this;
+    }
+
+    /**
+     * 添加规范
+     */
+    public Options addStandard(Standard... standards) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.standardsValue = Standard.addStandard(this.standardsValue, standards);
+        return this;
+    }
+
+    /**
+     * 移除规范
+     */
+    public Options removeStandard(Standard... standards) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.standardsValue = Standard.removeStandard(this.standardsValue, standards);
         return this;
     }
 

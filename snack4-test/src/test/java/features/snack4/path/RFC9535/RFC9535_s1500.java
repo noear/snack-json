@@ -4,16 +4,16 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONAware;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 
 /**
  *
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s1500 {
+public class RFC9535_s1500 extends AbsRFC9535{
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
+
 
     @Test
     public void case1() {
@@ -40,7 +40,7 @@ public class RFC9535_s1500 {
     }
 
     private ONode queryCompatibleDo(String expr) {
-        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
+        ONode oNode = ofJson(json).select(expr);
         String rst1 = oNode.toJson();
         System.out.println("::" + expr);
         System.out.println(rst1);
@@ -55,7 +55,7 @@ public class RFC9535_s1500 {
     }
 
     private ONode queryCompatibleDo2(String expr) {
-        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
+        ONode oNode = ofJson(json).select(expr);
         String rst1 = oNode.toJson();
         System.out.println("::" + expr);
         System.out.println(rst1);
@@ -70,7 +70,7 @@ public class RFC9535_s1500 {
     }
 
     private ONode queryNoCompatibleDo(String expr) {
-        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
+        ONode oNode = ofJson(json).select(expr);
         System.out.println("::" + expr);
         System.out.println(oNode.toJson());
 

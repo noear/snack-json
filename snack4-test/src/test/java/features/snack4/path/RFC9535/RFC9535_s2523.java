@@ -2,7 +2,6 @@ package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s2523 {
+public class RFC9535_s2523 extends AbsRFC9535{
     @Test
     public void case1() {
         queryAssert("$..j", "[1,4]");
@@ -34,8 +33,8 @@ public class RFC9535_s2523 {
     private void queryAssert(String expr, String expected) {
         JsonPath jsonPath = JsonPath.compile(expr);
 
-        String actual = jsonPath.select(ONode.ofJson(json, Options.of().RFC9535(true))).toJson();
-        String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
+        String actual = jsonPath.select(ofJson(json)).toJson();
+        String expected2 = ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
         assertEquals(expected2, actual);
     }
@@ -43,8 +42,8 @@ public class RFC9535_s2523 {
     private void queryAssert2(String expr, String expected) {
         JsonPath jsonPath = JsonPath.compile(expr);
 
-        String actual = jsonPath.select(ONode.ofJson(json, Options.of().RFC9535(true))).toJson();
-        String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
+        String actual = jsonPath.select(ofJson(json)).toJson();
+        String expected2 = ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
 
         assert expected2.equals(actual) || expected2.length() == actual.length();

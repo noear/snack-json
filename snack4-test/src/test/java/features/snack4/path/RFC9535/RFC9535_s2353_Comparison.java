@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author noear 2025/5/6 created
  */
-public class RFC9535_s2353_Comparison {
+public class RFC9535_s2353_Comparison extends AbsRFC9535 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
@@ -62,7 +62,7 @@ public class RFC9535_s2353_Comparison {
 
 
     private void comparisonAssert(String expr, boolean expected) {
-        ONode node = ONode.ofJson(comparisonJson);
+        ONode node = ofJson(comparisonJson);
         boolean actual = Expression.get(expr).test(node, new QueryContext(node, QueryMode.SELECT));
         assertEquals(expected, actual);
     }

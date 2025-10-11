@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s2490_Function {
+public class RFC9535_s2490_Function_no extends AbsRFC9535{
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
