@@ -118,10 +118,10 @@ public class JsonPathCompatibleTest2 {
         compatible_do("1", json, "$..book[?(@.price < 10)]");
     }
 
-//    @Test
-//    public void test13() {
-//        compatible_do("1", json, "$..*"); //数据相同，但顺序不同
-//    }
+    @Test
+    public void test13() {
+        compatible_do("1", json, "$..*"); //数据相同，但顺序不同
+    }
 
 
     private void compatible_do(String hint, String json, String jsonpathStr) {
