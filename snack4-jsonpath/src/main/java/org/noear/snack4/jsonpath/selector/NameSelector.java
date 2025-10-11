@@ -36,7 +36,14 @@ public class NameSelector implements Selector {
 
     public NameSelector(String expr) {
         this.expr = expr;
-        this.name = expr.substring(1, expr.length() - 1);
+
+        this.name = expr;
+        if (expr.length() > 2) {
+            char ch = expr.charAt(0);
+            if (ch == '\'' || ch == '"') {
+                this.name = expr.substring(1, expr.length() - 1);
+            }
+        }
     }
 
     @Override

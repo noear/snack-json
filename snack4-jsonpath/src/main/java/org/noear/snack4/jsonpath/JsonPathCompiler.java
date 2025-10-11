@@ -34,7 +34,6 @@ public class JsonPathCompiler {
         return new JsonPathCompiler(path).doCompile();
     }
 
-
     private final String path;
     private int position;
     private List<Segment> segments = new ArrayList<>();
@@ -118,12 +117,7 @@ public class JsonPathCompiler {
             position++;
         }
 
-        if (segment.startsWith("?")) {
-            addSegment(new FilterSegment(segment));
-        } else {
-            // 选择器片段
-            addSegment(new SelectSegment(segment));
-        }
+        addSegment(new SelectSegment(segment));
     }
 
     /**
@@ -138,7 +132,7 @@ public class JsonPathCompiler {
         } else if (key.equals("*")) {
             addSegment(new SelectSegment(key));
         } else {
-            addSegment( new SelectSegment("'"+key+"'"));
+            addSegment(new SelectSegment(key));
         }
     }
 

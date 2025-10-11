@@ -18,6 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.selector.*;
+import org.noear.snack4.util.Asserts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,24 +36,32 @@ public class SelectSegment extends AbstractSegment {
     public SelectSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
-        for (String s : segmentStr.split(",")) {
-            String chunk = s.trim();
+        if (segmentStr.startsWith("?")) {
+            selectors.add(new FilterSelector(segmentStr));
+        } else {
+            for (String s : segmentStr.split(",")) {
+                String chunk = s.trim();
 
-            if (chunk.length() > 0) {
-                char ch = chunk.charAt(0);
+                if (chunk.length() > 0) {
+                    char ch = chunk.charAt(0);
 
-                if (ch == '*') {
-                    selectors.add(new WildcardSelector());
-                } else if (ch == '$' || ch == '@') {
-                    selectors.add(new QuerySelector(chunk));
-                } else if (ch == '?') {
-                    selectors.add(new FilterSelector(chunk));
-                } else if (ch == '\'') {
-                    selectors.add(new NameSelector(chunk));
-                } else if (chunk.indexOf(':') >= 0) {
-                    selectors.add(new SliceSelector(chunk));
-                } else {
-                    selectors.add(new IndexSelector(chunk));
+                    if (ch == '*') {
+                        selectors.add(new WildcardSelector());
+                    } else if (ch == '$' || ch == '@') {
+                        selectors.add(new QuerySelector(chunk));
+                    } else if (ch == '?') {
+                        selectors.add(new FilterSelector(chunk));
+                    } else if (ch == '\'') {
+                        selectors.add(new NameSelector(chunk));
+                    } else if (chunk.indexOf(':') >= 0) {
+                        selectors.add(new SliceSelector(chunk));
+                    } else {
+                        if (Asserts.isNumber(chunk)) {
+                            selectors.add(new IndexSelector(chunk));
+                        } else {
+                            selectors.add(new NameSelector(chunk));
+                        }
+                    }
                 }
             }
         }
