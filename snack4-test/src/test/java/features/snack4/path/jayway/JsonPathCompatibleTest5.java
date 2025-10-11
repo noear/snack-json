@@ -6,6 +6,7 @@ import features.snack4.path.manual.JsonPathTest3;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.json.JsonType;
 
 /**
  * @author noear 2023/11/3 created
@@ -101,26 +102,25 @@ public class JsonPathCompatibleTest5 {
     public void test6_1() {
         String json = "{\"result\":[]}";
 
-        String jsonpathStr1 = "$.result[*].amount.sum()";
 
-        compatible_do("1", json, jsonpathStr1);
+        compatible_do("1", json, "$.result[*].amount");
+        compatible_do("2", json, "$.result[*].amount.sum()");
     }
 
     @Test
     public void test6_2() {
         String json = "{\"result\":[]}";
-        String jsonpathStr1 = "$.result[*].amount.min()";
 
-        compatible_do("1", json, jsonpathStr1);
+        compatible_do("1", json, "$.result[*].amount");
+        compatible_do("2", json, "$.result[*].amount.min()");
     }
 
     @Test
     public void test6_3() {
         String json = "{\"result\":[]}";
 
-        String jsonpathStr1 = "$.result[*].amount.max()";
-
-        compatible_do("1", json, jsonpathStr1);
+        compatible_do("1", json, "$.result[*].amount");
+        compatible_do("2", json, "$.result[*].amount.max()");
     }
 
 
@@ -133,6 +133,13 @@ public class JsonPathCompatibleTest5 {
         compatible_do("2", json, "$[?(@.id == 1002)]");
     }
 
+    @Test
+    public void test11() {
+        //compatible_do("1", "{b:1}", "$.user");
+        compatible_do("1", "{user:1}", "$.user");
+        compatible_do("2", "{user:null}", "$.user");
+    }
+
 
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
@@ -141,8 +148,8 @@ public class JsonPathCompatibleTest5 {
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
-        System.out.println(tmp2);
+        System.out.println(ONode.serialize(tmp2));
 
-        assert tmp.toJson().equals(tmp2.toString());
+        assert tmp.toJson().equals(ONode.serialize(tmp2));
     }
 }

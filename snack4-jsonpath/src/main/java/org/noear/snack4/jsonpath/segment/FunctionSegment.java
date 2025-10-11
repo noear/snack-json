@@ -57,6 +57,10 @@ public class FunctionSegment extends AbstractSegment {
             currentNodes = results;
         }
 
+        if(currentNodes.isEmpty()){
+            return currentNodes;
+        }
+
         return Collections.singletonList(
                 FuncLib.get(funcName).apply(ctx, currentNodes) // 传入节点列表
         );
