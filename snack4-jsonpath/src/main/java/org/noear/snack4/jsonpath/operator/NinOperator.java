@@ -13,21 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath.operator;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
-
-import java.util.List;
+import org.noear.snack4.jsonpath.filter.Term;
 
 /**
  *
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class CountFunc implements Func {
+public class NinOperator implements Operator{
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        return new ONode(oNodes.size());
+    public boolean apply(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
+
+        if (leftNode.isNull() == false) {
+            ONode rightNode = term.getRightNode(ctx, node);
+            if (rightNode.isArray() == false) {
+                return false;
+            }
+
+            return rightNode.getArray().stream().noneMatch(v -> ContainsOperator.isValueMatch(leftNode, v));
+        }
+
+        return false;
     }
 }

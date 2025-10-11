@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.op;
+package org.noear.snack4.jsonpath.operator;
 
 
 import org.noear.snack4.ONode;
@@ -21,7 +21,6 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.filter.Term;
-import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
 import java.util.Map;
 import java.util.Objects;
@@ -37,23 +36,24 @@ public class OperatorLib {
     private static final Map<String, Operator> LIB = new ConcurrentHashMap<>();
 
     static {
-        // 操作函数
-        register("startsWith", OperatorLib::startsWith);
-        register("endsWith", OperatorLib::endsWith);
-
-        register("contains", OperatorLib::contains);
-
-        register("in", OperatorLib::in);
-        register("nin", OperatorLib::nin);
-
-        register("=~", OperatorLib::matches);
-
+        //协议规定
         register("==", OperatorLib::compare);
         register("!=", OperatorLib::compare);
         register(">", OperatorLib::compare);
         register("<", OperatorLib::compare);
         register(">=", OperatorLib::compare);
         register("<=", OperatorLib::compare);
+
+        //扩展
+        register("=~", new MatchesOperator());
+
+        register("in", new InOperator());
+        register("nin", new NinOperator());
+
+        register("startsWith", new StartsWithOperator());
+        register("endsWith", new EndsWithOperator());
+
+        register("contains", new ContainsOperator());
     }
 
     /**
@@ -71,98 +71,6 @@ public class OperatorLib {
     }
 
     /// /////////////////
-
-    private static boolean startsWith(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-
-        if (leftNode.isString()) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isNull()) {
-                return false;
-            }
-
-            return leftNode.getString().startsWith(rightNode.getString());
-        }
-        return false;
-    }
-
-    private static boolean endsWith(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-
-        if (leftNode.isString()) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray()) {
-                return false;
-            }
-
-            return leftNode.getString().endsWith(rightNode.getString());
-        }
-        return false;
-    }
-
-    private static boolean contains(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-
-        ONode expectedNode = term.getRightNode(ctx, node);
-
-        // 支持多类型包含检查
-        if (leftNode.isArray()) {
-            return leftNode.getArray().stream()
-                    .anyMatch(item -> isValueMatch(item, expectedNode));
-        } else if (leftNode.isString()) {
-            if (expectedNode.isString()) {
-                return leftNode.getString().contains(expectedNode.getString());
-            } else {
-                throw new IllegalArgumentException("expected string but got " + expectedNode);
-            }
-        }
-        return false;
-    }
-
-    private static boolean in(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-
-        if (leftNode.isNull() == false) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray() == false) {
-                return false;
-            }
-
-            return rightNode.getArray().stream().anyMatch(v -> isValueMatch(leftNode, v));
-        }
-
-        return false;
-    }
-
-    private static boolean nin(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-
-        if (leftNode.isNull() == false) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray() == false) {
-                return false;
-            }
-
-            return rightNode.getArray().stream().noneMatch(v -> isValueMatch(leftNode, v));
-        }
-
-        return false;
-    }
-
-    private static boolean matches(QueryContext ctx, ONode node, Term term) {
-        ONode leftNode = term.getLeftNode(ctx, node);
-        ONode rightNode = term.getRightNode(ctx, node);
-
-        boolean found = false;
-        if (leftNode.isValue()) {
-            if (rightNode.isString()) {
-                String v = rightNode.getString();//.replace("\\/", "/");
-                found = JsRegexUtil.of(v).matcher(leftNode.getString()).find();
-            }
-        }
-
-        return found;
-    }
 
     private static boolean compare(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
@@ -239,30 +147,5 @@ public class OperatorLib {
             default:
                 throw new JsonPathException("Unsupported operator for number: " + op);
         }
-    }
-
-    private static boolean isValueMatch(ONode item, ONode expected) {
-        if (item.isArray()) {
-            return item.getArray().stream().anyMatch(one -> isValueMatch(one, expected));
-        }
-
-        if (item.isString()) {
-            if (expected.isString()) {
-                return item.getString().equals(expected.getString());
-            }
-        } else if (item.isNumber()) {
-            if (expected.isNumber()) {
-                double itemValue = item.getDouble();
-                double expectedValue = expected.getNumber().doubleValue();
-                return itemValue == expectedValue;
-            }
-        } else if (item.isBoolean()) {
-            if (expected.isBoolean()) {
-                Boolean itemBool = item.getBoolean();
-                return itemBool == expected.getBoolean();
-            }
-        }
-
-        return false;
     }
 }
