@@ -58,17 +58,17 @@ public class FuncHolder {
     }
 
     public ONode apply(QueryContext ctx, ONode node) {
-        List<ONode> nodes = new ArrayList<>();
+        List<ONode> oNodes = new ArrayList<>();
 
         for (Object arg : args) {
             if (arg instanceof JsonPath) {
                 ONode n1 = ctx.nestedQuery(node, (JsonPath) arg);
-                nodes.add(n1);
+                oNodes.add(n1);
             } else {
-                nodes.add((ONode) arg);
+                oNodes.add((ONode) arg);
             }
         }
 
-        return func.apply(ctx, nodes);
+        return func.apply(ctx, oNodes);
     }
 }

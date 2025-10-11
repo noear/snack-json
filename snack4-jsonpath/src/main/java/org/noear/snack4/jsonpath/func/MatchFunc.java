@@ -34,7 +34,13 @@ public class MatchFunc implements Func {
             throw new JsonPathException("The parameter requires two");
         }
 
-        String arg0 = oNodes.get(0).toString();
+        ONode o1 = oNodes.get(0);
+
+        if(o1.isNull()) {
+            return new ONode(false);
+        }
+
+        String arg0 = o1.toString();
         String arg1 = oNodes.get(1).toString();
 
         boolean found = JsRegexUtil.of(arg1).matcher(arg0).find();
