@@ -141,7 +141,7 @@ public class JsonPathCompiler {
     // 在 JsonPathCompiler.java 中
 
     /**
-     * 解析路径段（支持终止符列表），同时健壮地处理引号、正则和嵌套方括号。
+     * 解析路径段（支持终止符列表），同时健壮地处理引号、正则、嵌套方括号和Unicode转义。
      *
      * @param terminators 允许的终止字符，如 '.', '[' 或 ']'。
      * @return 解析到的路径段字符串。
@@ -151,15 +151,48 @@ public class JsonPathCompiler {
         boolean inQuote = false; // 是否在引号内部
         char quoteChar = 0;
         boolean inRegex = false; // 是否在正则表达式内部 (仅在过滤器中可能出现)
+        boolean inUnicodeEscape = false; // 是否在Unicode转义序列中
+        int unicodeEscapeCount = 0; // Unicode转义字符计数
+        StringBuilder unicodeBuffer = new StringBuilder(); // Unicode转义字符缓冲区
 
-        // 检查当前解析是否是针对方括号内部的内容（即 resolveBracket 调用时）
+        // 检查当前解析是否是针对方括号内部的内容
         boolean parsingBracketContent = isTerminator(']', terminators);
-        int bracketLevel = parsingBracketContent ? 1 : 0; // 如果解析方括号内容，初始级别为 1
+        int bracketLevel = parsingBracketContent ? 1 : 0;
 
         while (position < path.length()) {
             char ch = path.charAt(position);
 
-            // 1. 处理引号内的内容
+            // 1. 处理Unicode转义序列
+            if (inUnicodeEscape) {
+                unicodeBuffer.append(ch);
+                unicodeEscapeCount++;
+
+                if (unicodeEscapeCount == 4) {
+                    // 完成4位Unicode转义序列
+                    try {
+                        int codePoint = Integer.parseInt(unicodeBuffer.toString(), 16);
+                        sb.append((char) codePoint);
+                    } catch (NumberFormatException e) {
+                        // 如果解析失败，保持原样输出
+                        sb.append("\\u").append(unicodeBuffer);
+                    }
+                    inUnicodeEscape = false;
+                    unicodeEscapeCount = 0;
+                    unicodeBuffer.setLength(0);
+                }
+                position++;
+                continue;
+            }
+
+            // 2. 检测Unicode转义序列开始
+            if (ch == '\\' && position + 1 < path.length() && path.charAt(position + 1) == 'u') {
+                // 开始Unicode转义序列
+                inUnicodeEscape = true;
+                position += 2; // 跳过 \\u
+                continue;
+            }
+
+            // 3. 处理引号内的内容
             if ((ch == '\'' || ch == '\"') && !inRegex) {
                 if (inQuote && ch == quoteChar) {
                     // 引号结束
@@ -182,7 +215,7 @@ public class JsonPathCompiler {
                 continue;
             }
 
-            // 2. 处理正则表达式的开始/结束 (仅在过滤器中适用)
+            // 4. 处理正则表达式的开始/结束
             if (ch == '/' && !inRegex) {
                 inRegex = true;
                 sb.append(ch);
@@ -202,8 +235,56 @@ public class JsonPathCompiler {
                 continue;
             }
 
+            // 5. 处理转义字符（非Unicode）
+            if (ch == '\\' && position + 1 < path.length()) {
+                // 处理常见的转义序列
+                char nextChar = path.charAt(position + 1);
+                switch (nextChar) {
+                    case '\\':
+                        sb.append('\\');
+                        position += 2;
+                        continue;
+                    case '/':
+                        sb.append('/');
+                        position += 2;
+                        continue;
+                    case 'b':
+                        sb.append('\b');
+                        position += 2;
+                        continue;
+                    case 'f':
+                        sb.append('\f');
+                        position += 2;
+                        continue;
+                    case 'n':
+                        sb.append('\n');
+                        position += 2;
+                        continue;
+                    case 'r':
+                        sb.append('\r');
+                        position += 2;
+                        continue;
+                    case 't':
+                        sb.append('\t');
+                        position += 2;
+                        continue;
+                    case '"':
+                        sb.append('"');
+                        position += 2;
+                        continue;
+                    case '\'':
+                        sb.append('\'');
+                        position += 2;
+                        continue;
+                    default:
+                        // 如果不是特殊转义，保持原样
+                        sb.append(ch);
+                        position++;
+                        continue;
+                }
+            }
 
-            // 3. 处理嵌套的方括号 (仅在解析方括号内容时激活)
+            // 6. 处理嵌套的方括号
             if (parsingBracketContent) {
                 if (ch == '[') {
                     bracketLevel++;
@@ -216,7 +297,7 @@ public class JsonPathCompiler {
                 }
             }
 
-            // 4. 检查外部终止符（仅在非方括号内容解析模式下，或在方括号内容解析但遇到非方括号终止符时）
+            // 7. 检查外部终止符
             if (!parsingBracketContent || bracketLevel == 1) {
                 if (isTerminator(ch, terminators)) {
                     // 遇到非方括号的终止符 (如 . 或 [)
@@ -228,6 +309,11 @@ public class JsonPathCompiler {
 
             sb.append(ch);
             position++;
+        }
+
+        // 处理未完成的Unicode转义序列
+        if (inUnicodeEscape) {
+            sb.append("\\u").append(unicodeBuffer);
         }
 
         return sb.toString().trim();
