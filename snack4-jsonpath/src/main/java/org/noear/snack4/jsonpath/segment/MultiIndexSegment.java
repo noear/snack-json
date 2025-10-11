@@ -17,6 +17,11 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
+import org.noear.snack4.jsonpath.selector.IndexSelector;
+import org.noear.snack4.jsonpath.selector.NameSelector;
+import org.noear.snack4.jsonpath.selector.QuerySelector;
+import org.noear.snack4.jsonpath.selector.WildcardSelector;
+import org.noear.snack4.util.Asserts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class MultiIndexSegment implements Segment {
     private final String segmentStr;
-    private List<Object> chunks = new ArrayList<>();
+    private List<Selector> selectors = new ArrayList<>();
 
     public MultiIndexSegment(String segmentStr) {
         this.segmentStr = segmentStr;
@@ -44,13 +49,17 @@ public class MultiIndexSegment implements Segment {
                 char ch = chunk.charAt(0);
 
                 if (ch == '*') {
-                    chunks.add(Boolean.TRUE);
+                    selectors.add(new WildcardSelector());
+                    //chunks.add(Boolean.TRUE);
                 } else if (ch == '$' || ch == '@') {
-                    chunks.add(JsonPath.compile(chunk));
+                    selectors.add(new QuerySelector(chunk));
+                    //chunks.add(JsonPath.compile(chunk));
                 } else if (ch == '\'') {
-                    chunks.add(chunk.substring(1, chunk.length() - 1));
+                    selectors.add(new NameSelector(chunk));
+                    //chunks.add(chunk.substring(1, chunk.length() - 1));
                 } else {
-                    chunks.add(Integer.parseInt(chunk));
+                    selectors.add(new IndexSelector(chunk));
+                    //chunks.add(Integer.parseInt(chunk));
                 }
             }
         }
@@ -65,66 +74,66 @@ public class MultiIndexSegment implements Segment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        for (ONode n : currentNodes) {
-            doResolve(ctx, n, result);
-        }
+       for (Selector selector : selectors) {
+           selector.select(ctx, currentNodes, result);
+       }
 
         ctx.flattened = false;
         return result;
     }
 
-    private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
-        for (Object c1 : chunks) {
-            if (c1 instanceof Boolean) {
-                //*
-                if (node.isArray()) {
-                    int idx = 0;
-                    for (ONode n1 : node.getArray()) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, null, idx);
-                        }
-
-                        idx++;
-                        result.add(n1);
-                    }
-                } else if (node.isObject()) {
-                    for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                        ONode n1 = entry.getValue();
-                        if (n1.source == null) {
-                            n1.source = new PathSource(node, entry.getKey(), 0);
-                        }
-
-                        result.add(n1);
-                    }
-                }
-            } else if (c1 instanceof JsonPath) {
-                //$.x
-                ONode dynamicIdx = ctx.nestedQuery(node, (JsonPath) c1);
-
-                if (dynamicIdx.isNumber()) {
-                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
-                } else if (dynamicIdx.isString()) {
-                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
-                }
-            } else if (c1 instanceof String) {
-                //'name'
-                if (ctx.getMode() == QueryMode.CREATE) {
-                    node.asObject();
-                }
-
-                if (node.isObject()) {
-                    IndexUtil.forKeyUnsafe(ctx, node, (String) c1, result);
-                }
-            } else if (c1 instanceof Integer) {
-                //idx
-                if (ctx.getMode() == QueryMode.CREATE) {
-                    node.asArray();
-                }
-
-                if (node.isArray()) {
-                    IndexUtil.forIndexUnsafe(ctx, node, (Integer) c1, result);
-                }
-            }
-        }
-    }
+//    private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
+//        for (Object c1 : chunks) {
+//            if (c1 instanceof Boolean) {
+//                //*
+//                if (node.isArray()) {
+//                    int idx = 0;
+//                    for (ONode n1 : node.getArray()) {
+//                        if (n1.source == null) {
+//                            n1.source = new PathSource(node, null, idx);
+//                        }
+//
+//                        idx++;
+//                        result.add(n1);
+//                    }
+//                } else if (node.isObject()) {
+//                    for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+//                        ONode n1 = entry.getValue();
+//                        if (n1.source == null) {
+//                            n1.source = new PathSource(node, entry.getKey(), 0);
+//                        }
+//
+//                        result.add(n1);
+//                    }
+//                }
+//            } else if (c1 instanceof JsonPath) {
+//                //$.x
+//                ONode dynamicIdx = ctx.nestedQuery(node, (JsonPath) c1);
+//
+//                if (dynamicIdx.isNumber()) {
+//                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
+//                } else if (dynamicIdx.isString()) {
+//                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
+//                }
+//            } else if (c1 instanceof String) {
+//                //'name'
+//                if (ctx.getMode() == QueryMode.CREATE) {
+//                    node.asObject();
+//                }
+//
+//                if (node.isObject()) {
+//                    IndexUtil.forKeyUnsafe(ctx, node, (String) c1, result);
+//                }
+//            } else if (c1 instanceof Integer) {
+//                //idx
+//                if (ctx.getMode() == QueryMode.CREATE) {
+//                    node.asArray();
+//                }
+//
+//                if (node.isArray()) {
+//                    IndexUtil.forIndexUnsafe(ctx, node, (Integer) c1, result);
+//                }
+//            }
+//        }
+//    }
 }

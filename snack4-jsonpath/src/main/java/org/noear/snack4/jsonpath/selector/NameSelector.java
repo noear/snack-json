@@ -20,7 +20,7 @@ public class NameSelector implements Selector {
 
     public NameSelector(String expr) {
         this.expr = expr;
-        this.name = name;
+        this.name = expr.substring(1, expr.length() - 1);
     }
 
     @Override

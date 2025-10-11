@@ -17,6 +17,9 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
+import org.noear.snack4.jsonpath.selector.IndexSelector;
+import org.noear.snack4.jsonpath.selector.NameSelector;
+import org.noear.snack4.jsonpath.selector.QuerySelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,19 +32,24 @@ import java.util.List;
  */
 public class IndexSegment implements Segment {
     private final String segmentStr;
-    private JsonPath query;
-    private String key;
-    private int index;
+//    private JsonPath query;
+//    private String key;
+//    private int index;
+
+    private Selector selector;
 
     public IndexSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
         if (segmentStr.startsWith("$.") || segmentStr.startsWith("@.")) {
-            query = JsonPath.compile(segmentStr);
+            selector  =new QuerySelector(segmentStr);
+           // query = JsonPath.compile(segmentStr);
         } else if (segmentStr.indexOf('\'') < 0) {
-            index = Integer.parseInt(segmentStr);
+            selector = new IndexSelector(segmentStr);
+            //index = Integer.parseInt(segmentStr);
         } else {
-            key = segmentStr.substring(1, segmentStr.length() - 1);
+            selector = new NameSelector(segmentStr);
+            //key = segmentStr.substring(1, segmentStr.length() - 1);
         }
     }
 
@@ -54,24 +62,26 @@ public class IndexSegment implements Segment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        for (ONode node : currentNodes) {
-            if (query != null) {
-                //$.x
-                ONode dynamicIdx = ctx.nestedQuery(node, query);
+        selector.select(ctx, currentNodes, result);
 
-                if (dynamicIdx.isNumber()) {
-                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
-                } else if (dynamicIdx.isString()) {
-                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
-                }
-            } else if (key != null) {
-                //'name'
-                IndexUtil.forKey(ctx, node, key, result);
-            } else {
-                //idx
-                IndexUtil.forIndex(ctx, node, index, result);
-            }
-        }
+//        for (ONode node : currentNodes) {
+//            if (query != null) {
+//                //$.x
+//                ONode dynamicIdx = ctx.nestedQuery(node, query);
+//
+//                if (dynamicIdx.isNumber()) {
+//                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), result);
+//                } else if (dynamicIdx.isString()) {
+//                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), result);
+//                }
+//            } else if (key != null) {
+//                //'name'
+//                IndexUtil.forKey(ctx, node, key, result);
+//            } else {
+//                //idx
+//                IndexUtil.forIndex(ctx, node, index, result);
+//            }
+//        }
 
         ctx.flattened = false;
         return result;

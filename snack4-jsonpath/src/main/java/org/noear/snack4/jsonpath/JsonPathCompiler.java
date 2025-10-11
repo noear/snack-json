@@ -130,7 +130,7 @@ public class JsonPathCompiler {
                 segments.add(new ArraySliceSegment(segment));
             } else {
                 // 属性选择
-                segments.add(new IndexSegment(segment));
+                segments.add(new MultiIndexSegment(segment));
             }
         }
     }
@@ -147,7 +147,8 @@ public class JsonPathCompiler {
         } else if (key.equals("*")) {
             segments.add(new WildcardSegment());
         } else {
-            segments.add(new NameSegment(key));
+            segments.add( new MultiIndexSegment("'"+key+"'"));
+            //segments.add(new NameSegment(key));
         }
     }
 
