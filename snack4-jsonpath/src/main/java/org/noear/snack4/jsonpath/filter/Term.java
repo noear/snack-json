@@ -37,25 +37,25 @@ public class Term {
     /// ///////////////////
 
 
-    private final String conditionStr;
+    private final String termStr;
 
     private final Operand left;
     private final String op;
     private final Operand right;
 
-    private Term(String conditionStr) {
-        this.conditionStr = conditionStr;
+    private Term(String termStr) {
+        this.termStr = termStr;
 
         String[] parts = new String[3];
 
-        int spaceIdx = conditionStr.indexOf(' ');
+        int spaceIdx = termStr.indexOf(' ');
         if (spaceIdx < 0) {
             //没有空隔
-            parts[0] = conditionStr;
+            parts[0] = termStr;
         } else {
             //有空隔
-            parts[0] = conditionStr.substring(0, spaceIdx);
-            parts[1] = conditionStr.substring(spaceIdx + 1).trim();
+            parts[0] = termStr.substring(0, spaceIdx);
+            parts[1] = termStr.substring(spaceIdx + 1).trim();
             spaceIdx = parts[1].indexOf(' ');
             if (spaceIdx > 0) {
                 //有第二个空隔
@@ -110,6 +110,6 @@ public class Term {
 
     @Override
     public String toString() {
-        return conditionStr;
+        return termStr;
     }
 }
