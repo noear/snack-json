@@ -110,7 +110,7 @@ public class JsonPathSelectComplexTest2 {
         ONode result = jsonPath.select(loadRoot());
 
         assertEquals(2, result.size());
-        assertTrue(result.select("$[*].category").toJson().contains("fiction"));
+        assertTrue(result.select("$[*].category").toJson().contains("tech"));
     }
 
     @Test

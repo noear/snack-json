@@ -56,6 +56,12 @@ public class Term {
             not = false;
         }
 
+        if(expr.length() > 3) {
+            if (expr.charAt(0) == '(' && expr.charAt(expr.length() - 1) == ')') { //like !(xxx == yyy)
+                expr = expr.substring(1, expr.length() - 1);
+            }
+        }
+
 
         String leftStr;
         String opStr = null;

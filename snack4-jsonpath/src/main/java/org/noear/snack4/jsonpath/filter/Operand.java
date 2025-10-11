@@ -62,11 +62,6 @@ public class Operand {
         if (Asserts.isNotEmpty(value)) {
             char ch = value.charAt(0);
 
-            if(ch == '(' && value.charAt(value.length() - 1) == ')'){ //like !(xxx == yyy)
-                value = value.substring(1, value.length() - 1);
-                ch = value.charAt(0);
-            }
-
             if (ch == '@' || ch == '$') {
                 queryValue = JsonPath.compile(value);
             } else {
