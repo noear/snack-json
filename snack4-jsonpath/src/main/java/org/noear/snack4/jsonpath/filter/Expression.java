@@ -235,11 +235,15 @@ public class Expression {
     private boolean evaluateTerm(QueryContext ctx, ONode node, String termStr) {
         Term term = Term.get(termStr);
 
+        boolean isOk;
         if (term.isNot()) {
-            return !doEvaluateTerm(ctx, node, term);
+            isOk = !doEvaluateTerm(ctx, node, term);
         } else {
-            return doEvaluateTerm(ctx, node, term);
+            isOk = doEvaluateTerm(ctx, node, term);
         }
+
+        //方便调试
+        return isOk;
     }
 
 

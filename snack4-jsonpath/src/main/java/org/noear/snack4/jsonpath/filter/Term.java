@@ -44,17 +44,18 @@ public class Term {
     private final String op;
     private final Operand right;
 
-    private Term(String s) {
-        s = s.trim();
+    private Term(String expr) {
+        this.termStr = expr; // 仅用于打印
 
-        if (s.charAt(0) == '!') {
+        expr = expr.trim();
+
+        if (expr.charAt(0) == '!') {
             not = true;
-            s = s.substring(1);
+            expr = expr.substring(1);
         } else {
             not = false;
         }
 
-        this.termStr = s.trim(); // 保证整个字符串没有首尾空格
 
         String leftStr;
         String opStr = null;
@@ -65,8 +66,8 @@ public class Term {
 
         // 1. 寻找左操作数的结束位置
         // 这个位置是第一个在括号层级为0时遇到的空格
-        for (int i = 0; i < this.termStr.length(); i++) {
-            char c = this.termStr.charAt(i);
+        for (int i = 0; i < expr.length(); i++) {
+            char c = expr.charAt(i);
             if (c == '(') {
                 parenLevel++;
             } else if (c == ')') {
@@ -82,13 +83,13 @@ public class Term {
 
         if (endOfLeft == -1) {
             // 2. 没有找到顶级空格，说明整个字符串都是左操作数
-            leftStr = this.termStr;
+            leftStr = expr;
         } else {
             // 3. 找到了顶级空格，分割出左操作数
-            leftStr = this.termStr.substring(0, endOfLeft).trim();
+            leftStr = expr.substring(0, endOfLeft).trim();
 
             // 剩余部分包含操作符和右操作数
-            String opAndRight = this.termStr.substring(endOfLeft + 1).trim();
+            String opAndRight = expr.substring(endOfLeft + 1).trim();
 
             // 寻找操作符和右操作数之间的空格
             // 假设操作符本身不包含空格（例如，我们不支持 'is not' 这样的多词操作符）
