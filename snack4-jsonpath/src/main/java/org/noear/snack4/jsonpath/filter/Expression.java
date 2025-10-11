@@ -253,7 +253,11 @@ public class Expression {
         if (Asserts.isEmpty(term.getRight().getValue())) {
             if (term.getOp() == null) {
                 ONode leftNode = term.getLeftNode(ctx, node);
-                return !leftNode.isNull();
+                if (leftNode.isBoolean()) {
+                    return leftNode.getBoolean();
+                } else {
+                    return !leftNode.isNull();
+                }
             } else {
                 return false;
             }

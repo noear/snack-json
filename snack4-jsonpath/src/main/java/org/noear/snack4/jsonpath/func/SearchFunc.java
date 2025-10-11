@@ -18,8 +18,10 @@ package org.noear.snack4.jsonpath.func;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -33,10 +35,17 @@ public class SearchFunc implements Func {
             throw new JsonPathException("The parameter requires two");
         }
 
-        String arg0 = oNodes.get(0).toString();
+        ONode o1 = oNodes.get(0);
+
+        if(o1.isNull()) {
+            return new ONode(false);
+        }
+
+        String arg0 = o1.toString();
         String arg1 = oNodes.get(1).toString();
 
-        boolean found = arg0.indexOf(arg1) >= 0;
+        Pattern pattern = JsRegexUtil.of(arg1);
+        boolean found = pattern.matcher(arg0).find(); //与 MatchFunc 的区别就在这儿
 
         return new ONode(found);
     }

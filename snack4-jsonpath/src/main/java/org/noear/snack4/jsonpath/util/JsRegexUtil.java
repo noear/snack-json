@@ -38,7 +38,9 @@ public class JsRegexUtil {
     private static Pattern parseJsRegex(String jsRegex) {
         // 1. 检查输入是否以 / 开头和结尾
         if (!jsRegex.startsWith("/") || !jsRegex.contains("/")) {
-            throw new IllegalArgumentException("Invalid JavaScript regex format: " + jsRegex);
+            return Pattern.compile(jsRegex);
+
+            //throw new IllegalArgumentException("Invalid JavaScript regex format: " + jsRegex);
         }
 
         // 2. 分离正则主体和修饰符
