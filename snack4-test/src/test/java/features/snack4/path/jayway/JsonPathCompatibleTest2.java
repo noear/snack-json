@@ -120,7 +120,7 @@ public class JsonPathCompatibleTest2 {
 
     @Test
     public void test13() {
-        compatible_do("1", json, "$..*"); //数据相同，但顺序不同
+        compatible_do_len("1", json, "$..*"); //数据相同，但顺序不同
     }
 
 
@@ -134,5 +134,17 @@ public class JsonPathCompatibleTest2 {
         System.out.println(tmp2);
 
         assert tmp.toJson().equals(tmp2.toString());
+    }
+
+    private void compatible_do_len(String hint, String json, String jsonpathStr) {
+        System.out.println("::::" + hint);
+
+        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
+        System.out.println(tmp.toJson());
+
+        Object tmp2 = JsonPath.read(json, jsonpathStr);
+        System.out.println(ONode.serialize(tmp2));
+
+        assert tmp.toJson().length() == ONode.serialize(tmp2).length();
     }
 }
