@@ -37,12 +37,9 @@ public class FilterSegment extends AbstractSegment {
     private final String segmentStr;
     private final FilterSelector selector;
 
-    /**
-     * @param segmentStr `?...`
-     */
     public FilterSegment(String segmentStr) {
         this.segmentStr = segmentStr;
-        this.selector = new  FilterSelector(segmentStr);
+        this.selector = new FilterSelector(segmentStr);
     }
 
     @Override
@@ -54,7 +51,7 @@ public class FilterSegment extends AbstractSegment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        selector.select(ctx, currentNodes, result);
+        selector.select(ctx, isFlattened(), currentNodes, result);
 
         return result;
     }

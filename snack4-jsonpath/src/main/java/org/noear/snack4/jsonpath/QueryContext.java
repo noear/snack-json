@@ -29,8 +29,6 @@ import java.util.function.Function;
  * @since 4.0
  * */
 public class QueryContext {
-    public boolean flattened = false;
-
     private final ONode root;
     private final QueryMode mode;
     private final Options options;

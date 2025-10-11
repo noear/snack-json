@@ -18,8 +18,6 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.FunctionLib;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.Segment;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +44,6 @@ public class FunctionSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        ctx.flattened = false;
         return Collections.singletonList(
                 FunctionLib.get(funcName).apply(ctx, currentNodes) // 传入节点列表
         );

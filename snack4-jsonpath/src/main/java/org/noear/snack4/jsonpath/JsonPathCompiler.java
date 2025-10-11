@@ -122,7 +122,7 @@ public class JsonPathCompiler {
             addSegment(new FilterSegment(segment));
         } else {
             // 选择器片段
-            addSegment(new SelectorsSegment(segment));
+            addSegment(new SelectSegment(segment));
         }
     }
 
@@ -136,9 +136,9 @@ public class JsonPathCompiler {
         if (key.endsWith("()")) {
             addSegment(new FunctionSegment(key));
         } else if (key.equals("*")) {
-            addSegment(new SelectorsSegment(key));
+            addSegment(new SelectSegment(key));
         } else {
-            addSegment( new SelectorsSegment("'"+key+"'"));
+            addSegment( new SelectSegment("'"+key+"'"));
         }
     }
 

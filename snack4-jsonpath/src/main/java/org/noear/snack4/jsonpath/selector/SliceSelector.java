@@ -1,3 +1,18 @@
+/*
+ * Copyright 2005-2025 noear.org and authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
@@ -10,12 +25,12 @@ import org.noear.snack4.jsonpath.util.RangeUtil;
 import java.util.List;
 
 /**
- * 数组切片选择器（如 $[1:4]，$[1:5:1]）
+ * (数组)切片选择器（如 $[1:4]，$[1:5:1], $[::1]）
  *
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class ArraySliceSelector implements Selector {
+public class SliceSelector implements Selector {
     //start:end:step
     private final String expr;
 
@@ -23,7 +38,7 @@ public class ArraySliceSelector implements Selector {
     private Integer endRef;
     private int step;
 
-    public ArraySliceSelector(String expr) {
+    public SliceSelector(String expr) {
         this.expr = expr;
 
         String[] parts = expr.split(":", 3); //[start:end:step]
@@ -51,7 +66,7 @@ public class ArraySliceSelector implements Selector {
 
 
     @Override
-    public void select(QueryContext ctx, List<ONode> currentNodes, List<ONode> results) {
+    public void select(QueryContext ctx, boolean flattened, List<ONode> currentNodes, List<ONode> results) {
         if (step == 0) {
             return;
         }
@@ -59,8 +74,6 @@ public class ArraySliceSelector implements Selector {
         for (ONode arr : currentNodes) {
             doResolve(ctx, arr, results);
         }
-
-        ctx.flattened = false;
     }
 
     private void doResolve(QueryContext ctx, ONode node, List<ONode> results) {
