@@ -87,11 +87,29 @@ public class Expression {
                 continue;
             }
 
+            // 检查是否是独立的右括号（不在函数调用内部的）
+            if (c == ')') {
+                // 检查前面是否有对应的函数调用
+                boolean isFunctionParen = false;
+                if (!tokens.isEmpty()) {
+                    Token lastToken = tokens.get(tokens.size() - 1);
+                    // 如果前一个token是函数调用的开始部分，那么这个右括号属于函数调用
+                    if (lastToken.type == TokenType.ATOM &&
+                            (lastToken.value.contains("(") && !lastToken.value.contains(")"))) {
+                        isFunctionParen = true;
+                    }
+                }
+
+                if (!isFunctionParen) {
+                    tokens.add(new Token(TokenType.RPAREN, ")"));
+                    index++;
+                    continue;
+                }
+                // 如果是函数调用的右括号，继续处理作为ATOM的一部分
+            }
+
             if (c == '(') {
                 tokens.add(new Token(TokenType.LPAREN, "("));
-                index++;
-            } else if (c == ')') {
-                tokens.add(new Token(TokenType.RPAREN, ")"));
                 index++;
             } else if (c == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
                 tokens.add(new Token(TokenType.AND, "&&"));
@@ -102,23 +120,67 @@ public class Expression {
             } else {
                 int start = index;
                 boolean inQuotes = false;
+                int parenCount = 0;
+                boolean hasContent = false;
+
                 while (index < len) {
                     char curr = filter.charAt(index);
-                    if (!inQuotes && (curr == '(' || curr == ')' || curr == '&' || curr == '|')) {
-                        break;
-                    }
-                    if (!inQuotes && (curr == '&' || curr == '|') &&
-                            index + 1 < len && filter.charAt(index + 1) == curr) {
-                        break;
-                    }
+
+                    // 处理引号内的内容
                     if (curr == '\'' || curr == '"') {
                         inQuotes = !inQuotes;
                     }
+
+                    // 如果不在引号内，检查括号和操作符
+                    if (!inQuotes) {
+                        if (curr == '(') {
+                            parenCount++;
+                            hasContent = true;
+                        } else if (curr == ')') {
+                            if (parenCount > 0) {
+                                parenCount--; // 匹配函数内部的右括号
+                            } else {
+                                // 独立的右括号，停止当前token
+                                break;
+                            }
+                        }
+
+                        // 检查是否遇到逻辑操作符（不在括号内时）
+                        if (parenCount == 0) {
+                            if (curr == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
+                                break;
+                            }
+                            if (curr == '|' && index + 1 < len && filter.charAt(index + 1) == '|') {
+                                break;
+                            }
+                            if (curr == '(' || curr == ')') {
+                                // 独立的括号，已经在上面的条件中处理
+                                if (curr == '(') {
+                                    // 独立的左括号，需要单独处理
+                                    if (index == start) {
+                                        index++; // 让外层循环处理这个左括号
+                                        break;
+                                    } else {
+                                        // 当前token已经有一些内容，遇到独立的左括号就停止
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     index++;
+                    hasContent = true;
                 }
-                String atom = filter.substring(start, index).trim();
-                if (!atom.isEmpty()) {
-                    tokens.add(new Token(TokenType.ATOM, atom));
+
+                // 如果没有读取到任何内容，向前移动一位避免无限循环
+                if (!hasContent && index == start) {
+                    index++;
+                } else if (hasContent) {
+                    String atom = filter.substring(start, index).trim();
+                    if (!atom.isEmpty()) {
+                        tokens.add(new Token(TokenType.ATOM, atom));
+                    }
                 }
             }
         }
