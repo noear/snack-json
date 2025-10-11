@@ -10,11 +10,11 @@ import org.noear.snack4.jsonpath.OperationLib;
  */
 public class OperationDemo {
     public static void main(String[] args) {
-        OperationLib.register("startsWith", (ctx, node, condition) -> {
-            ONode leftNode = condition.getLeftNode(ctx, node);
+        OperationLib.register("startsWith", (ctx, node, term) -> {
+            ONode leftNode = term.getLeftNode(ctx, node);
 
             if (leftNode.isString()) {
-                ONode rightNode = condition.getRightNode(ctx, node);
+                ONode rightNode = term.getRightNode(ctx, node);
                 if (rightNode.isNull()) {
                     return false;
                 }
