@@ -6,10 +6,10 @@ import org.noear.snack4.jsonpath.OperationLib;
 /**
  *
  * @author noear 2025/10/11 created
- *
  */
 public class OperationDemo {
     public static void main(String[] args) {
+        //定制操作符
         OperationLib.register("startsWith", (ctx, node, term) -> {
             ONode leftNode = term.getLeftNode(ctx, node);
 
@@ -24,6 +24,7 @@ public class OperationDemo {
             return false;
         });
 
+        //检验效果
         assert ONode.ofJson("{'list':['a','b','c']}")
                 .select("$.list[?@ startsWith 'a']")
                 .size() == 1;
