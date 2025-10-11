@@ -17,10 +17,7 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
-import org.noear.snack4.jsonpath.selector.IndexSelector;
-import org.noear.snack4.jsonpath.selector.NameSelector;
-import org.noear.snack4.jsonpath.selector.QuerySelector;
-import org.noear.snack4.jsonpath.selector.WildcardSelector;
+import org.noear.snack4.jsonpath.selector.*;
 import org.noear.snack4.util.Asserts;
 
 import java.util.ArrayList;
@@ -57,6 +54,8 @@ public class MultiIndexSegment implements Segment {
                 } else if (ch == '\'') {
                     selectors.add(new NameSelector(chunk));
                     //chunks.add(chunk.substring(1, chunk.length() - 1));
+                } else if (ch == '?') {
+                    selectors.add(new FilterSelector(chunk));
                 } else {
                     selectors.add(new IndexSelector(chunk));
                     //chunks.add(Integer.parseInt(chunk));

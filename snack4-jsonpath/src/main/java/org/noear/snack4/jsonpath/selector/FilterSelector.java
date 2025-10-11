@@ -66,6 +66,8 @@ public class FilterSelector implements Selector {
                 }
             }
         }
+
+        ctx.flattened = false;
     }
 
     // 新增递归展开方法

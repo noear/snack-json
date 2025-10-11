@@ -22,6 +22,12 @@ public class WildcardSelector implements Selector {
 
     @Override
     public void select(QueryContext ctx, List<ONode> currentNodes, List<ONode> results) {
+        if (ctx.flattened) {
+            ctx.flattened = false;
+            results.addAll(currentNodes);
+            return;
+        }
+
         for (ONode n : currentNodes) {
             if (n.isArray()) {
                 int idx = 0;

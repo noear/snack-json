@@ -114,7 +114,7 @@ public class JsonPathCompiler {
 
         if (segment.equals("*")) {
             // 全选
-            segments.add(new WildcardSegment());
+            segments.add(new MultiIndexSegment(segment));
         } else {
             if (segment.startsWith("?")) {
                 // 条件过滤，如 [?@id]
@@ -145,7 +145,7 @@ public class JsonPathCompiler {
         if (key.endsWith("()")) {
             segments.add(new FunctionSegment(key));
         } else if (key.equals("*")) {
-            segments.add(new WildcardSegment());
+            segments.add(new MultiIndexSegment(key));
         } else {
             segments.add( new MultiIndexSegment("'"+key+"'"));
             //segments.add(new NameSegment(key));
