@@ -12,6 +12,11 @@ import java.util.List;
  */
 public interface Selector {
     /**
+     * 是否为多出
+     */
+    boolean isMultiple();
+
+    /**
      * 选择
      *
      * @param currentNodes 当前节点

@@ -40,6 +40,11 @@ public class QuerySelector implements Selector {
     }
 
     @Override
+    public boolean isMultiple() {
+        return false;
+    }
+
+    @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
             //后裔

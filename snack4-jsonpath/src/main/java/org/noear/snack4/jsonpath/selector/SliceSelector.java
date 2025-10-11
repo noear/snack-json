@@ -65,6 +65,10 @@ public class SliceSelector implements Selector {
         return expr;
     }
 
+    @Override
+    public boolean isMultiple() {
+        return true;
+    }
 
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {

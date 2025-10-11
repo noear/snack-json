@@ -32,6 +32,7 @@ import java.util.List;
 public class SelectSegment extends AbstractSegment {
     private final String segmentStr;
     private List<Selector> selectors = new ArrayList<>();
+    private boolean isMultiple;
 
     public SelectSegment(String segmentStr) {
         this.segmentStr = segmentStr;
@@ -40,23 +41,30 @@ public class SelectSegment extends AbstractSegment {
 
         for (String chunk : chunks) {
             if (chunk.length() > 0) {
+                Selector selector = null;
+
                 char ch = chunk.charAt(0);
                 if (ch == '*') {
-                    selectors.add(new WildcardSelector());
+                    selector = new WildcardSelector();
                 } else if (ch == '$' || ch == '@') {
-                    selectors.add(new QuerySelector(chunk));
+                    selector = new QuerySelector(chunk);
                 } else if (ch == '?') {
-                    selectors.add(new FilterSelector(chunk));
+                    selector = new FilterSelector(chunk);
                 } else if (ch == '\'') {
-                    selectors.add(new NameSelector(chunk));
+                    selector = new NameSelector(chunk);
                 } else if (chunk.indexOf(':') >= 0) {
-                    selectors.add(new SliceSelector(chunk));
+                    selector = new SliceSelector(chunk);
                 } else {
                     if (Asserts.isNumber(chunk)) {
-                        selectors.add(new IndexSelector(chunk));
+                        selector = new IndexSelector(chunk);
                     } else {
-                        selectors.add(new NameSelector(chunk));
+                        selector = new NameSelector(chunk);
                     }
+                }
+
+                if (selector != null) {
+                    isMultiple = isMultiple || selector.isMultiple();
+                    selectors.add(selector);
                 }
             }
         }
@@ -66,6 +74,11 @@ public class SelectSegment extends AbstractSegment {
     @Override
     public String toString() {
         return "[" + segmentStr + "]";
+    }
+
+    @Override
+    public boolean isMultiple() {
+        return isMultiple;
     }
 
     @Override

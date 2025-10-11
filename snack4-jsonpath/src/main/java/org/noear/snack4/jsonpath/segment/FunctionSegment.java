@@ -45,6 +45,11 @@ public class FunctionSegment extends AbstractSegment {
     }
 
     @Override
+    public boolean isMultiple() {
+        return false;
+    }
+
+    @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         if (isDescendant()) {
             List<ONode> results = new ArrayList<>();

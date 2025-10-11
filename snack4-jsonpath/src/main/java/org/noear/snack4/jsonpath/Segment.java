@@ -27,6 +27,11 @@ import java.util.List;
  * */
 public interface Segment {
     /**
+     * 是否为多出
+     */
+    boolean isMultiple();
+
+    /**
      * 分析
      *
      * @param currentNodes 当前节点

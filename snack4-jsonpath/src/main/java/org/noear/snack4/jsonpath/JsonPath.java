@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.segment.FunctionSegment;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,13 +32,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JsonPath {
     private final String expression;
     private final List<Segment> segments;
-    private final boolean multiple;
+    private boolean multiple;
     private final boolean rooted;
 
     public JsonPath(String expression, List<Segment> segments) {
         this.expression = expression;
         this.segments = segments;
-        this.multiple = (expression.indexOf('*') > 0 || expression.indexOf("..") > 0 || expression.indexOf(',') > 0 || expression.indexOf(':') > 0 || expression.indexOf('?') > 0) && (expression.indexOf("()") < 0);
+        for (Segment seg : segments) {
+            if (seg instanceof FunctionSegment) {
+                multiple = false;
+            } else {
+                multiple = multiple || seg.isMultiple();
+            }
+        }
+
         this.rooted = expression.charAt(0) == '$';
     }
 

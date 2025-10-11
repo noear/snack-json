@@ -46,6 +46,11 @@ public class FilterSelector implements Selector {
         return expr;
     }
 
+    @Override
+    public boolean isMultiple() {
+        return true;
+    }
+
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
             //后裔

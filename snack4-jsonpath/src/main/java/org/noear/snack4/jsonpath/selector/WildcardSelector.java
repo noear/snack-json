@@ -37,6 +37,11 @@ public class WildcardSelector implements Selector {
     }
 
     @Override
+    public boolean isMultiple() {
+        return true;
+    }
+
+    @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
             //后裔
