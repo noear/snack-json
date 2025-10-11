@@ -59,7 +59,7 @@ public class Expression {
             Deque<Boolean> stack = new ArrayDeque<>();
             for (Token token : rpn) {
                 if (token.type == TokenType.ATOM) {
-                    stack.push(evaluateTerm(node, token.value, ctx));
+                    stack.push(evaluateTerm(ctx, node, token.value));
                 } else if (token.type == TokenType.AND || token.type == TokenType.OR) {
                     boolean b = stack.pop();
                     boolean a = stack.pop();
@@ -229,37 +229,40 @@ public class Expression {
         return token.type == TokenType.AND ? 2 : token.type == TokenType.OR ? 1 : 0;
     }
 
+    private boolean evaluateTerm(QueryContext ctx, ONode node, String termStr) {
+        Term term = Term.get(termStr);
 
-    private boolean evaluateTerm(ONode node, String termStr, QueryContext ctx) {
-        if (termStr.startsWith("!")) {
-            //非运行
-            return !evaluateTerm(node, termStr.substring(1), ctx);
+        if (term.isNot()) {
+            return !doEvaluateTerm(ctx, node, term);
+        } else {
+            return doEvaluateTerm(ctx, node, term);
         }
+    }
 
-        Term condition = Term.get(termStr);
 
+    private boolean doEvaluateTerm(QueryContext ctx, ONode node, Term term) {
         // 过滤空条件（操作符处理时，就不需要再过滤了）
-        if (Asserts.isEmpty(condition.getLeft().getValue())) {
+        if (Asserts.isEmpty(term.getLeft().getValue())) {
             return false;
         }
 
         // 单元操作（如 @.price）
-        if (Asserts.isEmpty(condition.getRight().getValue())) {
-            if (condition.getOp() == null) {
-                ONode leftNode = condition.getLeftNode(ctx, node);
+        if (Asserts.isEmpty(term.getRight().getValue())) {
+            if (term.getOp() == null) {
+                ONode leftNode = term.getLeftNode(ctx, node);
                 return !leftNode.isNull();
             } else {
                 return false;
             }
         }
 
-        Operation operation = OperationLib.get(condition.getOp());
+        Operation operation = OperationLib.get(term.getOp());
 
         if (operation == null) {
-            throw new JsonPathException("Unsupported operator : " + condition.getOp());
+            throw new JsonPathException("Unsupported operator : " + term.getOp());
         }
 
-        return operation.apply(ctx, node, condition);
+        return operation.apply(ctx, node, term);
     }
 
     private enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
