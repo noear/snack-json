@@ -73,7 +73,7 @@ public class Expression {
     }
 
     /**
-     * 新增分词器
+     * 分词
      */
     public static List<Token> tokenize(String filter) {
         List<Token> tokens = new ArrayList<>();
@@ -264,7 +264,7 @@ public class Expression {
 
     private enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
 
-    private static class Token {
+    public static class Token {
         final TokenType type;
         final String value;
 
