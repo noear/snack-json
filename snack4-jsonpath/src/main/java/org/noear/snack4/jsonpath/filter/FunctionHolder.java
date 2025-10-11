@@ -6,7 +6,6 @@ import org.noear.snack4.jsonpath.FunctionLib;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
