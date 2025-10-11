@@ -28,12 +28,12 @@ import java.util.List;
 public class LengthFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.size() == 1) {
+        if (oNodes.size() > 0) {
             ONode n = oNodes.get(0);
             if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
             if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
             if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
         }
-        return new ONode(ctx.getOptions(), 0);
+        return new ONode(null);
     }
 }
