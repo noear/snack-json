@@ -10,7 +10,7 @@ import org.noear.snack4.Standard;
  *
  */
 public class AbsRFC9535 {
-    final Options options = Options.of().addStandard(Standard.IETF_JSONPath_RFC_9535);
+    final Options options = Options.of().addStandard(Standard.JSONPath_IETF_RFC_9535);
 
     protected ONode ofJson(String json) {
         return ONode.ofJson(json, options);

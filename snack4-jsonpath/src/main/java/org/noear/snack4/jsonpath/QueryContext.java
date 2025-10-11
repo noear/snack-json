@@ -45,7 +45,7 @@ public class QueryContext {
             this.options = Options.DEF_OPTIONS;
         }
 
-        RFC9535 = options.hasStandard(Standard.IETF_JSONPath_RFC_9535);
+        RFC9535 = options.hasStandard(Standard.JSONPath_IETF_RFC_9535);
     }
 
     public ONode getRoot() {

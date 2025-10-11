@@ -22,8 +22,8 @@ package org.noear.snack4;
  * @since 4.0
  */
 public enum Standard {
-    Jayway_Jsonpath,
-    IETF_JSONPath_RFC_9535,
+    JSONPath_Jayway,
+    JSONPath_IETF_RFC_9535,
     ;
 
     private final int _mask;
