@@ -19,8 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -216,17 +215,30 @@ public class FuncLib {
     }
 
     static ONode keys(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.size() == 1) {
-            ONode node = nodes.get(0);
+        if (nodes.isEmpty()) {
+            return new ONode(ctx.getOptions());
+        }
 
-            if (node.isObject()) {
-                return ONode.ofBean(node.getObject().keySet());
-            } else {
-                throw new JsonPathException("keys() requires object");
+        if (nodes.size() > 1) {
+            Set<String> results = new HashSet<>();
+            for (ONode n1 : nodes) {
+                if (n1.isObject() && n1.getObject().size() > 0) {
+                    results.addAll(n1.getObject().keySet());
+                }
+            }
+
+            if (results.size() > 0) {
+                return new ONode(ctx.getOptions()).addAll(results);
             }
         } else {
-            throw new JsonPathException("keys() requires object");
+            ONode n1 = nodes.get(0);
+
+            if (n1.isObject() && n1.getObject().size() > 0) {
+                return ONode.ofBean(n1.getObject().keySet());
+            }
         }
+
+        return new ONode(ctx.getOptions());
     }
 
     static ONode size(QueryContext ctx, List<ONode> nodes) {

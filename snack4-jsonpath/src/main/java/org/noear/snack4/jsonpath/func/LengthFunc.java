@@ -29,10 +29,14 @@ public class LengthFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> oNodes) {
         if (oNodes.size() > 0) {
-            ONode n = oNodes.get(0);
-            if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
-            if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
-            if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+            if (oNodes.size() > 1) {
+                return new ONode(ctx.getOptions(), oNodes.size());
+            } else {
+                ONode n = oNodes.get(0);
+                if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
+                if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
+                if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+            }
         }
         return new ONode(null);
     }
