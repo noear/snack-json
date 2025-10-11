@@ -36,36 +36,32 @@ public class SelectSegment extends AbstractSegment {
     public SelectSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
-        if (segmentStr.startsWith("?")) {
-            selectors.add(new FilterSelector(segmentStr));
-        } else {
-            for (String s : segmentStr.split(",")) {
-                String chunk = s.trim();
+        List<String> chunks = splitSelectors(segmentStr);
 
-                if (chunk.length() > 0) {
-                    char ch = chunk.charAt(0);
-
-                    if (ch == '*') {
-                        selectors.add(new WildcardSelector());
-                    } else if (ch == '$' || ch == '@') {
-                        selectors.add(new QuerySelector(chunk));
-                    } else if (ch == '?') {
-                        selectors.add(new FilterSelector(chunk));
-                    } else if (ch == '\'') {
-                        selectors.add(new NameSelector(chunk));
-                    } else if (chunk.indexOf(':') >= 0) {
-                        selectors.add(new SliceSelector(chunk));
+        for (String chunk : chunks) {
+            if (chunk.length() > 0) {
+                char ch = chunk.charAt(0);
+                if (ch == '*') {
+                    selectors.add(new WildcardSelector());
+                } else if (ch == '$' || ch == '@') {
+                    selectors.add(new QuerySelector(chunk));
+                } else if (ch == '?') {
+                    selectors.add(new FilterSelector(chunk));
+                } else if (ch == '\'') {
+                    selectors.add(new NameSelector(chunk));
+                } else if (chunk.indexOf(':') >= 0) {
+                    selectors.add(new SliceSelector(chunk));
+                } else {
+                    if (Asserts.isNumber(chunk)) {
+                        selectors.add(new IndexSelector(chunk));
                     } else {
-                        if (Asserts.isNumber(chunk)) {
-                            selectors.add(new IndexSelector(chunk));
-                        } else {
-                            selectors.add(new NameSelector(chunk));
-                        }
+                        selectors.add(new NameSelector(chunk));
                     }
                 }
             }
         }
     }
+
 
     @Override
     public String toString() {
@@ -79,6 +75,43 @@ public class SelectSegment extends AbstractSegment {
         for (Selector selector : selectors) {
             selector.select(ctx, isDescendant(), currentNodes, result);
         }
+
+        return result;
+    }
+
+    /**
+     * 按顶层逗号分割选择器字符串，会忽略括号和方括号内的逗号。
+     *
+     * @param segmentStr 待分割的字符串，例如 "0, 'name', ?(@.price < 10 && @.category in ['books', 'fiction'])"
+     * @return 分割后的选择器列表
+     */
+    public static List<String> splitSelectors(String segmentStr) {
+        List<String> result = new ArrayList<>();
+        StringBuilder currentChunk = new StringBuilder();
+        int parenLevel = 0;   // 圆括号 () 的嵌套层级
+        int bracketLevel = 0; // 方括号 [] 的嵌套层级
+
+        for (char c : segmentStr.toCharArray()) {
+            if (c == ',' && parenLevel == 0 && bracketLevel == 0) {
+                // 只有当逗号在最外层时，才进行分割
+                result.add(currentChunk.toString().trim());
+                currentChunk.setLength(0); // 重置 StringBuilder
+            } else {
+                // 更新嵌套层级
+                if (c == '(') {
+                    parenLevel++;
+                } else if (c == ')') {
+                    parenLevel--;
+                } else if (c == '[') {
+                    bracketLevel++;
+                } else if (c == ']') {
+                    bracketLevel--;
+                }
+                currentChunk.append(c);
+            }
+        }
+        // 添加最后一个片段
+        result.add(currentChunk.toString().trim());
 
         return result;
     }
