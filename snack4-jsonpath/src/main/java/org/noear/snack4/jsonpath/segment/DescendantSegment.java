@@ -16,13 +16,12 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 后代段：选择节点的零个或多个后代（如 $..a, $..*, $..[?@a] ）
@@ -41,35 +40,8 @@ public class DescendantSegment implements Segment {
         ctx.flattened = true;
         List<ONode> result = new ArrayList<>();
 
-        for (ONode node : currentNodes) {
-            collectRecursive(node, result);
-        }
+        SelectUtil.descendantSelect(currentNodes, result, (n1) -> true);
 
         return result;
-    }
-
-    private void collectRecursive(ONode node, List<ONode> results) {
-        if (node.isArray()) {
-            int idx = 0;
-            for (ONode n1 : node.getArray()) {
-                if(n1.source == null) {
-                    n1.source = new PathSource(node, null, idx);
-                }
-
-                idx++;
-                results.add(n1);
-                collectRecursive(n1, results);
-            }
-        } else if (node.isObject()) {
-            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                ONode n1 = entry.getValue();
-                if(n1.source == null) {
-                    n1.source = new PathSource(node, entry.getKey(), 0);
-                }
-
-                results.add(n1);
-                collectRecursive(n1, results);
-            }
-        }
     }
 }

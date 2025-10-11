@@ -18,6 +18,7 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.selector.ArraySliceSelector;
 import org.noear.snack4.jsonpath.util.RangeUtil;
 import org.noear.snack4.jsonpath.Segment;
 
@@ -32,91 +33,23 @@ import java.util.List;
  * @since 4.0
  */
 public class ArraySliceSegment implements Segment {
-    //[start:end:step]
-    private final String segmentStr;
-    private Integer startRef;
-    private Integer endRef;
-    private int step;
+    ArraySliceSelector selector;
 
     public ArraySliceSegment(String segmentStr) {
-        this.segmentStr = segmentStr;
-
-        String[] parts = segmentStr.split(":", 3); //[start:end:step]
-        if (parts.length == 1) {
-            throw new JsonPathException("Invalid range syntax: " + segmentStr);
-        }
-
-        final int step = (parts.length == 3 && parts[2].length() > 0) ? Integer.parseInt(parts[2]) : 1;
-
-        if (parts[0].length() > 0) {
-            startRef = Integer.parseInt(parts[0]);
-        }
-
-        if (parts[1].length() > 0) {
-            endRef = Integer.parseInt(parts[1]);
-        }
-
-        this.step = step;
+       this.selector = new ArraySliceSelector(segmentStr);
     }
 
     @Override
     public String toString() {
-        return "[" + segmentStr + "]";
+        return "[" + selector.toString() + "]";
     }
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        if (step == 0) {
-            return Collections.emptyList();
-        }
-
-        List<ONode> result = new ArrayList<>();
-
-        for (ONode arr : currentNodes) {
-            doResolve(ctx, arr, result);
-        }
+        List<ONode> results = new ArrayList<>();
+        selector.select(ctx, currentNodes, results);
 
         ctx.flattened = false;
-        return result;
-    }
-
-    private void doResolve(QueryContext ctx, ONode node, List<ONode> result) {
-        if (node.isArray()) {
-            int size = node.size();
-            int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
-            int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
-
-            // 调整范围确保有效
-            RangeUtil.Bounds bounds = RangeUtil.bounds(start, end, step, size);
-
-            if (step > 0) {
-                int i = bounds.getLower();
-                while (i < bounds.getUpper()) {
-                    IndexUtil.forIndexUnsafe(ctx, node, i, result);
-
-                    i += step;
-                }
-            } else {
-                int i = bounds.getUpper();
-                while (bounds.getLower() < i) {
-                    IndexUtil.forIndexUnsafe(ctx, node, i, result);
-
-                    i += step;
-                }
-            }
-        }
-    }
-
-    // 辅助方法：解析范围边界
-    private int parseRangeBound(Integer boundRef, int def, int size) {
-        if (boundRef == null) {
-            return def; // 默认开始
-        }
-
-        int bound = boundRef.intValue();
-        if (bound < 0) {
-            bound += size;
-        }
-        return bound;
+        return results;
     }
 }

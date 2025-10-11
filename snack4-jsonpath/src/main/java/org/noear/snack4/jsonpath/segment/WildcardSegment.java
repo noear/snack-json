@@ -19,6 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.selector.WildcardSelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.Map;
  * @since 4.0
  */
 public class WildcardSegment implements Segment {
+    private WildcardSelector selector = new WildcardSelector();
+
     @Override
     public String toString() {
         return "[*]";
@@ -45,34 +48,7 @@ public class WildcardSegment implements Segment {
 
         List<ONode> result = new ArrayList<>();
 
-        for (ONode n : currentNodes) {
-            List<ONode> childs = new ArrayList<>();
-
-            if (n.isArray()) {
-                int idx= 0;
-                for (ONode n1 : n.getArray()) {
-                    if (n1.source == null) {
-                        n1.source = new PathSource(n, null, idx);
-                    }
-
-                    idx++;
-                    childs.add(n1);
-                }
-            } else if (n.isObject()) {
-                for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
-                    ONode n1 = entry.getValue();
-                    if(n1.source == null) {
-                        n1.source = new PathSource(n, entry.getKey(), 0);
-                    }
-
-                    childs.add(n1);
-                }
-            }
-
-            if (childs.size() > 0) {
-                result.addAll(childs);
-            }
-        }
+        selector.select(ctx, currentNodes, result);
 
         return result;
     }

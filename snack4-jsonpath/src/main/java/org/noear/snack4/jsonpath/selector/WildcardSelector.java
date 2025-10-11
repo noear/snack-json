@@ -1,0 +1,48 @@
+package org.noear.snack4.jsonpath.selector;
+
+import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.PathSource;
+import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.Selector;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 通配符选择器：选择节点的所有子节点（如 $.*, $[*], $..*, $..[*]）
+ *
+ * @author noear 2025/10/11 created
+ * @since 4.0
+ */
+public class WildcardSelector implements Selector {
+    @Override
+    public String toString() {
+        return "*";
+    }
+
+    @Override
+    public void select(QueryContext ctx, List<ONode> currentNodes, List<ONode> results) {
+        for (ONode n : currentNodes) {
+            if (n.isArray()) {
+                int idx = 0;
+                for (ONode n1 : n.getArray()) {
+                    if (n1.source == null) {
+                        n1.source = new PathSource(n, null, idx);
+                    }
+
+                    idx++;
+                    results.add(n1);
+                }
+            } else if (n.isObject()) {
+                for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
+                    ONode n1 = entry.getValue();
+                    if (n1.source == null) {
+                        n1.source = new PathSource(n, entry.getKey(), 0);
+                    }
+
+                    results.add(n1);
+                }
+            }
+        }
+    }
+}

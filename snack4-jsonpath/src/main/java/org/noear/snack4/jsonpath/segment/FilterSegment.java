@@ -21,6 +21,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.filter.Expression;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.Segment;
+import org.noear.snack4.jsonpath.selector.FilterSelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +35,14 @@ import java.util.Map;
  */
 public class FilterSegment implements Segment {
     private final String segmentStr;
-    private final Expression expression;
+    private final FilterSelector selector;
 
     /**
      * @param segmentStr `?...`
      */
     public FilterSegment(String segmentStr) {
         this.segmentStr = segmentStr;
-        this.expression = Expression.get(segmentStr.substring(1));
+        this.selector = new  FilterSelector(segmentStr);
     }
 
     @Override
@@ -53,98 +54,9 @@ public class FilterSegment implements Segment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        if (ctx.flattened) {
-            //已经偏平化
-            for (ONode n1 : currentNodes) {
-                if (expression.test(n1, ctx)) {
-                    result.add(n1);
-                }
-            }
-        } else {
-            //还未偏平化
-            if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
-                for (ONode n : currentNodes) { //其实只有一条
-                    if (n.isNull()) {
-                        n.asArray().addNew();
-                    }
-
-                    if (ctx.isRFC9535()) {
-                        flattenResolve2(ctx, n, result);
-                    } else {
-                        flattenResolve(ctx, n, result);
-                    }
-                }
-            } else {
-                for (ONode n : currentNodes) {
-                    if (ctx.isRFC9535()) {
-                        flattenResolve2(ctx, n, result);
-                    } else {
-                        flattenResolve(ctx, n, result);
-                    }
-                }
-            }
-        }
+        selector.select(ctx, currentNodes, result);
 
         ctx.flattened = false;
         return result;
-    }
-
-    // 新增递归展开方法
-    private void flattenResolve(QueryContext ctx, ONode node, List<ONode> result) {
-        if (node.isArray()) {
-            int idx = 0;
-            for (ONode n1 : node.getArray()) {
-                if (n1.source == null) {
-                    n1.source = new PathSource(node, null, idx);
-                }
-
-                idx++;
-                flattenResolve(ctx, n1, result);
-            }
-        } else {
-            if (ctx.getMode() == QueryMode.CREATE) {
-                node.asObject();
-            }
-
-            if (expression.test(node, ctx)) {
-                result.add(node);
-            }
-        }
-    }
-
-    private void flattenResolve2(QueryContext ctx, ONode node, List<ONode> result) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            node.asObject();
-        }
-
-        if (node.isArray()) {
-            int idx = 0;
-            for (ONode n1 : node.getArray()) {
-                if (n1.source == null) {
-                    n1.source = new PathSource(node, null, idx);
-                }
-
-                idx++;
-                if (expression.test(n1, ctx)) {
-                    result.add(n1);
-                }
-            }
-        } else if (node.isObject()) {
-            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                ONode n1 = entry.getValue();
-
-                if (n1.source == null) {
-                    n1.source = new PathSource(node, entry.getKey(), 0);
-                }
-
-                if (expression.test(n1, ctx)) {
-                    result.add(n1);
-                }
-            }
-        } else {
-            if (expression.test(node, ctx)) {
-                result.add(node);
-            }
-        }
     }
 }

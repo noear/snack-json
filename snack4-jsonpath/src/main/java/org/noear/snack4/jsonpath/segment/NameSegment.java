@@ -28,11 +28,11 @@ import java.util.List;
  * @author noear
  * @since 4.0
  */
-public class PropertySegment implements Segment {
+public class NameSegment implements Segment {
     private final String segmentStr;
     private String key;
 
-    public PropertySegment(String key) {
+    public NameSegment(String key) {
         this.segmentStr = key;
         this.key = key;
     }

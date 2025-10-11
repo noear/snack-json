@@ -147,7 +147,7 @@ public class JsonPathCompiler {
         } else if (key.equals("*")) {
             segments.add(new WildcardSegment());
         } else {
-            segments.add(new PropertySegment(key));
+            segments.add(new NameSegment(key));
         }
     }
 
