@@ -19,6 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Selector;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -36,31 +37,31 @@ public class WildcardSelector implements Selector {
     }
 
     @Override
-    public void select(QueryContext ctx,  boolean flattened, List<ONode> currentNodes, List<ONode> results) {
-        if (flattened) {
-            results.addAll(currentNodes);
-            return;
-        }
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+        if (isDescendant) {
+            //后裔
+            SelectUtil.descendantSelect(currentNodes, results::add);
+        } else {
+            for (ONode n : currentNodes) {
+                if (n.isArray()) {
+                    int idx = 0;
+                    for (ONode n1 : n.getArray()) {
+                        if (n1.source == null) {
+                            n1.source = new PathSource(n, null, idx);
+                        }
 
-        for (ONode n : currentNodes) {
-            if (n.isArray()) {
-                int idx = 0;
-                for (ONode n1 : n.getArray()) {
-                    if (n1.source == null) {
-                        n1.source = new PathSource(n, null, idx);
+                        idx++;
+                        results.add(n1);
                     }
+                } else if (n.isObject()) {
+                    for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
+                        ONode n1 = entry.getValue();
+                        if (n1.source == null) {
+                            n1.source = new PathSource(n, entry.getKey(), 0);
+                        }
 
-                    idx++;
-                    results.add(n1);
-                }
-            } else if (n.isObject()) {
-                for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
-                    ONode n1 = entry.getValue();
-                    if (n1.source == null) {
-                        n1.source = new PathSource(n, entry.getKey(), 0);
+                        results.add(n1);
                     }
-
-                    results.add(n1);
                 }
             }
         }

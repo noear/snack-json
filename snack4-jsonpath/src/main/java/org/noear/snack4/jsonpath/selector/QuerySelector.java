@@ -20,6 +20,7 @@ import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Selector;
 import org.noear.snack4.jsonpath.util.IndexUtil;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 
@@ -39,14 +40,27 @@ public class QuerySelector implements Selector {
     }
 
     @Override
-    public void select(QueryContext ctx,  boolean flattened, List<ONode> currentNodes, List<ONode> results) {
-        for (ONode node : currentNodes) {
-            ONode dynamicIdx = ctx.nestedQuery(node, jsonPath);
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+        if (isDescendant) {
+            //后裔
+            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+                ONode dynamicIdx = ctx.nestedQuery(n1, jsonPath);
 
-            if (dynamicIdx.isNumber()) {
-                IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), results);
-            } else if (dynamicIdx.isString()) {
-                IndexUtil.forKey(ctx, node, dynamicIdx.getString(), results);
+                if (dynamicIdx.isNumber()) {
+                    IndexUtil.forIndex(ctx, n1, dynamicIdx.getInt(), results);
+                } else if (dynamicIdx.isString()) {
+                    IndexUtil.forKey(ctx, n1, dynamicIdx.getString(), results);
+                }
+            });
+        } else {
+            for (ONode node : currentNodes) {
+                ONode dynamicIdx = ctx.nestedQuery(node, jsonPath);
+
+                if (dynamicIdx.isNumber()) {
+                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), results);
+                } else if (dynamicIdx.isString()) {
+                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), results);
+                }
             }
         }
     }

@@ -21,6 +21,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.Selector;
 import org.noear.snack4.jsonpath.filter.Expression;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -33,12 +34,8 @@ import java.util.Map;
  */
 public class FilterSelector implements Selector {
     private final String expr;
-
     private final Expression expression;
 
-    /**
-     * @param expr `?...`
-     */
     public FilterSelector(String expr) {
         this.expr = expr;
         this.expression = Expression.get(expr.substring(1));
@@ -49,16 +46,15 @@ public class FilterSelector implements Selector {
         return expr;
     }
 
-    public void select(QueryContext ctx,  boolean flattened, List<ONode> currentNodes, List<ONode> results) {
-        if (flattened) {
-            //已经偏平化
-            for (ONode n1 : currentNodes) {
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+        if (isDescendant) {
+            //后裔
+            SelectUtil.descendantSelect(currentNodes, (n1) -> {
                 if (expression.test(n1, ctx)) {
                     results.add(n1);
                 }
-            }
+            });
         } else {
-            //还未偏平化
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) { //其实只有一条
                     if (n.isNull()) {

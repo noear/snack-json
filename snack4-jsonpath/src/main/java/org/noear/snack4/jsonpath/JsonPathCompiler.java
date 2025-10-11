@@ -44,7 +44,7 @@ public class JsonPathCompiler {
         this.path = path;
     }
 
-    private void addSegment(Segment segment) {
+    private void addSegment(AbstractSegment segment) {
         segment.before(lastSegment);
         lastSegment = segment;
 

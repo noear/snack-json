@@ -16,16 +16,11 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.filter.Expression;
-import org.noear.snack4.jsonpath.QueryMode;
-import org.noear.snack4.jsonpath.Segment;
 import org.noear.snack4.jsonpath.selector.FilterSelector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 过滤选择器：使用逻辑表达式选择特定的子项（如 [?(@.price > 10)] ）
@@ -51,7 +46,7 @@ public class FilterSegment extends AbstractSegment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        selector.select(ctx, isFlattened(), currentNodes, result);
+        selector.select(ctx, isDescendant(), currentNodes, result);
 
         return result;
     }

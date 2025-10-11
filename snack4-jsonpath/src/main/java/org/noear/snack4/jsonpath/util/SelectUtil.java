@@ -5,7 +5,7 @@ import org.noear.snack4.jsonpath.PathSource;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.function.Consumer;
 
 /**
  *
@@ -14,13 +14,13 @@ import java.util.function.Predicate;
  */
 public class SelectUtil {
 
-    public static void descendantSelect(List<ONode> currentNodes, List<ONode> results, Predicate<ONode> tester) {
+    public static void descendantSelect(List<ONode> currentNodes, Consumer<ONode> consumer) {
         for (ONode node : currentNodes) {
-            collectRecursive(node, results, tester);
+            collectRecursive(node, consumer);
         }
     }
 
-    private static void collectRecursive(ONode node, List<ONode> results, Predicate<ONode> tester) {
+    private static void collectRecursive(ONode node, Consumer<ONode> consumer) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
@@ -30,11 +30,8 @@ public class SelectUtil {
 
                 idx++;
 
-                if (tester.test(n1)) {
-                    results.add(n1);
-                }
-
-                collectRecursive(n1, results, tester);
+                consumer.accept(n1);
+                collectRecursive(n1, consumer);
             }
         } else if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
@@ -43,11 +40,8 @@ public class SelectUtil {
                     n1.source = new PathSource(node, entry.getKey(), 0);
                 }
 
-                if (tester.test(n1)) {
-                    results.add(n1);
-                }
-
-                collectRecursive(n1, results, tester);
+                consumer.accept(n1);
+                collectRecursive(n1, consumer);
             }
         }
     }

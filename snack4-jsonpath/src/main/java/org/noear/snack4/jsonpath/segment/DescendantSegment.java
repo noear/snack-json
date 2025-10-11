@@ -17,9 +17,6 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.util.SelectUtil;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,10 +33,6 @@ public class DescendantSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        List<ONode> result = new ArrayList<>();
-
-        SelectUtil.descendantSelect(currentNodes, result, (n1) -> true);
-
-        return result;
+        return currentNodes;
     }
 }

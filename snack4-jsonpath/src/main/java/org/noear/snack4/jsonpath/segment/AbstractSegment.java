@@ -22,14 +22,13 @@ import org.noear.snack4.jsonpath.Segment;
  * @since 4.0
  */
 public abstract class AbstractSegment implements Segment {
-    private boolean flattened;
+    private boolean descendant;
 
-    public boolean isFlattened() {
-        return flattened;
+    public boolean isDescendant() {
+        return descendant;
     }
 
-    @Override
     public void before(Segment segment) {
-        flattened = segment instanceof DescendantSegment;
+        descendant = segment instanceof DescendantSegment;
     }
 }

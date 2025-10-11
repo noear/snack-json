@@ -68,7 +68,7 @@ public class SelectSegment extends AbstractSegment {
         List<ONode> result = new ArrayList<>();
 
         for (Selector selector : selectors) {
-            selector.select(ctx, isFlattened(), currentNodes, result);
+            selector.select(ctx, isDescendant(), currentNodes, result);
         }
 
         return result;

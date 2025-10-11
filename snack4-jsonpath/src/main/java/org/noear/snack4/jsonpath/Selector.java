@@ -18,5 +18,5 @@ public interface Selector {
      * @param ctx          查询上下文
      * @param results      结果
      */
-    void select(QueryContext ctx, boolean flattened, List<ONode> currentNodes, List<ONode> results);
+    void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results);
 }

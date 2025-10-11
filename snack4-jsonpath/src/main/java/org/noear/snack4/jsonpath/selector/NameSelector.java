@@ -19,6 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Selector;
 import org.noear.snack4.jsonpath.util.IndexUtil;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 
@@ -44,9 +45,16 @@ public class NameSelector implements Selector {
     }
 
     @Override
-    public void select(QueryContext ctx,  boolean flattened, List<ONode> currentNodes, List<ONode> results) {
-        for (ONode n : currentNodes) {
-            IndexUtil.forKey(ctx, n, name, results);
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+        if (isDescendant) {
+            //后裔
+            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+                IndexUtil.forKey(ctx, n1, name, results);
+            });
+        } else {
+            for (ONode n : currentNodes) {
+                IndexUtil.forKey(ctx, n, name, results);
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Selector;
 import org.noear.snack4.jsonpath.util.IndexUtil;
 import org.noear.snack4.jsonpath.util.RangeUtil;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 
@@ -66,13 +67,20 @@ public class SliceSelector implements Selector {
 
 
     @Override
-    public void select(QueryContext ctx, boolean flattened, List<ONode> currentNodes, List<ONode> results) {
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (step == 0) {
             return;
         }
 
-        for (ONode arr : currentNodes) {
-            doResolve(ctx, arr, results);
+        if (isDescendant) {
+            //后裔
+            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+                doResolve(ctx, n1, results);
+            });
+        } else {
+            for (ONode arr : currentNodes) {
+                doResolve(ctx, arr, results);
+            }
         }
     }
 
