@@ -225,6 +225,9 @@ public class Expression {
         return output;
     }
 
+    /**
+     * 优先级
+     * */
     private static int precedence(Token token) {
         return token.type == TokenType.AND ? 2 : token.type == TokenType.OR ? 1 : 0;
     }
