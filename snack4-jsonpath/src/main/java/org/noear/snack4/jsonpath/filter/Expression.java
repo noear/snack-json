@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 表达式
+ * 逻辑表达式
  *
  * @author noear 2025/5/5 created
  * @since 4.0
@@ -170,7 +170,7 @@ public class Expression {
             return !evaluateSingleCondition(node, conditionStr.substring(1), ctx);
         }
 
-        Condition condition = Condition.get(conditionStr);
+        Term condition = Term.get(conditionStr);
 
         // 过滤空条件（操作符处理时，就不需要再过滤了）
         if (Asserts.isEmpty(condition.getLeft().getValue())) {

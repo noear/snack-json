@@ -22,16 +22,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 条件描述
+ * 逻辑表达式项
  *
  * @author noear 2025/5/5 created
  * @since 4.0
  */
-public class Condition {
-    private static Map<String, Condition> conditionMap = new ConcurrentHashMap<>();
+public class Term {
+    private static Map<String, Term> conditionMap = new ConcurrentHashMap<>();
 
-    public static Condition get(String conditionStr) {
-        return conditionMap.computeIfAbsent(conditionStr, Condition::new);
+    public static Term get(String conditionStr) {
+        return conditionMap.computeIfAbsent(conditionStr, Term::new);
     }
 
     /// ///////////////////
@@ -43,7 +43,7 @@ public class Condition {
     private final String op;
     private final Operand right;
 
-    private Condition(String conditionStr) {
+    private Term(String conditionStr) {
         this.conditionStr = conditionStr;
 
         String[] parts = new String[3];
@@ -69,14 +69,23 @@ public class Condition {
         this.right = new Operand(parts[2]);
     }
 
+    /**
+     * 左操作元
+     */
     public Operand getLeft() {
         return left;
     }
 
+    /**
+     * 操作符（可能没有）
+     */
     public String getOp() {
         return op;
     }
 
+    /**
+     * 右操作元（可能没有）
+     */
     public Operand getRight() {
         return right;
     }

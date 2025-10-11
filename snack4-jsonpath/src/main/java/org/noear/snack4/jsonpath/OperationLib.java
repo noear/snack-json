@@ -17,7 +17,7 @@ package org.noear.snack4.jsonpath;
 
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.filter.Condition;
+import org.noear.snack4.jsonpath.filter.Term;
 import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
 import java.util.Map;
@@ -69,11 +69,11 @@ public class OperationLib {
 
     /// /////////////////
 
-    private static boolean startsWith(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
+    private static boolean startsWith(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
 
         if (leftNode.isString()) {
-            ONode rightNode = condition.getRightNode(ctx, node);
+            ONode rightNode = term.getRightNode(ctx, node);
             if (rightNode.isNull()) {
                 return false;
             }
@@ -83,11 +83,11 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean endsWith(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
+    private static boolean endsWith(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
 
         if (leftNode.isString()) {
-            ONode rightNode = condition.getRightNode(ctx, node);
+            ONode rightNode = term.getRightNode(ctx, node);
             if (rightNode.isArray()) {
                 return false;
             }
@@ -97,10 +97,10 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean contains(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
+    private static boolean contains(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
 
-        ONode expectedNode = condition.getRightNode(ctx, node);
+        ONode expectedNode = term.getRightNode(ctx, node);
 
         // 支持多类型包含检查
         if (leftNode.isArray()) {
@@ -116,11 +116,11 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean in(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
+    private static boolean in(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
 
         if (leftNode.isNull() == false) {
-            ONode rightNode = condition.getRightNode(ctx, node);
+            ONode rightNode = term.getRightNode(ctx, node);
             if (rightNode.isArray() == false) {
                 return false;
             }
@@ -131,11 +131,11 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean nin(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
+    private static boolean nin(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
 
         if (leftNode.isNull() == false) {
-            ONode rightNode = condition.getRightNode(ctx, node);
+            ONode rightNode = term.getRightNode(ctx, node);
             if (rightNode.isArray() == false) {
                 return false;
             }
@@ -146,9 +146,9 @@ public class OperationLib {
         return false;
     }
 
-    private static boolean matches(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
-        ONode rightNode = condition.getRightNode(ctx, node);
+    private static boolean matches(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
+        ONode rightNode = term.getRightNode(ctx, node);
 
         boolean found = false;
         if (leftNode.isValue()) {
@@ -161,34 +161,34 @@ public class OperationLib {
         return found;
     }
 
-    private static boolean compare(QueryContext ctx, ONode node, Condition condition) {
-        ONode leftNode = condition.getLeftNode(ctx, node);
-        ONode rightNode = condition.getRightNode(ctx, node);
+    private static boolean compare(QueryContext ctx, ONode node, Term term) {
+        ONode leftNode = term.getLeftNode(ctx, node);
+        ONode rightNode = term.getRightNode(ctx, node);
 
         if (leftNode.getType() == rightNode.getType()) {
             if (leftNode.isString()) {
-                return compareString(condition.getOp(), leftNode, rightNode);
+                return compareString(term.getOp(), leftNode, rightNode);
             } else if (leftNode.isNumber()) {
                 //都是数字
-                return compareNumber(condition.getOp(), leftNode.getDouble(), rightNode.getDouble());
+                return compareNumber(term.getOp(), leftNode.getDouble(), rightNode.getDouble());
             } else if (leftNode.isNull()) {
-                return compareNumber(condition.getOp(), 0, 0);
+                return compareNumber(term.getOp(), 0, 0);
             } else {
-                if ("!=".equals(condition.getOp())) {
+                if ("!=".equals(term.getOp())) {
                     return leftNode.equals(rightNode) == false;
-                } else if (condition.getOp().indexOf('=') >= 0) {
+                } else if (term.getOp().indexOf('=') >= 0) {
                     return leftNode.equals(rightNode);
                 }
             }
         } else {
             if (ctx.getMode() == QueryMode.CREATE && leftNode.isNull()) {
-                if ("==".equals(condition.getOp())) {
+                if ("==".equals(term.getOp())) {
                     leftNode.fill(rightNode);
                     return true;
                 }
             }
 
-            if ("!=".equals(condition.getOp())) {
+            if ("!=".equals(term.getOp())) {
                 return true;
             }
         }

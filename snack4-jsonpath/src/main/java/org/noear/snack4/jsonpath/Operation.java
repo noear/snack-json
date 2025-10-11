@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.filter.Condition;
+import org.noear.snack4.jsonpath.filter.Term;
 
 /**
  * JsonPath 操作符
@@ -28,6 +28,10 @@ import org.noear.snack4.jsonpath.filter.Condition;
 public interface Operation {
     /**
      * 应用
+     *
+     * @param ctx  查询上下文
+     * @param node 目标节点
+     * @param term 逻辑表达式项
      */
-    boolean apply(QueryContext ctx, ONode node, Condition condition);
+    boolean apply(QueryContext ctx, ONode node, Term term);
 }
