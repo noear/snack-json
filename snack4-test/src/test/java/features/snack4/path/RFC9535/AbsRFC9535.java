@@ -15,4 +15,8 @@ public class AbsRFC9535 {
     protected ONode ofJson(String json) {
         return ONode.ofJson(json, options);
     }
+
+    protected ONode queryOf(String json, String query) {
+        return ofJson(json).select(query);
+    }
 }

@@ -19,7 +19,8 @@ public class RFC9535_s2710 extends AbsRFC9535 {
 
     @Test
     public void case2() {
-        queryAssert("{'a':{b:[1,2,3,4,5]}}", "$.a.b[1:2]", "$['a']['b'][1]");
+        queryOf("{'a':{b:[1,2,3,4,5]}}", "$.a.b[1:2]").equals(new ONode().add(2));
+        queryOf("{'a':{b:[1,2,3,4,5]}}", "$['a']['b'][1]").equals(2);
     }
 
     @Test
