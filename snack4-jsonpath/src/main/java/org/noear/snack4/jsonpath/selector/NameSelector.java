@@ -54,6 +54,12 @@ public class NameSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
+            if(ctx.isRFC9535()){
+                for (ONode n : currentNodes) {
+                    IndexUtil.forKey(ctx, n, name, results);
+                }
+            }
+
             //后裔
             SelectUtil.descendantSelect(currentNodes, (n1) -> {
                 IndexUtil.forKey(ctx, n1, name, results);
