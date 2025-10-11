@@ -39,9 +39,9 @@ public class Condition {
 
     private final String conditionStr;
 
-    private final Factor left;
+    private final Operand left;
     private final String op;
-    private final Factor right;
+    private final Operand right;
 
     private Condition(String conditionStr) {
         this.conditionStr = conditionStr;
@@ -64,12 +64,12 @@ public class Condition {
             }
         }
 
-        this.left = new Factor(parts[0]);
+        this.left = new Operand(parts[0]);
         this.op = parts[1];
-        this.right = new Factor(parts[2]);
+        this.right = new Operand(parts[2]);
     }
 
-    public Factor getLeft() {
+    public Operand getLeft() {
         return left;
     }
 
@@ -77,7 +77,7 @@ public class Condition {
         return op;
     }
 
-    public Factor getRight() {
+    public Operand getRight() {
         return right;
     }
 

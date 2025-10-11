@@ -21,12 +21,12 @@ import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.util.Asserts;
 
 /**
- * 条件因子描述
+ * 操作元
  *
  * @author noear 2025/10/10 created
  * @since 4.0
  */
-public class Factor {
+public class Operand {
     private final String value;
     private ONode nodeValue;
     private JsonPath queryValue;
@@ -48,7 +48,7 @@ public class Factor {
         return value;
     }
 
-    public Factor(String value) {
+    public Operand(String value) {
         this.value = value;
 
         if (Asserts.isNotEmpty(value)) {
