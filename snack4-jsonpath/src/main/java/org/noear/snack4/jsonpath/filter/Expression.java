@@ -59,7 +59,7 @@ public class Expression {
             Deque<Boolean> stack = new ArrayDeque<>();
             for (Token token : rpn) {
                 if (token.type == TokenType.ATOM) {
-                    stack.push(evaluateSingleCondition(node, token.value, ctx));
+                    stack.push(evaluateTerm(node, token.value, ctx));
                 } else if (token.type == TokenType.AND || token.type == TokenType.OR) {
                     boolean b = stack.pop();
                     boolean a = stack.pop();
@@ -230,13 +230,13 @@ public class Expression {
     }
 
 
-    private boolean evaluateSingleCondition(ONode node, String conditionStr, QueryContext ctx) {
-        if (conditionStr.startsWith("!")) {
+    private boolean evaluateTerm(ONode node, String termStr, QueryContext ctx) {
+        if (termStr.startsWith("!")) {
             //非运行
-            return !evaluateSingleCondition(node, conditionStr.substring(1), ctx);
+            return !evaluateTerm(node, termStr.substring(1), ctx);
         }
 
-        Term condition = Term.get(conditionStr);
+        Term condition = Term.get(termStr);
 
         // 过滤空条件（操作符处理时，就不需要再过滤了）
         if (Asserts.isEmpty(condition.getLeft().getValue())) {

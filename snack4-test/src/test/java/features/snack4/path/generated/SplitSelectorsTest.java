@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.noear.snack4.jsonpath.segment.SelectSegment;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +80,7 @@ class SplitSelectorsTest {
     @MethodSource("selectorTestCases")
     @DisplayName("测试各种场景下的选择器分割")
     void testSplitSelectors(String testName, String input, List<String> expected) {
-        List<String> actual = SelectSegment.splitSelectors(input);
+        List<String> actual = SelectUtil.splitSelectors(input);
         assertEquals(expected, actual);
     }
 
@@ -90,7 +91,7 @@ class SplitSelectorsTest {
     void testSplitWithLeadingAndTrailingCommas() {
         String input = ",1,2,";
         List<String> expected = Arrays.asList("", "1", "2", "");
-        List<String> actual = SelectSegment.splitSelectors(input);
+        List<String> actual = SelectUtil.splitSelectors(input);
         assertEquals(expected, actual, "应正确处理前导和尾随逗号");
     }
 
@@ -99,7 +100,7 @@ class SplitSelectorsTest {
     void testSplitWithOnlyCommas() {
         String input = ",,";
         List<String> expected = Arrays.asList("", "", "");
-        List<String> actual = SelectSegment.splitSelectors(input);
+        List<String> actual = SelectUtil.splitSelectors(input);
         assertEquals(expected, actual, "应将只有逗号的字符串分割为空字符串数组");
     }
 }
