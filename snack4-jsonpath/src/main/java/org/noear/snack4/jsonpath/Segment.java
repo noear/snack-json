@@ -27,6 +27,11 @@ import java.util.List;
  * */
 public interface Segment {
     /**
+     * 前一个版段
+     */
+    void before(Segment segment);
+
+    /**
      * 分析
      *
      * @param currentNodes 当前节点

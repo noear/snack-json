@@ -28,7 +28,7 @@ import java.util.List;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class SelectorsSegment implements Segment {
+public class SelectorsSegment extends AbstractSegment {
     private final String segmentStr;
     private List<Selector> selectors = new ArrayList<>();
 

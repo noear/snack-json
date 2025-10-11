@@ -30,7 +30,7 @@ import java.util.List;
  * @author noear
  * @since 4.0
  */
-public class FunctionSegment implements Segment {
+public class FunctionSegment extends AbstractSegment {
     private final String segmentStr;
     private final String funcName;
 

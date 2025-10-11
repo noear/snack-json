@@ -33,7 +33,7 @@ import java.util.Map;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class FilterSegment implements Segment {
+public class FilterSegment extends AbstractSegment {
     private final String segmentStr;
     private final FilterSelector selector;
 

@@ -38,9 +38,17 @@ public class JsonPathCompiler {
     private final String path;
     private int position;
     private List<Segment> segments = new ArrayList<>();
+    private Segment lastSegment = null;
 
     private JsonPathCompiler(String path) {
         this.path = path;
+    }
+
+    private void addSegment(Segment segment) {
+        segment.before(lastSegment);
+        lastSegment = segment;
+
+        segments.add(segment);
     }
 
     private JsonPath doCompile() {
@@ -66,12 +74,11 @@ public class JsonPathCompiler {
 
     /**
      * 分析 '.' 或 '..' 操作符
-     *
      */
     private void resolveDot(QueryContext context) {
         position++;
         if (position < path.length() && path.charAt(position) == '.') {
-            segments.add(new DescendantSegment());
+            addSegment(new DescendantSegment());
 
             while (position < path.length()) {
                 skipWhitespace();
@@ -103,7 +110,6 @@ public class JsonPathCompiler {
 
     /**
      * 分析 '[...]' 操作符
-     *
      */
     private void resolveBracket(QueryContext context) {
         position++; // 跳过'['
@@ -112,20 +118,11 @@ public class JsonPathCompiler {
             position++;
         }
 
-        if (segment.equals("*")) {
-            // 全选
-            segments.add(new SelectorsSegment(segment));
+        if (segment.startsWith("?")) {
+            addSegment(new FilterSegment(segment));
         } else {
-            if (segment.startsWith("?")) {
-                // 条件过滤，如 [?@id]
-                // ..*[?...] 支持进一步深度展开
-                // ..x[?...] 已展开过，但查询后是新的结果可以再展开
-                // ..[?...] 已展开过，不需要再展开
-                segments.add(new FilterSegment(segment));
-            } else {
-                // 选择器片段
-                segments.add(new SelectorsSegment(segment));
-            }
+            // 选择器片段
+            addSegment(new SelectorsSegment(segment));
         }
     }
 
@@ -137,12 +134,11 @@ public class JsonPathCompiler {
         String key = parseSegment('.', '[');
 
         if (key.endsWith("()")) {
-            segments.add(new FunctionSegment(key));
+            addSegment(new FunctionSegment(key));
         } else if (key.equals("*")) {
-            segments.add(new SelectorsSegment(key));
+            addSegment(new SelectorsSegment(key));
         } else {
-            segments.add( new SelectorsSegment("'"+key+"'"));
-            //segments.add(new NameSegment(key));
+            addSegment( new SelectorsSegment("'"+key+"'"));
         }
     }
 

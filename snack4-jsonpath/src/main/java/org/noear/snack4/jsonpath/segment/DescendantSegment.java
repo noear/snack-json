@@ -29,7 +29,7 @@ import java.util.List;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class DescendantSegment implements Segment {
+public class DescendantSegment extends AbstractSegment {
     @Override
     public String toString() {
         return "..";
