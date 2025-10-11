@@ -74,11 +74,6 @@ public final class Options {
         return RFC9535;
     }
 
-    public Options RFC9535(boolean RFC9535) {
-        this.RFC9535 = RFC9535;
-        return this;
-    }
-
     /**
      * 是否启用指定特性
      */
@@ -155,6 +150,14 @@ public final class Options {
 
 
     /// /////////////
+    public Options RFC9535(boolean RFC9535) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.RFC9535 = RFC9535;
+        return this;
+    }
 
     /**
      * 设置日期格式

@@ -18,21 +18,21 @@ public class RFC9535_s2313 {
             "}";
 
     @Test
-    public void case1_1() {
+    public void case1() {
         ONode rst = ONode.ofJson(json1).select("$.o['j j']");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("{\"k.k\":3}");
     }
 
     @Test
-    public void case1_2() {
+    public void case2() {
         ONode rst = ONode.ofJson(json1).select("$.o['j j']['k.k']");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("3");
     }
 
     @Test
-    public void case1_3() {
+    public void case3() {
         ONode rst = ONode.ofJson(json1).select("$['a']['@']"); // $['\'']['@']
         System.out.println(rst.toJson());
         assert rst.toJson().equals("2");
