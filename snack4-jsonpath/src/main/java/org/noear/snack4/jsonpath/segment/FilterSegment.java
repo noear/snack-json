@@ -56,7 +56,6 @@ public class FilterSegment implements Segment {
 
         selector.select(ctx, currentNodes, result);
 
-        ctx.flattened = false;
         return result;
     }
 }

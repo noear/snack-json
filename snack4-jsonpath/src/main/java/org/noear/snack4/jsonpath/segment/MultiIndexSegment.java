@@ -51,11 +51,13 @@ public class MultiIndexSegment implements Segment {
                 } else if (ch == '$' || ch == '@') {
                     selectors.add(new QuerySelector(chunk));
                     //chunks.add(JsonPath.compile(chunk));
+                } else if (ch == '?') {
+                    selectors.add(new FilterSelector(chunk));
                 } else if (ch == '\'') {
                     selectors.add(new NameSelector(chunk));
                     //chunks.add(chunk.substring(1, chunk.length() - 1));
-                } else if (ch == '?') {
-                    selectors.add(new FilterSelector(chunk));
+                } else if (chunk.indexOf(':') >= 0) {
+                    selectors.add(new ArraySliceSelector(chunk));
                 } else {
                     selectors.add(new IndexSelector(chunk));
                     //chunks.add(Integer.parseInt(chunk));

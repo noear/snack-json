@@ -4,7 +4,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.Selector;
-import org.noear.snack4.jsonpath.segment.IndexUtil;
+import org.noear.snack4.jsonpath.util.IndexUtil;
 
 import java.util.List;
 

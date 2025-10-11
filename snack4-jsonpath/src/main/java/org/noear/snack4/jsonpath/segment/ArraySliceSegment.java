@@ -48,8 +48,6 @@ public class ArraySliceSegment implements Segment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> results = new ArrayList<>();
         selector.select(ctx, currentNodes, results);
-
-        ctx.flattened = false;
         return results;
     }
 }
