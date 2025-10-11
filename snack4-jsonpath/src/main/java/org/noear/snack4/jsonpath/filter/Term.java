@@ -47,7 +47,7 @@ public class Term {
     private Term(String s) {
         s = s.trim();
 
-        if(s.charAt(0) == '!') {
+        if (s.charAt(0) == '!') {
             not = true;
             s = s.substring(1);
         } else {
@@ -135,20 +135,12 @@ public class Term {
     }
 
     public ONode getLeftNode(QueryContext ctx, ONode node) {
-        if (left.getQuery() != null) {
-            return ctx.nestedQuery(node, left.getQuery());
-        } else {
-            return left.getNode();
-        }
+        return left.getNode(ctx, node);
     }
 
 
     public ONode getRightNode(QueryContext ctx, ONode node) {
-        if (right.getQuery() != null) {
-            return ctx.nestedQuery(node, right.getQuery());
-        } else {
-            return right.getNode();
-        }
+        return right.getNode(ctx, node);
     }
 
 
