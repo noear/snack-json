@@ -257,11 +257,7 @@ public class Expression {
         if (Asserts.isEmpty(term.getRight().getValue())) {
             if (term.getOp() == null) {
                 ONode leftNode = term.getLeftNode(ctx, node);
-                if (leftNode.isBoolean()) {
-                    return leftNode.getBoolean();
-                } else {
-                    return !leftNode.isNull();
-                }
+                return confirmQuery(node, leftNode);
             } else {
                 return false;
             }
@@ -274,6 +270,18 @@ public class Expression {
         }
 
         return operation.apply(ctx, node, term);
+    }
+
+    private boolean confirmQuery(ONode node, ONode leftNode) { //node 方便调试
+        if (leftNode.isBoolean()) {
+            return leftNode.getBoolean();
+        }
+
+        if (leftNode.isArray()) {
+            return leftNode.size() > 0;
+        }
+
+        return !leftNode.isNull();
     }
 
     private enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
