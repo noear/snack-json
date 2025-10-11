@@ -18,25 +18,21 @@ package org.noear.snack4.jsonpath.segment;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.selector.*;
-import org.noear.snack4.util.Asserts;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * 多索引选择器（如 $.list[1,4], ['a','b']）
+ * 选择器片段（如 $.list[1,4], ['a','b']）
  *
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class MultiIndexSegment implements Segment {
+public class SelectorsSegment implements Segment {
     private final String segmentStr;
     private List<Selector> selectors = new ArrayList<>();
 
-    public MultiIndexSegment(String segmentStr) {
+    public SelectorsSegment(String segmentStr) {
         this.segmentStr = segmentStr;
 
         for (String s : segmentStr.split(",")) {

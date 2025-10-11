@@ -114,7 +114,7 @@ public class JsonPathCompiler {
 
         if (segment.equals("*")) {
             // 全选
-            segments.add(new MultiIndexSegment(segment));
+            segments.add(new SelectorsSegment(segment));
         } else {
             if (segment.startsWith("?")) {
                 // 条件过滤，如 [?@id]
@@ -122,15 +122,9 @@ public class JsonPathCompiler {
                 // ..x[?...] 已展开过，但查询后是新的结果可以再展开
                 // ..[?...] 已展开过，不需要再展开
                 segments.add(new FilterSegment(segment));
-            } else if (segment.contains(",")) {
-                // 多索引选择，如 [1,4], ['a','b']
-                segments.add(new MultiIndexSegment(segment));
-            } else if (segment.contains(":")) {
-                // 范围选择，如 [1:4]
-                segments.add(new ArraySliceSegment(segment));
             } else {
-                // 属性选择
-                segments.add(new MultiIndexSegment(segment));
+                // 选择器片段
+                segments.add(new SelectorsSegment(segment));
             }
         }
     }
@@ -145,9 +139,9 @@ public class JsonPathCompiler {
         if (key.endsWith("()")) {
             segments.add(new FunctionSegment(key));
         } else if (key.equals("*")) {
-            segments.add(new MultiIndexSegment(key));
+            segments.add(new SelectorsSegment(key));
         } else {
-            segments.add( new MultiIndexSegment("'"+key+"'"));
+            segments.add( new SelectorsSegment("'"+key+"'"));
             //segments.add(new NameSegment(key));
         }
     }
