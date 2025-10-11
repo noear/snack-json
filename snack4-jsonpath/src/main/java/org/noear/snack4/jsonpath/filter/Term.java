@@ -39,12 +39,22 @@ public class Term {
 
     private final String termStr;
 
+    private final boolean not;
     private final Operand left;
     private final String op;
     private final Operand right;
 
-    private Term(String termStr) {
-        this.termStr = termStr.trim(); // 保证整个字符串没有首尾空格
+    private Term(String s) {
+        s = s.trim();
+
+        if(s.charAt(0) == '!') {
+            not = true;
+            s = s.substring(1);
+        } else {
+            not = false;
+        }
+
+        this.termStr = s.trim(); // 保证整个字符串没有首尾空格
 
         String leftStr;
         String opStr = null;
@@ -97,6 +107,10 @@ public class Term {
         this.left = new Operand(leftStr);
         this.op = opStr;
         this.right = new Operand(rightStr);
+    }
+
+    public boolean isNot() {
+        return not;
     }
 
     /**
