@@ -91,23 +91,25 @@ public class SelectSegment extends AbstractSegment {
         int parenLevel = 0;   // 圆括号 () 的嵌套层级
         int bracketLevel = 0; // 方括号 [] 的嵌套层级
 
-        for (char c : segmentStr.toCharArray()) {
-            if (c == ',' && parenLevel == 0 && bracketLevel == 0) {
+        for (int i = 0, len = segmentStr.length(); i < len; i++) {
+            char ch = segmentStr.charAt(i);
+
+            if (ch == ',' && parenLevel == 0 && bracketLevel == 0) {
                 // 只有当逗号在最外层时，才进行分割
                 result.add(currentChunk.toString().trim());
                 currentChunk.setLength(0); // 重置 StringBuilder
             } else {
                 // 更新嵌套层级
-                if (c == '(') {
+                if (ch == '(') {
                     parenLevel++;
-                } else if (c == ')') {
+                } else if (ch == ')') {
                     parenLevel--;
-                } else if (c == '[') {
+                } else if (ch == '[') {
                     bracketLevel++;
-                } else if (c == ']') {
+                } else if (ch == ']') {
                     bracketLevel--;
                 }
-                currentChunk.append(c);
+                currentChunk.append(ch);
             }
         }
         // 添加最后一个片段
