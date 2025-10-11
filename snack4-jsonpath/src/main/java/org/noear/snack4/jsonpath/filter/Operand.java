@@ -18,7 +18,10 @@ package org.noear.snack4.jsonpath.filter;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 import org.noear.snack4.util.Asserts;
+
+import java.util.List;
 
 /**
  * 操作元
@@ -30,6 +33,7 @@ public class Operand {
     private final String value;
     private ONode nodeValue;
     private JsonPath queryValue;
+    private FunctionHolder functionValue;
 
     public String getValue() {
         return value;
@@ -64,8 +68,18 @@ public class Operand {
                     //正则
                     nodeValue = new ONode(Options.DEF_OPTIONS, value);
                 } else {
-                    //其它
-                    nodeValue = ONode.ofJson(value);
+                    if (value.indexOf(')') > 0) {
+                        //函数
+                        int bl = value.indexOf('(');
+                        String funName = value.substring(0, bl);
+                        String argsStr = value.substring(bl + 1, value.length() - 1);
+                        List<String> args = SelectUtil.splitSelectors(argsStr);
+
+                        functionValue = new FunctionHolder(funName, args);
+                    } else {
+                        //其它
+                        nodeValue = ONode.ofJson(value);
+                    }
                 }
             }
         }
