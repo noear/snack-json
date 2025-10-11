@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.segment.FunctionSegment;
+import org.noear.snack4.jsonpath.segment.Segment;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,6 +1,7 @@
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
 

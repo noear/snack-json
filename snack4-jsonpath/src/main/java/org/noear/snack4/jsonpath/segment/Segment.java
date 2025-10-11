@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
 

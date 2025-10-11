@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.op;
 
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPathException;
+import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.filter.Term;
 import org.noear.snack4.jsonpath.util.JsRegexUtil;
 
@@ -30,40 +33,40 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author noear 2025/5/5 created
  * @since 4.0
  */
-public class OperationLib {
-    private static final Map<String, Operation> LIB = new ConcurrentHashMap<>();
+public class OperatorLib {
+    private static final Map<String, Operator> LIB = new ConcurrentHashMap<>();
 
     static {
         // 操作函数
-        register("startsWith", OperationLib::startsWith);
-        register("endsWith", OperationLib::endsWith);
+        register("startsWith", OperatorLib::startsWith);
+        register("endsWith", OperatorLib::endsWith);
 
-        register("contains", OperationLib::contains);
+        register("contains", OperatorLib::contains);
 
-        register("in", OperationLib::in);
-        register("nin", OperationLib::nin);
+        register("in", OperatorLib::in);
+        register("nin", OperatorLib::nin);
 
-        register("=~", OperationLib::matches);
+        register("=~", OperatorLib::matches);
 
-        register("==", OperationLib::compare);
-        register("!=", OperationLib::compare);
-        register(">", OperationLib::compare);
-        register("<", OperationLib::compare);
-        register(">=", OperationLib::compare);
-        register("<=", OperationLib::compare);
+        register("==", OperatorLib::compare);
+        register("!=", OperatorLib::compare);
+        register(">", OperatorLib::compare);
+        register("<", OperatorLib::compare);
+        register(">=", OperatorLib::compare);
+        register("<=", OperatorLib::compare);
     }
 
     /**
      * 注册
      */
-    public static void register(String name, Operation func) {
+    public static void register(String name, Operator func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static Operation get(String funcName) {
+    public static Operator get(String funcName) {
         return LIB.get(funcName);
     }
 

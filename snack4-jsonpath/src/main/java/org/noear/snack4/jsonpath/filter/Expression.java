@@ -17,8 +17,8 @@ package org.noear.snack4.jsonpath.filter;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.Operation;
-import org.noear.snack4.jsonpath.OperationLib;
+import org.noear.snack4.jsonpath.op.Operator;
+import org.noear.snack4.jsonpath.op.OperatorLib;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.util.Asserts;
 
@@ -259,7 +259,7 @@ public class Expression {
             }
         }
 
-        Operation operation = OperationLib.get(term.getOp());
+        Operator operation = OperatorLib.get(term.getOp());
 
         if (operation == null) {
             throw new JsonPathException("Unsupported operator : " + term.getOp());

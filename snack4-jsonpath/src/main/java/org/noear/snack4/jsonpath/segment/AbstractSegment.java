@@ -15,8 +15,6 @@
  */
 package org.noear.snack4.jsonpath.segment;
 
-import org.noear.snack4.jsonpath.Segment;
-
 /**
  * @author noear 2025/10/11 created
  * @since 4.0

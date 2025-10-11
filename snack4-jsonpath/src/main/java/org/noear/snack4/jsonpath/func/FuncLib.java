@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPathException;
+import org.noear.snack4.jsonpath.QueryContext;
 
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -32,40 +32,46 @@ import java.util.stream.Stream;
  * @author noear 2025/3/17 created
  * @since 4.0
  */
-public class FunctionLib {
-    private static final Map<String, Function> LIB = new ConcurrentHashMap<>();
+public class FuncLib {
+    private static final Map<String, Func> LIB = new ConcurrentHashMap<>();
 
     static {
         // 聚合函数
-        register("min", FunctionLib::min);
-        register("max", FunctionLib::max);
-        register("avg", FunctionLib::avg);
-        register("sum", FunctionLib::sum);
+        register("min", FuncLib::min);
+        register("max", FuncLib::max);
+        register("avg", FuncLib::avg);
+        register("sum", FuncLib::sum);
 
         // 集合函数
-        register("size", FunctionLib::size);
-        register("keys", FunctionLib::keys);
-        register("first", FunctionLib::first);
-        register("last", FunctionLib::last);
+        register("size", FuncLib::size);
+        register("keys", FuncLib::keys);
+        register("first", FuncLib::first);
+        register("last", FuncLib::last);
 
         // 字符串函数
-        register("length", FunctionLib::length);
-        register("upper", FunctionLib::upper);
-        register("lower", FunctionLib::lower);
-        register("trim", FunctionLib::trim);
+        register("upper", FuncLib::upper);
+        register("lower", FuncLib::lower);
+        register("trim", FuncLib::trim);
+
+        //过滤函数
+        register("length", new LengthFunc());
+        register("count", new CountFunc());
+        register("match", new MatchFunc());
+        register("search", new SearchFunc());
+        register("value", new ValueFunc());
     }
 
     /**
      * 注册
      */
-    public static void register(String name, Function func) {
+    public static void register(String name, Func func) {
         LIB.put(name, func);
     }
 
     /**
      * 获取
      */
-    public static Function get(String funcName) {
+    public static Func get(String funcName) {
         return LIB.get(funcName);
     }
 
@@ -232,17 +238,6 @@ public class FunctionLib {
         return new ONode(ctx.getOptions(), size);
     }
 
-    /* 字符串函数实现 */
-    static ONode length(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.size() == 1) {
-            ONode n = nodes.get(0);
-            if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
-            if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
-            if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
-        }
-        return new ONode(ctx.getOptions(), 0);
-    }
-
 
     static ONode upper(QueryContext ctx, List<ONode> nodes) {
         return processStrings(ctx, nodes, String::toUpperCase);
@@ -264,7 +259,7 @@ public class FunctionLib {
 
     private static Stream<ONode> flattenDo(ONode node) {
         if (node.isArray()) {
-            return node.getArray().stream().flatMap(FunctionLib::flattenDo);
+            return node.getArray().stream().flatMap(FuncLib::flattenDo);
         } else {
             return Stream.of(node);
         }

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath;
+package org.noear.snack4.jsonpath.op;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.filter.Term;
 
 /**
@@ -25,7 +26,7 @@ import org.noear.snack4.jsonpath.filter.Term;
  * @since 4.0
  */
 @FunctionalInterface
-public interface Operation {
+public interface Operator {
     /**
      * 应用
      *

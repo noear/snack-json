@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.demo;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.OperationLib;
+import org.noear.snack4.jsonpath.op.OperatorLib;
 
 /**
  *
@@ -10,7 +10,7 @@ import org.noear.snack4.jsonpath.OperationLib;
 public class OperationDemo {
     public static void main(String[] args) {
         //定制操作符
-        OperationLib.register("startsWith", (ctx, node, term) -> {
+        OperatorLib.register("startsWith", (ctx, node, term) -> {
             ONode leftNode = term.getLeftNode(ctx, node);
 
             if (leftNode.isString()) {
