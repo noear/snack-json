@@ -72,8 +72,10 @@ public class Expression {
         }
     }
 
-    // 新增分词器
-    private List<Token> tokenize(String filter) {
+    /**
+     * 新增分词器
+     */
+    public static List<Token> tokenize(String filter) {
         List<Token> tokens = new ArrayList<>();
         int index = 0;
         int len = filter.length();
@@ -123,8 +125,10 @@ public class Expression {
         return tokens;
     }
 
-    // 转换为逆波兰式
-    private List<Token> convertToRPN(List<Token> tokens) {
+    /**
+     * 转换为逆波兰式
+     */
+    public static List<Token> convertToRPN(List<Token> tokens) {
         List<Token> output = new ArrayList<>();
         Deque<Token> stack = new ArrayDeque<>();
 
@@ -159,7 +163,7 @@ public class Expression {
         return output;
     }
 
-    private int precedence(Token token) {
+    private static int precedence(Token token) {
         return token.type == TokenType.AND ? 2 : token.type == TokenType.OR ? 1 : 0;
     }
 
