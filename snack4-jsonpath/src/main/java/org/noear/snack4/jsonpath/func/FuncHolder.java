@@ -33,6 +33,11 @@ public class FuncHolder {
     private final Func func;
     private final List<Object> args;
 
+    @Override
+    public String toString() {
+        return funcName;
+    }
+
     public FuncHolder(String funcName, List<String> argsStr) {
         this.funcName = funcName;
         this.func = FuncLib.get(funcName);
