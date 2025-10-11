@@ -34,6 +34,8 @@ public class RFC9535_s2353_Query {
         //Existence of non-singular queries
         queryAssert("$[?@.*]", "[[3,5,1,2,4,6,{\"b\":\"j\"},{\"b\":\"k\"},{\"b\":{}},{\"b\":\"kilo\"}],{\"p\":1,\"q\":2,\"r\":3,\"s\":5,\"t\":{\"u\":6}},\"f\"]");
 
+        //Non-deterministic ordering
+        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,1,2]"); //[1,2,2,1] 顺序不定
 
     }
 
@@ -41,14 +43,15 @@ public class RFC9535_s2353_Query {
     public void case2() {
         //Nested filters
         queryAssert("$[?@[?@.b]]", "[[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]]");
+    }
 
-        //Non-deterministic ordering
-        queryAssert("$.o[?@ < 3, ?@ < 3]", "[1,2,2,1]");
+    @Test
+    public void case3() {
 
         //Array value regular expression match
-        queryAssert("$.a[?match(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"}]");
+        queryAssert("$.a[?match(@.b, '[jk]')]", "[{\"b\": \"j\"},{\"b\": \"k\"}]");
         //Array value regular expression search
-        queryAssert("$.a[?search(@.b, \"[jk]\")]", "[{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": \"kilo\"}]");
+        queryAssert("$.a[?search(@.b, '[jk]')]", "[{\"b\": \"j\"},{\"b\": \"k\"},{\"b\": \"kilo\"}]");
 
     }
 
