@@ -12,18 +12,18 @@ public class RFC9535_s2333 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
-    static final String json3 = "[\"a\",\"b\"]";
+    static final String json = "[\"a\",\"b\"]";
 
     @Test
-    public void case3_1() {
-        ONode rst = ONode.ofJson(json3).select("$[1]");
+    public void case1() {
+        ONode rst = ONode.ofJson(json).select("$[1]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("\"b\"");
     }
 
     @Test
-    public void case3_2() {
-        ONode rst = ONode.ofJson(json3).select("$[-2]");
+    public void case2() {
+        ONode rst = ONode.ofJson(json).select("$[-2]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("\"a\"");
     }

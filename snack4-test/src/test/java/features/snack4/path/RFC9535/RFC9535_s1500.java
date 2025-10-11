@@ -11,7 +11,7 @@ import org.noear.snack4.Options;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s15 {
+public class RFC9535_s1500 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
@@ -29,19 +29,38 @@ public class RFC9535_s15 {
         queryCompatibleDo("$..book[:2]"); //前两本书
         queryCompatibleDo("$..book[?(@.isbn)]"); //所有具有 ISBN 编号的书籍
         queryCompatibleDo("$..book[?(@.price < 10)]"); //所有低于 10 的书籍
-        queryCompatibleDo("$..*"); //输入值中包含的所有成员值和数组元素
 
         queryNoCompatibleDo("$..book[?@.isbn]"); //所有具有 ISBN 编号的书籍
         queryNoCompatibleDo("$..book[?@.price < 10]"); //所有低于 10 的书籍
     }
 
+    @Test
+    public void case2() {
+        queryCompatibleDo2("$..*"); //输入值中包含的所有成员值和数组元素
+    }
+
     private ONode queryCompatibleDo(String expr) {
-        ONode oNode = ONode.ofJson(json1, Options.of().RFC9535(true)).select(expr);
+        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
         String rst1 = oNode.toJson();
         System.out.println("::" + expr);
         System.out.println(rst1);
 
-        JSONAware jsonAware = JsonPath.read(json1, expr);
+        JSONAware jsonAware = JsonPath.read(json, expr);
+        String rst2 = jsonAware.toJSONString();
+        System.out.println(rst2);
+
+        assert rst2.equals(rst1);
+
+        return oNode;
+    }
+
+    private ONode queryCompatibleDo2(String expr) {
+        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
+        String rst1 = oNode.toJson();
+        System.out.println("::" + expr);
+        System.out.println(rst1);
+
+        JSONAware jsonAware = JsonPath.read(json, expr);
         String rst2 = jsonAware.toJSONString();
         System.out.println(rst2);
 
@@ -51,7 +70,7 @@ public class RFC9535_s15 {
     }
 
     private ONode queryNoCompatibleDo(String expr) {
-        ONode oNode = ONode.ofJson(json1, Options.of().RFC9535(true)).select(expr);
+        ONode oNode = ONode.ofJson(json, Options.of().RFC9535(true)).select(expr);
         System.out.println("::" + expr);
         System.out.println(oNode.toJson());
 
@@ -59,7 +78,7 @@ public class RFC9535_s15 {
     }
 
 
-    static final String json1 = "{ \"store\": {\n" +
+    static final String json = "{ \"store\": {\n" +
             "    \"book\": [\n" +
             "      { \"category\": \"reference\",\n" +
             "        \"author\": \"Nigel Rees\",\n" +

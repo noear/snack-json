@@ -10,23 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author noear 2025/5/6 created
  */
-public class RFC9535_s2353_Filter {
+public class RFC9535_s2353_Query {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
-    static final String queryJson = "{\n" +
-            "  \"a\": [3, 5, 1, 2, 4, 6,\n" +
-            "        {\"b\": \"j\"},\n" +
-            "        {\"b\": \"k\"},\n" +
-            "        {\"b\": {}},\n" +
-            "        {\"b\": \"kilo\"}\n" +
-            "       ],\n" +
-            "  \"o\": {\"p\": 1, \"q\": 2, \"r\": 3, \"s\": 5, \"t\": {\"u\": 6}},\n" +
-            "  \"e\": \"f\"\n" +
-            "}";
-
     @Test
-    public void queryTest() {
+    public void case1() {
         queryAssert("$.a[?@.b == 'kilo']", "[{\"b\": \"kilo\"}]");
         queryAssert("$.a[?(@.b == 'kilo')]", "[{\"b\": \"kilo\"}]");
         queryAssert("$.a[?@ > 3.5]", "[5,4,6]");
@@ -49,7 +38,7 @@ public class RFC9535_s2353_Filter {
     }
 
     @Test
-    public void queryTest2() {
+    public void case2() {
         //Nested filters
         queryAssert("$[?@[?@.b]]", "[[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]]");
 
@@ -66,9 +55,20 @@ public class RFC9535_s2353_Filter {
     private void queryAssert(String expr, String expected) {
         JsonPath jsonPath = JsonPath.compile(expr);
 
-        String actual = jsonPath.select(ONode.ofJson(queryJson, Options.of().RFC9535(true))).toJson();
+        String actual = jsonPath.select(ONode.ofJson(json, Options.of().RFC9535(true))).toJson();
         String expected2 = ONode.ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
         assertEquals(expected2, actual);
     }
+
+    static final String json = "{\n" +
+            "  \"a\": [3, 5, 1, 2, 4, 6,\n" +
+            "        {\"b\": \"j\"},\n" +
+            "        {\"b\": \"k\"},\n" +
+            "        {\"b\": {}},\n" +
+            "        {\"b\": \"kilo\"}\n" +
+            "       ],\n" +
+            "  \"o\": {\"p\": 1, \"q\": 2, \"r\": 3, \"s\": 5, \"t\": {\"u\": 6}},\n" +
+            "  \"e\": \"f\"\n" +
+            "}";
 }

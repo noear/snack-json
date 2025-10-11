@@ -10,39 +10,39 @@ public class RFC9535_s2343 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
-    static final String json4 = "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"]";
+    static final String json = "[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"]";
 
     @Test
-    public void case4_1() {
-        ONode rst = ONode.ofJson(json4).select("$[1:3]");
+    public void case1() {
+        ONode rst = ONode.ofJson(json).select("$[1:3]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("[\"b\",\"c\"]");
     }
 
     @Test
-    public void case4_2() {
-        ONode rst = ONode.ofJson(json4).select("$[5:]");
+    public void case2() {
+        ONode rst = ONode.ofJson(json).select("$[5:]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("[\"f\",\"g\"]");
     }
 
     @Test
-    public void case4_3() {
-        ONode rst = ONode.ofJson(json4).select("$[1:5:2]");
+    public void case3() {
+        ONode rst = ONode.ofJson(json).select("$[1:5:2]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("[\"b\",\"d\"]");
     }
 
     @Test
-    public void case4_4() {
-        ONode rst = ONode.ofJson(json4).select("$[5:1:-2]");
+    public void case4() {
+        ONode rst = ONode.ofJson(json).select("$[5:1:-2]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("[\"f\",\"d\"]");
     }
 
     @Test
-    public void case4_5() {
-        ONode rst = ONode.ofJson(json4).select("$[::-1]");
+    public void case5() {
+        ONode rst = ONode.ofJson(json).select("$[::-1]");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("[\"g\",\"f\",\"e\",\"d\",\"c\",\"b\",\"a\"]");
     }

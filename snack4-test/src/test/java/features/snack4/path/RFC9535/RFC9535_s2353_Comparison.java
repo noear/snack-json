@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author noear 2025/5/6 created
  */
-public class RFC9535_s2353_Expression {
+public class RFC9535_s2353_Comparison {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 

@@ -12,28 +12,28 @@ public class RFC9535_s2313 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
-    static final String json1 = "{\n" +
+    static final String json = "{\n" +
             "  \"o\": {\"j j\": {\"k.k\": 3}},\n" +
             "  \"a\": {\"@\": 2}\n" +
             "}";
 
     @Test
     public void case1() {
-        ONode rst = ONode.ofJson(json1).select("$.o['j j']");
+        ONode rst = ONode.ofJson(json).select("$.o['j j']");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("{\"k.k\":3}");
     }
 
     @Test
     public void case2() {
-        ONode rst = ONode.ofJson(json1).select("$.o['j j']['k.k']");
+        ONode rst = ONode.ofJson(json).select("$.o['j j']['k.k']");
         System.out.println(rst.toJson());
         assert rst.toJson().equals("3");
     }
 
     @Test
     public void case3() {
-        ONode rst = ONode.ofJson(json1).select("$['a']['@']"); // $['\'']['@']
+        ONode rst = ONode.ofJson(json).select("$['a']['@']"); // $['\'']['@']
         System.out.println(rst.toJson());
         assert rst.toJson().equals("2");
     }
