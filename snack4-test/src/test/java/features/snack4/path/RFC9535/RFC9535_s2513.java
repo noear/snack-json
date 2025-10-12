@@ -1,8 +1,6 @@
 package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +19,7 @@ public class RFC9535_s2513 extends AbsRFC9535{
     }
 
     private void queryAssert(String expr, String expected) {
-        JsonPath jsonPath = JsonPath.compile(expr);
+        JsonPath jsonPath = JsonPath.parse(expr);
 
         String actual = jsonPath.select(ofJson(json)).toJson();
         String expected2 = ofJson(expected).toJson(); //重新格式化
