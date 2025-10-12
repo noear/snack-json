@@ -63,7 +63,7 @@ public class FuncHolder {
                     //正则
                     args.add(new ONode(arg));
                 } else {
-                    //字符串或数字
+                    //字符串或数字或json
                     args.add(ONode.ofJson(arg));
                 }
             }
