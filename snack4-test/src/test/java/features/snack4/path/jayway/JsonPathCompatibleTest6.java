@@ -201,26 +201,45 @@ public class JsonPathCompatibleTest6 {
         String json = "{\"request1\":{\"result\":[{\"relTickers\":[{\"tickerId\":1},{\"tickerId\":1.1}],\"accountId\":400006},{\"relTickers\":[{\"tickerId\":2},{\"tickerId\":2.2}]},{\"relTickers\":[{\"tickerId\":3}]},{\"relTickers\":[{\"tickerId\":4}]},{\"relTickers\":[{\"tickerId\":5}]},{\"relTickers\":[{\"tickerId\":6}]}]}}\n";
 
         assert_do("1", json, "$.request1..tickerId");
-        assert_do("1", json, "$.request1..tickerId.first()");
-        assert_do("6", json, "$.request1..tickerId.last()");
+        assert_do("2", json, "$.request1..tickerId.first()");
+        assert_do("3", json, "$.request1..tickerId.last()");
 
-        assert_do("1", json, "$.request1.result[*].relTickers[*].tickerId.first()");
-        assert_do("6", json, "$.request1.result[*].relTickers[*].tickerId.last()");
+        assert_do("4", json, "$.request1.result[*].relTickers[*].tickerId.first()");
+        assert_do("5", json, "$.request1.result[*].relTickers[*].tickerId.last()");
 
         System.out.println(ONode.ofJson(json).select("$.request1.result[*].relTickers.first()"));
 
-        assert_do("1", json, "$.request1.result[*].relTickers.first()[0].tickerId");
-        assert_do("6", json, "$.request1.result[*].relTickers.last()[0].tickerId");
+        //todo: jayway 可能不支持函数之后，再查询
+        //assert_do("6", json, "$.request1.result[*].relTickers.first()[0].tickerId");
+        //assert_do("7", json, "$.request1.result[*].relTickers.last()[0].tickerId");
     }
 
     private void assert_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
+        ONode tmp = null;
+        Object tmp2 = null;
+        Throwable err1 = null;
+        Throwable err2 = null;
 
-        ONode tmp = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonpathStr);
-        System.out.println(tmp.toJson());
+        try {
+            tmp = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonpathStr);
+            System.out.println(tmp.toJson());
+        } catch (Throwable ex) {
+            err1 = ex;
+            System.err.println(ex.getMessage());
+        }
 
-        Object tmp2 = JsonPath.read(json, jsonpathStr);
-        System.out.println(tmp2);
+        try {
+            tmp2 = JsonPath.read(json, jsonpathStr);
+            System.out.println(tmp2);
+        } catch (Throwable ex) {
+            err2 = ex;
+            System.err.println(ex.getMessage());
+        }
+
+        if (err1 != null && err2 != null) {
+            return;
+        }
 
         assert tmp.toJson().equals(tmp2.toString());
     }

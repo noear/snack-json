@@ -3,6 +3,7 @@ package org.noear.snack4.jsonpath.func;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.ArrayList;
@@ -29,10 +30,14 @@ public class LastFunc implements Func {
                 }
             }
 
-            if (results.size() == 1) {
-                return results.get(0);
+            if (results.size() > 0) {
+                if (results.size() == 1) {
+                    return results.get(0);
+                } else {
+                    return new ONode(ctx.getOptions(), results);
+                }
             } else {
-                return new ONode(ctx.getOptions(), results);
+                throw new JsonPathException("The aggregation function requires an array type");
             }
         } else {
             if (oNodes.size() > 1) {
