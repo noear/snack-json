@@ -32,26 +32,23 @@ import java.util.List;
 public class AppendFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        ONode arg0 = null;
+        ONode arg1 = null;
+
         if (ctx.isInFilter()) {
             if (argNodes.size() != 2) {
                 throw new JsonPathException("Requires 2 parameters");
             }
 
-            ONode oNode = argNodes.get(0);
-            if (oNode.isArray()) {
-                currentNodes = oNode.getArray();
-            } else {
-                currentNodes = Arrays.asList(oNode);
-            }
+            arg0 = argNodes.get(0);
+            arg1 = argNodes.get(1);
         } else {
             if (argNodes.size() != 1) {
                 throw new JsonPathException("Requires 1 parameter");
             }
+            arg0 = new ONode(currentNodes);
+            arg1 = argNodes.get(0);
         }
-
-
-        ONode arg0 = argNodes.get(0);
-        ONode arg1 = argNodes.get(1);
 
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();

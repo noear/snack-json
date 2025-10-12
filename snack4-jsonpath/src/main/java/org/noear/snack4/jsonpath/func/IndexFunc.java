@@ -32,12 +32,23 @@ import java.util.List;
 public class IndexFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (argNodes.size() != 2) {
-            throw new JsonPathException("Requires 2 parameters");
-        }
+        ONode arg0 = null;
+        ONode arg1 = null;
 
-        ONode arg0 = argNodes.get(0);
-        ONode arg1 = argNodes.get(1);
+        if (ctx.isInFilter()) {
+            if (argNodes.size() != 2) {
+                throw new JsonPathException("Requires 2 parameters");
+            }
+
+            arg0 = argNodes.get(0);
+            arg1 = argNodes.get(1);
+        } else {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameter");
+            }
+            arg0 = new ONode(currentNodes);
+            arg1 = argNodes.get(0);
+        }
 
         if (arg1.isNumber() == false) {
             throw new JsonPathException("Requires arg1 is number");

@@ -29,15 +29,20 @@ public class ContainsOperator implements Operator {
     @Override
     public boolean apply(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
+        ONode rightNode = term.getRightNode(ctx, node);
 
-        if (leftNode.isString()) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isNull()) {
-                return false;
+        // 支持多类型包含检查
+        if (leftNode.isArray()) {
+            return leftNode.getArray().stream()
+                    .anyMatch(item -> MatchUtil.isValueMatch(item, rightNode));
+        } else if (leftNode.isString()) {
+            if (rightNode.isString()) {
+                return leftNode.getString().contains(rightNode.getString());
+            } else {
+                throw new IllegalArgumentException("expected string but got " + rightNode);
             }
-
-            return leftNode.getString().contains(rightNode.getString());
         }
+
         return false;
     }
 }
