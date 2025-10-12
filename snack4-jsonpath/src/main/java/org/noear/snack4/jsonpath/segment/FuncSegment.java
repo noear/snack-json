@@ -16,8 +16,10 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.func.Func;
+import org.noear.snack4.jsonpath.func.FuncHolder;
 import org.noear.snack4.jsonpath.func.FuncLib;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
@@ -33,21 +35,18 @@ import java.util.Objects;
  * @since 4.0
  */
 public class FuncSegment extends AbstractSegment {
-    private final String segmentStr;
-    private final String funcName;
-    private final Func func;
+    private final String description;
+    private final FuncHolder funcHolder;
 
-    public FuncSegment(String segmentStr) {
-        this.segmentStr = segmentStr;
-        this.funcName = segmentStr.substring(0, segmentStr.length() - 2);
-        this.func = FuncLib.get(funcName);
+    public FuncSegment(String description) {
+        this.description = description;
 
-        Objects.requireNonNull(func, "The function not found: " + funcName);
+        this.funcHolder = new FuncHolder(description);
     }
 
     @Override
     public String toString() {
-        return segmentStr;
+        return description;
     }
 
     @Override
@@ -63,12 +62,16 @@ public class FuncSegment extends AbstractSegment {
             currentNodes = results;
         }
 
-        if(currentNodes.isEmpty()){
+        if (currentNodes.isEmpty()) {
             return currentNodes;
         }
 
         return Collections.singletonList(
-                func.apply(ctx, currentNodes) // 传入节点列表
+                apply(ctx, currentNodes) // 传入节点列表
         );
+    }
+
+    private ONode apply(QueryContext ctx, List<ONode> currentNodes) {
+        return funcHolder.apply(ctx, currentNodes);
     }
 }

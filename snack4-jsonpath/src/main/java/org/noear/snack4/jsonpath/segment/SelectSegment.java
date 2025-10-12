@@ -31,14 +31,14 @@ import java.util.List;
  * @since 4.0
  */
 public class SelectSegment extends AbstractSegment {
-    private final String segmentStr;
+    private final String description;
     private List<Selector> selectors = new ArrayList<>();
     private boolean isMultiple;
 
-    public SelectSegment(String segmentStr) {
-        this.segmentStr = segmentStr;
+    public SelectSegment(String description) {
+        this.description = description;
 
-        List<String> chunks = SelectUtil.splitSelectors(segmentStr);
+        List<String> chunks = SelectUtil.splitSelectors(description);
 
         for (String chunk : chunks) {
             if (chunk.length() > 0) {
@@ -74,7 +74,7 @@ public class SelectSegment extends AbstractSegment {
 
     @Override
     public String toString() {
-        return "[" + segmentStr + "]";
+        return "[" + description + "]";
     }
 
     @Override

@@ -47,6 +47,8 @@ public class FuncLib {
         register("keys", FuncLib::keys);
         register("first", FuncLib::first);
         register("last", FuncLib::last);
+        register("index", new IndexFunc());
+        register("concat", new ConcatFun());
 
         // 字符串函数
         register("upper", FuncLib::upper);

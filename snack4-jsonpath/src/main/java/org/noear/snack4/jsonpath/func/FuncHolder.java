@@ -18,6 +18,7 @@ package org.noear.snack4.jsonpath.func;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +30,22 @@ import java.util.Objects;
  * @since 4.0
  */
 public class FuncHolder {
-    private final String funcName;
-    private final Func func;
-    private final List<Object> args;
+    public final String funcName;
+    public final Func func;
+    public final List<Object> args;
 
     @Override
     public String toString() {
         return funcName;
     }
 
-    public FuncHolder(String funcName, List<String> argsStr) {
-        this.funcName = funcName;
+    public FuncHolder(String description) {
+        int bl = description.indexOf('(');
+
+        this.funcName = description.substring(0, bl);
+        String argsStr0 = description.substring(bl + 1, description.length() - 1);
+        List<String> argsStr = SelectUtil.splitSelectors(argsStr0);
+
         this.func = FuncLib.get(funcName);
 
         Objects.requireNonNull(func, "The function not found: " + funcName);
@@ -59,6 +65,21 @@ public class FuncHolder {
                     args.add(ONode.ofJson(arg));
                 }
             }
+        }
+    }
+
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes) {
+        if (args.isEmpty()) {
+            return func.apply(ctx, currentNodes);
+        } else {
+            List<ONode> oNodes = new ArrayList<>();
+            oNodes.add(new ONode(ctx.getOptions(), currentNodes));
+
+            for (Object arg : args) {
+                oNodes.add((ONode) arg);
+            }
+
+            return func.apply(ctx, oNodes);
         }
     }
 

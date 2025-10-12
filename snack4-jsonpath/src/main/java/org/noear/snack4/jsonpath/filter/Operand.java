@@ -74,12 +74,7 @@ public class Operand {
                 } else {
                     if (value.indexOf(')') > 0) {
                         //函数
-                        int bl = value.indexOf('(');
-                        String funName = value.substring(0, bl);
-                        String argsStr = value.substring(bl + 1, value.length() - 1);
-                        List<String> args = SelectUtil.splitSelectors(argsStr);
-
-                        funcValue = new FuncHolder(funName, args);
+                        funcValue = new FuncHolder(value);
                     } else {
                         //其它
                         nodeValue = ONode.ofJson(value);
