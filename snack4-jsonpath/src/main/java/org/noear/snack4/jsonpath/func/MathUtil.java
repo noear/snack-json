@@ -113,4 +113,25 @@ public class MathUtil {
             return null;
         }
     }
+
+    public static Double avgByChild(List<ONode> oNodes) {
+        double ref = 0D;
+        int count = 0;
+        for (ONode n : oNodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        ref += o.getDouble();
+                        count++;
+                    }
+                }
+            }
+        }
+
+        if (count > 0) {
+            return ref / count;
+        } else {
+            return null;
+        }
+    }
 }

@@ -32,9 +32,9 @@ public class FuncLib {
 
     static {
         //:: for jayway
-        register("min", FuncLib::min);
-        register("max", FuncLib::max);
-        register("avg", FuncLib::avg);
+        register("min", new MinFunc());
+        register("max", new MaxFunc());
+        register("avg", new AvgFunc());
         register("stddev", FuncLib::stddev);
         //length
         register("size", new LengthFunc());
@@ -42,8 +42,8 @@ public class FuncLib {
         register("sum", FuncLib::sum);
         register("keys", new KeysFunc());
 
-        register("concat", new ConcatFun());
-        register("append", new AppendFun());
+        register("concat", new ConcatFunc());
+        register("append", new AppendFunc());
 
         register("first", new FirstFunc());
         register("last", new LastFunc());
@@ -82,82 +82,6 @@ public class FuncLib {
         Double _sum = MathUtil.sum(oNodes);
 
         return new ONode(ctx.getOptions(), _sum);
-    }
-
-    static ONode avg(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        Double _avg = MathUtil.avg(oNodes);
-
-        return new ONode(ctx.getOptions(), _avg);
-    }
-
-    static ONode min(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        Double ref = null;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        if (ref == null) {
-                            ref = o.getDouble();
-                        } else {
-                            if (ref > o.getDouble()) {
-                                ref = o.getDouble();
-                            }
-                        }
-                    }
-                }
-            } else if (n.isNumber()) {
-                if (ref == null) {
-                    ref = n.getDouble();
-                } else {
-                    if (ref > n.getDouble()) {
-                        ref = n.getDouble();
-                    }
-                }
-            }
-        }
-
-        return new ONode(ctx.getOptions(), ref);
-    }
-
-    static ONode max(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        Double ref = null;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        if (ref == null) {
-                            ref = o.getDouble();
-                        } else {
-                            if (ref < o.getDouble()) {
-                                ref = o.getDouble();
-                            }
-                        }
-                    }
-                }
-            } else if (n.isNumber()) {
-                if (ref == null) {
-                    ref = n.getDouble();
-                } else {
-                    if (ref < n.getDouble()) {
-                        ref = n.getDouble();
-                    }
-                }
-            }
-        }
-
-        return new ONode(ctx.getOptions(), ref);
     }
 
     static ONode stddev(QueryContext ctx, List<ONode> oNodes) {

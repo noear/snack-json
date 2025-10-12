@@ -13,7 +13,7 @@ import java.util.List;
  * @author noear 2025/10/12 created
  *
  */
-public class ConcatFun implements Func {
+public class ConcatFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> args) {
         if (args.size() != 2) {
