@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.operator;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.Operator;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.filter.Term;
 

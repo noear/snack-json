@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.QueryContext;
-
-import java.util.List;
+import org.noear.snack4.jsonpath.filter.Term;
 
 /**
- * JsonPath 函数
+ * JsonPath 操作符
  *
- * @author noear 2025/10/8 created
+ * @author noear 2025/5/5 created
  * @since 4.0
  */
 @FunctionalInterface
-public interface Func {
-    ONode apply(QueryContext ctx, List<ONode> oNodes);
+public interface Operator {
+    /**
+     * 应用
+     *
+     * @param ctx  查询上下文
+     * @param node 目标节点
+     * @param term 逻辑表达式项
+     */
+    boolean apply(QueryContext ctx, ONode node, Term term);
 }

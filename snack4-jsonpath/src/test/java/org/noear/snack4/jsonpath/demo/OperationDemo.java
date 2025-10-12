@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.demo;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.operator.OperatorLib;
+import org.noear.snack4.jsonpath.OperatorLib;
 
 /**
  *

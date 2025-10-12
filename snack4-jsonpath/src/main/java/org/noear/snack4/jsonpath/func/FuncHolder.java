@@ -16,6 +16,8 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.FuncLib;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.SelectUtil;

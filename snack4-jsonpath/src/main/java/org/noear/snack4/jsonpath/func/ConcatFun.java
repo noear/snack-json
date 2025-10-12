@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @author noear 2025/10/12 created
  *
  */
-public class ConcatFun implements  Func {
+public class ConcatFun implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> args) {
         if (args.size() != 2) {

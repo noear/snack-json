@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 

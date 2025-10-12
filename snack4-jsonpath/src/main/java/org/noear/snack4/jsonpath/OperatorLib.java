@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.operator;
+package org.noear.snack4.jsonpath;
 
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.filter.Term;
+import org.noear.snack4.jsonpath.operator.*;
 
 import java.util.Map;
 import java.util.Objects;

@@ -17,8 +17,8 @@ package org.noear.snack4.jsonpath.filter;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
-import org.noear.snack4.jsonpath.operator.Operator;
-import org.noear.snack4.jsonpath.operator.OperatorLib;
+import org.noear.snack4.jsonpath.Operator;
+import org.noear.snack4.jsonpath.OperatorLib;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.util.Asserts;
 

@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.demo;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.func.FuncLib;
+import org.noear.snack4.jsonpath.FuncLib;
 import org.noear.snack4.jsonpath.JsonPathException;
 
 /**

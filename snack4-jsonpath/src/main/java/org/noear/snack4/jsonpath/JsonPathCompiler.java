@@ -121,7 +121,7 @@ public class JsonPathCompiler {
     }
 
     /**
-     * 分析键名或函数操作符（如 "store" 或 "count()", 或 "index(-1)" 或 "concat('world')", 或 "append({'a':'1'})"）
+     * 分析键名或函数操作符（如 "store" 或 "count()", 或 "index(-1)" 或 "concat(9.9)" 或 "concat('world')", 或 "append({'a':'1'})"）
      */
     private void resolveKey() {
         String segment = parseSegment('.', '[');
