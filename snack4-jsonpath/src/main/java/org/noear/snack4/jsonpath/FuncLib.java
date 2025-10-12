@@ -34,33 +34,37 @@ public class FuncLib {
     private static final Map<String, Func> LIB = new ConcurrentHashMap<>();
 
     static {
-        // 聚合函数
+        //:: for jayway
         register("min", FuncLib::min);
         register("max", FuncLib::max);
         register("avg", FuncLib::avg);
-        register("sum", FuncLib::sum);
         register("stddev", FuncLib::stddev);
-
-        // 对象函数
+        //length
         register("size", new LengthFunc());
-        register("keys", FuncLib::keys);
-        register("first", FuncLib::first);
-        register("last", FuncLib::last);
-        register("index", new IndexFunc());
+
+        register("sum", FuncLib::sum);
+        register("keys", new KeysFunc());
+
         register("concat", new ConcatFun());
         register("append", new AppendFun());
 
-        // 字符串函数
-        register("upper", FuncLib::upper);
-        register("lower", FuncLib::lower);
-        register("trim", FuncLib::trim);
+        register("first", new FirstFunc());
+        register("last", new LastFunc());
+        register("index", new IndexFunc());
 
-        //过滤函数
+
+        //for rfc9535
         register("length", new LengthFunc());
         register("count", new CountFunc());
         register("match", new MatchFunc());
         register("search", new SearchFunc());
         register("value", new ValueFunc());
+
+
+        // 字符串函数
+        //register("upper", FuncLib::upper);
+        //register("lower", FuncLib::lower);
+        //register("trim", FuncLib::trim);
     }
 
     /**
@@ -176,70 +180,6 @@ public class FuncLib {
 
         return new ONode(ctx.getOptions(), ref);
     }
-
-    static ONode first(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        if (oNodes.size() > 1) {
-            return oNodes.get(0);
-        } else {
-            ONode n1 = oNodes.get(0);
-
-            if (n1.isArray()) {
-                return n1.get(0);
-            } else {
-                return n1;
-            }
-        }
-    }
-
-    static ONode last(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        if (oNodes.size() > 1) {
-            return oNodes.get(oNodes.size() - 1);
-        } else {
-            ONode n1 = oNodes.get(0);
-
-            if (n1.isArray()) {
-                return n1.get(-1);
-            } else {
-                return n1;
-            }
-        }
-    }
-
-    static ONode keys(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        if (oNodes.size() > 1) {
-            Set<String> results = new HashSet<>();
-            for (ONode n1 : oNodes) {
-                if (n1.isObject() && n1.getObject().size() > 0) {
-                    results.addAll(n1.getObject().keySet());
-                }
-            }
-
-            if (results.size() > 0) {
-                return new ONode(ctx.getOptions()).addAll(results);
-            }
-        } else {
-            ONode n1 = oNodes.get(0);
-
-            if (n1.isObject() && n1.getObject().size() > 0) {
-                return ONode.ofBean(n1.getObject().keySet());
-            }
-        }
-
-        return new ONode(ctx.getOptions());
-    }
-
 
     static ONode upper(QueryContext ctx, List<ONode> oNodes) {
         return processStrings(ctx, oNodes, String::toUpperCase);

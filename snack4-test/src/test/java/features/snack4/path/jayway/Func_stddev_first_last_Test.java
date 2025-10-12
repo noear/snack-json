@@ -141,7 +141,10 @@ public class Func_stddev_first_last_Test {
         compatible_str("1","xxx","$.store.book");
         compatible_str("1","xxx","$.store.book.last()");
         compatible_str("2","15","$.store.inventory.last()");
+
+        compatible_str("3","\"Charlie\"","$.store.staff[*].name");
         compatible_str("3","\"Charlie\"","$.store.staff[*].name.last()");
+
         compatible_str("4","5","$.store.book[2].ratings.last()");
         compatible_str("5","\"The Lord of the Rings\"","$.store.book[?(@.category == 'fiction')].last().title");
     }

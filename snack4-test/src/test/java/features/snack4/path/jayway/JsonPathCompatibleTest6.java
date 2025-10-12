@@ -3,6 +3,8 @@ package features.snack4.path.jayway;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 
 /**
  * @author noear 2023/5/13 created
@@ -198,6 +200,7 @@ public class JsonPathCompatibleTest6 {
     public void test9() {
         String json = "{\"request1\":{\"result\":[{\"relTickers\":[{\"tickerId\":1},{\"tickerId\":1.1}],\"accountId\":400006},{\"relTickers\":[{\"tickerId\":2},{\"tickerId\":2.2}]},{\"relTickers\":[{\"tickerId\":3}]},{\"relTickers\":[{\"tickerId\":4}]},{\"relTickers\":[{\"tickerId\":5}]},{\"relTickers\":[{\"tickerId\":6}]}]}}\n";
 
+        assert_do("1", json, "$.request1..tickerId");
         assert_do("1", json, "$.request1..tickerId.first()");
         assert_do("6", json, "$.request1..tickerId.last()");
 
@@ -213,7 +216,7 @@ public class JsonPathCompatibleTest6 {
     private void assert_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

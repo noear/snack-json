@@ -56,6 +56,10 @@ public class QueryContext {
         return RFC9535;
     }
 
+    public boolean hasStandard(Standard standard) {
+        return options.hasStandard(standard);
+    }
+
     public QueryMode getMode() {
         return mode;
     }

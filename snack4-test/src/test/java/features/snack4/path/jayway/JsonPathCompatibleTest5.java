@@ -6,6 +6,8 @@ import features.snack4.path.manual.JsonPathTest3;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 import org.noear.snack4.json.JsonType;
 
 /**
@@ -144,7 +146,7 @@ public class JsonPathCompatibleTest5 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

@@ -16,11 +16,13 @@
 package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.func.FuncHolder;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,7 +61,12 @@ public class FuncSegment extends AbstractSegment {
         }
 
         if (currentNodes.isEmpty()) {
-            return currentNodes;
+            //与 jayway 兼容
+            if (ctx.getOptions().hasStandard(Standard.JSONPath_Jayway)) {
+                return Arrays.asList(new ONode().asArray());
+            } else {
+                return currentNodes;
+            }
         }
 
         return Collections.singletonList(
