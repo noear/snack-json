@@ -37,7 +37,7 @@ public class LastFunc implements Func {
                     return new ONode(ctx.getOptions(), results);
                 }
             } else {
-                throw new JsonPathException("The aggregation function requires an array type");
+                throw new JsonPathException("Aggregate functions require non-empty arrays");
             }
         } else {
             if (oNodes.size() > 1) {

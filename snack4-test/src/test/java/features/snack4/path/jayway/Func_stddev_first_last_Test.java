@@ -99,51 +99,51 @@ public class Func_stddev_first_last_Test {
     }
 
     @Test
-    public void stddevCheck1(){
-        List<Double> data = Arrays.asList(30D,25D,40D);
+    public void stddevCheck1() {
+        List<Double> data = Arrays.asList(30D, 25D, 40D);
         double stdDev = MathUtil.calculateStdDev(data);
         System.out.printf("标准差 (StdDev): %f", stdDev);
     }
 
     @Test
-    public void stddevTest(){
-        compatible_str("1","xxx","$.store.book[*].price");
-        compatible_num("1","5.730646","$.store.book[*].price.stddev()");
+    public void stddevTest() {
+        compatible_str("1", "xxx", "$.store.book[*].price");
+        compatible_num("1", "5.730646", "$.store.book[*].price.stddev()");
 
-        compatible_str("2","xxx","$.store.inventory");
-        compatible_num("2","5.590170","$.store.inventory.stddev()");
+        compatible_str("2", "xxx", "$.store.inventory");
+        compatible_num("2", "5.590170", "$.store.inventory.stddev()");
 
-        compatible_str("3","xxx","$.store.book[0].ratings");
-        compatible_num("3","0.471405","$.store.book[0].ratings.stddev()");
+        compatible_str("3", "xxx", "$.store.book[0].ratings");
+        compatible_num("3", "0.471405", "$.store.book[0].ratings.stddev()");
 
-        compatible_str("4","xxx","$.store.book[2].ratings");
-        compatible_num("4","0.82915","$.store.book[2].ratings.stddev()");
+        compatible_str("4", "xxx", "$.store.book[2].ratings");
+        compatible_num("4", "0.82915", "$.store.book[2].ratings.stddev()");
 
-        compatible_str("5","xxx","$.store.staff[*].age");
-        compatible_num("5","6.236096","$.store.staff[*].age.stddev()");
+        compatible_str("5", "xxx", "$.store.staff[*].age");
+        compatible_num("5", "6.236096", "$.store.staff[*].age.stddev()");
     }
 
     @Test
-    public void firstTest(){
-        compatible_str("1","","$.store.book");
-        compatible_str("1","","$.store.book.first()");
-        compatible_str("2","10","$.store.inventory.first()");
-        compatible_str("3","\"Alice\"","$.store.staff[*].name.first()");
-        compatible_str("4","3","$.store.book[2].ratings.first()");
-        compatible_str("5","\"Nigel Rees\"","$.store.book[:2].first().author");
+    public void firstTest() {
+        compatible_str("1", "", "$.store.book");
+        compatible_str("1", "", "$.store.book.first()");
+        compatible_str("2", "10", "$.store.inventory.first()");
+        compatible_str("3", "\"Alice\"", "$.store.staff[*].name.first()");
+        compatible_str("4", "3", "$.store.book[2].ratings.first()");
+        compatible_str("5", "\"Nigel Rees\"", "$.store.book[:2].first().author");
     }
 
     @Test
-    public void lastTest(){
-        compatible_str("1","xxx","$.store.book");
-        compatible_str("1","xxx","$.store.book.last()");
-        compatible_str("2","15","$.store.inventory.last()");
+    public void lastTest() {
+        compatible_str("1", "xxx", "$.store.book");
+        compatible_str("1", "xxx", "$.store.book.last()");
+        compatible_str("2", "15", "$.store.inventory.last()");
 
-        compatible_str("3","\"Charlie\"","$.store.staff[*].name");
-        compatible_str("3","\"Charlie\"","$.store.staff[*].name.last()");
+        compatible_str("3", "\"Charlie\"", "$.store.staff[*].name");
+        compatible_str("3", "\"Charlie\"", "$.store.staff[*].name.last()");
 
-        compatible_str("4","5","$.store.book[2].ratings.last()");
-        compatible_str("5","\"The Lord of the Rings\"","$.store.book[?(@.category == 'fiction')].last().title");
+        compatible_str("4", "5", "$.store.book[2].ratings.last()");
+        compatible_str("5", "\"The Lord of the Rings\"", "$.store.book[?(@.category == 'fiction')].last().title");
     }
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {
@@ -168,18 +168,32 @@ public class Func_stddev_first_last_Test {
     private void compatible_str(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);
 
-        ONode tmp = oNode.select(jsonpathStr);
-        System.out.println(tmp.toJson());
+        ONode tmp = null;
+        Object tmp2 = null;
+        Throwable err1 = null;
+        Throwable err2 = null;
 
         try {
-            Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
-
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert ref.length() == tmp.toJson().length();
-            }
+            tmp = oNode.select(jsonpathStr);
+            System.out.println(tmp.toJson());
         } catch (Exception e) {
-            System.out.println("jayway: err");
+            err1 = e;
+            System.err.println(e.getMessage());
+        }
+
+        try {
+            tmp2 = context.read(jsonpathStr);
+            System.out.println(ONode.serialize(tmp2));
+        } catch (Exception e) {
+            err2 = e;
+            System.err.println(e.getMessage());
+        }
+
+        if (err1 != null && err2 != null) {
+            return;
+        }
+
+        if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
             assert ref.length() == tmp.toJson().length();
         }
     }
