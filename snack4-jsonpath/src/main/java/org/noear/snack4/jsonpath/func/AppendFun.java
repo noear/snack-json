@@ -28,13 +28,18 @@ public class AppendFun implements Func {
 
             if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
                 if (oNodes.size() > 0) {
-                    ONode n1 = oNodes.get(0);
-                    if (n1.isArray()) {
-                      return   n1.add(arg1);
+                    for (ONode n1 : oNodes) {
+                        if (n1.isArray()) {
+                            n1.add(arg1);
+                        }
                     }
                 }
 
-                return arg0;
+                if (ctx.isMultiple()) {
+                    return arg0;
+                } else {
+                    return arg0.get(0);
+                }
             } else {
                 if (oNodes.size() > 1) {
                     return arg0.add(arg1);

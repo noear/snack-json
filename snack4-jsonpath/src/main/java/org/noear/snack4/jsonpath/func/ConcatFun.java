@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
@@ -25,14 +26,32 @@ public class ConcatFun implements Func {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (oNodes.size() > 1) {
-                return arg0.add(arg1);
+            if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+                if (oNodes.size() > 0) {
+                    for(ONode n1: oNodes) {
+                        if (n1.isString()) {
+                            n1.setValue(n1.toString().concat(arg1.toString()));
+                        } else {
+                            n1.setValue(arg1.toString());
+                        }
+                    }
+                }
+
+                if(ctx.isMultiple()) {
+                    return arg0;
+                } else {
+                    return arg0.get(0);
+                }
             } else {
-                ONode n1 = oNodes.get(0);
-                if (n1.isArray()) {
-                    return n1.add(arg1);
-                } else if (n1.isString()) {
-                    return new ONode(n1.getString().concat(arg1.getString()));
+                if (oNodes.size() > 1) {
+                    return arg0.add(arg1);
+                } else {
+                    ONode n1 = oNodes.get(0);
+                    if (n1.isArray()) {
+                        return n1.add(arg1);
+                    } else if (n1.isString()) {
+                        return new ONode(n1.getString().concat(arg1.getString()));
+                    }
                 }
             }
         }

@@ -1,10 +1,12 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,12 +31,37 @@ public class IndexFunc implements Func {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (oNodes.size() > 1) {
-                return arg0.get(arg1.getInt());
+            if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+                List<ONode> results = new ArrayList<>();
+
+                if (oNodes.size() > 0) {
+                    for (ONode n1 : oNodes) {
+                        if (n1.isArray()) {
+                            ONode tmp = n1.get(arg1.getInt());
+                            if (tmp.isNull() == false) {
+                                results.add(tmp);
+                            }
+                        }
+                    }
+                }
+
+                if (results.size() > 0) {
+                    if (ctx.isMultiple()) {
+                        return new ONode(results);
+                    } else {
+                        return results.get(0);
+                    }
+                } else {
+                    throw new JsonPathException("Aggregate functions require non-empty arrays");
+                }
             } else {
-                ONode n1 = oNodes.get(0);
-                if (n1.isArray()) {
-                    return n1.get(arg1.getInt());
+                if (oNodes.size() > 1) {
+                    return arg0.get(arg1.getInt());
+                } else {
+                    ONode n1 = oNodes.get(0);
+                    if (n1.isArray()) {
+                        return n1.get(arg1.getInt());
+                    }
                 }
             }
         }
