@@ -93,7 +93,7 @@ public class QueryContextImpl implements QueryContext {
     }
 
     @Override
-    public ONode getNodeBy(ONode node, String key) {
+    public ONode getChildNodeBy(ONode node, String key) {
         if (mode == QueryMode.CREATE) {
             return node.getOrNew(key);
         } else {
@@ -102,7 +102,7 @@ public class QueryContextImpl implements QueryContext {
     }
 
     @Override
-    public ONode getNodeAt(ONode node, int idx) {
+    public ONode getChildNodeAt(ONode node, int idx) {
         if (mode == QueryMode.CREATE) {
             return node.getOrNew(idx);
         } else {

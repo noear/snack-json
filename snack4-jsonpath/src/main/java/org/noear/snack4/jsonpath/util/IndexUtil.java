@@ -42,7 +42,7 @@ public class IndexUtil {
     }
 
     public static void forKeyUnsafe(QueryContext ctx, ONode node, String key, List<ONode> result) {
-        ONode n1 = ctx.getNodeBy(node, key);
+        ONode n1 = ctx.getChildNodeBy(node, key);
 
         if (n1 != null) {
             if (n1.source == null) {
@@ -70,7 +70,7 @@ public class IndexUtil {
             idx += node.size();
         }
 
-        ONode n1 = ctx.getNodeAt(node, idx);
+        ONode n1 = ctx.getChildNodeAt(node, idx);
 
         if (n1 != null) {
             if (n1.source == null) {

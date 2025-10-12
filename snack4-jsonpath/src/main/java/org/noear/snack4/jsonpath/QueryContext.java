@@ -28,23 +28,59 @@ import java.util.function.Function;
  * @since 4.0
  * */
 public interface QueryContext {
+    /**
+     * 有使用标准？
+     *
+     */
     boolean hasStandard(Standard standard);
 
+    /**
+     * 是否为多输出
+     *
+     */
     boolean isMultiple();
 
+    /**
+     * 是否在过滤器中
+     *
+     */
     boolean isInFilter();
 
+    /**
+     * 查询根节点
+     *
+     */
     ONode getRoot();
 
+    /**
+     * 查询模式
+     *
+     */
     QueryMode getMode();
 
+    /**
+     * 获取根选项配置
+     *
+     */
     Options getOptions();
 
-    ONode getNodeBy(ONode node, String key);
+    /**
+     * 获取节点的子节点
+     */
+    ONode getChildNodeBy(ONode node, String key);
 
-    ONode getNodeAt(ONode node, int idx);
+    /**
+     * 获取节点的子节点
+     */
+    ONode getChildNodeAt(ONode node, int idx);
 
+    /**
+     * 缓存获取
+     */
     <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction);
 
+    /**
+     * 内嵌查询（`@.user.name`）
+     */
     ONode nestedQuery(ONode target, JsonPath query);
 }
