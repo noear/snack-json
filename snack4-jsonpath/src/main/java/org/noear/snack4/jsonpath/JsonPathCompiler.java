@@ -124,14 +124,22 @@ public class JsonPathCompiler {
      * 分析键名或函数操作符（如 "store" 或 "count()", 或 "index(-1)" 或 "concat('world')", 或 "append({'a':'1'})"）
      */
     private void resolveKey() {
-        String key = parseSegment('.', '[');
+        String segment = parseSegment('.', '[');
 
-        if (key.endsWith("()")) {
-            addSegment(new FuncSegment(key));
-        } else if (key.equals("*")) {
-            addSegment(new SelectSegment(key));
+        if (segment.isEmpty()) {
+            throw new JsonPathException("Expected a segment, wildcard or function at index " + position);
+        }
+
+        // 检查是否是函数调用
+        int openParenIndex = segment.indexOf('(');
+        int closeParenIndex = segment.lastIndexOf(')');
+
+        if (openParenIndex > 0 && closeParenIndex == segment.length() - 1) {
+            addSegment(new FuncSegment(segment));
+        } else if (segment.equals("*")) {
+            addSegment(new SelectSegment(segment));
         } else {
-            addSegment(new SelectSegment(key));
+            addSegment(new SelectSegment(segment));
         }
     }
 
