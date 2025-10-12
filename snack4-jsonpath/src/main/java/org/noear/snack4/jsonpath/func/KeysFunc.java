@@ -1,10 +1,13 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,22 +23,38 @@ public class KeysFunc implements Func {
             return new ONode(ctx.getOptions());
         }
 
-        if (oNodes.size() > 1) {
-            Set<String> results = new HashSet<>();
+        if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+            Set<String> keys = new LinkedHashSet<>();
+
             for (ONode n1 : oNodes) {
-                if (n1.isObject() && n1.getObject().size() > 0) {
-                    results.addAll(n1.getObject().keySet());
+                if(n1.isObject()){
+                    keys = n1.getObject().keySet();
                 }
             }
 
-            if (results.size() > 0) {
-                return new ONode(ctx.getOptions()).addAll(results);
+            if(keys.size() > 0){
+                return new ONode().addAll(keys);
+            }  else{
+                throw new JsonPathException("Aggregate functions require non-empty objects");
             }
         } else {
-            ONode n1 = oNodes.get(0);
+            if (oNodes.size() > 1) {
+                Set<String> results = new HashSet<>();
+                for (ONode n1 : oNodes) {
+                    if (n1.isObject() && n1.getObject().size() > 0) {
+                        results.addAll(n1.getObject().keySet());
+                    }
+                }
 
-            if (n1.isObject() && n1.getObject().size() > 0) {
-                return ONode.ofBean(n1.getObject().keySet());
+                if (results.size() > 0) {
+                    return new ONode(ctx.getOptions()).addAll(results);
+                }
+            } else {
+                ONode n1 = oNodes.get(0);
+
+                if (n1.isObject() && n1.getObject().size() > 0) {
+                    return ONode.ofBean(n1.getObject().keySet());
+                }
             }
         }
 
