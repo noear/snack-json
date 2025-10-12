@@ -17,12 +17,14 @@ package org.noear.snack4.jsonpath.segment;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.func.Func;
 import org.noear.snack4.jsonpath.func.FuncLib;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 聚合函数（如 $.list.last() ）
@@ -30,13 +32,17 @@ import java.util.List;
  * @author noear
  * @since 4.0
  */
-public class FunctionSegment extends AbstractSegment {
+public class FuncSegment extends AbstractSegment {
     private final String segmentStr;
     private final String funcName;
+    private final Func func;
 
-    public FunctionSegment(String segmentStr) {
+    public FuncSegment(String segmentStr) {
         this.segmentStr = segmentStr;
         this.funcName = segmentStr.substring(0, segmentStr.length() - 2);
+        this.func = FuncLib.get(funcName);
+
+        Objects.requireNonNull(func, "The function not found: " + funcName);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class FunctionSegment extends AbstractSegment {
         }
 
         return Collections.singletonList(
-                FuncLib.get(funcName).apply(ctx, currentNodes) // 传入节点列表
+                func.apply(ctx, currentNodes) // 传入节点列表
         );
     }
 }

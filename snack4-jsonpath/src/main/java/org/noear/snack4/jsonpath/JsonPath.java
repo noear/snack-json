@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.segment.FunctionSegment;
+import org.noear.snack4.jsonpath.segment.FuncSegment;
 import org.noear.snack4.jsonpath.segment.Segment;
 
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class JsonPath {
         this.expression = expression;
         this.segments = segments;
         for (Segment seg : segments) {
-            if (seg instanceof FunctionSegment) {
+            if (seg instanceof FuncSegment) {
                 multiple = false;
             } else {
                 multiple = multiple || seg.isMultiple();

@@ -128,7 +128,7 @@ public class JsonPathCompiler {
         String key = parseSegment('.', '[');
 
         if (key.endsWith("()")) {
-            addSegment(new FunctionSegment(key));
+            addSegment(new FuncSegment(key));
         } else if (key.equals("*")) {
             addSegment(new SelectSegment(key));
         } else {

@@ -383,7 +383,13 @@ public final class ONode {
     public ONode get(int index) {
         asArray();
 
-        if (index >= 0 && getArray().size() > index) {
+        int size = getArray().size();
+
+        if (index < 0) {
+            index += size;
+        }
+
+        if (index >= 0 && size > index) {
             return getArray().get(index);
         }
 

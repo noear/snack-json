@@ -40,9 +40,10 @@ public class FuncLib {
         register("max", FuncLib::max);
         register("avg", FuncLib::avg);
         register("sum", FuncLib::sum);
+        register("stddev",FuncLib::stddev);
 
         // 集合函数
-        register("size", FuncLib::size);
+        register("size", new LengthFunc());
         register("keys", FuncLib::keys);
         register("first", FuncLib::first);
         register("last", FuncLib::last);
@@ -76,69 +77,33 @@ public class FuncLib {
 
     /// /////////////////
 
-    static ONode sum(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode sum(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : nodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            } else if (n.isNumber()) {
-                ref += n.getDouble();
-                count++;
-            }
-        }
+        Double _sum = MathUtil.sum(oNodes);
 
-        if (count == 0) {
-            return new ONode(ctx.getOptions());
-        } else {
-            return new ONode(ctx.getOptions(), ref);
-        }
+        return new ONode(ctx.getOptions(), _sum);
     }
 
-    static ONode avg(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode avg(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : nodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            } else if (n.isNumber()) {
-                ref += n.getDouble();
-                count++;
-            }
-        }
+        Double _avg = MathUtil.avg(oNodes);
 
-        if (count == 0) {
-            return new ONode(ctx.getOptions());
-        } else {
-            return new ONode(ctx.getOptions(), ref / count);
-        }
+        return new ONode(ctx.getOptions(), _avg);
     }
 
-    static ONode min(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode min(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
         Double ref = null;
-        for (ONode n : nodes) {
+        for (ONode n : oNodes) {
             if (n.isArray()) {
                 for (ONode o : n.getArray()) {
                     if (o.isNumber()) {
@@ -165,13 +130,13 @@ public class FuncLib {
         return new ONode(ctx.getOptions(), ref);
     }
 
-    static ONode max(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode max(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
         Double ref = null;
-        for (ONode n : nodes) {
+        for (ONode n : oNodes) {
             if (n.isArray()) {
                 for (ONode o : n.getArray()) {
                     if (o.isNumber()) {
@@ -198,30 +163,62 @@ public class FuncLib {
         return new ONode(ctx.getOptions(), ref);
     }
 
-    static ONode first(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode stddev(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
-        return nodes.get(0);
+        List<Double> doubleList = MathUtil.getDoubleList(oNodes);
+
+        Double ref = MathUtil.calculateStdDev(doubleList);
+
+        return new ONode(ctx.getOptions(), ref);
     }
 
-    static ONode last(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode first(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
-        return nodes.get(nodes.size() - 1);
+        if (oNodes.size() > 1) {
+            return oNodes.get(0);
+        } else {
+            ONode n1 = oNodes.get(0);
+
+            if (n1.isArray()) {
+                return n1.get(0);
+            } else {
+                return n1;
+            }
+        }
     }
 
-    static ONode keys(QueryContext ctx, List<ONode> nodes) {
-        if (nodes.isEmpty()) {
+    static ONode last(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
-        if (nodes.size() > 1) {
+        if (oNodes.size() > 1) {
+            return oNodes.get(oNodes.size() - 1);
+        } else {
+            ONode n1 = oNodes.get(0);
+
+            if (n1.isArray()) {
+                return n1.get(-1);
+            } else {
+                return n1;
+            }
+        }
+    }
+
+    static ONode keys(QueryContext ctx, List<ONode> oNodes) {
+        if (oNodes.isEmpty()) {
+            return new ONode(ctx.getOptions());
+        }
+
+        if (oNodes.size() > 1) {
             Set<String> results = new HashSet<>();
-            for (ONode n1 : nodes) {
+            for (ONode n1 : oNodes) {
                 if (n1.isObject() && n1.getObject().size() > 0) {
                     results.addAll(n1.getObject().keySet());
                 }
@@ -231,7 +228,7 @@ public class FuncLib {
                 return new ONode(ctx.getOptions()).addAll(results);
             }
         } else {
-            ONode n1 = nodes.get(0);
+            ONode n1 = oNodes.get(0);
 
             if (n1.isObject() && n1.getObject().size() > 0) {
                 return ONode.ofBean(n1.getObject().keySet());
@@ -241,26 +238,17 @@ public class FuncLib {
         return new ONode(ctx.getOptions());
     }
 
-    static ONode size(QueryContext ctx, List<ONode> nodes) {
-        int size = nodes.stream()
-                .filter(n -> n.isArray() || n.isObject())
-                .mapToInt(n -> n.size())
-                .sum();
 
-        return new ONode(ctx.getOptions(), size);
+    static ONode upper(QueryContext ctx, List<ONode> oNodes) {
+        return processStrings(ctx, oNodes, String::toUpperCase);
     }
 
-
-    static ONode upper(QueryContext ctx, List<ONode> nodes) {
-        return processStrings(ctx, nodes, String::toUpperCase);
+    static ONode lower(QueryContext ctx, List<ONode> oNodes) {
+        return processStrings(ctx, oNodes, String::toLowerCase);
     }
 
-    static ONode lower(QueryContext ctx, List<ONode> nodes) {
-        return processStrings(ctx, nodes, String::toLowerCase);
-    }
-
-    static ONode trim(QueryContext ctx, List<ONode> nodes) {
-        return processStrings(ctx, nodes, String::trim);
+    static ONode trim(QueryContext ctx, List<ONode> oNodes) {
+        return processStrings(ctx, oNodes, String::trim);
     }
 
     /// ///////////////// 工具方法 //////////////////
@@ -277,8 +265,8 @@ public class FuncLib {
         }
     }
 
-    private static DoubleStream collectNumbersDo(List<ONode> nodes) {
-        return nodes.stream()
+    private static DoubleStream collectNumbersDo(List<ONode> oNodes) {
+        return oNodes.stream()
                 .flatMap(n -> n.isArray() ?
                         n.getArray().stream() :
                         Stream.of(n))
@@ -286,8 +274,8 @@ public class FuncLib {
                 .mapToDouble(ONode::getDouble);
     }
 
-    private static ONode processStrings(QueryContext ctx, List<ONode> nodes, java.util.function.Function<String, String> processor) {
-        List<String> results = nodes.stream()
+    private static ONode processStrings(QueryContext ctx, List<ONode> oNodes, java.util.function.Function<String, String> processor) {
+        List<String> results = oNodes.stream()
                 .flatMap(n -> {
                     if (n.isString()) {
                         return Stream.of(n.getString());
