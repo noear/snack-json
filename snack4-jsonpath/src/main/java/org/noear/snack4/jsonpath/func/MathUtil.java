@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPathException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,22 @@ public class MathUtil {
         return list;
     }
 
+    public static List<Double> getDoubleListByChild(List<ONode> oNodes) {
+        List<Double> list = new ArrayList<>();
+
+        for (ONode n : oNodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        list.add(o.getDouble());
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
+
     /**
      * 计算数组的平均值 (Mean)
      */
@@ -46,7 +63,7 @@ public class MathUtil {
      */
     public static double calculateStdDev(List<Double> data) {
         if (data == null || data.size() == 0) {
-            return Double.NaN; // 处理空数组或 null
+            return Double.NaN;
         }
 
         // 步骤 1: 计算平均值 (Mean)
@@ -80,6 +97,27 @@ public class MathUtil {
             } else if (n.isNumber()) {
                 ref += n.getDouble();
                 count++;
+            }
+        }
+
+        if (count > 0) {
+            return ref;
+        } else {
+            return null;
+        }
+    }
+
+    public static Double sumByChild(List<ONode> oNodes){
+        double ref = 0D;
+        int count = 0;
+        for (ONode n : oNodes) {
+            if (n.isArray()) {
+                for (ONode o : n.getArray()) {
+                    if (o.isNumber()) {
+                        ref += o.getDouble();
+                        count++;
+                    }
+                }
             }
         }
 

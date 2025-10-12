@@ -52,7 +52,7 @@ public class IndexFunc implements Func {
                         return results.get(0);
                     }
                 } else {
-                    throw new JsonPathException("Aggregate functions require non-empty arrays");
+                    throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
                 }
             } else {
                 if (oNodes.size() > 1) {

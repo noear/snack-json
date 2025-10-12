@@ -35,7 +35,7 @@ public class KeysFunc implements Func {
             if(keys.size() > 0){
                 return new ONode().addAll(keys);
             }  else{
-                throw new JsonPathException("Aggregate functions require non-empty objects");
+                throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
             }
         } else {
             if (oNodes.size() > 1) {

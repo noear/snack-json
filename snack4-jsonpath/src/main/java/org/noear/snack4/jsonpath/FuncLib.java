@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.func.*;
 
 import java.util.*;
@@ -35,11 +34,11 @@ public class FuncLib {
         register("min", new MinFunc());
         register("max", new MaxFunc());
         register("avg", new AvgFunc());
-        register("stddev", FuncLib::stddev);
+        register("stddev", new StddevFunc());
         //length
         register("size", new LengthFunc());
 
-        register("sum", FuncLib::sum);
+        register("sum", new SumFunc());
         register("keys", new KeysFunc());
 
         register("concat", new ConcatFunc());
@@ -70,29 +69,5 @@ public class FuncLib {
      */
     public static Func get(String funcName) {
         return LIB.get(funcName);
-    }
-
-    /// /////////////////
-
-    static ONode sum(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        Double _sum = MathUtil.sum(oNodes);
-
-        return new ONode(ctx.getOptions(), _sum);
-    }
-
-    static ONode stddev(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
-        }
-
-        List<Double> doubleList = MathUtil.getDoubleList(oNodes);
-
-        Double ref = MathUtil.calculateStdDev(doubleList);
-
-        return new ONode(ctx.getOptions(), ref);
     }
 }
