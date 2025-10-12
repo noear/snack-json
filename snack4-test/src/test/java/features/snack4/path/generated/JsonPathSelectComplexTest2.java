@@ -75,9 +75,13 @@ public class JsonPathSelectComplexTest2 {
 
     @Test
     void testInOperatorCombination() {
+        System.out.println(loadRoot().select("$.store.book[?(@.tags in ['sci-fi','cloud'])]").toJson());
+        System.out.println(loadRoot().select("$.store.book[?(@.stock != 0)]").toJson());
+
         ONode result = JsonPath.select(loadRoot(),
                 "$.store.book[?(@.tags in ['sci-fi','cloud'] && @.stock != 0)]");
 
+        System.out.println(result.toJson());
         assertEquals(2, result.size());
         assertArrayEquals(new String[]{"Book A", "Book E"},
                 result.select("$[*].title").toBean(String[].class));

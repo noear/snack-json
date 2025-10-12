@@ -54,15 +54,17 @@ public class FuncSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
+        boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+
         if (isDescendant()) {
             List<ONode> results = new ArrayList<>();
-            SelectUtil.descendantSelect(currentNodes, results::add);
+            SelectUtil.descendantSelect(currentNodes, !forJayway, results::add);
             currentNodes = results;
         }
 
         if (currentNodes.isEmpty()) {
             //与 jayway 兼容
-            if (ctx.getOptions().hasStandard(Standard.JSONPath_Jayway)) {
+            if (forJayway) {
                 return Arrays.asList(new ONode().asArray());
             } else {
                 return currentNodes;

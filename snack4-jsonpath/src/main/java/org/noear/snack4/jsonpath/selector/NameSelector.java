@@ -59,14 +59,10 @@ public class NameSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            if(ctx.hasStandard(Standard.JSONPath_IETF_RFC_9535)){
-                for (ONode n : currentNodes) {
-                    IndexUtil.forKey(ctx, n, name, results);
-                }
-            }
+            boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
 
             //后裔
-            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 IndexUtil.forKey(ctx, n1, name, results);
             });
         } else {

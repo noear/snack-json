@@ -16,8 +16,12 @@ import java.util.function.Consumer;
  */
 public class SelectUtil {
 
-    public static void descendantSelect(List<ONode> currentNodes, Consumer<ONode> consumer) {
+    public static void descendantSelect(List<ONode> currentNodes, boolean andSelf, Consumer<ONode> consumer) {
         for (ONode node : currentNodes) {
+            if (andSelf) {
+                consumer.accept(node);
+            }
+
             collectRecursive(node, consumer);
         }
     }

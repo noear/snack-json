@@ -185,13 +185,13 @@ public class JsonPathTest {
         assert  t0.size() ==4;
 
         ONode t1 = n.select("$..b[?(@.c)]");
-        assert  t1.size() ==3;
+        Assertions.assertEquals(3, t1.size());
 
         ONode t2 = n.select("$..b[?(@.c == 1)]");
-        assert  t2.size() ==1;
+        Assertions.assertEquals(1, t2.size());
 
         ONode t3 = n.select("$..b[?(@.c == 12)]");
-        assert  t3.size() ==0;
+        Assertions.assertEquals(0, t3.size());
 
         ONode t4 = n.select("$..b[?(@.c > 1)]");
         assert  t4.size() ==2;
@@ -224,7 +224,7 @@ public class JsonPathTest {
         ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
         ONode t2 = n.select("$..*[?(@ == 19.95)]");
-        assert t2.size() == 1;
+        Assertions.assertEquals(1, t2.size());
     }
 
     @Test

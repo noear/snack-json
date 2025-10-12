@@ -27,6 +27,7 @@ public class RFC9535_s1500 extends AbsRFC9535{
         queryCompatibleDo("$..book[-1]"); //空结果：第三本书没有“出版商”成员
         queryCompatibleDo("$..book[0,1]"); //按顺序排列的最后一本书
         queryCompatibleDo("$..book[:2]"); //前两本书
+        queryCompatibleDo("$..book");
         queryCompatibleDo("$..book[?(@.isbn)]"); //所有具有 ISBN 编号的书籍
         queryCompatibleDo("$..book[?(@.price < 10)]"); //所有低于 10 的书籍
 

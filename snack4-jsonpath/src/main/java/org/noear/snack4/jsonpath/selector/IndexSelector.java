@@ -53,13 +53,10 @@ public class IndexSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            if(ctx.hasStandard(Standard.JSONPath_IETF_RFC_9535)){
-                for (ONode node : currentNodes) {
-                    IndexUtil.forIndex(ctx, node, index, results);
-                }
-            }
+            boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+
             //后裔
-            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 IndexUtil.forIndex(ctx, n1, index, results);
             });
         } else {

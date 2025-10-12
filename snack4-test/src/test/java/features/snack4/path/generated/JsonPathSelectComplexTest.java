@@ -1,5 +1,6 @@
 package features.snack4.path.generated;
 
+import javafx.stage.StageStyle;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
@@ -119,6 +120,7 @@ public class JsonPathSelectComplexTest {
     public void testRecursiveSearchWithFilter1_4() {
         ONode root = ONode.ofJson(JSON);
         ONode result = JsonPath.select(root, "$..book[?(!@.price2)]");
+        System.out.println(result.toJson());
         assertNotNull(result);
         assertTrue(result.isArray());
         assertEquals(4, result.size());

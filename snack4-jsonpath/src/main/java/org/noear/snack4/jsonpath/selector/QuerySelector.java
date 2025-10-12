@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.IndexUtil;
@@ -46,8 +47,10 @@ public class QuerySelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
+            boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+
             //后裔
-            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 ONode dynamicIdx = ctx.nestedQuery(n1, jsonPath);
 
                 if (dynamicIdx.isNumber()) {

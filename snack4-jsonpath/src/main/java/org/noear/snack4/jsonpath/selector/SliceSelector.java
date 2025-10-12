@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.IndexUtil;
@@ -76,8 +77,10 @@ public class SliceSelector implements Selector {
         }
 
         if (isDescendant) {
+            boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+
             //后裔
-            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 doResolve(ctx, n1, results);
             });
         } else {

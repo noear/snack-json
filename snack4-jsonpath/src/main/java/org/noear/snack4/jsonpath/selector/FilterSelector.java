@@ -52,34 +52,34 @@ public class FilterSelector implements Selector {
     }
 
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+        boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+
         if (isDescendant) {
             //后裔
-            SelectUtil.descendantSelect(currentNodes, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 if (expression.test(n1, ctx)) {
                     results.add(n1);
                 }
             });
         } else {
-            boolean isRFC9535 = ctx.hasStandard(Standard.JSONPath_IETF_RFC_9535);
-
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) { //其实只有一条
                     if (n.isNull()) {
                         n.asArray().addNew();
                     }
 
-                    if (isRFC9535) {
-                        flattenResolve2(ctx, n, results);
+                    if (forJayway) {
+                        flattenResolveJayway(ctx, n, results);
                     } else {
-                        flattenResolve(ctx, n, results);
+                        flattenResolveIetf(ctx, n, results);
                     }
                 }
             } else {
                 for (ONode n : currentNodes) {
-                    if (isRFC9535) {
-                        flattenResolve2(ctx, n, results);
+                    if (forJayway) {
+                        flattenResolveJayway(ctx, n, results);
                     } else {
-                        flattenResolve(ctx, n, results);
+                        flattenResolveIetf(ctx, n, results);
                     }
                 }
             }
@@ -87,7 +87,7 @@ public class FilterSelector implements Selector {
     }
 
     // 新增递归展开方法
-    private void flattenResolve(QueryContext ctx, ONode node, List<ONode> result) {
+    private void flattenResolveJayway(QueryContext ctx, ONode node, List<ONode> result) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
@@ -96,7 +96,7 @@ public class FilterSelector implements Selector {
                 }
 
                 idx++;
-                flattenResolve(ctx, n1, result);
+                flattenResolveJayway(ctx, n1, result);
             }
         } else {
             if (ctx.getMode() == QueryMode.CREATE) {
@@ -109,7 +109,7 @@ public class FilterSelector implements Selector {
         }
     }
 
-    private void flattenResolve2(QueryContext ctx, ONode node, List<ONode> result) {
+    private void flattenResolveIetf(QueryContext ctx, ONode node, List<ONode> result) {
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
         }

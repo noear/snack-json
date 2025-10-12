@@ -1,5 +1,6 @@
 package features.snack4.path.generated;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
@@ -145,15 +146,10 @@ public class JsonPathCreateTest {
     public void testCreatePathWithRecursiveSearch() {
         ONode root = new ONode();
         root.set("user", new ONode().set("name", "John"));
-        JsonPath.create(root, "$..name");
-        assertTrue(root.get("user").hasKey("name"));
+
+        Assertions.assertThrows(Throwable.class, () -> {
+            JsonPath.create(root, "$..name");
+        });
     }
 
-    @Test
-    public void testCreatePathWithRecursiveSearch2() {
-        ONode root = new ONode();
-        root.set("user", new ONode().set("name", "John"));
-        root.create("$..name");
-        assertTrue(root.get("user").hasKey("name"));
-    }
 }

@@ -86,6 +86,10 @@ public class JsonPath {
     }
 
     public ONode create(ONode root) {
+        if(expression.contains("..")){
+            throw new JsonPathException("The create mode not support descendant selector");
+        }
+
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.CREATE);
 

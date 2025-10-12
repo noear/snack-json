@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 import features.snack4.path.manual.JsonPathTest3;
 import net.minidev.json.JSONArray;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
@@ -43,7 +44,7 @@ public class JsonPathCompatibleTest5 {
         ONode tmp2 = ONode.ofJson(json).select("$..*[?(@.treePath)]");
         System.out.println(tmp2.toJson());
         assert tmp2.isArray();
-        assert tmp2.size() == 5;
+        Assertions.assertEquals(5, tmp2.size());
     }
 
     @Test

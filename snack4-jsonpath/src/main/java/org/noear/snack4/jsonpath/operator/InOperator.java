@@ -36,7 +36,7 @@ public class InOperator implements Operator {
                 return false;
             }
 
-            return rightNode.getArray().stream().anyMatch(v -> MatchUtil.isValueMatch(leftNode, v));
+            return MatchUtil.isValueMatchPlus(rightNode, leftNode);
         }
 
         return false;

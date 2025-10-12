@@ -107,6 +107,8 @@ public class JsonPathTest3 {
         Entity entity = new Entity(1001, "ljw2083");
         ONode n = ONode.ofBean(entity);
 
+        System.out.println(n.select("$[?(@.id == 1001)].first()").toJson());
+
         assert n.select("$[?(@.id == 1001)].first()").isObject();
         assert n.select("$[?(@.id == 1002)].first()").isNull();
 

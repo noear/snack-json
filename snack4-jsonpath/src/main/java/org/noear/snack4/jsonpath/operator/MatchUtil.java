@@ -8,25 +8,39 @@ import org.noear.snack4.ONode;
  *
  */
 public class MatchUtil {
-    public static boolean isValueMatch(ONode item, ONode expected) {
-        if (item.isArray()) {
-            return item.getArray().stream().anyMatch(one -> isValueMatch(one, expected));
+    public static boolean isValueMatchPlus(ONode refere, ONode source) {
+        if (source.isArray()) {
+            for (ONode item : source.getArray()) {
+                if (MatchUtil.isValueMatch(refere, item)) {
+                    return true;
+                }
+            }
+        } else {
+            return MatchUtil.isValueMatch(refere, source);
         }
 
-        if (item.isString()) {
-            if (expected.isString()) {
-                return item.getString().equals(expected.getString());
+        return false;
+    }
+
+    public static boolean isValueMatch(ONode refere, ONode source) {
+        if (refere.isArray()) {
+            return refere.getArray().stream().anyMatch(one -> isValueMatch(one, source));
+        }
+
+        if (refere.isString()) {
+            if (source.isString()) {
+                return refere.getString().equals(source.getString());
             }
-        } else if (item.isNumber()) {
-            if (expected.isNumber()) {
-                double itemValue = item.getDouble();
-                double expectedValue = expected.getNumber().doubleValue();
+        } else if (refere.isNumber()) {
+            if (source.isNumber()) {
+                double itemValue = refere.getDouble();
+                double expectedValue = source.getNumber().doubleValue();
                 return itemValue == expectedValue;
             }
-        } else if (item.isBoolean()) {
-            if (expected.isBoolean()) {
-                Boolean itemBool = item.getBoolean();
-                return itemBool == expected.getBoolean();
+        } else if (refere.isBoolean()) {
+            if (source.isBoolean()) {
+                Boolean itemBool = refere.getBoolean();
+                return itemBool == source.getBoolean();
             }
         }
 
