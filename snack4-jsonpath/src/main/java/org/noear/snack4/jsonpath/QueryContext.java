@@ -33,7 +33,6 @@ public class QueryContext {
     private final ONode root;
     private final QueryMode mode;
     private final Options options;
-    private final boolean RFC9535;
 
     public QueryContext(ONode root, QueryMode mode) {
         this.root = root;
@@ -44,20 +43,14 @@ public class QueryContext {
         } else {
             this.options = Options.DEF_OPTIONS;
         }
-
-        RFC9535 = options.hasStandard(Standard.JSONPath_IETF_RFC_9535);
-    }
-
-    public ONode getRoot() {
-        return root;
-    }
-
-    public boolean isRFC9535() {
-        return RFC9535;
     }
 
     public boolean hasStandard(Standard standard) {
         return options.hasStandard(standard);
+    }
+
+    public ONode getRoot() {
+        return root;
     }
 
     public QueryMode getMode() {

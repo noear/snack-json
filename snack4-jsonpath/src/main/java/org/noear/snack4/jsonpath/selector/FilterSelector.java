@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -59,13 +60,15 @@ public class FilterSelector implements Selector {
                 }
             });
         } else {
+            boolean isRFC9535 = ctx.hasStandard(Standard.JSONPath_IETF_RFC_9535);
+
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
                 for (ONode n : currentNodes) { //其实只有一条
                     if (n.isNull()) {
                         n.asArray().addNew();
                     }
 
-                    if (ctx.isRFC9535()) {
+                    if (isRFC9535) {
                         flattenResolve2(ctx, n, results);
                     } else {
                         flattenResolve(ctx, n, results);
@@ -73,7 +76,7 @@ public class FilterSelector implements Selector {
                 }
             } else {
                 for (ONode n : currentNodes) {
-                    if (ctx.isRFC9535()) {
+                    if (isRFC9535) {
                         flattenResolve2(ctx, n, results);
                     } else {
                         flattenResolve(ctx, n, results);

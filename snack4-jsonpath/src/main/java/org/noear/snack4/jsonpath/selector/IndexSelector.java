@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.selector;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.IndexUtil;
 import org.noear.snack4.jsonpath.util.SelectUtil;
@@ -52,7 +53,7 @@ public class IndexSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            if(ctx.isRFC9535()){
+            if(ctx.hasStandard(Standard.JSONPath_IETF_RFC_9535)){
                 for (ONode node : currentNodes) {
                     IndexUtil.forIndex(ctx, node, index, results);
                 }
