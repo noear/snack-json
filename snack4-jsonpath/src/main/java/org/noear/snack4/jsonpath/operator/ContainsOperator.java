@@ -30,44 +30,14 @@ public class ContainsOperator implements Operator {
     public boolean apply(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
 
-        ONode expectedNode = term.getRightNode(ctx, node);
-
-        // 支持多类型包含检查
-        if (leftNode.isArray()) {
-            return leftNode.getArray().stream()
-                    .anyMatch(item -> isValueMatch(item, expectedNode));
-        } else if (leftNode.isString()) {
-            if (expectedNode.isString()) {
-                return leftNode.getString().contains(expectedNode.getString());
-            } else {
-                throw new IllegalArgumentException("expected string but got " + expectedNode);
+        if (leftNode.isString()) {
+            ONode rightNode = term.getRightNode(ctx, node);
+            if (rightNode.isNull()) {
+                return false;
             }
+
+            return leftNode.getString().contains(rightNode.getString());
         }
-        return false;
-    }
-
-    protected static boolean isValueMatch(ONode item, ONode expected) {
-        if (item.isArray()) {
-            return item.getArray().stream().anyMatch(one -> isValueMatch(one, expected));
-        }
-
-        if (item.isString()) {
-            if (expected.isString()) {
-                return item.getString().equals(expected.getString());
-            }
-        } else if (item.isNumber()) {
-            if (expected.isNumber()) {
-                double itemValue = item.getDouble();
-                double expectedValue = expected.getNumber().doubleValue();
-                return itemValue == expectedValue;
-            }
-        } else if (item.isBoolean()) {
-            if (expected.isBoolean()) {
-                Boolean itemBool = item.getBoolean();
-                return itemBool == expected.getBoolean();
-            }
-        }
-
         return false;
     }
 }

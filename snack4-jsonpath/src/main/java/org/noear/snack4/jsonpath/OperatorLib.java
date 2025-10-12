@@ -48,9 +48,16 @@ public class OperatorLib {
         register("in", new InOperator());
         register("nin", new NinOperator());
 
+        register("subsetof", new SubsetofOperator());
+
+        register("anyof", new AnyofOperator());
+        register("noneof", new NoneofOperator());
+
+        register("size", new SizeOperator());
+        register("empty", new EmptyOperator());
+
         register("startsWith", new StartsWithOperator());
         register("endsWith", new EndsWithOperator());
-
         register("contains", new ContainsOperator());
     }
 
