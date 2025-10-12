@@ -2,6 +2,8 @@ package features.snack4.v3_composite;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 
 import java.util.*;
 
@@ -109,8 +111,8 @@ public class JsonPathTest3 {
 
         System.out.println(n.select("$[?(@.id == 1001)].first()").toJson());
 
-        assert n.select("$[?(@.id == 1001)].first()").isObject();
-        assert n.select("$[?(@.id == 1002)].first()").isNull();
+        assert n.select("$..[?(@.id == 1001)].first()").isObject();
+        assert n.select("$..[?(@.id == 1002)].first()").isNull();
 
         n.select("$").set("id", 123456);
         assert n.get("id").getInt() == 123456;

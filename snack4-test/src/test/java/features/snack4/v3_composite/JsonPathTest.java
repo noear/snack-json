@@ -184,28 +184,28 @@ public class JsonPathTest {
         ONode t0 = n.select("$..b");
         assert  t0.size() ==4;
 
-        ONode t1 = n.select("$..b[?(@.c)]");
+        ONode t1 = n.select("$..b.c[?(@)]");
         Assertions.assertEquals(3, t1.size());
 
-        ONode t2 = n.select("$..b[?(@.c == 1)]");
+        ONode t2 = n.select("$..b.c[?(@ == 1)]");
         Assertions.assertEquals(1, t2.size());
 
-        ONode t3 = n.select("$..b[?(@.c == 12)]");
+        ONode t3 = n.select("$..[?(@.b.c == 12)]");
         Assertions.assertEquals(0, t3.size());
 
-        ONode t4 = n.select("$..b[?(@.c > 1)]");
+        ONode t4 = n.select("$..[?(@.b.c > 1)]");
         assert  t4.size() ==2;
 
-        ONode t4_min = n.select("$..b[?(@.c > 1)].c.min()");
+        ONode t4_min = n.select("$..b.c[?(@ > 1)].min()");
         Assertions.assertEquals(2, t4_min.getInt());
 
-        ONode t5 = n.select("$..b[?(@.c in [1,2])]");
+        ONode t5 = n.select("$..[?(@.b.c in [1,2])]");
         assert  t5.size() ==2;
 
-        ONode t6 = n.select("$..b[?(@.c nin [1,2])]");
+        ONode t6 = n.select("$..[?(@.b.c nin [1,2])]");
         assert  t6.size() ==1;
 
-        ONode t7 = n.select("$..b[?(@.c =~ /\\d+/)]");
+        ONode t7 = n.select("$..[?(@.b.c =~ /\\d+/)]");
         assert  t7.size() ==3;
     }
 
@@ -223,7 +223,7 @@ public class JsonPathTest {
         //1.加载json
         ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
-        ONode t2 = n.select("$..*[?(@ == 19.95)]");
+        ONode t2 = n.select("$..[?(@ == 19.95)]");
         Assertions.assertEquals(1, t2.size());
     }
 
@@ -232,7 +232,7 @@ public class JsonPathTest {
         //1.加载json
         ONode n = ONode.ofJson("{ \"store\": { \"book\": [ { \"category\": \"reference\", \"author\": \"Nigel Rees\", \"title\": \"Sayings of the Century\", \"price\": 8.95 }, { \"category\": \"fiction\", \"author\": \"Evelyn Waugh\", \"title\": \"Sword of Honour\", \"price\": 12.99 }, { \"category\": \"fiction\", \"author\": \"Herman Melville\", \"title\": \"Moby Dick\", \"isbn\": \"0-553-21311-3\", \"price\": 8.99 }, { \"category\": \"fiction\", \"author\": \"J. R. R. Tolkien\", \"title\": \"The Lord of the Rings\", \"isbn\": \"0-395-19395-8\", \"price\": 22.99 } ], \"bicycle\": { \"color\": \"red\", \"price\": 19.95 } }, \"expensive\": 10 }");
 
-        ONode t2 = n.select("$..*[?(@.price == 19.95)]");
+        ONode t2 = n.select("$..[?(@.price == 19.95)]");
         assert t2.size() == 1;
     }
 
@@ -259,7 +259,7 @@ public class JsonPathTest {
         ONode t3 = n.select("$..*");//
         assert  t3.size() ==6;
 
-        ONode t4 = n.select("$..*[?(@ =~ /c+/)]");//
+        ONode t4 = n.select("$..[?(@ =~ /c+/)]");//
         assert  t4.size() ==2;
     }
 
