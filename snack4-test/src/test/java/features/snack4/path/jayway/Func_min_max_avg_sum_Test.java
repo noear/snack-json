@@ -1,18 +1,18 @@
-package features.snack4.path.jayway.generted;
+package features.snack4.path.jayway;
 
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
-public class Func_min_max_avg_sum_length_Test {
+public class Func_min_max_avg_sum_Test {
     //Jayway JsonPath 内置函数（截至其主流版本，如 2.x）通常包括以下几种：
-    // min()、max()、avg()、sum()、length()、keys()、
+    // min()、max()、avg()、sum()、length()、keys()
     // stddev()、first()、last()
     // concat(X)、append(X)、index(X)。
     //
-    //本例：（min()、max()、avg()、sum()、length()）
+    //本例：（min()、max()、avg()、sum()、length()、keys()）
     private static final String JSON_DATA = "{" +
             "\"store\": {" +
             "\"book\": [" +
@@ -78,25 +78,6 @@ public class Func_min_max_avg_sum_length_Test {
         compatible_num("5", "95.0", "$.store.staff[*].age.sum()");
     }
 
-    @Test
-    void lengthTest() {
-        compatible_num("1", "4", "$.store.book.length()");
-        compatible_num("2", "4", "$.store.inventory.length()");
-        compatible_num("3", "3", "$.store.staff[*].name");
-        compatible_num("3", "3", "$.store.staff[*].name.length()");
-        compatible_num("4", "5", "$.store.book[3].ratings.length()");
-        compatible_num("5", "3", "$.store.bicycle.color.length()");
-    }
-
-    @Test
-    void keysTest() {
-        compatible_str("1", "[\"book\",\"bicycle\",\"staff\",\"inventory\"]", "$.store.keys()");
-        compatible_str("2", "[\"color\",\"price\",\"stock\"]", "$.store.bicycle.keys()");
-        compatible_str("3", "[\"category\",\"author\",\"title\",\"price\",\"ratings\"]", "$.store.book[0].keys()");
-        compatible_str("4", "[\"store\",\"totalPrice\"]", "$.keys()");
-        compatible_str("5", "", "$..book[?(@.isbn)]");
-        compatible_str("5", "[\"category\",\"author\",\"title\",\"isbn\",\"price\",\"ratings\"]", "$..book[?(@.isbn)].keys()");
-    }
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);

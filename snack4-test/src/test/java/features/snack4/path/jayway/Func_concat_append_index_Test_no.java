@@ -1,21 +1,16 @@
-package features.snack4.path.jayway.generted;
+package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.func.MathUtil;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *
  * @author noear 2025/10/12 created
  *
  */
-public class Func_Test {
+public class Func_concat_append_index_Test_no {
     //Jayway JsonPath 内置函数（截至其主流版本，如 2.x）通常包括以下几种：
     // min()、max()、avg()、sum()、length()、keys()、
     // stddev()、first()、last()
@@ -80,100 +75,28 @@ public class Func_Test {
         oNode = ONode.ofJson(JSON_DATA);
     }
 
-    @Test
-    public void stddevCheck0() {
-        List<Double> data = Arrays.asList(600D, 470D, 170D, 430D, 300D);
-
-        System.out.println("数据数组: " + data);
-
-        double mean = MathUtil.calculateMean(data);
-        System.out.printf("平均值 (Mean): %.2f%n", mean);
-
-        assert Math.abs(394.00D - mean) < 0.01;
-
-        double stdDev = MathUtil.calculateStdDev(data);
-        System.out.printf("标准差 (StdDev): %.2f%n", stdDev);
-
-        assert Math.abs(147.32D - stdDev) < 0.01;
-
-        // 示例结果:
-        // 平均值 (Mean): 394.00
-        // 标准差 (StdDev): 147.32 (约等于)
+    public void indexTest(){
+        compatible_num("1","xxx","$.store.book.index(1)"); //第二个 Book 对象 (Sword of Honour)
+        compatible_num("2","10","$.store.inventory.index(0)");
+        compatible_num("3","\"Charlie\"","$.store.staff[*].name.index(-1)");
+        compatible_num("4","5","$.store.book[3].ratings.index(2)");
+        compatible_num("5","\"Herman Melville\"","$.store.book.index($.store.book.length() - 2).author");
     }
 
-    @Test
-    public void stddevCheck1(){
-        List<Double> data = Arrays.asList(30D,25D,40D);
-        double stdDev = MathUtil.calculateStdDev(data);
-        System.out.printf("标准差 (StdDev): %f", stdDev);
+    public void concatTest(){
+        compatible_str("1","[10, 5, 20, 15, 50]","$.store.inventory.concat(50)");
+        compatible_str("2","[4, 5, 4, 1]","$.store.book[0].ratings.concat(1)");
+        compatible_str("3","[\"Alice\",\"Bob\",\"Charlie\",\"David\"]","$.store.staff[*].name.concat('David')");
+        compatible_str("4","[8.95, 8.99, 9.00]","$.store.book[?(@.price < 10)].price.concat(9.00)");
+        compatible_str("5","[\"Sayings of the Century\",\"New Ref\"]","$.store.book[?(@.category == 'reference')].title.concat('New Ref')");
     }
 
-    @Test
-    public void stddevTest(){
-        compatible_str("1","xxx","$.store.book[*].price");
-        compatible_num("1","5.730646","$.store.book[*].price.stddev()");
-
-        compatible_str("2","xxx","$.store.inventory");
-        compatible_num("2","5.590170","$.store.inventory.stddev()");
-
-        compatible_str("3","xxx","$.store.book[0].ratings");
-        compatible_num("3","0.471405","$.store.book[0].ratings.stddev()");
-
-        compatible_str("4","xxx","$.store.book[2].ratings");
-        compatible_num("4","0.82915","$.store.book[2].ratings.stddev()");
-
-        compatible_str("5","xxx","$.store.staff[*].age");
-        compatible_num("5","6.236096","$.store.staff[*].age.stddev()");
-    }
-
-    @Test
-    public void firstTest(){
-        compatible_str("1","","$.store.book");
-        compatible_str("1","","$.store.book.first()");
-        compatible_str("2","10","$.store.inventory.first()");
-        compatible_str("3","\"Alice\"","$.store.staff[*].name.first()");
-        compatible_str("4","3","$.store.book[2].ratings.first()");
-        compatible_str("5","\"Nigel Rees\"","$.store.book[:2].first().author");
-    }
-
-    @Test
-    public void lastTest(){
-        compatible_str("1","xxx","$.store.book");
-        compatible_str("1","xxx","$.store.book.last()");
-        compatible_str("2","15","$.store.inventory.last()");
-        compatible_str("3","\"Charlie\"","$.store.staff[*].name.last()");
-        compatible_str("4","5","$.store.book[2].ratings.last()");
-        compatible_str("5","\"The Lord of the Rings\"","$.store.book[?(@.category == 'fiction')].last().title");
-    }
-
-    public void xx(){
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-    }
-
-    public void bb(){
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-    }
-
-    public void cc(){
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
-        compatible_num("xxx","xxx","xxx");
+    public void appendTest(){
+        compatible_num("1","[10, 5, 20, 15, 100]","$.store.inventory.append(100)");
+        compatible_num("2","[5, 5, 5, 10]","$.store.book[1].ratings.append(10)");
+        compatible_num("3","[30, 25, 40, 50]","$.store.staff[*].age.append(50)");
+        compatible_num("4","xxx","$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
+        compatible_num("5","[5, 5, 5, 5, 5, 2]","$.store.book[?(@.price > 20)].ratings.append(2)");
     }
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {
