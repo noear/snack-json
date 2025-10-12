@@ -16,9 +16,12 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,16 +32,40 @@ import java.util.List;
 public class LengthFunc implements Func {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.size() > 0) {
-            if (oNodes.size() > 1) {
-                return new ONode(ctx.getOptions(), oNodes.size());
+
+        if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+            List<ONode> results = new ArrayList<>();
+
+            for (ONode n1 : oNodes) {
+                if (n1.isArray()) {
+                    results.add(new ONode(n1.getArray().size()));
+                } else {
+                    results.add(new ONode());
+                }
+            }
+
+            if (results.size() > 0) {
+                if (ctx.isMultiple()) {
+                    return new ONode(results);
+                } else {
+                    return results.get(0);
+                }
             } else {
-                ONode n = oNodes.get(0);
-                if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
-                if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
-                if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+                throw new JsonPathException("Aggregate functions require non-empty arrays");
+            }
+        } else {
+            if (oNodes.size() > 0) {
+                if (oNodes.size() > 1) {
+                    return new ONode(ctx.getOptions(), oNodes.size());
+                } else {
+                    ONode n = oNodes.get(0);
+                    if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
+                    if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
+                    if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+                }
             }
         }
+
         return new ONode(null);
     }
 }

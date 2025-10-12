@@ -49,19 +49,19 @@ public class Func_min_max_avg_sum_Test extends FuncTestAbs {
 
     @Test
     public void avgTest() {
-        compatible_num("1", "13.48", "$.store.book[*].price.avg()");
-        compatible_num("2", "12.5", "$.store.inventory.avg()");
-        compatible_num("3", "8.97", "$.store.book[?(@.price < 10)].price.avg()");
-        compatible_num("4", "5.0", "$.store.book[1].ratings.avg()");
-        compatible_num("5", "31.666", "$.store.staff[*].age.avg()");
+        compatible_str("1", "13.48", "$.store.book[*].price.avg()");
+        compatible_str("2", "12.5", "$.store.inventory.avg()");
+        compatible_str("3", "8.97", "$.store.book[?(@.price < 10)].price.avg()");
+        compatible_str("4", "5.0", "$.store.book[1].ratings.avg()");
+        compatible_str("5", "31.666", "$.store.staff[*].age.avg()");
     }
 
     @Test
     void sumTest() {
-        compatible_num("1", "53.92", "$.store.book[*].price.sum()");
-        compatible_num("2", "50.0", "$.store.inventory.sum()");
-        compatible_num("3", "53.92", "$.totalPrice.sum()");
-        compatible_num("4", "15.0", "$.store.book[?(@.author =~ /.*Waugh/)].ratings[*].sum()");
-        compatible_num("5", "95.0", "$.store.staff[*].age.sum()");
+        compatible_str("1", "53.92", "$.store.book[*].price.sum()");
+        compatible_str("2", "50.0", "$.store.inventory.sum()");
+        compatible_str("3", "53.92", "$.totalPrice.sum()");
+        compatible_str("4", "15.0", "$.store.book[?(@.author =~ /.*Waugh/)].ratings[*].sum()");
+        compatible_str("5", "95.0", "$.store.staff[*].age.sum()");
     }
 }
