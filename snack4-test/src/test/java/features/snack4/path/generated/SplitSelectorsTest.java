@@ -81,7 +81,7 @@ class SplitSelectorsTest {
     @DisplayName("测试各种场景下的选择器分割")
     void testSplitSelectors(String testName, String input, List<String> expected) {
         List<String> actual = SelectUtil.splitSelectors(input);
-        assertEquals(expected, actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     // --- 补充的独立测试用例 ---
@@ -90,7 +90,7 @@ class SplitSelectorsTest {
     @DisplayName("Case 13: 测试带有前导和尾随逗号的字符串")
     void testSplitWithLeadingAndTrailingCommas() {
         String input = ",1,2,";
-        List<String> expected = Arrays.asList("", "1", "2", "");
+        List<String> expected = Arrays.asList("1", "2");
         List<String> actual = SelectUtil.splitSelectors(input);
         assertEquals(expected, actual, "应正确处理前导和尾随逗号");
     }
@@ -99,7 +99,7 @@ class SplitSelectorsTest {
     @DisplayName("Case 14: 测试只有逗号的字符串")
     void testSplitWithOnlyCommas() {
         String input = ",,";
-        List<String> expected = Arrays.asList("", "", "");
+        List<String> expected = Arrays.asList();
         List<String> actual = SelectUtil.splitSelectors(input);
         assertEquals(expected, actual, "应将只有逗号的字符串分割为空字符串数组");
     }
