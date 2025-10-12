@@ -11,23 +11,27 @@ import org.noear.snack4.jsonpath.JsonPathException;
 public class FunctionDemo {
     public static void main(String[] args) {
         //定制聚合函数
-        FuncLib.register("keys", (ctx, currentNodes, argNodes) -> {
+        FuncLib.register("parent", (ctx, currentNodes, argNodes) -> {
             if (currentNodes.size() == 1) {
                 ONode node = currentNodes.get(0);
-
-                if (node.isObject()) {
-                    return ONode.ofBean(node.getObject().keySet());
+                if (node.parent() == null) {
+                    return node;
                 } else {
-                    throw new JsonPathException("keys() requires object");
+                    return node.parent();
                 }
             } else {
-                throw new JsonPathException("keys() requires object");
+                throw new JsonPathException("Invalid currentNodes");
             }
         });
 
-        //检验效果
-        assert ONode.ofJson("{'a':1,'b':2}")
-                .select("$.keys()")
-                .size() == 2;
+        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2）
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$[?@.parent().a == 1]")
+                .toJson());
+
+        //参考
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$[?@ == 1]")
+                .toJson());
     }
 }
