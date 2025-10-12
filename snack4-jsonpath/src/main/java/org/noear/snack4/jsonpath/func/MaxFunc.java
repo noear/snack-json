@@ -3,7 +3,9 @@ package org.noear.snack4.jsonpath.func;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.util.Asserts;
 
 import java.util.List;
 
@@ -19,32 +21,27 @@ public class MaxFunc implements Func {
             return new ONode(ctx.getOptions());
         }
 
-        boolean isJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+        List<Double> doubleList = null;
 
-        Double ref = null;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        if (ref == null) {
-                            ref = o.getDouble();
-                        } else {
-                            if (ref < o.getDouble()) {
-                                ref = o.getDouble();
-                            }
-                        }
-                    }
-                }
-            } else if (n.isNumber()) {
-                if (isJayway == false) {
-                    if (ref == null) {
-                        ref = n.getDouble();
-                    } else {
-                        if (ref < n.getDouble()) {
-                            ref = n.getDouble();
-                        }
-                    }
-                }
+        if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+            doubleList = MathUtil.getDoubleListByChild(oNodes);
+
+            if (Asserts.isEmpty(doubleList)) {
+                throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+            }
+        } else {
+            doubleList = MathUtil.getDoubleList(oNodes);
+
+            if (Asserts.isEmpty(doubleList)) {
+                return new ONode(ctx.getOptions());
+            }
+        }
+
+
+        double ref = doubleList.get(0);
+        for (double d : doubleList) {
+            if (ref < d) {
+                ref = d;
             }
         }
 

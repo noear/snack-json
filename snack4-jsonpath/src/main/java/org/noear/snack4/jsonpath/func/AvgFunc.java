@@ -3,7 +3,9 @@ package org.noear.snack4.jsonpath.func;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.util.Asserts;
 
 import java.util.List;
 
@@ -19,13 +21,28 @@ public class AvgFunc implements Func {
             return new ONode(ctx.getOptions());
         }
 
-        Double ref = null;
+        List<Double> doubleList = null;
+
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
-            ref = MathUtil.avgByChild(oNodes);
+            doubleList = MathUtil.getDoubleListByChild(oNodes);
+
+            if (Asserts.isEmpty(doubleList)) {
+                throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+            }
         } else {
-            ref = MathUtil.avg(oNodes);
+            doubleList = MathUtil.getDoubleList(oNodes);
+
+            if (Asserts.isEmpty(doubleList)) {
+                return new ONode(ctx.getOptions());
+            }
         }
 
-        return new ONode(ctx.getOptions(), ref);
+
+        double ref = 0;
+        for (Double d : doubleList) {
+            ref += d;
+        }
+
+        return new ONode(ctx.getOptions(), ref / doubleList.size());
     }
 }
