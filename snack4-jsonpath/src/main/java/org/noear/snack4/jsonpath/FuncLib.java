@@ -20,12 +20,9 @@ import org.noear.snack4.jsonpath.func.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 /**
- * JsonPath 函数处理库(支持动态注册)
+ * 扩展函数库（支持动态注册）
  *
  * @author noear 2025/3/17 created
  * @since 4.0
@@ -59,12 +56,6 @@ public class FuncLib {
         register("match", new MatchFunc());
         register("search", new SearchFunc());
         register("value", new ValueFunc());
-
-
-        // 字符串函数
-        //register("upper", FuncLib::upper);
-        //register("lower", FuncLib::lower);
-        //register("trim", FuncLib::trim);
     }
 
     /**
@@ -113,7 +104,7 @@ public class FuncLib {
             if (n.isArray()) {
                 for (ONode o : n.getArray()) {
                     if (o.isNumber()) {
-                        if(ref == null){
+                        if (ref == null) {
                             ref = o.getDouble();
                         } else {
                             if (ref > o.getDouble()) {
@@ -123,7 +114,7 @@ public class FuncLib {
                     }
                 }
             } else if (n.isNumber()) {
-                if(ref == null){
+                if (ref == null) {
                     ref = n.getDouble();
                 } else {
                     if (ref > n.getDouble()) {
@@ -179,60 +170,5 @@ public class FuncLib {
         Double ref = MathUtil.calculateStdDev(doubleList);
 
         return new ONode(ctx.getOptions(), ref);
-    }
-
-    static ONode upper(QueryContext ctx, List<ONode> oNodes) {
-        return processStrings(ctx, oNodes, String::toUpperCase);
-    }
-
-    static ONode lower(QueryContext ctx, List<ONode> oNodes) {
-        return processStrings(ctx, oNodes, String::toLowerCase);
-    }
-
-    static ONode trim(QueryContext ctx, List<ONode> oNodes) {
-        return processStrings(ctx, oNodes, String::trim);
-    }
-
-    /// ///////////////// 工具方法 //////////////////
-
-    private static Stream<ONode> flatten(QueryContext ctx, ONode node) {
-        return flattenDo(node);
-    }
-
-    private static Stream<ONode> flattenDo(ONode node) {
-        if (node.isArray()) {
-            return node.getArray().stream().flatMap(FuncLib::flattenDo);
-        } else {
-            return Stream.of(node);
-        }
-    }
-
-    private static DoubleStream collectNumbersDo(List<ONode> oNodes) {
-        return oNodes.stream()
-                .flatMap(n -> n.isArray() ?
-                        n.getArray().stream() :
-                        Stream.of(n))
-                .filter(ONode::isNumber)
-                .mapToDouble(ONode::getDouble);
-    }
-
-    private static ONode processStrings(QueryContext ctx, List<ONode> oNodes, java.util.function.Function<String, String> processor) {
-        List<String> results = oNodes.stream()
-                .flatMap(n -> {
-                    if (n.isString()) {
-                        return Stream.of(n.getString());
-                    } else if (n.isArray()) {
-                        return n.getArray().stream()
-                                .filter(ONode::isString)
-                                .map(ONode::getString);
-                    }
-                    return Stream.empty();
-                })
-                .map(processor)
-                .collect(Collectors.toList());
-
-        return results.size() == 1 ?
-                new ONode(ctx.getOptions(), results.get(0)) :
-                ONode.ofBean(results);
     }
 }

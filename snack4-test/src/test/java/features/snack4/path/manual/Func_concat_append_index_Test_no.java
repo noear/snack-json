@@ -1,11 +1,9 @@
-package features.snack4.path.jayway;
+package features.snack4.path.manual;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 /**
  *
@@ -13,7 +11,7 @@ import org.noear.snack4.Standard;
  *
  */
 public class Func_concat_append_index_Test_no {
-    //开启 jayway 特性
+    //不开启 jayway 特性
     private static String JSON_DATA = "{\n" +
             "  \"store\": {\n" +
             "    \"book\": [\n" +
@@ -122,8 +120,7 @@ public class Func_concat_append_index_Test_no {
     private void compatible_str(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);
 
-        ONode tmp = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway))
-                .select(jsonpathStr);
+        ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         try {

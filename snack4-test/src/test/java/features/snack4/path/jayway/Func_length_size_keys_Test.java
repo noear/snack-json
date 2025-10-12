@@ -5,14 +5,11 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 
 public class Func_length_size_keys_Test {
-    //Jayway JsonPath 内置函数（截至其主流版本，如 2.x）通常包括以下几种：
-    // min()、max()、avg()、sum()、length()、keys()
-    // stddev()、first()、last()
-    // concat(X)、append(X)、index(X)。
-    //
-    //本例：（min()、max()、avg()、sum()、length()、keys()）
+    //开启 jayway 特性
     private static final String JSON_DATA = "{" +
             "\"store\": {" +
             "\"book\": [" +
@@ -38,7 +35,7 @@ public class Func_length_size_keys_Test {
     @BeforeAll
     static void setup() {
         context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA);
+        oNode = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway));
     }
 
     @Test

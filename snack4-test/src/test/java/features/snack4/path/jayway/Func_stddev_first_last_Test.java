@@ -5,6 +5,8 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.func.MathUtil;
 
 import java.util.Arrays;
@@ -16,12 +18,7 @@ import java.util.List;
  *
  */
 public class Func_stddev_first_last_Test {
-    //Jayway JsonPath 内置函数（截至其主流版本，如 2.x）通常包括以下几种：
-    // min()、max()、avg()、sum()、length()、keys()、
-    // stddev()、first()、last()
-    // concat(X)、append(X)、index(X)。
-    //
-    //本例：stddev()、first()、last()
+    //开启 jayway 特性
     private static String JSON_DATA = "{\n" +
             "  \"store\": {\n" +
             "    \"book\": [\n" +
@@ -77,7 +74,7 @@ public class Func_stddev_first_last_Test {
     @BeforeAll
     static void setup() {
         context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA);
+        oNode = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway));
     }
 
     @Test

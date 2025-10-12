@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * JsonPath 操作符库(支持动态注册)
+ * 操作符库（支持动态注册）
  *
  * @author noear 2025/5/5 created
  * @since 4.0

@@ -1,15 +1,13 @@
-package features.snack4.path.jayway;
+package features.snack4.path.manual;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
-public class Func_min_max_avg_sum_Test {
-    //开启 jayway 特性
+public class Func_length_size_keys_Test {
+    //不开启 jayway 特性
     private static final String JSON_DATA = "{" +
             "\"store\": {" +
             "\"book\": [" +
@@ -35,46 +33,38 @@ public class Func_min_max_avg_sum_Test {
     @BeforeAll
     static void setup() {
         context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway));
+        oNode = ONode.ofJson(JSON_DATA);
     }
 
     @Test
-    public void minTest() {
-        compatible_num("1", "8.95", "$.store.book[*].price.min()"); //8.95
-        compatible_num("2", "5.0", "$.store.inventory.min()"); //5.0
-        compatible_num("3", "8.99", "$.store.book[?(@.category == 'fiction')].price.min()");//8.99
-        compatible_num("4", "3.0", "$..ratings[*].min()"); //3.0
-        compatible_num("5", "3.0", "$.store.book[2].ratings.min()");
-        compatible_num("6", "25.0", "$.store.staff[*].age.min()");//25.0
+    void lengthTest() {
+        compatible_num("1", "4", "$.store.book.length()");
+        compatible_num("2", "4", "$.store.inventory.length()");
+        compatible_num("3", "3", "$.store.staff[*].name");
+        compatible_num("3", "3", "$.store.staff[*].name.length()");
+        compatible_num("4", "5", "$.store.book[3].ratings.length()");
+        compatible_num("5", "3", "$.store.bicycle.color.length()");
     }
 
     @Test
-    public void maxTest() {
-        compatible_num("1", "22.99", "$.store.book[*].price.max()");
-        compatible_num("2", "20.0", "$.store.inventory.max()");
-        compatible_num("3", "8.95", "$.store.book[?(@.category == 'reference')].price.max()");
-        compatible_num("4", "5.0", "$.store.book[3].ratings.max()");
-        compatible_num("5", "40.0", "$.store.staff[*].age.max()");
+    void sizeTest() {
+        compatible_num("1", "4", "$.store.book.size()");
+        compatible_num("2", "4", "$.store.inventory.size()");
+        compatible_num("3", "3", "$.store.staff[*].name");
+        compatible_num("3", "3", "$.store.staff[*].name.size()");
+        compatible_num("4", "5", "$.store.book[3].ratings.size()");
+        compatible_num("5", "3", "$.store.bicycle.color.length()");
     }
 
     @Test
-    public void avgTest() {
-        compatible_num("1", "13.48", "$.store.book[*].price.avg()");
-        compatible_num("2", "12.5", "$.store.inventory.avg()");
-        compatible_num("3", "8.97", "$.store.book[?(@.price < 10)].price.avg()");
-        compatible_num("4", "5.0", "$.store.book[1].ratings.avg()");
-        compatible_num("5", "31.666", "$.store.staff[*].age.avg()");
+    void keysTest() {
+        compatible_str("1", "[\"book\",\"bicycle\",\"staff\",\"inventory\"]", "$.store.keys()");
+        compatible_str("2", "[\"color\",\"price\",\"stock\"]", "$.store.bicycle.keys()");
+        compatible_str("3", "[\"category\",\"author\",\"title\",\"price\",\"ratings\"]", "$.store.book[0].keys()");
+        compatible_str("4", "[\"store\",\"totalPrice\"]", "$.keys()");
+        compatible_str("5", "", "$..book[?(@.isbn)]");
+        compatible_str("5", "[\"category\",\"author\",\"title\",\"isbn\",\"price\",\"ratings\"]", "$..book[?(@.isbn)].keys()");
     }
-
-    @Test
-    void sumTest() {
-        compatible_num("1", "53.92", "$.store.book[*].price.sum()");
-        compatible_num("2", "50.0", "$.store.inventory.sum()");
-        compatible_num("3", "53.92", "$.totalPrice.sum()");
-        compatible_num("4", "15.0", "$.store.book[?(@.author =~ /.*Waugh/)].ratings[*].sum()");
-        compatible_num("5", "95.0", "$.store.staff[*].age.sum()");
-    }
-
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);
