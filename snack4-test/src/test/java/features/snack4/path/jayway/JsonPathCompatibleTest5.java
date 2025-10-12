@@ -41,10 +41,26 @@ public class JsonPathCompatibleTest5 {
         System.out.println(tmp);
         assert tmp.size() == 5;
 
-        ONode tmp2 = ONode.ofJson(json).select("$..*[?(@.treePath)]");
+        ONode tmp2 = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select("$..*[?(@.treePath)]");
         System.out.println(tmp2.toJson());
         assert tmp2.isArray();
         Assertions.assertEquals(5, tmp2.size());
+    }
+
+    @Test
+    public void test2_2() {
+        String json = "[{\"id\":0,\"treePath\":\"1\",\"a\":[{\"id\":1,\"treePath\":\"123\",\"subItem\":[{\"id\":3,\"treePath\":\"123\"}]}],\"b\":\"a\"},{\"id\":2}]";
+
+        ReadContext context = JsonPath.parse(json);
+
+        JSONArray tmp = context.read("$..[?(@.treePath)]");
+        System.out.println(tmp);
+        assert tmp.size() == 3;
+
+        ONode tmp2 = ONode.ofJson(json).select("$..[?(@.treePath)]");
+        System.out.println(tmp2.toJson());
+        assert tmp2.isArray();
+        Assertions.assertEquals(3, tmp2.size());
     }
 
     @Test

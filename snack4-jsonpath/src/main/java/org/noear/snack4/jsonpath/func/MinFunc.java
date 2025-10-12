@@ -39,7 +39,11 @@ public class MinFunc implements Func {
         List<Double> doubleList = null;
 
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
-            doubleList = MathUtil.getDoubleListByChild(currentNodes);
+            if (ctx.isDescendant()) {
+                doubleList = MathUtil.getDoubleList(currentNodes);
+            } else {
+                doubleList = MathUtil.getDoubleListByChild(currentNodes);
+            }
 
             if (Asserts.isEmpty(doubleList)) {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");

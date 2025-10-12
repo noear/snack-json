@@ -39,6 +39,11 @@ public interface QueryContext {
     boolean isMultiple();
 
     /**
+     * 是否有后裔
+     */
+    boolean isDescendant();
+
+    /**
      * 是否在过滤器中
      */
     boolean isInFilter();

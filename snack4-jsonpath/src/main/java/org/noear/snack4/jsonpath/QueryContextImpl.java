@@ -18,6 +18,7 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.Standard;
+import org.noear.snack4.jsonpath.segment.DescendantSegment;
 import org.noear.snack4.jsonpath.segment.FuncSegment;
 import org.noear.snack4.jsonpath.segment.Segment;
 
@@ -37,6 +38,7 @@ public class QueryContextImpl implements QueryContext {
     private final Options options;
 
     private boolean multiple;
+    private boolean descendant;
     private boolean inFilter;
 
     public QueryContextImpl(ONode root, QueryMode mode) {
@@ -51,6 +53,10 @@ public class QueryContextImpl implements QueryContext {
     }
 
     public void multipleOf(Segment seg) {
+        if(seg instanceof DescendantSegment) {
+            descendant = true;
+        }
+
         if (seg instanceof FuncSegment) {
             multiple = false;
         } else {
@@ -70,6 +76,11 @@ public class QueryContextImpl implements QueryContext {
     @Override
     public boolean isMultiple() {
         return multiple;
+    }
+
+    @Override
+    public boolean isDescendant() {
+        return descendant;
     }
 
     @Override

@@ -14,6 +14,20 @@ public class JsonPathCompatibleTest6 {
     public void test1() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$..*[?(@.id)]";
+        String json1 = ONode.ofJson(test, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonPath).toJson();
+        System.out.println("org.noear.snack: " + json1);
+
+        Object documentContext = JsonPath.read(test, jsonPath);
+        String json2 = ONode.serialize(documentContext);
+        System.out.println("com.jayway.jsonpath: " + json2);
+
+        assert json1.length() == json2.length();
+    }
+
+    @Test
+    public void test1_2() {
+        String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
+        String jsonPath = "$..[?(@.id)]";
         String json1 = ONode.ofJson(test).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
