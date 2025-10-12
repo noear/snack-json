@@ -36,7 +36,7 @@ public class NinOperator implements Operator {
                 return false;
             }
 
-            return rightNode.getArray().stream().noneMatch(v -> ContainsOperator.isValueMatch(leftNode, v));
+            return rightNode.getArray().stream().noneMatch(v -> MatchUtil.isValueMatch(leftNode, v));
         }
 
         return false;
