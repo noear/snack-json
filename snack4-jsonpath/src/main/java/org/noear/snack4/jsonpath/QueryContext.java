@@ -18,11 +18,7 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.Standard;
-import org.noear.snack4.jsonpath.segment.FuncSegment;
-import org.noear.snack4.jsonpath.segment.Segment;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -31,93 +27,24 @@ import java.util.function.Function;
  * @author noear
  * @since 4.0
  * */
-public class QueryContext {
-    private final ONode root;
-    private final QueryMode mode;
-    private boolean multiple;
-    private final Options options;
+public interface QueryContext {
+    boolean hasStandard(Standard standard);
 
-    public QueryContext(ONode root, QueryMode mode) {
-        this.root = root;
-        this.mode = mode;
+    boolean isMultiple();
 
-        if (root != null) {
-            this.options = root.options();
-        } else {
-            this.options = Options.DEF_OPTIONS;
-        }
-    }
+    boolean isInFilter();
 
-    protected void multipleOf(Segment seg) {
-        if (seg instanceof FuncSegment) {
-            multiple = false;
-        } else {
-            multiple = multiple || seg.isMultiple();
-        }
-    }
+    ONode getRoot();
 
-    public boolean hasStandard(Standard standard) {
-        return options.hasStandard(standard);
-    }
+    QueryMode getMode();
 
-    public boolean isMultiple() {
-        return multiple;
-    }
+    Options getOptions();
 
-    public ONode getRoot() {
-        return root;
-    }
+    ONode getNodeBy(ONode node, String key);
 
-    public QueryMode getMode() {
-        return mode;
-    }
+    ONode getNodeAt(ONode node, int idx);
 
-    public Options getOptions() {
-        return options;
-    }
+    <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction);
 
-    public ONode getNodeBy(ONode node, String key) {
-        if (mode == QueryMode.CREATE) {
-            return node.getOrNew(key);
-        } else {
-            return node.getOrNull(key);
-        }
-    }
-
-    public ONode getNodeAt(ONode node, int idx) {
-        if (mode == QueryMode.CREATE) {
-            return node.getOrNew(idx);
-        } else {
-            return node.getOrNull(idx);
-        }
-    }
-
-    private Map<String, Object> attach;
-
-    private Map<String, Object> getAttach() {
-        if (attach == null) {
-            attach = new HashMap<>();
-        }
-
-        return attach;
-    }
-
-    public <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction) {
-        return (T) getAttach().computeIfAbsent(key, mappingFunction);
-    }
-
-    /**
-     * 内嵌查询
-     */
-    public ONode nestedQuery(ONode target, JsonPath query) {
-        if (query.isRooted()) {
-            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()));
-        }
-
-        if (getMode() == QueryMode.CREATE) {
-            return query.create(target);
-        } else {
-            return query.select(target);
-        }
-    }
+    ONode nestedQuery(ONode target, JsonPath query);
 }

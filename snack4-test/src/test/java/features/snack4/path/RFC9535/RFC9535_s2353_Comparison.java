@@ -2,6 +2,7 @@ package features.snack4.path.RFC9535;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.QueryContextImpl;
 import org.noear.snack4.jsonpath.filter.Expression;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
@@ -63,7 +64,7 @@ public class RFC9535_s2353_Comparison extends AbsRFC9535 {
 
     private void comparisonAssert(String expr, boolean expected) {
         ONode node = ofJson(comparisonJson);
-        boolean actual = Expression.get(expr).test(node, new QueryContext(node, QueryMode.SELECT));
+        boolean actual = Expression.get(expr).test(node, new QueryContextImpl(node, QueryMode.SELECT));
         assertEquals(expected, actual);
     }
 }

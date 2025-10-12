@@ -16,10 +16,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.Func;
-import org.noear.snack4.jsonpath.FuncLib;
-import org.noear.snack4.jsonpath.JsonPath;
-import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
@@ -97,6 +94,13 @@ public class FuncHolder {
             }
         }
 
-        return func.apply(ctx, oNodes);
+        QueryContextImpl ctx0 = (QueryContextImpl) ctx;
+
+        try {
+            ctx0.setInFilter(true);
+            return func.apply(ctx, oNodes);
+        } finally {
+            ctx0.setInFilter(false);
+        }
     }
 }

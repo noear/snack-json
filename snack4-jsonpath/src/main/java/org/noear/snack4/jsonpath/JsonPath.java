@@ -63,7 +63,7 @@ public class JsonPath {
 
     public ONode select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext ctx = new QueryContext(root, QueryMode.SELECT);
+        QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.SELECT);
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);
@@ -87,7 +87,7 @@ public class JsonPath {
 
     public ONode create(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext ctx = new QueryContext(root, QueryMode.CREATE);
+        QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.CREATE);
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);
@@ -111,7 +111,7 @@ public class JsonPath {
 
     public void delete(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext ctx = new QueryContext(root, QueryMode.DELETE);
+        QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.DELETE);
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);

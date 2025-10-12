@@ -52,7 +52,6 @@ public class JsonPathParser {
 
     private JsonPath doCompile() {
         position = 1; //Skip $, @
-        QueryContext ctx = new QueryContext(null, QueryMode.SELECT); //记录分析中的 flattened 变化
 
         while (position < path.length()) {
             skipWhitespace();
@@ -60,9 +59,9 @@ public class JsonPathParser {
 
             char ch = path.charAt(position);
             if (ch == '.') {
-                resolveDot(ctx);
+                resolveDot();
             } else if (ch == '[') {
-                resolveBracket(ctx);
+                resolveBracket();
             } else {
                 throw new JsonPathException("Unexpected character '" + ch + "' at index " + position);
             }
@@ -74,7 +73,7 @@ public class JsonPathParser {
     /**
      * 分析 '.' 或 '..' 操作符
      */
-    private void resolveDot(QueryContext context) {
+    private void resolveDot() {
         position++;
         if (position < path.length() && path.charAt(position) == '.') {
             addSegment(new DescendantSegment());
@@ -85,9 +84,9 @@ public class JsonPathParser {
                 char ch = path.charAt(position);
                 if (ch == '.' || ch == '[') {
                     if (ch == '.') {
-                        resolveDot(context);
+                        resolveDot();
                     } else if (ch == '[') {
-                        resolveBracket(context);
+                        resolveBracket();
                     }
                 } else {
                     break;
@@ -100,7 +99,7 @@ public class JsonPathParser {
         } else {
             char ch = path.charAt(position);
             if (ch == '[') {
-                resolveBracket(context);
+                resolveBracket();
             } else {
                 resolveKey();
             }
@@ -110,7 +109,7 @@ public class JsonPathParser {
     /**
      * 分析 '[...]' 操作符
      */
-    private void resolveBracket(QueryContext context) {
+    private void resolveBracket() {
         position++; // 跳过'['
         String segment = parseSegment(']');
         while (position < path.length() && path.charAt(position) == ']') {
