@@ -11,9 +11,9 @@ import org.noear.snack4.jsonpath.JsonPathException;
 public class FunctionDemo {
     public static void main(String[] args) {
         //定制聚合函数
-        FuncLib.register("keys", (context, oNodes) -> {
-            if (oNodes.size() == 1) {
-                ONode node = oNodes.get(0);
+        FuncLib.register("keys", (ctx, currentNodes, argNodes) -> {
+            if (currentNodes.size() == 1) {
+                ONode node = currentNodes.get(0);
 
                 if (node.isObject()) {
                     return ONode.ofBean(node.getObject().keySet());

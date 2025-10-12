@@ -31,15 +31,15 @@ import java.util.List;
  */
 public class FirstFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (currentNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
             List<ONode> results = new ArrayList<>();
 
-            for (ONode n1 : oNodes) {
+            for (ONode n1 : currentNodes) {
                 if (n1.isArray()) {
                     results.add(n1.get(0));
                 }
@@ -55,10 +55,10 @@ public class FirstFunc implements Func {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            if (oNodes.size() > 1) {
-                return oNodes.get(0);
+            if (currentNodes.size() > 1) {
+                return currentNodes.get(0);
             } else {
-                ONode n1 = oNodes.get(0);
+                ONode n1 = currentNodes.get(0);
                 if (n1.isArray()) {
                     return n1.get(0);
                 } else {

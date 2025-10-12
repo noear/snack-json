@@ -31,19 +31,19 @@ import java.util.regex.Pattern;
  */
 public class MatchFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> args) {
-        if (args.size() != 2) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (argNodes.size() != 2) {
             throw new JsonPathException("Requires 2 parameters");
         }
 
-        ONode o1 = args.get(0);
+        ONode o1 = argNodes.get(0);
 
         if(o1.isNull()) {
             return new ONode(false);
         }
 
         String arg0 = o1.toString();
-        String arg1 = args.get(1).toString();
+        String arg1 = argNodes.get(1).toString();
 
         Pattern pattern = JsRegexUtil.of(arg1);
         boolean found = pattern.matcher(arg0).matches(); //与 SearchFunc 的区别就在这儿

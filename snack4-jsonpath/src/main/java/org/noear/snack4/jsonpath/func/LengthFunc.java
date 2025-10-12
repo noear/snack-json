@@ -31,12 +31,12 @@ import java.util.List;
  */
 public class LengthFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
 
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
             List<ONode> results = new ArrayList<>();
 
-            for (ONode n1 : oNodes) {
+            for (ONode n1 : currentNodes) {
                 if (n1.isArray()) {
                     results.add(new ONode(n1.getArray().size()));
                 } else {
@@ -54,11 +54,11 @@ public class LengthFunc implements Func {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            if (oNodes.size() > 0) {
-                if (oNodes.size() > 1) {
-                    return new ONode(ctx.getOptions(), oNodes.size());
+            if (currentNodes.size() > 0) {
+                if (currentNodes.size() > 1) {
+                    return new ONode(ctx.getOptions(), currentNodes.size());
                 } else {
-                    ONode n = oNodes.get(0);
+                    ONode n = currentNodes.get(0);
                     if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
                     if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
                     if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());

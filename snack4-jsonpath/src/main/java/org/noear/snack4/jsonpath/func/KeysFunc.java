@@ -33,15 +33,15 @@ import java.util.Set;
  */
 public class KeysFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (currentNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
             Set<String> keys = new LinkedHashSet<>();
 
-            for (ONode n1 : oNodes) {
+            for (ONode n1 : currentNodes) {
                 if(n1.isObject()){
                     keys = n1.getObject().keySet();
                 }
@@ -53,9 +53,9 @@ public class KeysFunc implements Func {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
             }
         } else {
-            if (oNodes.size() > 1) {
+            if (currentNodes.size() > 1) {
                 Set<String> results = new HashSet<>();
-                for (ONode n1 : oNodes) {
+                for (ONode n1 : currentNodes) {
                     if (n1.isObject() && n1.getObject().size() > 0) {
                         results.addAll(n1.getObject().keySet());
                     }
@@ -65,7 +65,7 @@ public class KeysFunc implements Func {
                     return new ONode(ctx.getOptions()).addAll(results);
                 }
             } else {
-                ONode n1 = oNodes.get(0);
+                ONode n1 = currentNodes.get(0);
 
                 if (n1.isObject() && n1.getObject().size() > 0) {
                     return ONode.ofBean(n1.getObject().keySet());

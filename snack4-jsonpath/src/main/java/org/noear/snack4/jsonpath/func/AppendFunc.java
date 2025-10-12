@@ -21,6 +21,7 @@ import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,13 +31,27 @@ import java.util.List;
  */
 public class AppendFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> args) {
-        if (args.size() != 2) {
-            throw new JsonPathException("Requires 2 parameters");
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (ctx.isInFilter()) {
+            if (argNodes.size() != 2) {
+                throw new JsonPathException("Requires 2 parameters");
+            }
+
+            ONode oNode = argNodes.get(0);
+            if (oNode.isArray()) {
+                currentNodes = oNode.getArray();
+            } else {
+                currentNodes = Arrays.asList(oNode);
+            }
+        } else {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameter");
+            }
         }
 
-        ONode arg0 = args.get(0);
-        ONode arg1 = args.get(1);
+
+        ONode arg0 = argNodes.get(0);
+        ONode arg1 = argNodes.get(1);
 
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();

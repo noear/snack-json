@@ -31,13 +31,13 @@ import java.util.List;
  */
 public class IndexFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> args) {
-        if (args.size() != 2) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (argNodes.size() != 2) {
             throw new JsonPathException("Requires 2 parameters");
         }
 
-        ONode arg0 = args.get(0);
-        ONode arg1 = args.get(1);
+        ONode arg0 = argNodes.get(0);
+        ONode arg1 = argNodes.get(1);
 
         if (arg1.isNumber() == false) {
             throw new JsonPathException("Requires arg1 is number");

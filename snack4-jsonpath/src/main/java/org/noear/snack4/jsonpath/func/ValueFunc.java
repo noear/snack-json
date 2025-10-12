@@ -28,9 +28,9 @@ import java.util.List;
  */
 public class ValueFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.size() > 0) {
-            ONode n1 = oNodes.get(0);
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (currentNodes.size() > 0) {
+            ONode n1 = currentNodes.get(0);
             if (n1.isValue()) {
                 return n1;
             } else if (n1.isArray()) {

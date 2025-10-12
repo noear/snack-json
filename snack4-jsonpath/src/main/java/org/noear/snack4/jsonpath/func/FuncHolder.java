@@ -20,6 +20,7 @@ import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +51,7 @@ public class FuncHolder {
         Objects.requireNonNull(func, "The function not found: " + funcName);
 
         this.args = new ArrayList<>();
+
         for (String arg : argsStr) {
             if (arg.length() > 0) {
                 char ch = arg.charAt(0);
@@ -69,28 +71,27 @@ public class FuncHolder {
 
     public ONode apply(QueryContext ctx, List<ONode> currentNodes) {
         if (args.isEmpty()) {
-            return func.apply(ctx, currentNodes);
+            return func.apply(ctx, currentNodes, Collections.emptyList());
         } else {
-            List<ONode> oNodes = new ArrayList<>();
-            oNodes.add(new ONode(ctx.getOptions(), currentNodes));
+            List<ONode> argNodes = new ArrayList<>();
 
             for (Object arg : args) {
-                oNodes.add((ONode) arg);
+                argNodes.add((ONode) arg);
             }
 
-            return func.apply(ctx, oNodes);
+            return func.apply(ctx, currentNodes, argNodes);
         }
     }
 
     public ONode apply(QueryContext ctx, ONode node) {
-        List<ONode> oNodes = new ArrayList<>();
+        List<ONode> argNodes = new ArrayList<>();
 
         for (Object arg : args) {
             if (arg instanceof JsonPath) {
                 ONode n1 = ctx.nestedQuery(node, (JsonPath) arg);
-                oNodes.add(n1);
+                argNodes.add(n1);
             } else {
-                oNodes.add((ONode) arg);
+                argNodes.add((ONode) arg);
             }
         }
 
@@ -98,7 +99,7 @@ public class FuncHolder {
 
         try {
             ctx0.setInFilter(true);
-            return func.apply(ctx, oNodes);
+            return func.apply(ctx, null, argNodes);
         } finally {
             ctx0.setInFilter(false);
         }

@@ -31,21 +31,21 @@ import java.util.List;
  */
 public class StddevFunc implements Func {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> oNodes) {
-        if (oNodes.isEmpty()) {
+    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (currentNodes.isEmpty()) {
             return new ONode(ctx.getOptions());
         }
 
         List<Double> doubleList = null;
 
         if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
-            doubleList = MathUtil.getDoubleListByChild(oNodes);
+            doubleList = MathUtil.getDoubleListByChild(currentNodes);
 
             if (Asserts.isEmpty(doubleList)) {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            doubleList = MathUtil.getDoubleList(oNodes);
+            doubleList = MathUtil.getDoubleList(currentNodes);
         }
 
         Double ref = MathUtil.calculateStdDev(doubleList);
