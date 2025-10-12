@@ -30,37 +30,31 @@ import java.util.function.Function;
 public interface QueryContext {
     /**
      * 有使用标准？
-     *
      */
     boolean hasStandard(Standard standard);
 
     /**
      * 是否为多输出
-     *
      */
     boolean isMultiple();
 
     /**
      * 是否在过滤器中
-     *
      */
     boolean isInFilter();
 
     /**
      * 查询根节点
-     *
      */
     ONode getRoot();
 
     /**
      * 查询模式
-     *
      */
     QueryMode getMode();
 
     /**
      * 获取根选项配置
-     *
      */
     Options getOptions();
 
