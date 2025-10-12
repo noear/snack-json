@@ -20,10 +20,7 @@ import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.func.FuncHolder;
-import org.noear.snack4.jsonpath.util.SelectUtil;
 import org.noear.snack4.util.Asserts;
-
-import java.util.List;
 
 /**
  * 操作元
@@ -63,7 +60,7 @@ public class Operand {
             char ch = value.charAt(0);
 
             if (ch == '@' || ch == '$') {
-                queryValue = JsonPath.compile(value);
+                queryValue = JsonPath.parse(value);
             } else {
                 if (ch == '\'') {
                     //字符串

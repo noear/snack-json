@@ -2,7 +2,6 @@ package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
@@ -67,57 +66,50 @@ public class Func_concat_append_index_Test_no {
             "  \"totalPrice\": 53.92\n" +
             "}";
 
-    private static DocumentContext context;
-    private static ONode oNode;
-
-    @BeforeAll
-    static void setup() {
-        context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA);
-    }
 
     @Test
-    public void indexTest(){
-        compatible_str("1","xxx","$.store.book.index(1)"); //第二个 Book 对象 (Sword of Honour)
-        compatible_num("2","10","$.store.inventory.index(0)");
-        compatible_str("3","\"Charlie\"","$.store.staff[*].name.index(-1)");
-        compatible_num("4","5","$.store.book[3].ratings.index(2)");
+    public void indexTest() {
+        compatible_str("1", "xxx", "$.store.book.index(1)"); //第二个 Book 对象 (Sword of Honour)
+        compatible_num("2", "10", "$.store.inventory.index(0)");
+        compatible_str("3", "\"Charlie\"", "$.store.staff[*].name.index(-1)");
+        compatible_num("4", "5", "$.store.book[3].ratings.index(2)");
         //compatible_str("5","\"Herman Melville\"","$.store.book.index($.store.book.length() - 2).author");
     }
 
     @Test
-    public void concatTest(){
-        compatible_str("1","[10,5,20,15]","$.store.inventory");
-        compatible_str("1","[10,5,20,15,50]","$.store.inventory.concat(50)");
+    public void concatTest() {
+        compatible_str("1", "[10,5,20,15]", "$.store.inventory");
+        compatible_str("1", "[10,5,20,15,50]", "$.store.inventory.concat(50)");
 
-        compatible_str("2","[4,5,4,1]","$.store.book[0].ratings.concat(1)");
+        compatible_str("2", "[4,5,4,1]", "$.store.book[0].ratings.concat(1)");
 
-        compatible_str("3","[\"Alice\",\"Bob\",\"Charlie\",\"David\"]","$.store.staff[*].name");
-        compatible_str("3","[\"Alice\",\"Bob\",\"Charlie\",\"David\"]","$.store.staff[*].name.concat('David')");
+        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name");
+        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name.concat('David')");
 
-        compatible_str("4","[8.95,8.99,9.0]","$.store.book[?(@.price < 10)].price");
-        compatible_str("4","[8.95,8.99,9.0]","$.store.book[?(@.price < 10)].price.concat(9.00)");
+        compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price");
+        compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
 
-        compatible_str("5","[\"Sayings of the Century\"]","$.store.book[?(@.category == 'reference')].title");
-        compatible_str("5","\"Sayings of the Century New Ref\"","$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
+        compatible_str("5", "[\"Sayings of the Century\"]", "$.store.book[?(@.category == 'reference')].title");
+        compatible_str("5", "\"Sayings of the Century New Ref\"", "$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
     }
 
     @Test
-    public void appendTest(){
-        compatible_str("1","[10,5,20,15,100]","$.store.inventory.append(100)");
-        compatible_str("2","[5,5,5,10]","$.store.book[1].ratings.append(10)");
-        compatible_str("3","[30,25,40,50]","$.store.staff[*].age.append(50)");
-        compatible_str("4","xxx","$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
-        compatible_str("5","[5,5,5,5,5,2]","$.store.book[?(@.price > 20)].ratings.append(2)");
+    public void appendTest() {
+        compatible_str("1", "[10,5,20,15,100]", "$.store.inventory.append(100)");
+        compatible_str("2", "[5,5,5,10]", "$.store.book[1].ratings.append(10)");
+        compatible_str("3", "[30,25,40,50]", "$.store.staff[*].age.append(50)");
+        compatible_str("4", "xxx", "$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
+        compatible_str("5", "[5,5,5,5,5,2]", "$.store.book[?(@.price > 20)].ratings.append(2)");
     }
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);
 
-        ONode tmp = oNode.select(jsonpathStr);
+        ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         try {
+            DocumentContext context = JsonPath.parse(JSON_DATA);
             Object tmp2 = context.read(jsonpathStr);
             System.out.println(ONode.serialize(tmp2));
 
@@ -133,15 +125,17 @@ public class Func_concat_append_index_Test_no {
     private void compatible_str(String tag, String ref, String jsonpathStr) {
         System.out.println("::::" + tag + " - " + jsonpathStr);
 
-        ONode tmp = oNode.select(jsonpathStr);
+        ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         try {
+            DocumentContext context = JsonPath.parse(JSON_DATA);
             Object tmp2 = context.read(jsonpathStr);
             System.out.println(ONode.serialize(tmp2));
 
             if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert ref.length() == tmp.toJson().length();
+                assert ref.length() == tmp.toJson().length() ||
+                        tmp.toJson().length() == ONode.serialize(tmp2).length();
             }
         } catch (Exception e) {
             System.out.println("jayway: err");

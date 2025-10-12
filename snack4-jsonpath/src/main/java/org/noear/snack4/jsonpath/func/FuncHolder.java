@@ -58,7 +58,7 @@ public class FuncHolder {
                 char ch = arg.charAt(0);
                 if (ch == '@' || ch == '$') {
                     //查询
-                    args.add(JsonPath.compile(arg));
+                    args.add(JsonPath.parse(arg));
                 } else if (ch == '/') {
                     //正则
                     args.add(new ONode(arg));

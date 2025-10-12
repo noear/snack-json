@@ -21,17 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JsonPath 编译器
+ * JsonPath 解析器
  *
  * @author noear
  * @since 4.0
  * */
-public class JsonPathCompiler {
+public class JsonPathParser {
     /*
-     * 编译
+     * 解析
      * */
-    public static JsonPath compile(String path) {
-        return new JsonPathCompiler(path).doCompile();
+    public static JsonPath parse(String path) {
+        return new JsonPathParser(path).doCompile();
     }
 
     private final String path;
@@ -39,7 +39,7 @@ public class JsonPathCompiler {
     private List<Segment> segments = new ArrayList<>();
     private Segment lastSegment = null;
 
-    private JsonPathCompiler(String path) {
+    private JsonPathParser(String path) {
         this.path = path;
     }
 

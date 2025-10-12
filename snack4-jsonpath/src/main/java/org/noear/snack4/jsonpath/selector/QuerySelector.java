@@ -35,7 +35,7 @@ public class QuerySelector implements Selector {
 
     public QuerySelector(String expr) {
         this.expr = expr;
-        this.jsonPath = JsonPath.compile(expr);
+        this.jsonPath = JsonPath.parse(expr);
     }
 
     @Override

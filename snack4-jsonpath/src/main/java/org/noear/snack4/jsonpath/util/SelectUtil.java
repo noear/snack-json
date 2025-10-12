@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.util;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.PathSource;
 
 import java.util.ArrayList;
@@ -117,8 +118,8 @@ public class SelectUtil {
 
         // 检查平衡性（可选，但推荐用于错误报告）
         if (parenLevel != 0 || bracketLevel != 0 || curlyBraceLevel != 0) {
-            // 在实际编译器中，这里应该抛出 JsonPathException
-            // throw new JsonPathException("Unbalanced brackets/parentheses in selector: " + segmentStr);
+            // 在实际解析器中，这里应该抛出 JsonPathException
+            //throw new JsonPathException("Unbalanced brackets/parentheses in selector: " + segmentStr);
             // 这里我们仅继续执行，因为您只要求优化分割逻辑
         }
 

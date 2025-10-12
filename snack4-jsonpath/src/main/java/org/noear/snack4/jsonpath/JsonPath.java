@@ -148,14 +148,14 @@ public class JsonPath {
     private static Map<String, JsonPath> cached = new ConcurrentHashMap<>();
 
     /**
-     * 编译
+     * 解析
      */
-    public static JsonPath compile(String path) {
+    public static JsonPath parse(String path) {
         if (!path.startsWith("$") && !path.startsWith("@")) {
             throw new JsonPathException("Path must start with $");
         }
 
-        return cached.computeIfAbsent(path, JsonPathCompiler::compile);
+        return cached.computeIfAbsent(path, JsonPathParser::parse);
     }
 
     /**
@@ -169,20 +169,20 @@ public class JsonPath {
      * 根据 jsonpath 查询
      */
     public static ONode select(ONode root, String path) {
-        return compile(path).select(root);
+        return parse(path).select(root);
     }
 
     /**
      * 根据 jsonpath 生成
      */
     public static ONode create(ONode root, String path) {
-        return compile(path).create(root);
+        return parse(path).create(root);
     }
 
     /**
      * 根据 jsonpath 删除
      */
     public static void delete(ONode root, String path) {
-        compile(path).delete(root);
+        parse(path).delete(root);
     }
 }
