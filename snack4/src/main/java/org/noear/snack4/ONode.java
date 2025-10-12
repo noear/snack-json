@@ -381,8 +381,6 @@ public final class ONode {
     }
 
     public ONode get(int index) {
-        asArray();
-
         int size = getArray().size();
 
         if (index < 0) {
@@ -403,11 +401,17 @@ public final class ONode {
     public ONode getOrNew(int index, Consumer<ONode> thenApply) {
         List<ONode> self = getArray();
 
-        if (self.size() > index) {
+        int size = self.size();
+
+        if (index < 0) {
+            index += size;
+        }
+
+        if (size > index) {
             return self.get(index);
         } else {
             ONode last = null;
-            int count = index + 1 - self.size();
+            int count = index + 1 - size;
 
             for (int i = 0; i < count; i++) {
                 last = new ONode(options);
@@ -423,7 +427,13 @@ public final class ONode {
 
     public ONode getOrNull(int index) {
         if (isArray()) {
-            if (index >= 0 && getArray().size() > index) {
+            int size = getArray().size();
+
+            if (index < 0) {
+                index += size;
+            }
+
+            if (index >= 0 && size > index) {
                 return getArray().get(index);
             }
         }
@@ -432,12 +442,13 @@ public final class ONode {
     }
 
     public ONode remove(int index) {
+        int size = getArray().size();
+
         if (index < 0) {
-            int pos = getArray().size() + index;
-            return getArray().remove(pos);
-        } else {
-            return getArray().remove(index);
+            index += size;
         }
+
+        return getArray().remove(index);
     }
 
     public ONode add(Object value) {
