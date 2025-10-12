@@ -1,15 +1,13 @@
-package features.snack4.path.jayway;
+package features.snack4.path.manual.func;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 public class Func_min_max_avg_sum_Test {
-    //开启 jayway 特性
+    //不开启 jayway 特性
     private static final String JSON_DATA = "{" +
             "\"store\": {" +
             "\"book\": [" +
@@ -35,7 +33,7 @@ public class Func_min_max_avg_sum_Test {
     @BeforeAll
     static void setup() {
         context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway));
+        oNode = ONode.ofJson(JSON_DATA);
     }
 
     @Test

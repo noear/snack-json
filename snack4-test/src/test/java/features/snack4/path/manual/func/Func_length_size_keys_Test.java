@@ -1,4 +1,4 @@
-package features.snack4.path.manual;
+package features.snack4.path.manual.func;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;

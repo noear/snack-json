@@ -33,20 +33,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JsonPath {
     private final String expression;
     private final List<Segment> segments;
-    private boolean multiple;
     private final boolean rooted;
 
     public JsonPath(String expression, List<Segment> segments) {
         this.expression = expression;
         this.segments = segments;
-        for (Segment seg : segments) {
-            if (seg instanceof FuncSegment) {
-                multiple = false;
-            } else {
-                multiple = multiple || seg.isMultiple();
-            }
-        }
-
         this.rooted = expression.charAt(0) == '$';
     }
 
@@ -67,7 +58,6 @@ public class JsonPath {
         return "JsonPath{" +
                 "path='" + expression + '\'' +
                 ", segments=" + segments +
-                ", multiple=" + multiple +
                 '}';
     }
 
@@ -77,12 +67,13 @@ public class JsonPath {
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);
+            ctx.multipleOf(seg);
         }
 
         if (currentNodes.size() > 1) {
             return new ONode(root.options(), currentNodes);
         } else {
-            if (multiple) {
+            if (ctx.isMultiple()) {
                 return new ONode(root.options(), currentNodes);
             } else {
                 if (currentNodes.size() > 0) {
@@ -96,16 +87,17 @@ public class JsonPath {
 
     public ONode create(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
-        QueryContext dtx = new QueryContext(root, QueryMode.CREATE);
+        QueryContext ctx = new QueryContext(root, QueryMode.CREATE);
 
         for (Segment seg : segments) {
-            currentNodes = seg.resolve(dtx, currentNodes);
+            currentNodes = seg.resolve(ctx, currentNodes);
+            ctx.multipleOf(seg);
         }
 
         if (currentNodes.size() > 1) {
             return new ONode(root.options(), currentNodes);
         } else {
-            if (multiple) {
+            if (ctx.isMultiple()) {
                 return new ONode(root.options(), currentNodes);
             } else {
                 if (currentNodes.size() > 0) {
@@ -123,6 +115,7 @@ public class JsonPath {
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);
+            ctx.multipleOf(seg);
         }
 
         if (currentNodes.size() == 1) {

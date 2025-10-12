@@ -1,12 +1,6 @@
-package features.snack4.path.jayway;
+package features.snack4.path.jayway.func;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.func.MathUtil;
 
 import java.util.Arrays;
@@ -17,7 +11,7 @@ import java.util.List;
  * @author noear 2025/10/12 created
  *
  */
-public class Func_stddev_first_last_Test {
+public class Func_stddev_first_last_Test extends FuncTestAbs{
     //开启 jayway 特性
     private static String JSON_DATA = "{\n" +
             "  \"store\": {\n" +
@@ -68,13 +62,9 @@ public class Func_stddev_first_last_Test {
             "  \"totalPrice\": 53.92\n" +
             "}";
 
-    private static DocumentContext context;
-    private static ONode oNode;
-
-    @BeforeAll
-    static void setup() {
-        context = JsonPath.parse(JSON_DATA);
-        oNode = ONode.ofJson(JSON_DATA, Options.of().addStandard(Standard.JSONPath_Jayway));
+    @Override
+    protected String JSON_DATA() {
+        return  JSON_DATA;
     }
 
     @Test
@@ -144,57 +134,5 @@ public class Func_stddev_first_last_Test {
 
         compatible_str("4", "5", "$.store.book[2].ratings.last()");
         compatible_str("5", "\"The Lord of the Rings\"", "$.store.book[?(@.category == 'fiction')].last().title");
-    }
-
-    private void compatible_num(String tag, String ref, String jsonpathStr) {
-        System.out.println("::::" + tag + " - " + jsonpathStr);
-
-        ONode tmp = oNode.select(jsonpathStr);
-        System.out.println(tmp.toJson());
-
-        try {
-            Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
-
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
-            }
-        } catch (Exception e) {
-            System.out.println("jayway: err");
-            assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
-        }
-    }
-
-    private void compatible_str(String tag, String ref, String jsonpathStr) {
-        System.out.println("::::" + tag + " - " + jsonpathStr);
-
-        ONode tmp = null;
-        Object tmp2 = null;
-        Throwable err1 = null;
-        Throwable err2 = null;
-
-        try {
-            tmp = oNode.select(jsonpathStr);
-            System.out.println(tmp.toJson());
-        } catch (Exception e) {
-            err1 = e;
-            System.err.println(e.getMessage());
-        }
-
-        try {
-            tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
-        } catch (Exception e) {
-            err2 = e;
-            System.err.println(e.getMessage());
-        }
-
-        if (err1 != null && err2 != null) {
-            return;
-        }
-
-        if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-            assert ref.length() == tmp.toJson().length();
-        }
     }
 }

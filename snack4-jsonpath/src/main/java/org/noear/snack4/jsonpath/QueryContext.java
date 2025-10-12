@@ -18,6 +18,8 @@ package org.noear.snack4.jsonpath;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.Standard;
+import org.noear.snack4.jsonpath.segment.FuncSegment;
+import org.noear.snack4.jsonpath.segment.Segment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,7 @@ import java.util.function.Function;
 public class QueryContext {
     private final ONode root;
     private final QueryMode mode;
+    private boolean multiple;
     private final Options options;
 
     public QueryContext(ONode root, QueryMode mode) {
@@ -45,8 +48,20 @@ public class QueryContext {
         }
     }
 
+    protected void multipleOf(Segment seg) {
+        if (seg instanceof FuncSegment) {
+            multiple = false;
+        } else {
+            multiple = multiple || seg.isMultiple();
+        }
+    }
+
     public boolean hasStandard(Standard standard) {
         return options.hasStandard(standard);
+    }
+
+    public boolean isMultiple() {
+        return multiple;
     }
 
     public ONode getRoot() {

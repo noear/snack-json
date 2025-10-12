@@ -1,17 +1,14 @@
-package features.snack4.path.manual;
+package features.snack4.path.jayway.func;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.ONode;
 
 /**
  *
  * @author noear 2025/10/12 created
  *
  */
-public class Func_concat_append_index_Test_no {
-    //不开启 jayway 特性
+public class Func_concat_append_index_Test_no extends FuncTestAbs {
+    //开启 jayway 特性
     private static String JSON_DATA = "{\n" +
             "  \"store\": {\n" +
             "    \"book\": [\n" +
@@ -61,6 +58,10 @@ public class Func_concat_append_index_Test_no {
             "  \"totalPrice\": 53.92\n" +
             "}";
 
+    @Override
+    protected String JSON_DATA() {
+        return JSON_DATA;
+    }
 
     @Test
     public void indexTest() {
@@ -90,51 +91,19 @@ public class Func_concat_append_index_Test_no {
 
     @Test
     public void appendTest() {
+        compatible_str("1", "[10,5,20,15,100]", "$.store.inventory");
         compatible_str("1", "[10,5,20,15,100]", "$.store.inventory.append(100)");
+
+        compatible_str("2", "[5,5,5,10]", "$.store.book[1].ratings");
         compatible_str("2", "[5,5,5,10]", "$.store.book[1].ratings.append(10)");
+
+        compatible_str("3", "[30,25,40,50]", "$.store.staff[*].age");
         compatible_str("3", "[30,25,40,50]", "$.store.staff[*].age.append(50)");
+
+        compatible_str("4", "xxx", "$.store.book"); //5个 Book 对象的列表 (最后一个是追加的对象)
         compatible_str("4", "xxx", "$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
+
+        compatible_str("5", "[5,5,5,5,5,2]", "$.store.book[?(@.price > 20)].ratings");
         compatible_str("5", "[5,5,5,5,5,2]", "$.store.book[?(@.price > 20)].ratings.append(2)");
-    }
-
-    private void compatible_num(String tag, String ref, String jsonpathStr) {
-        System.out.println("::::" + tag + " - " + jsonpathStr);
-
-        ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
-        System.out.println(tmp.toJson());
-
-        try {
-            DocumentContext context = JsonPath.parse(JSON_DATA);
-            Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
-
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
-            }
-        } catch (Exception e) {
-            System.out.println("jayway: err");
-            assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
-        }
-    }
-
-    private void compatible_str(String tag, String ref, String jsonpathStr) {
-        System.out.println("::::" + tag + " - " + jsonpathStr);
-
-        ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
-        System.out.println(tmp.toJson());
-
-        try {
-            DocumentContext context = JsonPath.parse(JSON_DATA);
-            Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
-
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert ref.length() == tmp.toJson().length() ||
-                        tmp.toJson().length() == ONode.serialize(tmp2).length();
-            }
-        } catch (Exception e) {
-            System.out.println("jayway: err");
-            assert ref.length() == tmp.toJson().length();
-        }
     }
 }

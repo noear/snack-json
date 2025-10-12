@@ -1,6 +1,7 @@
 package org.noear.snack4.jsonpath.func;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
@@ -25,14 +26,25 @@ public class AppendFun implements Func {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (oNodes.size() > 1) {
-                return arg0.add(arg1);
+            if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+                if (oNodes.size() > 0) {
+                    ONode n1 = oNodes.get(0);
+                    if (n1.isArray()) {
+                      return   n1.add(arg1);
+                    }
+                }
+
+                return arg0;
             } else {
-                ONode n1 = oNodes.get(0);
-                if (n1.isArray()) {
-                    return n1.add(arg1);
-                } else if (n1.isString()) {
-                    return new ONode(n1.getString().concat(arg1.getString()));
+                if (oNodes.size() > 1) {
+                    return arg0.add(arg1);
+                } else {
+                    ONode n1 = oNodes.get(0);
+                    if (n1.isArray()) {
+                        return n1.add(arg1);
+                    } else if (n1.isString()) {
+                        return new ONode(n1.getString().concat(arg1.getString()));
+                    }
                 }
             }
         }
