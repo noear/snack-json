@@ -102,12 +102,13 @@ public class Func_concat_append_index_Test_no {
         compatible_str("5","\"Sayings of the Century New Ref\"","$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
     }
 
+    @Test
     public void appendTest(){
-        compatible_num("1","[10, 5, 20, 15, 100]","$.store.inventory.append(100)");
-        compatible_num("2","[5, 5, 5, 10]","$.store.book[1].ratings.append(10)");
-        compatible_num("3","[30, 25, 40, 50]","$.store.staff[*].age.append(50)");
-        compatible_num("4","xxx","$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
-        compatible_num("5","[5, 5, 5, 5, 5, 2]","$.store.book[?(@.price > 20)].ratings.append(2)");
+        compatible_str("1","[10,5,20,15,100]","$.store.inventory.append(100)");
+        compatible_str("2","[5,5,5,10]","$.store.book[1].ratings.append(10)");
+        compatible_str("3","[30,25,40,50]","$.store.staff[*].age.append(50)");
+        compatible_str("4","xxx","$.store.book.append({'category': 'new', 'price': 1.00})"); //5个 Book 对象的列表 (最后一个是追加的对象)
+        compatible_str("5","[5,5,5,5,5,2]","$.store.book[?(@.price > 20)].ratings.append(2)");
     }
 
     private void compatible_num(String tag, String ref, String jsonpathStr) {

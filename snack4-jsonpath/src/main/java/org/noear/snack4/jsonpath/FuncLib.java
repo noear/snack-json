@@ -39,15 +39,16 @@ public class FuncLib {
         register("max", FuncLib::max);
         register("avg", FuncLib::avg);
         register("sum", FuncLib::sum);
-        register("stddev",FuncLib::stddev);
+        register("stddev", FuncLib::stddev);
 
-        // 集合函数
+        // 对象函数
         register("size", new LengthFunc());
         register("keys", FuncLib::keys);
         register("first", FuncLib::first);
         register("last", FuncLib::last);
         register("index", new IndexFunc());
         register("concat", new ConcatFun());
+        register("append", new AppendFun());
 
         // 字符串函数
         register("upper", FuncLib::upper);
