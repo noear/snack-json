@@ -24,12 +24,12 @@ public class FunctionDemo {
             }
         });
 
-        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2）
+        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2） //out: [1,2]
         System.out.println(ONode.ofJson("{'a':1,'b':2}")
                 .select("$[?@.parent().a == 1]")
                 .toJson());
 
-        //参考
+        //参考 //out: [1]
         System.out.println(ONode.ofJson("{'a':1,'b':2}")
                 .select("$[?@ == 1]")
                 .toJson());
