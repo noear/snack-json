@@ -40,7 +40,7 @@ public interface QueryContext {
     boolean isMultiple();
 
     /**
-     * 是否有后裔
+     * 是否有后代选择
      */
     boolean isDescendant();
 
@@ -65,12 +65,12 @@ public interface QueryContext {
     Options getOptions();
 
     /**
-     * 获取节点的子节点
+     * 获取节点的子项
      */
     ONode getChildNodeBy(ONode node, String key);
 
     /**
-     * 获取节点的子节点
+     * 获取节点的子项
      */
     ONode getChildNodeAt(ONode node, int idx);
 

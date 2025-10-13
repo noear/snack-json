@@ -55,7 +55,7 @@ public class FilterSelector implements Selector {
         boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 
         if (isDescendant) {
-            //后裔
+            //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 if (expression.test(n1, ctx)) {
                     results.add(n1);
@@ -82,6 +82,10 @@ public class FilterSelector implements Selector {
 
     // 新增递归展开方法
     private void flattenResolveJayway(QueryContext ctx, ONode node, List<ONode> result) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            node.asObject();
+        }
+
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
@@ -93,10 +97,6 @@ public class FilterSelector implements Selector {
                 flattenResolveJayway(ctx, n1, result);
             }
         } else {
-            if (ctx.getMode() == QueryMode.CREATE) {
-                node.asObject();
-            }
-
             if (expression.test(node, ctx)) {
                 result.add(node);
             }
@@ -104,6 +104,7 @@ public class FilterSelector implements Selector {
     }
 
     private void flattenResolveIetf(QueryContext ctx, ONode node, List<ONode> result) {
+        //IETF JSONPath (RFC 9535) 只过滤子项（不包括自己）
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
         }

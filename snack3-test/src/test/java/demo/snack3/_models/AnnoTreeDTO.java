@@ -37,7 +37,7 @@ public class AnnoTreeDTO<T> {
     T value;
 
     /**
-     * 子节点
+     * 子项
      */
     List<AnnoTreeDTO<T>> children;
 }

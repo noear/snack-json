@@ -52,7 +52,7 @@ public class Test2 {
         //::之里做一次string解析；
         JSONObject parse = JSONObject.parseObject(select.val().toString());
 
-        //代码，到这一部就可以了  // ONode 是个 树形结构，子节点变了。。。整个树就会变了。
+        //代码，到这一部就可以了  // ONode 是个 树形结构，子项变了。。。整个树就会变了。
         select.fill(parse);
 
         //但 fill 需要做类型解析；不是很好；改用：select.val(parse); 性能更好。

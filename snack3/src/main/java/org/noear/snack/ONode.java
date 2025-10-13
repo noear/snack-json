@@ -147,7 +147,7 @@ public class ONode {
     }
 
     /**
-     * 使用路径（把当前作为根级，深度生成每个子节点的路径）
+     * 使用路径（把当前作为根级，深度生成每个子项的路径）
      * */
     public ONode usePaths(){
         //一般只在根级生成一次
@@ -485,7 +485,7 @@ public class ONode {
     ////////////////////
 
     /**
-     * 清空子节点（对象或数组有效）
+     * 清空子项（对象或数组有效）
      */
     public void clear() {
         if (isObject()) {
@@ -496,7 +496,7 @@ public class ONode {
     }
 
     /**
-     * 子节点数量（对象或数组有效）
+     * 子项数量（对象或数组有效）
      */
     public int count() {
         if (isObject()) {
@@ -526,7 +526,7 @@ public class ONode {
     }
 
     /**
-     * 是否存在对象子节点
+     * 是否存在对象子项
      */
     public boolean contains(String key) {
         if (isObject()) {
@@ -537,7 +537,7 @@ public class ONode {
     }
 
     /**
-     * 重命名一个子节点（如果不存在则跳过）
+     * 重命名一个子项（如果不存在则跳过）
      */
     public ONode rename(String key, String newKey) {
         if (key == null || newKey == null) {
@@ -568,7 +568,7 @@ public class ONode {
     }
 
     /**
-     * 获取对象子节点（不存在，生成新的子节点并返回）
+     * 获取对象子项（不存在，生成新的子项并返回）
      *
      * @return child:ONode
      */
@@ -606,7 +606,7 @@ public class ONode {
     }
 
     /**
-     * 获取对象子节点（不存在，返回null）
+     * 获取对象子项（不存在，返回null）
      *
      * @return child:ONode
      */
@@ -619,7 +619,7 @@ public class ONode {
     }
 
     /**
-     * 生成新的对象子节点，会清除之前的数据
+     * 生成新的对象子项，会清除之前的数据
      *
      * @return child:ONode
      */
@@ -648,7 +648,7 @@ public class ONode {
     }
 
     /**
-     * 设置对象的子节点（会自动处理类型）
+     * 设置对象的子项（会自动处理类型）
      *
      * @param val 为常规类型或ONode
      * @return self:ONode
@@ -666,7 +666,7 @@ public class ONode {
     }
 
     /**
-     * 设置对象的子节点，值为ONode类型 (需要在外部初始化类型)
+     * 设置对象的子项，值为ONode类型 (需要在外部初始化类型)
      *
      * @return self:ONode
      */
@@ -681,7 +681,7 @@ public class ONode {
     }
 
     /**
-     * 设置对象的子节点，将obj的子节点搬过来
+     * 设置对象的子项，将obj的子项搬过来
      *
      * @param obj 对象类型的节点
      * @return self:ONode
@@ -699,7 +699,7 @@ public class ONode {
     }
 
     /**
-     * 设置对象的子节点，将map的成员搬过来
+     * 设置对象的子项，将map的成员搬过来
      *
      * @return self:ONode
      */
@@ -713,7 +713,7 @@ public class ONode {
     }
 
     /**
-     * 设置对象的子节点，将map的成员搬过来，并交由代理处置
+     * 设置对象的子项，将map的成员搬过来，并交由代理处置
      *
      * @return self:ONode
      */
@@ -729,7 +729,7 @@ public class ONode {
     }
 
     /**
-     * 移除对象的子节点 (搞不清楚是自身还是被移除的，所以不返回)
+     * 移除对象的子项 (搞不清楚是自身还是被移除的，所以不返回)
      */
     public void remove(String key) {
         if (isObject()) {
@@ -753,7 +753,7 @@ public class ONode {
     }
 
     /**
-     * 获取数组子节点（超界，返回空节点） //支持倒数取
+     * 获取数组子项（超界，返回空节点） //支持倒数取
      *
      * @return child:ONode
      */
@@ -794,7 +794,7 @@ public class ONode {
     }
 
     /**
-     * 获取数组子节点（超界，返回null）
+     * 获取数组子项（超界，返回null）
      *
      * @return child:ONode
      */
@@ -809,7 +809,7 @@ public class ONode {
     }
 
     /**
-     * 移除数组的子节点(搞不清楚是自身还是被移除的，所以不返回)
+     * 移除数组的子项(搞不清楚是自身还是被移除的，所以不返回)
      */
     public void removeAt(int index) {
         if (isArray()) {
@@ -818,7 +818,7 @@ public class ONode {
     }
 
     /**
-     * 生成新的数组子节点
+     * 生成新的数组子项
      *
      * @return child:ONode
      */
@@ -831,7 +831,7 @@ public class ONode {
     }
 
     /**
-     * 添加数组子节点
+     * 添加数组子项
      *
      * @param val 为常规类型或ONode
      * @return self:ONode
@@ -849,7 +849,7 @@ public class ONode {
     }
 
     /**
-     * 添加数组子节点，值为ONode类型 (需要在外部初始化类型)
+     * 添加数组子项，值为ONode类型 (需要在外部初始化类型)
      *
      * @return self:ONode
      */
@@ -863,7 +863,7 @@ public class ONode {
     }
 
     /**
-     * 添加数组子节点，将ary的子节点搬过来
+     * 添加数组子项，将ary的子项搬过来
      *
      * @param ary 数组类型的节点
      * @return self:ONode
@@ -882,7 +882,7 @@ public class ONode {
     }
 
     /**
-     * 添加数组子节点，将ary的成员点搬过来
+     * 添加数组子项，将ary的成员点搬过来
      *
      * @return self:ONode
      */
@@ -896,7 +896,7 @@ public class ONode {
     }
 
     /**
-     * 添加数组子节点，将ary的成员点搬过来，并交由代理处置
+     * 添加数组子项，将ary的成员点搬过来，并交由代理处置
      *
      * @return self:ONode
      */
@@ -950,7 +950,7 @@ public class ONode {
 
 
     /**
-     * 遍历对象的子节点
+     * 遍历对象的子项
      */
     public ONode forEach(BiConsumer<String, ONode> consumer) {
         if (isObject()) {
@@ -961,7 +961,7 @@ public class ONode {
     }
 
     /**
-     * 遍历数组的子节点
+     * 遍历数组的子项
      */
     public ONode forEach(Consumer<ONode> consumer) {
         if (isArray()) {

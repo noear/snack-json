@@ -79,7 +79,7 @@ public class SliceSelector implements Selector {
         if (isDescendant) {
             boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 
-            //后裔
+            //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
                 doResolve(ctx, n1, results);
             });

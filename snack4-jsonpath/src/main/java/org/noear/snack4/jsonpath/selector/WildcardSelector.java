@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 通配符选择器：选择节点的所有子节点（如 $.*, $[*], $..*, $..[*]）
+ * 通配符选择器：选择节点的所有子项（如 $.*, $[*], $..*, $..[*]）
  *
  * @author noear 2025/10/11 created
  * @since 4.0
@@ -43,7 +43,7 @@ public class WildcardSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            //后裔
+            //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, false, results::add);
         } else {
             for (ONode n : currentNodes) {
