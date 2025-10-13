@@ -26,15 +26,6 @@ public class TermUtil {
      * 分析
      */
     public static String[] resolve(String expr) {
-        String[] result = new String[3];
-
-        if (expr.length() > 3) {
-            if (expr.charAt(0) == '(' && expr.charAt(expr.length() - 1) == ')') { //like !(xxx == yyy)
-                expr = expr.substring(1, expr.length() - 1);
-            }
-        }
-
-
         String leftStr;
         String opStr = null;
         String rightStr = null;
@@ -69,24 +60,43 @@ public class TermUtil {
             // 剩余部分包含操作符和右操作数
             String opAndRight = expr.substring(endOfLeft + 1).trim();
 
-            // 寻找操作符和右操作数之间的空格
-            // 假设操作符本身不包含空格（例如，我们不支持 'is not' 这样的多词操作符）
-            int endOfOp = opAndRight.indexOf(' ');
+            // --- 优化点：处理多词操作符，例如 "not like"、"not in" ---
 
-            if (endOfOp == -1) {
-                // 如果没有更多空格，说明剩余部分就是操作符（例如一元操作符）
-                opStr = opAndRight;
+            // 尝试识别 "not like " (注意 trailing space)
+            if (opAndRight.startsWith("not like ")) {
+                opStr = "not like";
+                rightStr = opAndRight.substring("not like".length() + 1).trim(); // +1 跳过空格
+            }
+            // 尝试识别 "not in "
+            else if (opAndRight.startsWith("not in ")) {
+                opStr = "not in";
+                rightStr = opAndRight.substring("not in".length() + 1).trim();
+            }
+            // 尝试识别 "is not null" (is not null 后面没有右操作数)
+            else if (opAndRight.equals("is not null")) {
+                opStr = "is not null";
+                rightStr = null;
+            }
+            // 尝试识别 "is null"
+            else if (opAndRight.equals("is null")) {
+                opStr = "is null";
+                rightStr = null;
             } else {
-                // 如果还有空格，分割出操作符和右操作数
-                opStr = opAndRight.substring(0, endOfOp).trim();
-                rightStr = opAndRight.substring(endOfOp + 1).trim();
+                // 如果不是多词操作符，则按单词操作符处理
+                // 寻找操作符和右操作数之间的空格
+                int firstSpace = opAndRight.indexOf(' ');
+
+                if (firstSpace == -1) {
+                    // 如果没有更多空格，说明剩余部分就是操作符（例如一元操作符）
+                    opStr = opAndRight;
+                } else {
+                    // 如果还有空格，分割出操作符和右操作数
+                    opStr = opAndRight.substring(0, firstSpace).trim();
+                    rightStr = opAndRight.substring(firstSpace + 1).trim();
+                }
             }
         }
 
-        result[0] = leftStr;
-        result[1] = opStr;
-        result[2] = rightStr;
-
-        return result;
+        return new String[]{leftStr, opStr, rightStr};
     }
 }
