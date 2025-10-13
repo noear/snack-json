@@ -30,23 +30,18 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class LengthFunction implements Function {
+public class LengthFunction extends AbstractFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+
+        if (currentNodes.isEmpty()) {
+            return ctx.newNode();
+        }
+
         if (ctx.isInFilter()) {
-            if (argNodes.size() != 1) {
-                throw new JsonPathException("Requires 1 parameters");
-            }
-
-            currentNodes = argNodes.get(0).getArray();
-
-            if (currentNodes.isEmpty()) {
-                return ctx.newNode();
-            }
-
             return lengthOf(ctx, currentNodes.get(0));
         } else {
-
             if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
                 List<ONode> results = new ArrayList<>();
 

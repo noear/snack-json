@@ -23,28 +23,20 @@ import org.noear.snack4.jsonpath.QueryContext;
 import java.util.List;
 
 /**
- * 节点列表中单个节点的值
  *
- * @author noear 2025/10/11 created
+ * @author noear 2025/10/14 created
  * @since 4.0
  */
-public class ValueFunction extends AbstractFunction implements Function {
-    @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+public abstract class AbstractFunction implements Function {
+    protected List<ONode> getNodeList(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (ctx.isInFilter()) {
+            if (argNodes.size() < 1) {
+                throw new JsonPathException("Requires 1 parameters");
+            }
 
-        if (currentNodes.size() != 1) {
-            throw new JsonPathException("Not a single-value array");
+            return argNodes.get(0).getArray();
+        } else {
+            return currentNodes;
         }
-
-        ONode n1 = currentNodes.get(0);
-
-        if (n1.isValue()) {
-            return n1;
-        } else if (n1.isArray()) {
-            return n1.get(0);
-        }
-
-        return ctx.newNode();
     }
 }

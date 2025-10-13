@@ -30,16 +30,10 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class LastFunction implements Function {
+public class LastFunction extends AbstractFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (ctx.isInFilter()) {
-            if (argNodes.size() != 1) {
-                throw new JsonPathException("Requires 1 parameters");
-            }
-
-            currentNodes = argNodes.get(0).getArray();
-        }
+        currentNodes = getNodeList(ctx, currentNodes, argNodes);
 
         if (currentNodes.isEmpty()) {
             return ctx.newNode();
