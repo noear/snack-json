@@ -33,7 +33,7 @@ public class SearchFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (argNodes.size() != 2) {
-            throw new JsonPathException("The parameter requires two");
+            throw new JsonPathException("Requires 2 parameters");
         }
 
         ONode o1 = argNodes.get(0);

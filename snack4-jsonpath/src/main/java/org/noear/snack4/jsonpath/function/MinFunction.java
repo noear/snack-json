@@ -33,6 +33,19 @@ import java.util.List;
 public class MinFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (ctx.isInFilter()) {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameters");
+            }
+
+            ONode arg0 = argNodes.get(0);
+            if (arg0.isArray() == false) {
+                throw new JsonPathException("Requires 1 array parameters");
+            }
+
+            currentNodes = arg0.getArray();
+        }
+
         if (currentNodes.isEmpty()) {
             return ctx.newNode();
         }

@@ -32,6 +32,10 @@ public class ValueFunction implements Function {
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         ONode n1 = null;
         if (ctx.isInFilter()) {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameters");
+            }
+
             n1 = argNodes.get(0);
         } else {
             if (currentNodes.size() == 1) {
