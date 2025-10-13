@@ -79,13 +79,10 @@ public class BeanEncoder {
 
             return oNode;
         } catch (Throwable e) {
-            if (e instanceof StackOverflowError) {
-                throw (StackOverflowError) e;
-            } else if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            } else {
-                throw new RuntimeException("Failed to convert bean to ONode", e);
+            if (e instanceof CodecException) {
+                throw (CodecException) e;
             }
+            throw new CodecException("Failed to encode bean to ONode", e);
         }
     }
 

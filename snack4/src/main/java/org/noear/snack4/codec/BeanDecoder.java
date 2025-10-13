@@ -21,7 +21,6 @@ import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
-import org.noear.snack4.SnackException;
 import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.*;
@@ -81,10 +80,10 @@ public class BeanDecoder {
         try {
             return (T) convertValue(source0, typeWrap, target0, null);
         } catch (Throwable e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
+            if (e instanceof CodecException) {
+                throw (CodecException) e;
             }
-            throw new RuntimeException(e);
+            throw new CodecException("Failed to decode bean from ONode", e);
         }
     }
 
@@ -136,12 +135,12 @@ public class BeanDecoder {
                         return null;
                     }
 
-                    throw new IllegalArgumentException("can not convert bean to type: " + typeWrap.getType());
+                    throw new CodecException("can not convert bean to type: " + typeWrap.getType());
                 }
 
                 Constructor constructor = typeWrap.getConstructor();
                 if (constructor == null) {
-                    throw new SnackException("Create instance failed: " + typeWrap.getType().getName());
+                    throw new CodecException("Create instance failed: " + typeWrap.getType().getName());
                 }
 
                 if (constructor.isAccessible() == false) {
@@ -195,7 +194,7 @@ public class BeanDecoder {
                         convertToBeanProperty(node, property, target);
                     }
                 } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
-                    throw new SnackException("Unknown property : " + kv.getKey());
+                    throw new CodecException("Unknown property : " + kv.getKey());
                 }
             }
         } else {
@@ -283,7 +282,7 @@ public class BeanDecoder {
                 }
             }
         } else {
-            throw new IllegalArgumentException("The type of node " + node.getType() + " cannot be converted to collection.");
+            throw new CodecException("The type of node " + node.getType() + " cannot be converted to collection.");
         }
 
         return coll;
@@ -324,7 +323,7 @@ public class BeanDecoder {
 
             return map;
         } else {
-            throw new IllegalArgumentException("The type of node " + node.getType() + " cannot be converted to map.");
+            throw new CodecException("The type of node " + node.getType() + " cannot be converted to map.");
         }
     }
 
@@ -342,7 +341,7 @@ public class BeanDecoder {
             }
         }
 
-        throw new IllegalArgumentException("Unsupported map key type: " + keyType.getType());
+        throw new CodecException("Unsupported map key type: " + keyType.getType());
     }
 
     private Object[] getConstructorArguments(TypeWrap typeWrap, ONode node) throws Exception {
@@ -403,12 +402,12 @@ public class BeanDecoder {
                         typeStr.startsWith("com.sun.") ||
                         typeStr.startsWith("javax.") ||
                         typeStr.startsWith("jdk.")) {
-                    throw new SnackException("Unsupported type, class: " + typeStr);
+                    throw new CodecException("Unsupported type, class: " + typeStr);
                 }
 
                 Class<?> clz = opts.loadClass(typeStr);
                 if (clz == null) {
-                    throw new SnackException("Unsupported type, class: " + typeStr);
+                    throw new CodecException("Unsupported type, class: " + typeStr);
                 } else {
                     return TypeWrap.from(clz);
                 }
