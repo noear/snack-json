@@ -34,7 +34,7 @@ public class URLDecoder implements ObjectDecoder<URL> {
     public URL decode(DecodeContext ctx, ONode node) {
         try {
             return URI.create(node.getString()).toURL();
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             throw new CodecException(e);
         }
     }

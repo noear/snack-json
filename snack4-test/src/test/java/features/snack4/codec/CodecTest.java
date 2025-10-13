@@ -1,8 +1,9 @@
 package features.snack4.codec;
 
-import javafx.scene.chart.Chart;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.codec.CodecException;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -10,12 +11,10 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.sql.Date;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Currency;
-import java.util.Objects;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -24,25 +23,27 @@ import java.util.concurrent.atomic.LongAdder;
  * @author noear 2025/10/13 created
  *
  */
-public class BeanTest {
+public class CodecTest {
 
     @Test
-    public void typeTest() throws Exception {
+    public void case1() throws Exception {
         Bean bean = new Bean();
 
-        bean.charset =  Charset.forName("UTF-8");
+        bean.charset = Charset.forName("UTF-8");
         bean.longAdder = new LongAdder();
         bean.doubleAdder = new DoubleAdder();
         bean.file = new File("/a.j");
-        bean.address = new  InetSocketAddress("127.0.0.1", 8080);
+        bean.address = new InetSocketAddress("127.0.0.1", 8080);
         bean.dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         bean.sqlDate = new Date(System.currentTimeMillis());
-        bean.timeZone =   TimeZone.getTimeZone("Asia/Shanghai");
+        bean.sqlTime = new Time(System.currentTimeMillis());
+        bean.timeZone = TimeZone.getTimeZone("Asia/Shanghai");
         bean.uri = URI.create("http://127.0.0.1:8080/a.j");
         bean.url = bean.uri.toURL();
         bean.uuid = UUID.randomUUID();
-        bean.currency =  Currency.getInstance("USD");
+        bean.currency = Currency.getInstance("USD");
         bean.duration = Duration.ofSeconds(30);
+        bean.collection = Arrays.asList("a", "b", "c");
 
 
         String json = ONode.serialize(bean);
@@ -57,6 +58,21 @@ public class BeanTest {
         assert json.equals(json2);
     }
 
+    @Test
+    public void case2() {
+        Assertions.assertThrows(CodecException.class, () -> {
+            ONode.deserialize("{'file':111}",  Bean.class);
+        });
+
+        Assertions.assertThrows(CodecException.class, () -> {
+            ONode.deserialize("{'dateFormat':111}",  Bean.class);
+        });
+
+        Assertions.assertThrows(CodecException.class, () -> {
+            ONode.deserialize("{'url':111}",  Bean.class);
+        });
+    }
+
     static class Bean {
         public Charset charset;
         public DoubleAdder doubleAdder;
@@ -65,12 +81,14 @@ public class BeanTest {
         public InetSocketAddress address;
         public SimpleDateFormat dateFormat;
         public java.sql.Date sqlDate;
+        public java.sql.Time sqlTime;
         public TimeZone timeZone;
         public URI uri;
-        public URL  url;
+        public URL url;
         public UUID uuid;
         public Currency currency;
         public Duration duration;
+        public Collection<String> collection;
 
         @Override
         public boolean equals(Object object) {
