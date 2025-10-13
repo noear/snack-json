@@ -20,6 +20,7 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.Operator;
 import org.noear.snack4.jsonpath.OperatorLib;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.util.TokenizeUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.util.*;
@@ -44,7 +45,7 @@ public class Expression {
 
     private Expression(String expressionStr) {
         this.expressionStr = expressionStr;
-        List<Token> tokens = tokenize(expressionStr);
+        List<Token> tokens = TokenizeUtil.tokenize(expressionStr);
         this.rpn = convertToRPN(tokens);
     }
 
@@ -72,103 +73,6 @@ public class Expression {
         }
     }
 
-    /**
-     * 分词
-     */
-    public static List<Token> tokenize(String filter) {
-        List<Token> tokens = new ArrayList<>();
-        int index = 0;
-        int len = filter.length();
-
-        while (index < len) {
-            char c = filter.charAt(index);
-            if (Character.isWhitespace(c)) {
-                index++;
-                continue;
-            }
-
-            if (c == '(') {
-                tokens.add(new Token(TokenType.LPAREN, "("));
-                index++;
-            } else if (c == ')') {
-                tokens.add(new Token(TokenType.RPAREN, ")"));
-                index++;
-            } else if (c == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
-                tokens.add(new Token(TokenType.AND, "&&"));
-                index += 2;
-            } else if (c == '|' && index + 1 < len && filter.charAt(index + 1) == '|') {
-                tokens.add(new Token(TokenType.OR, "||"));
-                index += 2;
-            } else {
-                // 扫描 ATOM (逻辑项，如 @.book.price > 10)
-                int start = index;
-                char quoteChar = 0; // 0 表示不在引号内
-                int parenCount = 0;
-                boolean hasContent = false;
-
-                while (index < len) {
-                    char curr = filter.charAt(index);
-
-                    // 1. 引号处理：处理函数参数或字面量中的引号
-                    if (quoteChar != 0) {
-                        if (curr == quoteChar) {
-                            quoteChar = 0;
-                        }
-                    } else if (curr == '\'' || curr == '"') {
-                        quoteChar = curr;
-                    }
-
-                    // 2. 逻辑操作符和括号边界检测 (不在引号内时)
-                    else {
-                        if (curr == '(') {
-                            parenCount++;
-                        } else if (curr == ')') {
-                            if (parenCount > 0) {
-                                parenCount--; // 匹配函数内部的右括号
-                            } else {
-                                // 独立的右括号，停止当前token，让外层循环处理
-                                break;
-                            }
-                        }
-
-                        // 检查是否遇到顶级逻辑操作符（不在任何括号内时）
-                        if (parenCount == 0) {
-                            if (curr == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
-                                break; // 遇到顶级 &&，终止 ATOM
-                            }
-                            if (curr == '|' && index + 1 < len && filter.charAt(index + 1) == '|') {
-                                break; // 遇到顶级 ||，终止 ATOM
-                            }
-                            if (curr == '(') {
-                                // 遇到独立的左括号，终止 ATOM，让外层循环处理
-                                break;
-                            }
-                        }
-
-                        if (Character.isWhitespace(curr)) {
-                            // 遇到空格，继续扫描直到遇到操作符或非空格
-                        }
-
-                    }
-
-                    index++;
-                    hasContent = true;
-                }
-
-                // 提取 ATOM
-                if (hasContent) {
-                    String atom = filter.substring(start, index).trim();
-                    if (!atom.isEmpty()) {
-                        tokens.add(new Token(TokenType.ATOM, atom));
-                    }
-                } else if (index == start) {
-                    // 如果没有读取到任何内容，向前移动一位避免无限循环 (理论上不会发生)
-                    index++;
-                }
-            }
-        }
-        return tokens;
-    }
 
     /**
      * 转换为逆波兰式
@@ -210,7 +114,8 @@ public class Expression {
 
     /**
      * 优先级
-     * */
+     *
+     */
     private static int precedence(Token token) {
         return token.type == TokenType.AND ? 2 : token.type == TokenType.OR ? 1 : 0;
     }
@@ -260,13 +165,13 @@ public class Expression {
         return !leftNode.isNull();
     }
 
-    private static enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
+    public static enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
 
     public static class Token {
         final TokenType type;
         final String value;
 
-        Token(TokenType type, String value) {
+        public Token(TokenType type, String value) {
             this.type = type;
             this.value = value;
         }

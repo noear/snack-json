@@ -2,6 +2,7 @@ package features.snack4.jsonpath.manual;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.jsonpath.filter.Expression;
+import org.noear.snack4.jsonpath.util.TokenizeUtil;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class TokenizeTest {
 
     private void testTokenize(String expression, int size) {
         System.out.println("Expression: " + expression);
-        List<Expression.Token> tokens = Expression.tokenize(expression);
+        List<Expression.Token> tokens = TokenizeUtil.tokenize(expression);
         for (Expression.Token token : tokens) {
             System.out.println("  " + token);
         }
