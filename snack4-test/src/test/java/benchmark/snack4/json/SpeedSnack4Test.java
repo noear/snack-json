@@ -13,7 +13,7 @@ public class SpeedSnack4Test {
     /** 测试性能（大json） */
     @Test
     public void test00() throws Exception {
-        //10000=>2377,2190,2285 //3179,2861,3136
+        //10000=>2377,2190,2285 //2203,2205,2140
         //
         //
         //62kb

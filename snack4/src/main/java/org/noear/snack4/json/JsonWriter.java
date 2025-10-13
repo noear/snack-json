@@ -175,7 +175,7 @@ public class JsonWriter {
 
     private void writeKey(String s) throws IOException {
         if (opts.hasFeature(Feature.Write_UnquotedFieldNames)) {
-            writer.write(escapeString(s, '"', opts));
+            writeEscapeString(s, '"', opts);
         } else {
             writeString(s);
         }
@@ -184,46 +184,41 @@ public class JsonWriter {
     private void writeString(String s) throws IOException {
         char quoteChar = opts.hasFeature(Feature.Write_UseSingleQuotes) ? '\'' : '"';
         writer.write(quoteChar);
-        writer.write(escapeString(s, quoteChar, opts));
+        writeEscapeString(s, quoteChar, opts);
         writer.write(quoteChar);
     }
 
-    private String escapeString(String s, char quoteChar, Options opts) {
-        if (s.isEmpty()) {
-            return s;
-        }
+    private void writeEscapeString(String s, char quoteChar, Options opts) throws IOException {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
 
-        StringBuilder sb = getStringBuilder();
-        for (char c : s.toCharArray()) {
             if (c >= '\0' && c <= '\7') {
-                sb.append("\\u000");
-                sb.append(IoUtil.CHARS_MARK[(int) c]);
+                writer.write("\\u000");
+                writer.write(IoUtil.CHARS_MARK[(int) c]);
                 continue;
             }
 
             if (c == quoteChar || c == '\n' || c == '\r' || c == '\t' || c == '\f' || c == '\b') {
-                sb.append("\\");
-                sb.append(IoUtil.CHARS_MARK[(int) c]);
+                writer.write('\\');
+                writer.write(IoUtil.CHARS_MARK[(int) c]);
                 continue;
             }
 
             if (c == '\\') {
                 if (opts.hasFeature(Feature.Write_UseRawBackslash)) {
-                    sb.append('\\');
+                    writer.write('\\');
                 } else {
-                    sb.append("\\\\");
+                    writer.write("\\\\");
                 }
                 continue;
             }
 
             if (c < 0x20 || (opts.hasFeature(Feature.Write_BrowserCompatible) && c > 0x7F)) {
-                sb.append(String.format("\\u%04x", (int) c));
+                writer.write(String.format("\\u%04x", (int) c));
             } else {
-                sb.append(c);
+                writer.write(c);
             }
         }
-
-        return sb.toString();
     }
 
     private String toSnakeStyle(String camelName) {
