@@ -52,18 +52,33 @@ public class BeanDecoder {
      *
      */
     public static <T> T decode(ONode node, Type type, Object target, Options opts) {
-        if (node == null || type == null) {
+        return new BeanDecoder(node, type, target, opts).decode();
+    }
+
+    private final ONode source0;
+    private final Type targetType0;
+    private final Object target0;
+
+    private final Options opts;
+    private Map<Object, Object> visited;
+
+    public BeanDecoder(ONode source, Type type, Object target, Options opts) {
+        this.source0 = source;
+        this.targetType0 = type;
+        this.target0 = target;
+        this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+    }
+
+    public <T> T decode() {
+        if (source0 == null || targetType0 == null) {
             return null;
         }
 
-        if (opts == null) {
-            opts = Options.DEF_OPTIONS;
-        }
-
-        TypeWrap typeWrap = TypeWrap.from(type);
+        TypeWrap typeWrap = TypeWrap.from(targetType0);
+        visited = new IdentityHashMap<>();
 
         try {
-            return (T) convertValue(node, typeWrap, target, null, new IdentityHashMap<>(), opts);
+            return (T) convertValue(source0, typeWrap, target0, null);
         } catch (Throwable e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
@@ -73,14 +88,14 @@ public class BeanDecoder {
     }
 
     // 类型转换核心
-    private static Object convertValue(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr, Map<Object, Object> visited, Options opts) throws Exception {
+    private Object convertValue(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr) throws Exception {
         if (node.isNull()) {
             return null;
         }
 
         // 优先使用自定义编解码器
         //提前找到@type类型，便于自定义解码器定位
-        typeWrap = confirmNodeType(opts, node, typeWrap);
+        typeWrap = confirmNodeType(node, typeWrap);
 
         // 优先使用自定义编解码器
         ObjectDecoder decoder = opts.getDecoder(typeWrap.getType());
@@ -135,24 +150,24 @@ public class BeanDecoder {
                 if (constructor.getParameterCount() == 0) {
                     target = constructor.newInstance();
                 } else {
-                    Object[] args = getConstructorArguments(typeWrap, node, visited, opts);
+                    Object[] args = getConstructorArguments(typeWrap, node);
                     target = constructor.newInstance(args);
                 }
             }
         }
 
         if (target instanceof Map) {
-            target = convertToMap(node, typeWrap, target, visited, opts);
+            target = convertToMap(node, typeWrap, target);
         } else if (target instanceof Collection) {
-            target = convertToCollection(node, typeWrap, target, visited, opts);
+            target = convertToCollection(node, typeWrap, target);
         } else {
-            return convertToBean(node, typeWrap, target, visited, opts);
+            return convertToBean(node, typeWrap, target);
         }
 
         return target;
     }
 
-    private static Object convertToBean(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private Object convertToBean(ONode node, TypeWrap typeWrap, Object target) throws Exception {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseOnlySetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
@@ -165,8 +180,8 @@ public class BeanDecoder {
                     continue;
                 }
 
-                if(typeWrap.getConstructor() != null) {
-                    if(typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                if (typeWrap.getConstructor() != null) {
+                    if (typeWrap.getParameterMap().containsKey(kv.getKey())) {
                         continue;
                     }
                 }
@@ -176,7 +191,7 @@ public class BeanDecoder {
                 if (propertyWrap != null) {
                     if (propertyWrap.getSetterWrap() != null) {
                         Property property = propertyWrap.getSetterWrap();
-                        setValueForProperty(node, property, target, visited, opts);
+                        convertToBeanProperty(node, property, target);
                     }
                 } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
                     throw new SnackException("Unknown property : " + kv.getKey());
@@ -185,8 +200,8 @@ public class BeanDecoder {
         } else {
             //允许用 setter （以类为主，支持 flat）
             for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWraps().entrySet()) {
-                if(typeWrap.getConstructor() != null) {
-                    if(typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                if (typeWrap.getConstructor() != null) {
+                    if (typeWrap.getParameterMap().containsKey(kv.getKey())) {
                         continue;
                     }
                 }
@@ -204,20 +219,20 @@ public class BeanDecoder {
                     continue;
                 }
 
-                setValueForProperty(node, property, target, visited, opts);
+                convertToBeanProperty(node, property, target);
             }
         }
 
         return target;
     }
 
-    private static void setValueForProperty(ONode node, Property property, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private void convertToBeanProperty(ONode node, Property property, Object target) throws Exception {
         ONode fieldNode = (property.getAttr().isFlat() ? node : node.get(property.getName()));
 
         if (fieldNode != null && !fieldNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
             Object existingFieldValue = property.getValue(target);
-            Object value = convertValue(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr(), visited, opts);
+            Object value = convertValue(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr());
 
             property.setValue(target, value);
         }
@@ -226,7 +241,7 @@ public class BeanDecoder {
 
     //-- 辅助方法 --//
     // 处理List泛型
-    private static Collection convertToCollection(ONode node, TypeWrap typeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private Collection convertToCollection(ONode node, TypeWrap typeWrap, Object target) throws Exception {
         Type elementType = Object.class;
         if (typeWrap.isParameterizedType()) {
             elementType = typeWrap.getActualTypeArguments()[0];
@@ -244,7 +259,7 @@ public class BeanDecoder {
 
             for (ONode n1 : node.getArray()) {
                 //填充集合时，元素为新创建的，所以 target 传 null
-                Object item = convertValue(n1, elementTypeWrap, null, null, visited, opts);
+                Object item = convertValue(n1, elementTypeWrap, null, null);
                 if (item != null) {
                     coll.add(item);
                 }
@@ -261,7 +276,7 @@ public class BeanDecoder {
             TypeWrap elementTypeWrap = TypeWrap.from(elementType);
 
             for (String str : strArray) {
-                Object item = convertValue(new ONode(opts, str), elementTypeWrap, null, null, visited, opts);
+                Object item = convertValue(new ONode(opts, str), elementTypeWrap, null, null);
                 if (item != null) {
                     coll.add(item);
                 }
@@ -274,7 +289,7 @@ public class BeanDecoder {
     }
 
     // 处理Map泛型
-    private static Map convertToMap(ONode node, TypeWrap targetTypeWrap, Object target, Map<Object, Object> visited, Options opts) throws Exception {
+    private Map convertToMap(ONode node, TypeWrap targetTypeWrap, Object target) throws Exception {
         if (node.isObject()) {
             Type keyType = Object.class;
             Type valueType = Object.class;
@@ -301,8 +316,8 @@ public class BeanDecoder {
                 }
 
                 //Map 的值是新对象，递归调用时 target 传 null
-                Object k = convertKey(kv.getKey(), keyTypeWrap, opts);
-                Object v = convertValue(kv.getValue(), valueTypeWrap, null, null, visited, opts);
+                Object k = convertKey(kv.getKey(), keyTypeWrap);
+                Object v = convertValue(kv.getValue(), valueTypeWrap, null, null);
                 map.put(k, v);
             }
 
@@ -313,7 +328,7 @@ public class BeanDecoder {
     }
 
     // Map键类型转换
-    private static Object convertKey(String key, TypeWrap keyType, Options opts) {
+    private Object convertKey(String key, TypeWrap keyType) {
         if (keyType.getType() == String.class || keyType.getType() == Object.class) return key;
         if (keyType.getType() == Integer.class || keyType.getType() == int.class) return Integer.parseInt(key);
         if (keyType.getType() == Long.class || keyType.getType() == long.class) return Long.parseLong(key);
@@ -329,7 +344,7 @@ public class BeanDecoder {
         throw new IllegalArgumentException("Unsupported map key type: " + keyType.getType());
     }
 
-    private static Object[] getConstructorArguments(TypeWrap typeWrap, ONode node, Map<Object, Object> visited, Options opts) throws Exception {
+    private Object[] getConstructorArguments(TypeWrap typeWrap, ONode node) throws Exception {
         //只有带参数的构造函（像 java record, kotlin data）
         Object[] argsV = new Object[typeWrap.getParameterAry().size()];
 
@@ -337,7 +352,7 @@ public class BeanDecoder {
             Parameter p = typeWrap.getParameterAry().get(j);
             if (node.hasKey(p.getName())) {
                 ONodeAttrHolder attr = new ONodeAttrHolder(p.getAnnotation(ONodeAttr.class), false);
-                Object val = convertValue(node.get(p.getName()), TypeWrap.from(p.getParameterizedType()), null, attr, visited, opts);
+                Object val = convertValue(node.get(p.getName()), TypeWrap.from(p.getParameterizedType()), null, attr);
                 argsV[j] = val;
             } else {
                 argsV[j] = null;
@@ -350,8 +365,8 @@ public class BeanDecoder {
     /**
      * 确认节点类型
      */
-    private static TypeWrap confirmNodeType(Options opts, ONode oRef, TypeWrap def) {
-        TypeWrap type0 = resolveNodeType(opts, oRef, def);
+    private TypeWrap confirmNodeType(ONode oRef, TypeWrap def) {
+        TypeWrap type0 = resolveNodeType(oRef, def);
 
         if (Throwable.class.isAssignableFrom(type0.getType())) {
             //如果有异常，则异常优先
@@ -372,10 +387,10 @@ public class BeanDecoder {
      * 分析节点类型
      *
      */
-    private static TypeWrap resolveNodeType(Options opts, ONode oRef, TypeWrap def) {
+    private TypeWrap resolveNodeType(ONode oRef, TypeWrap def) {
         if (oRef.isObject()) {
             String typeStr = null;
-            if (isReadClassName(opts, oRef)) {
+            if (isReadClassName(oRef)) {
                 ONode n1 = oRef.getObject().get(opts.getTypePropertyName());
                 if (n1 != null) {
                     typeStr = n1.getString();
@@ -415,7 +430,7 @@ public class BeanDecoder {
     /**
      * 是否读取类名字
      */
-    private static boolean isReadClassName(Options opts, ONode node) {
+    private boolean isReadClassName(ONode node) {
         if (opts.hasFeature(Feature.Read_AutoType) == false) {
             return false;
         }
