@@ -20,20 +20,28 @@ public class TermTest {
         testTerm("1 <= $.arr", "1", "<=", "$.arr");
         testTerm("$.a > 12", "$.a", ">", "12");
 
-        testTerm("@.a in [1,2,3]", "@.a", "in", "[1,2,3]");
-        testTerm("@.a like '1'", "@.a", "like", "'1'");
-
         testTerm("@.columnCode == \"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\"", "@.columnCode", "==", "\"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\"");
-    }
 
-    @Test
-    public void case2() {
+        testTerm("@.a in [1,2,3]", "@.a", "in", "[1,2,3]");
+        testTerm("@.a not in [1,2,3]", "@.a", "not in", "[1,2,3]");
+
+        testTerm("@.a like '1'", "@.a", "like", "'1'");
         testTerm("@.a not like '1'", "@.a", "not like", "'1'");
-    }
 
-    @Test
-    public void case3() {
+        testTerm("@.a rlike '1'", "@.a", "rlike", "'1'");
+        testTerm("@.a not rlike '1'", "@.a", "not rlike", "'1'");
+
+        testTerm("@.a between '1'", "@.a", "between", "'1'");
+        testTerm("@.a not between '1'", "@.a", "not between", "'1'");
+
+        testTerm("@.a and '1'", "@.a", "and", "'1'");
+        testTerm("@.a or '1'", "@.a", "or", "'1'");
+
         testTerm("@.a starts with '1'", "@.a", "starts with", "'1'");
+        testTerm("@.a ends with '1'", "@.a", "ends with", "'1'");
+
+        testTerm("@.a contains '1'", "@.a", "contains", "'1'");
+        testTerm("@.a not contains '1'", "@.a", "not contains", "'1'");
     }
 
     public void testTerm(String token, String left, String op, String right) {
