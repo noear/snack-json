@@ -20,6 +20,9 @@ public class TokenizeTest {
         testTokenize("$.absent1 == $.absent2", 1);
         testTokenize("1 <= $.arr", 1);
         testTokenize("($.a > 12) || ($.b > 5)", 7);
+
+        testTokenize("@.a like '1'", 1);
+        testTokenize("@.a not like '1'", 1);
     }
 
     private void testTokenize(String expression, int size) {
