@@ -2,9 +2,9 @@ package features.snack4.path.jayway.func;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 /**
  *
@@ -23,7 +23,7 @@ public abstract class FuncTestAbs {
         Throwable err2 = null;
 
         try {
-            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addStandard(Feature.JsonPath_Jayway));
+            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeature(Feature.JsonPath_Jayway));
             tmp = oNode.select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public abstract class FuncTestAbs {
         Throwable err2 = null;
 
         try {
-            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addStandard(Feature.JsonPath_Jayway));
+            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeature(Feature.JsonPath_Jayway));
             tmp = oNode.select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Exception e) {

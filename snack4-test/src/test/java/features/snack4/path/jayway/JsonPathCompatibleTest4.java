@@ -3,9 +3,9 @@ package features.snack4.path.jayway;
 import com.jayway.jsonpath.JsonPath;
 import features.snack4.v3_composite.JsonPathTest3;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class JsonPathCompatibleTest4 {
         Throwable err2 = null;
 
         try {
-            tmp = ONode.ofJson(json, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonpathStr);
+            tmp = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_Jayway)).select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Throwable e) {
             err1 = e;

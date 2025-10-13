@@ -6,9 +6,9 @@ import features.snack4.path.generated.JsonPathSelectComplexTest;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -42,7 +42,7 @@ public class JsonPathCompatibleTest1 {
         System.out.println(tmp);
         assert tmp.size() == 5;
 
-        ONode tmp2 = ONode.ofJson(json, Options.of().addStandard(Feature.JsonPath_Jayway)).select("$..*[?(@.treePath)]");
+        ONode tmp2 = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_Jayway)).select("$..*[?(@.treePath)]");
         System.out.println(tmp2);
         assert tmp2.isArray();
         Assertions.assertEquals(5, tmp2.size());
@@ -156,7 +156,7 @@ public class JsonPathCompatibleTest1 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.ofJson(json, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_Jayway)).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

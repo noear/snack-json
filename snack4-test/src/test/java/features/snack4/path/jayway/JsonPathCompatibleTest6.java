@@ -2,9 +2,9 @@ package features.snack4.path.jayway;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 /**
  * @author noear 2023/5/13 created
@@ -14,7 +14,7 @@ public class JsonPathCompatibleTest6 {
     public void test1() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$..*[?(@.id)]";
-        String json1 = ONode.ofJson(test, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test, Options.of().addFeature(Feature.JsonPath_Jayway)).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
@@ -236,7 +236,7 @@ public class JsonPathCompatibleTest6 {
         Throwable err2 = null;
 
         try {
-            tmp = ONode.ofJson(json, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonpathStr);
+            tmp = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_Jayway)).select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Throwable ex) {
             err1 = ex;

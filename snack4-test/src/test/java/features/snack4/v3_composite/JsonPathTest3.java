@@ -2,8 +2,6 @@ package features.snack4.v3_composite;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 import java.util.*;
 
