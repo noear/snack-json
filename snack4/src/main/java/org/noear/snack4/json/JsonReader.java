@@ -550,7 +550,11 @@ public class JsonReader {
 
         private void skipWhitespace() throws IOException {
             while (true) {
-                char c = peekChar();
+                if (bufferPosition >= bufferLimit && !fillBuffer()) {
+                    return; // 文件结束
+                }
+
+                char c = buffer[bufferPosition];
                 if ((c == ' ' || c == '\t' || c == '\n' || c == '\r')) {
                     nextChar(); // 使用 nextChar() 确保行/列计数正确
                 } else {
