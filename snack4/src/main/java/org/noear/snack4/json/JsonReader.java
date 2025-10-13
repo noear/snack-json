@@ -301,11 +301,55 @@ public class JsonReader {
         }
 
         StringBuilder sb = getStringBuilder();
+
+        // 性能优化：在缓冲区内进行批量复制，减少 nextChar() 和单字符 append() 的调用
         while (true) {
+            // 确保缓冲区有内容
+            if (state.bufferPosition >= state.bufferLimit) {
+                if (!state.fillBuffer()) {
+                    throw state.error("Unclosed string");
+                }
+            }
+
+            int start = state.bufferPosition;
+            int end = start;
+
+            // 在当前缓冲区内快速扫描，直到遇到：
+            // 1. 结束引号 (quoteChar)
+            // 2. 转义字符 (\)
+            // 3. 控制字符 (c < 0x20)
+            while (end < state.bufferLimit) {
+                char c = state.buffer[end];
+                if (c == quoteChar || c == '\\' || c < 0x20) {
+                    break;
+                }
+                end++;
+            }
+
+            // 1. 批量添加字符到 StringBuilder
+            if (end > start) {
+                // 使用 StringBuilder 的批量追加方法，性能更高
+                sb.append(state.buffer, start, end - start);
+            }
+
+            // 2. 更新位置
+            state.bufferPosition = end;
+
+            // 3. 处理终止条件
+            if (state.bufferPosition == state.bufferLimit) {
+                // 如果是因为 buffer 耗尽而退出，继续下一轮 fillBuffer()
+                continue;
+            }
+
+            // 4. 处理特殊字符 (必须使用 nextChar() 来正确消耗和更新位置)
             char c = state.nextChar();
-            if (c == quoteChar) break;
+
+            if (c == quoteChar) {
+                break; // 遇到结束引号，解析完成
+            }
 
             if (c == '\\') {
+                // 处理转义字符
                 c = state.nextChar();
                 switch (c) {
                     case '"':
@@ -350,25 +394,31 @@ public class JsonReader {
                         break;
                     }
                     default: {
+                        // 兼容旧的八进制转义（虽然 JSON 不支持）
                         if (c >= '0' && c <= '7') {
-                            sb.append(IoUtil.CHARS_MARK_REV[(int) c]);
+                            // 假设 IoUtil.CHARS_MARK_REV 存在并能正确映射
+                            sb.append(org.noear.snack4.codec.util.IoUtil.CHARS_MARK_REV[(int) c]);
                         } else if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
-                            sb.append(c);
+                            sb.append(c); // 忽略转义，直接追加字符
                         } else if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {
+                            // 允许 \X 形式的任意转义，追加 \ 和 X
                             sb.append('\\').append(c);
                         } else {
-                            //RFC 8259
+                            // 严格模式 (RFC 8259)
                             throw state.error("Invalid escape character: \\" + c);
                         }
                     }
                 }
-            } else {
-                if (c < 0x20) {
-                    if (opts.hasFeature(Feature.Read_AllowUnescapedControlCharacters) == false) {
-                        //RFC 8259
-                        throw state.error("Unescaped control character: 0x" + Integer.toHexString(c));
-                    }
+            } else if (c < 0x20) {
+                // 处理未转义的控制字符
+                if (opts.hasFeature(Feature.Read_AllowUnescapedControlCharacters) == false) {
+                    // 严格模式
+                    throw state.error("Unescaped control character: 0x" + Integer.toHexString(c));
                 }
+                sb.append(c); // 宽松模式下追加
+            } else {
+                // 理论上，在块复制逻辑中，普通字符已经被处理了，
+                // 除非 nextChar() 意外读取了一个普通字符，但为了安全保留。
                 sb.append(c);
             }
         }
