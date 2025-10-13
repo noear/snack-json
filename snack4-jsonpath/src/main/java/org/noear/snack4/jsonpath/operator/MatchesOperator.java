@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Operator;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.filter.Term;
-import org.noear.snack4.jsonpath.util.JsRegexUtil;
+import org.noear.snack4.jsonpath.util.RegexUtil;
 
 /**
  *
@@ -36,7 +36,7 @@ public class MatchesOperator implements Operator {
         if (leftNode.isValue()) {
             if (rightNode.isString()) {
                 String v = rightNode.getString();//.replace("\\/", "/");
-                found = JsRegexUtil.of(v).matcher(leftNode.getString()).matches(); //不能用 find
+                found = RegexUtil.parse(v).matcher(leftNode.getString()).matches(); //不能用 find
             }
         }
 

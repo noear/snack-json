@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.util.JsRegexUtil;
+import org.noear.snack4.jsonpath.util.RegexUtil;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -45,7 +45,7 @@ public class SearchFunction implements Function {
         String arg0 = o1.toString();
         String arg1 = argNodes.get(1).toString();
 
-        Pattern pattern = JsRegexUtil.of(arg1);
+        Pattern pattern = RegexUtil.parse(arg1);
         boolean found = pattern.matcher(arg0).find(); //与 MatchFunc 的区别就在这儿
 
         return new ONode(found);

@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Term {
     private static Map<String, Term> conditionMap = new ConcurrentHashMap<>();
 
-    public static Term get(String conditionStr) {
+    public static Term of(String conditionStr) {
         return conditionMap.computeIfAbsent(conditionStr, Term::new);
     }
 

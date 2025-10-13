@@ -22,7 +22,7 @@ package org.noear.snack4.jsonpath.util;
  * @since 4.0
  */
 public class RangeUtil {
-    public static Bounds bounds(int start, int end, int step, int size) {
+    public static Bounds boundsOf(int start, int end, int step, int size) {
         int n_start = start;
         int n_end = end;
 

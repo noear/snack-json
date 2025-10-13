@@ -38,7 +38,7 @@ public class FilterSelector implements Selector {
 
     public FilterSelector(String expr) {
         this.expr = expr;
-        this.expression = Expression.get(expr.substring(1));
+        this.expression = Expression.of(expr.substring(1));
     }
 
     @Override

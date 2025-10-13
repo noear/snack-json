@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Expression {
     private static Map<String, Expression> expressionMap = new ConcurrentHashMap<>();
 
-    public static Expression get(String expressionStr) {
+    public static Expression of(String expressionStr) {
         return expressionMap.computeIfAbsent(expressionStr, Expression::new);
     }
 
@@ -121,7 +121,7 @@ public class Expression {
     }
 
     private boolean evaluateTerm(QueryContext ctx, ONode node, String termStr) {
-        Term term = Term.get(termStr);
+        Term term = Term.of(termStr);
 
         boolean result = doEvaluateTerm(ctx, node, term);
         return term.isNot() ? !result : result;

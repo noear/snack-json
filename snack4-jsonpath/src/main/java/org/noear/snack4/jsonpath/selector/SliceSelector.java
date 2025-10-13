@@ -97,7 +97,7 @@ public class SliceSelector implements Selector {
             int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
 
             // 调整范围确保有效
-            RangeUtil.Bounds bounds = RangeUtil.bounds(start, end, step, size);
+            RangeUtil.Bounds bounds = RangeUtil.boundsOf(start, end, step, size);
 
             if (step > 0) {
                 int i = bounds.getLower();

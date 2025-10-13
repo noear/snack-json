@@ -25,17 +25,17 @@ import java.util.regex.Pattern;
  * @author noear 2025/10/9 created
  * @since 4.0
  */
-public class JsRegexUtil {
+public class RegexUtil {
     /**
      * 解析 js 正则
      */
     private static Map<String, Pattern> patternCached = new ConcurrentHashMap<>();
 
-    public static Pattern of(String jsRegex) {
-        return patternCached.computeIfAbsent(jsRegex, k -> parseJsRegex(k));
+    public static Pattern parse(String jsRegex) {
+        return patternCached.computeIfAbsent(jsRegex, k -> parseDo(k));
     }
 
-    private static Pattern parseJsRegex(String jsRegex) {
+    private static Pattern parseDo(String jsRegex) {
         // 1. 检查输入是否以 / 开头和结尾
         if (!jsRegex.startsWith("/") || !jsRegex.contains("/")) {
             return Pattern.compile(jsRegex);
