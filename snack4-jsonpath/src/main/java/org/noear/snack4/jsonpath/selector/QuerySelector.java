@@ -40,6 +40,11 @@ public class QuerySelector implements Selector {
     }
 
     @Override
+    public String toString() {
+        return expr;
+    }
+
+    @Override
     public boolean isMultiple() {
         return false;
     }

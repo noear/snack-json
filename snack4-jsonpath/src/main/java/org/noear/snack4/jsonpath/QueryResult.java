@@ -54,7 +54,7 @@ public class QueryResult {
         if (ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
             return ctx.newNode(nodeList);
         } else if (ctx.hasFeature(Feature.JsonPath_AsPathList)) {
-            return ctx.newNode(ctx.newNode(nodeList).pathList());
+            return ctx.newNode().addAll(ctx.newNode(nodeList).pathList());
         } else {
             return autoNode();
         }

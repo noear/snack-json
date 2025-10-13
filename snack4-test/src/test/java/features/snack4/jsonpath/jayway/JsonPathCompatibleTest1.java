@@ -30,6 +30,8 @@ public class JsonPathCompatibleTest1 {
         System.out.println(tmp2);
         assert tmp2.isArray();
         assertEquals(14, tmp2.size());
+
+        System.out.println(ONode.ofJson(json, Feature.JsonPath_AsPathList).select("$..*").toJson());
     }
 
     @Test
