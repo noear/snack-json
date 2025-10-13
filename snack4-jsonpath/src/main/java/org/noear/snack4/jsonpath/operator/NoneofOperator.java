@@ -24,15 +24,11 @@ public class NoneofOperator implements Operator {
     }
 
     boolean applyDo(QueryContext ctx, ONode leftNode, ONode rightNode) {
-        boolean rst = true;
+        boolean rst = false;
 
         if (leftNode.isArray()) {
-            if (leftNode.size() == 0) {
-                rst = false;
-            } else {
-                for (ONode ref : leftNode.getArray()) {
-                    rst &= MatchUtil.isValueMatch(rightNode, ref);
-                }
+            for (ONode ref : leftNode.getArray()) {
+                rst |= MatchUtil.isValueMatch(rightNode, ref);
             }
         } else {
             rst &= MatchUtil.isValueMatch(rightNode, leftNode);

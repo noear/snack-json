@@ -46,7 +46,7 @@ public class OperatorTest {
 
     static Options options = Options.of(
             Feature.JsonPath_AlwaysReturnList,
-            Feature.JsonPath_Jayway,
+            //Feature.JsonPath_Jayway,
             Feature.Write_Nulls);
 
     private List<Object> readPath(String path) {

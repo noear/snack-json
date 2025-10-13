@@ -24,7 +24,11 @@ public class MatchUtil {
 
     public static boolean isValueMatch(ONode refere, ONode source) {
         if (refere.isArray()) {
-            return refere.getArray().stream().anyMatch(one -> isValueMatch(one, source));
+            for(ONode ref : refere.getArray()) {
+                if (isValueMatch(ref, source)) {
+                    return true;
+                }
+            }
         }
 
         if (refere.isString()) {
