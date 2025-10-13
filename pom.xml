@@ -18,9 +18,6 @@
     </properties>
 
     <modules>
-        <module>snack3-parent</module>
-        <module>snack3-test</module>
-
         <module>snack4-parent</module>
         <module>snack4-test</module>
     </modules>
