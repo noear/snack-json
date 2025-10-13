@@ -77,7 +77,7 @@ public class SliceSelector implements Selector {
         }
 
         if (isDescendant) {
-            boolean forJayway = ctx.hasFeature(Feature.JsonPath_Jayway);
+            boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 
             //后裔
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {

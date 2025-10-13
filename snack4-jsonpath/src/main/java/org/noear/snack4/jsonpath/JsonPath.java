@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.segment.Segment;
 
@@ -64,52 +65,76 @@ public class JsonPath {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.SELECT);
 
-        for (Segment seg : segments) {
-            currentNodes = seg.resolve(ctx, currentNodes);
-            ctx.multipleOf(seg);
-        }
+        try {
+            for (Segment seg : segments) {
+                currentNodes = seg.resolve(ctx, currentNodes);
+                ctx.multipleOf(seg);
+            }
 
-        return new QueryResult(ctx, currentNodes);
+            return new QueryResult(ctx, currentNodes);
+        } catch (Throwable ex) {
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                return new QueryResult(ctx, Collections.emptyList());
+            } else {
+                throw ex;
+            }
+        }
     }
 
     public QueryResult create(ONode root) {
-        if(expression.contains("..")){
-            throw new JsonPathException("The create mode not support descendant selector");
-        }
-
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.CREATE);
 
-        for (Segment seg : segments) {
-            currentNodes = seg.resolve(ctx, currentNodes);
-            ctx.multipleOf(seg);
-        }
+        try {
+            if (expression.contains("..")) {
+                throw new JsonPathException("The create mode not support descendant selector");
+            }
 
-        return new QueryResult(ctx, currentNodes);
+            for (Segment seg : segments) {
+                currentNodes = seg.resolve(ctx, currentNodes);
+                ctx.multipleOf(seg);
+            }
+
+            return new QueryResult(ctx, currentNodes);
+        } catch (Throwable ex) {
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                return new QueryResult(ctx, Collections.emptyList());
+            } else {
+                throw ex;
+            }
+        }
     }
 
     public void delete(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.DELETE);
 
-        for (Segment seg : segments) {
-            currentNodes = seg.resolve(ctx, currentNodes);
-            ctx.multipleOf(seg);
-        }
+        try {
+            for (Segment seg : segments) {
+                currentNodes = seg.resolve(ctx, currentNodes);
+                ctx.multipleOf(seg);
+            }
 
-        if (currentNodes.size() == 1) {
-            for (ONode n1 : currentNodes) {
-                if (n1.source != null) {
-                    if (n1.source.key != null) {
-                        if ("*".equals(n1.source.key)) {
-                            n1.source.parent.clear();
+            if (currentNodes.size() == 1) {
+                for (ONode n1 : currentNodes) {
+                    if (n1.source != null) {
+                        if (n1.source.key != null) {
+                            if ("*".equals(n1.source.key)) {
+                                n1.source.parent.clear();
+                            } else {
+                                n1.source.parent.remove(n1.source.key);
+                            }
                         } else {
-                            n1.source.parent.remove(n1.source.key);
+                            n1.source.parent.remove(n1.source.index);
                         }
-                    } else {
-                        n1.source.parent.remove(n1.source.index);
                     }
                 }
+            }
+        } catch (Throwable ex) {
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                //...
+            } else {
+                throw ex;
             }
         }
     }

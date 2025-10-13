@@ -226,12 +226,7 @@ public enum Feature {
     /**
      * Jayway 兼容模式
      */
-    JsonPath_Jayway,
-
-    /**
-     * 为缺少的叶子节点返回 null
-     */
-    JsonPath_DefaultPathLeafToNull,
+    JsonPath_JaywayMode,
 
     /**
      * 无论路径是否明确，总是返回一个 List

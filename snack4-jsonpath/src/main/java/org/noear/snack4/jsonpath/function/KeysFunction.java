@@ -38,7 +38,7 @@ public class KeysFunction implements Function {
             return ctx.newNode();
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             Set<String> keys = new LinkedHashSet<>();
 
             for (ONode n1 : currentNodes) {

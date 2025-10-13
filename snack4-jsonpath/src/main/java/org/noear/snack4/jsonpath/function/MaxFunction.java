@@ -39,7 +39,7 @@ public class MaxFunction implements Function {
 
         List<Double> doubleList = null;
 
-        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             if (ctx.isDescendant()) {
                 doubleList = MathUtil.getDoubleList(currentNodes);
             } else {

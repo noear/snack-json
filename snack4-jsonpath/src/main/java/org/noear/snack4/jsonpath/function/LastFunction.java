@@ -36,7 +36,7 @@ public class LastFunction implements Function {
             return ctx.newNode();
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             List<ONode> results = new ArrayList<>();
 
             for (ONode n1 : currentNodes) {

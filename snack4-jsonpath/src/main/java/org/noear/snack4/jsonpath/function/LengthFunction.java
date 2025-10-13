@@ -37,7 +37,7 @@ public class LengthFunction implements Function {
             return lengthOf(ctx, n);
         } else {
 
-            if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
                 List<ONode> results = new ArrayList<>();
 
                 for (ONode n1 : currentNodes) {

@@ -52,7 +52,7 @@ public class AppendFunction implements Function {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
                 if (oNodes.size() > 0) {
                     for (ONode n1 : oNodes) {
                         if (n1.isArray()) {

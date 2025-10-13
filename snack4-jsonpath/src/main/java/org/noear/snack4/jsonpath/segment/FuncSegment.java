@@ -54,7 +54,7 @@ public class FuncSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        boolean forJayway = ctx.hasFeature(Feature.JsonPath_Jayway);
+        boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 
         if (isDescendant()) {
             List<ONode> results = new ArrayList<>();

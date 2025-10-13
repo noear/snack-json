@@ -39,7 +39,7 @@ public class SumFunction implements Function {
 
         List<Double> doubleList = null;
 
-        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             doubleList = MathUtil.getDoubleListByChild(currentNodes);
 
             if (Asserts.isEmpty(doubleList)) {

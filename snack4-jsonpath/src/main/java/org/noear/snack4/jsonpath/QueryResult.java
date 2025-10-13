@@ -45,6 +45,8 @@ public class QueryResult {
     public ONode asNode() {
         if (ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
             return ctx.newNode(currentNodes);
+        } else if (ctx.hasFeature(Feature.JsonPath_AsPathList)) {
+            return ctx.newNode(ctx.newNode(currentNodes).pathList());
         } else {
             return autoNode();
         }

@@ -57,7 +57,7 @@ public class IndexFunction implements Function {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
+            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
                 List<ONode> results = new ArrayList<>();
 
                 if (oNodes.size() > 0) {

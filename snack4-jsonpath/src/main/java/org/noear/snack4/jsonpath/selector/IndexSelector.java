@@ -53,7 +53,7 @@ public class IndexSelector implements Selector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            boolean forJayway = ctx.hasFeature(Feature.JsonPath_Jayway);
+            boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 
             //后裔
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
