@@ -39,8 +39,10 @@ public class RFC9535_s2353_Query extends AbsRFC9535{
     public void case2() {
         //Existence of non-singular queries
         queryAssert("$[?@.*]", "[[3,5,1,2,4,6,{\"b\":\"j\"},{\"b\":\"k\"},{\"b\":{}},{\"b\":\"kilo\"}],{\"p\":1,\"q\":2,\"r\":3,\"s\":5,\"t\":{\"u\":6}}]");
+    }
 
-
+    @Test
+    public void case2_1() {
         //Nested filters
         queryAssert("$[?@[?@.b]]", "[[3, 5, 1, 2, 4, 6, {\"b\": \"j\"}, {\"b\": \"k\"}, {\"b\": {}}, {\"b\": \"kilo\"}]]");
     }
