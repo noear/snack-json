@@ -111,7 +111,7 @@ public class JsonPathSelectComplexTest2 {
     @Test
     void testNegatedConditions() {
         JsonPath jsonPath = JsonPath.parse("$.store.book[?(!(@.category == 'fiction') && @.price < 40)]");
-        ONode result = jsonPath.select(loadRoot());
+        ONode result = jsonPath.select(loadRoot()).asNode();
 
         assertEquals(2, result.size());
         assertTrue(result.select("$[*].category").toJson().contains("tech"));

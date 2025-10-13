@@ -58,7 +58,7 @@ public class RFC9535_s2353_Query extends AbsRFC9535{
     private void queryAssert(String expr, String expected) {
         JsonPath jsonPath = JsonPath.parse(expr);
 
-        String actual = jsonPath.select(ofJson(json)).toJson();
+        String actual = jsonPath.select(ofJson(json)).asNode().toJson();
         String expected2 = ofJson(expected).toJson(); //重新格式化
         System.out.println("::" + expr);
         assertEquals(expected2, actual);

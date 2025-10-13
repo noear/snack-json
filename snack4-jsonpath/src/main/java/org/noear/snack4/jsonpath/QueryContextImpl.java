@@ -144,9 +144,9 @@ public class QueryContextImpl implements QueryContext {
         }
 
         if (getMode() == QueryMode.CREATE) {
-            return query.create(target);
+            return query.create(target).autoNode();
         } else {
-            return query.select(target);
+            return query.select(target).autoNode();
         }
     }
 }

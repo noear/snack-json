@@ -15,9 +15,7 @@
  */
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.segment.FuncSegment;
 import org.noear.snack4.jsonpath.segment.Segment;
 
 import java.util.Collections;
@@ -62,7 +60,7 @@ public class JsonPath {
                 '}';
     }
 
-    public ONode select(ONode root) {
+    public QueryResult select(ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.SELECT);
 
@@ -71,22 +69,10 @@ public class JsonPath {
             ctx.multipleOf(seg);
         }
 
-        if (currentNodes.size() > 1 || ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
-            return new ONode(root.options(), currentNodes);
-        } else {
-            if (ctx.isMultiple()) {
-                return new ONode(root.options(), currentNodes);
-            } else {
-                if (currentNodes.size() > 0) {
-                    return currentNodes.get(0);
-                } else {
-                    return new ONode(root.options());
-                }
-            }
-        }
+        return new QueryResult(ctx, currentNodes);
     }
 
-    public ONode create(ONode root) {
+    public QueryResult create(ONode root) {
         if(expression.contains("..")){
             throw new JsonPathException("The create mode not support descendant selector");
         }
@@ -99,19 +85,7 @@ public class JsonPath {
             ctx.multipleOf(seg);
         }
 
-        if (currentNodes.size() > 1 || ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
-            return new ONode(root.options(), currentNodes);
-        } else {
-            if (ctx.isMultiple()) {
-                return new ONode(root.options(), currentNodes);
-            } else {
-                if (currentNodes.size() > 0) {
-                    return currentNodes.get(0);
-                } else {
-                    return new ONode(root.options());
-                }
-            }
-        }
+        return new QueryResult(ctx, currentNodes);
     }
 
     public void delete(ONode root) {
@@ -167,14 +141,14 @@ public class JsonPath {
      * 根据 jsonpath 查询
      */
     public static ONode select(ONode root, String path) {
-        return parse(path).select(root);
+        return parse(path).select(root).asNode();
     }
 
     /**
      * 根据 jsonpath 生成
      */
     public static ONode create(ONode root, String path) {
-        return parse(path).create(root);
+        return parse(path).create(root).asNode();
     }
 
     /**

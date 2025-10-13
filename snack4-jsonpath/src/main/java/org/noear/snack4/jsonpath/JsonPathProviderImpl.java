@@ -28,20 +28,20 @@ public class JsonPathProviderImpl implements JsonPathProvider {
      * 根据 jsonpath 查询
      */
     public ONode select(ONode root, String path) {
-        return JsonPath.parse(path).select(root);
+        return JsonPath.select(root, path);
     }
 
     /**
      * 根据 jsonpath 生成
      */
     public ONode create(ONode root, String path) {
-        return JsonPath.parse(path).create(root);
+        return JsonPath.create(root, path);
     }
 
     /**
      * 根据 jsonpath 删除
      */
     public void delete(ONode root, String path) {
-        JsonPath.parse(path).delete(root);
+        JsonPath.delete(root, path);
     }
 }

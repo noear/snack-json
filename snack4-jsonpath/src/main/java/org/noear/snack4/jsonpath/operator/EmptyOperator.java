@@ -20,6 +20,14 @@ public class EmptyOperator implements Operator {
             return false;
         }
 
-        return leftNode.isNullOrEmpty() && rightNode.getBoolean();
+        if (leftNode.isNull()) {
+            return false;
+        }
+
+        if (rightNode.getBoolean()) {
+            return leftNode.isNullOrEmpty();
+        } else {
+            return !leftNode.isNullOrEmpty();
+        }
     }
 }
