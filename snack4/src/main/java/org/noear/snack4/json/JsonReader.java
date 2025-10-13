@@ -28,6 +28,8 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
+ * Json 读取器
+ *
  * @author noear noear 2025/3/16 created
  * @since 4.0
  * */
@@ -139,7 +141,7 @@ public class JsonReader {
         state.expect('n');
         state.expect('e');
         state.expect('w');
-        state.skipWhitespace();
+        state.skipWhitespace(); // 允许 'new' 后有空格
         state.expect('D');
         state.expect('a');
         state.expect('t');
@@ -147,36 +149,22 @@ public class JsonReader {
         state.expect('(');
         state.skipWhitespace();
 
-        // 解析时间戳（long类型数字）
-        StringBuilder sb = getStringBuilder();
-        char c = state.peekChar();
-        boolean negative = false;
+        // 🌟 优化点：使用 parseNumber() 解析时间戳
+        Number number = parseNumber();
 
-        // 处理负号
-        if (c == '-') {
-            negative = true;
-            sb.append(state.nextChar());
-        }
-
-        if (isDigit(state.peekChar())) {
-            while (isDigit(state.peekChar())) {
-                sb.append(state.nextChar());
-            }
-        } else if (sb.length() == 0 && !negative) {
-            // 如果不是负号开头，且没有数字，则为错误格式
-            throw state.error("Invalid timestamp in new Date()");
+        // 确保数字是 Long 类型或可以安全转换为 Long
+        long timestamp;
+        if (number instanceof Long) {
+            timestamp = (Long) number;
+        } else {
+            // 如果是 Double/BigDecimal，可能丢失精度，但此处需做出决定
+            timestamp = number.longValue();
         }
 
         state.skipWhitespace();
         state.expect(')'); // 期望 ')'
 
-        try {
-            long timestamp = Long.parseLong(sb.toString());
-            // ONode 应该支持 Date 构造
-            return new ONode(opts, new Date(timestamp));
-        } catch (NumberFormatException e) {
-            throw state.error("Invalid timestamp format in new Date()");
-        }
+        return new ONode(opts, new Date(timestamp));
     }
 
     private ONode parseObject() throws IOException {
@@ -512,7 +500,22 @@ public class JsonReader {
                 throw error("Unexpected end of input");
             }
             char c = buffer[bufferPosition++];
-            column++;
+
+            // 集中处理行/列计数
+            if (c == '\n') {
+                line++;
+                column = 0;
+            } else if (c == '\r') {
+                // 检查 Windows 换行符 \r\n
+                if (peekChar() == '\n') {
+                    bufferPosition++; // 跳过下一个 \n
+                }
+                line++;
+                column = 0;
+            } else {
+                column++;
+            }
+
             return c;
         }
 
@@ -546,19 +549,10 @@ public class JsonReader {
         }
 
         private void skipWhitespace() throws IOException {
-            while (bufferPosition < bufferLimit || fillBuffer()) {
-                char c = buffer[bufferPosition];
+            while (true) {
+                char c = peekChar();
                 if ((c == ' ' || c == '\t' || c == '\n' || c == '\r')) {
-                    if (c == '\n') {
-                        line++;
-                        column = 0;
-                    } else if (c == '\r') {
-                        if (peekChar(1) == '\n') bufferPosition++;
-                        line++;
-                        column = 0;
-                    }
-                    bufferPosition++;
-                    column++;
+                    nextChar(); // 使用 nextChar() 确保行/列计数正确
                 } else {
                     break;
                 }
