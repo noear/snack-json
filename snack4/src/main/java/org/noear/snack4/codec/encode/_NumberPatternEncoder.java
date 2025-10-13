@@ -39,10 +39,12 @@ public class _NumberPatternEncoder implements ObjectPatternEncoder<Number> {
                 return target.setValue(value.toString());
             }
 
-            if (ctx.getAttr().hasFeature(Feature.Write_BigNumbersAsString)) {
-                if (Asserts.isBigNumber(value)) {
-                    return target.setValue(value.toString());
-                }
+            if (ctx.getAttr().hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(value)) {
+                return target.setValue(value.toString());
+            }
+
+            if (ctx.getAttr().hasFeature(Feature.Write_LongAsString) && value instanceof Long) {
+                return target.setValue(value.toString());
             }
         }
 

@@ -25,7 +25,6 @@ import org.noear.snack4.util.Asserts;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -161,17 +160,24 @@ public class JsonWriter {
     private void writeNumber(Number num) throws IOException {
         if (opts.hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(num)) {
             writer.write('"' + num.toString() + '"');
-        } else {
-            writer.write(num.toString());
+            return;
+        }
 
-            if (opts.hasFeature(Feature.Write_NumberTypeSuffix)) {
-                if (num instanceof Double) {
-                    writer.write('D');
-                } else if (num instanceof Float) {
-                    writer.write('F');
-                } else if (num instanceof Long) {
-                    writer.write('L');
-                }
+        if (opts.hasFeature(Feature.Write_LongAsString) && num instanceof Long) {
+            writer.write('"' + num.toString() + '"');
+            return;
+
+        }
+
+        writer.write(num.toString());
+
+        if (opts.hasFeature(Feature.Write_NumberTypeSuffix)) {
+            if (num instanceof Double) {
+                writer.write('D');
+            } else if (num instanceof Float) {
+                writer.write('F');
+            } else if (num instanceof Long) {
+                writer.write('L');
             }
         }
     }

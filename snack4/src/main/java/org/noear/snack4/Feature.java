@@ -210,14 +210,19 @@ public enum Feature {
     Write_NumbersAsString,
 
     /**
-     * 写入大数字时使用字符串模式（避免精度丢失）
+     * 写入长整型时使用字符串模式
      */
     Write_BigNumbersAsString,
+
     /**
      * 写入数字类型
      */
     Write_NumberTypeSuffix,
-
+    
+    /**
+     * 写入长整型时使用字符串模式
+     */
+    Write_LongAsString,
 
     /**
      * IETF_RFC_9535 兼容模式
