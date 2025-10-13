@@ -52,12 +52,26 @@ public class BeanEncoder {
             return (ONode) value;
         }
 
-        if (opts == null) {
-            opts = Options.DEF_OPTIONS;
-        }
+        return new BeanEncoder(value, opts).encode();
+    }
 
+    private final Object source0;
+    private final Options opts;
+
+    private final Map<Object, Object> visited;
+
+    private BeanEncoder(Object value, Options opts){
+        this.source0 = value;
+        this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+        this.visited = new IdentityHashMap<>();
+    }
+
+    /**
+     * Java Object 编码为 ONode
+     */
+    public ONode encode() {
         try {
-            ONode oNode = convertValueToNode(value, null, new IdentityHashMap<>(), opts);
+            ONode oNode = convertValueToNode(source0, null);
 
             if (oNode.isObject() && opts.hasFeature(Feature.Write_NotRootClassName)) {
                 oNode.remove(opts.getTypePropertyName());
@@ -76,7 +90,7 @@ public class BeanEncoder {
     }
 
     // 值转ONode处理
-    private static ONode convertValueToNode(Object value, ONodeAttrHolder attr, Map<Object, Object> visited, Options opts) throws Exception {
+    private  ONode convertValueToNode(Object value, ONodeAttrHolder attr) throws Exception {
         if (value == null) {
             return new ONode(opts, null);
         }
@@ -96,20 +110,20 @@ public class BeanEncoder {
         }
 
         if (value instanceof Collection) {
-            return convertCollectionToNode((Collection<?>) value, visited, opts);
+            return convertCollectionToNode((Collection<?>) value);
         } else if (value instanceof Map) {
-            return convertMapToNode((Map<?, ?>) value, visited, opts);
+            return convertMapToNode((Map<?, ?>) value);
         } else {
             if (value.getClass().isArray()) {
-                return convertArrayToNode(value, visited, opts);
+                return convertArrayToNode(value);
             } else {
-                return convertBeanToNode(value, visited, opts);
+                return convertBeanToNode(value);
             }
         }
     }
 
     // 对象转ONode核心逻辑
-    private static ONode convertBeanToNode(Object bean, Map<Object, Object> visited, Options opts) throws Exception {
+    private  ONode convertBeanToNode(Object bean) throws Exception {
         // 循环引用检测
         if (visited.containsKey(bean)) {
             return null;
@@ -187,7 +201,7 @@ public class BeanEncoder {
                     }
                 }
 
-                ONode propertyNode = convertValueToNode(propertyValue, property.getAttr(), visited, opts);
+                ONode propertyNode = convertValueToNode(propertyValue, property.getAttr());
 
                 if (propertyNode != null) {
                     if (property.getAttr().isFlat()) {
@@ -207,26 +221,26 @@ public class BeanEncoder {
     }
 
     // 处理数组类型
-    private static ONode convertArrayToNode(Object array, Map<Object, Object> visited, Options opts) throws Exception {
+    private  ONode convertArrayToNode(Object array) throws Exception {
         ONode tmp = new ONode(opts).asArray();
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
-            tmp.add(convertValueToNode(Array.get(array, i), null, visited, opts));
+            tmp.add(convertValueToNode(Array.get(array, i), null));
         }
         return tmp;
     }
 
     // 处理集合类型
-    private static ONode convertCollectionToNode(Collection<?> collection, Map<Object, Object> visited, Options opts) throws Exception {
+    private  ONode convertCollectionToNode(Collection<?> collection) throws Exception {
         ONode tmp = new ONode(opts).asArray();
         for (Object item : collection) {
-            tmp.add(convertValueToNode(item, null, visited, opts));
+            tmp.add(convertValueToNode(item, null));
         }
         return tmp;
     }
 
     // 处理Map类型
-    private static ONode convertMapToNode(Map<?, ?> map, Map<Object, Object> visited, Options opts) throws Exception {
+    private  ONode convertMapToNode(Map<?, ?> map) throws Exception {
         if (visited.containsKey(map)) {
             return null;
         } else {
@@ -241,7 +255,7 @@ public class BeanEncoder {
             }
 
             for (Map.Entry<?, ?> entry : map.entrySet()) {
-                ONode valueNode = convertValueToNode(entry.getValue(), null, visited, opts);
+                ONode valueNode = convertValueToNode(entry.getValue(), null);
                 tmp.set(String.valueOf(entry.getKey()), valueNode);
             }
             return tmp;
@@ -250,7 +264,7 @@ public class BeanEncoder {
         }
     }
 
-    private static boolean isWriteClassName(Options opts, Object obj) {
+    private  boolean isWriteClassName(Options opts, Object obj) {
         if (obj == null) {
             return false;
         }

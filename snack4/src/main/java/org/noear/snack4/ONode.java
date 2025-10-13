@@ -594,14 +594,13 @@ public final class ONode {
 
     public static ONode ofJson(String json, Options opts) {
         try {
-            return new JsonReader(new StringReader(json), opts).read();
+            return JsonReader.read(json, opts);
         } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
             throw new SnackException(ex);
         }
     }
-
 
     public static String serialize(Object object, Feature... features) {
         if (Asserts.isEmpty(features)) {

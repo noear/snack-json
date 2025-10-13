@@ -42,6 +42,10 @@ public class JsonReader {
         return new JsonReader(new StringReader(json), opts).read();
     }
 
+    public static ONode read(Reader reader) throws IOException {
+        return new JsonReader(reader, null).read();
+    }
+
     public static ONode read(Reader reader, Options opts) throws IOException {
         return new JsonReader(reader, opts).read();
     }
@@ -67,6 +71,8 @@ public class JsonReader {
     }
 
     public JsonReader(Reader reader, Options opts) {
+        Objects.requireNonNull(reader, "reader");
+
         this.state = new ParserState(reader);
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
     }

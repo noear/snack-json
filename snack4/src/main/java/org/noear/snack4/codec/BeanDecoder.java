@@ -52,6 +52,10 @@ public class BeanDecoder {
      *
      */
     public static <T> T decode(ONode node, Type type, Object target, Options opts) {
+        if (node == null || type == null) {
+            return null;
+        }
+
         return new BeanDecoder(node, type, target, opts).decode();
     }
 
@@ -60,22 +64,19 @@ public class BeanDecoder {
     private final Object target0;
 
     private final Options opts;
-    private Map<Object, Object> visited;
+    private final Map<Object, Object> visited;
 
-    public BeanDecoder(ONode source, Type type, Object target, Options opts) {
+    private BeanDecoder(ONode source, Type type, Object target, Options opts) {
         this.source0 = source;
         this.targetType0 = type;
         this.target0 = target;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+        this.visited = new IdentityHashMap<>();
     }
 
     public <T> T decode() {
-        if (source0 == null || targetType0 == null) {
-            return null;
-        }
-
         TypeWrap typeWrap = TypeWrap.from(targetType0);
-        visited = new IdentityHashMap<>();
+
 
         try {
             return (T) convertValue(source0, typeWrap, target0, null);

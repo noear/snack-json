@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Json 书写器
@@ -59,6 +60,8 @@ public class JsonWriter {
     }
 
     public JsonWriter(Options opts, Writer writer) {
+        Objects.requireNonNull(writer, "writer");
+
         this.writer = writer;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
     }
