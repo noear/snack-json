@@ -19,6 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -82,4 +83,18 @@ public interface QueryContext {
      * 内嵌查询（`@.user.name`）
      */
     ONode nestedQuery(ONode target, JsonPath query);
+
+    /**
+     * 新建节点
+     */
+    default ONode newNode() {
+        return new ONode(getOptions());
+    }
+
+    /**
+     * 新建节点
+     */
+    default ONode newNode(Object value) {
+        return new ONode(getOptions(), value);
+    }
 }

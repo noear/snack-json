@@ -38,15 +38,15 @@ public class LengthFunction implements Function {
 
             for (ONode n1 : currentNodes) {
                 if (n1.isArray()) {
-                    results.add(new ONode(n1.getArray().size()));
+                    results.add(ctx.newNode(n1.getArray().size()));
                 } else {
-                    results.add(new ONode());
+                    results.add(ctx.newNode());
                 }
             }
 
             if (results.size() > 0) {
                 if (ctx.isMultiple()) {
-                    return new ONode(results);
+                    return ctx.newNode(results);
                 } else {
                     return results.get(0);
                 }
@@ -56,16 +56,16 @@ public class LengthFunction implements Function {
         } else {
             if (currentNodes.size() > 0) {
                 if (currentNodes.size() > 1) {
-                    return new ONode(ctx.getOptions(), currentNodes.size());
+                    return ctx.newNode(currentNodes.size());
                 } else {
                     ONode n = currentNodes.get(0);
-                    if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
-                    if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
-                    if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+                    if (n.isString()) return ctx.newNode(n.getString().length());
+                    if (n.isArray()) return ctx.newNode(n.size());
+                    if (n.isObject()) return ctx.newNode(n.getObject().size());
                 }
             }
         }
 
-        return new ONode(null);
+        return ctx.newNode();
     }
 }

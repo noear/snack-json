@@ -83,12 +83,12 @@ public class StringTest {
 
         System.out.println(jsonNode.toJson());
 
-        String typeName = jsonNode.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
+        String typeName = jsonNode.select("$.value[?(@.iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------Feature.StringJsonToNode typeName:{}" + typeName);
 
         String jsonStr =  ONode.ofBean(json, Feature.Read_UnwrapJsonString).toJson();
         ONode jsonNode2 = ONode.ofJson(jsonStr);
-        String typeName2 = jsonNode2.select("$.value[?(iotType == 'main')]").get(0).get("unitTypeName").getString();
+        String typeName2 = jsonNode2.select("$.value[?(@.iotType == 'main')]").get(0).get("unitTypeName").getString();
         System.out.println("------ typeName:{}" + typeName2);
     }
 

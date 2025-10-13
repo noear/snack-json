@@ -27,6 +27,14 @@ class JsonReaderSimpleTest {
     }
 
     @Test
+    void testParseNullItemArray() throws Exception {
+        JsonReader parser = new JsonReader(new StringReader("[null]"));
+        ONode node = parser.read();
+        assertTrue(node.isArray());
+        assertEquals(1, node.size());
+    }
+
+    @Test
     void testParseString() throws Exception {
         JsonReader parser = new JsonReader(new StringReader("\"Hello, World!\""));
         ONode node = parser.read();

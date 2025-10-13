@@ -82,6 +82,6 @@ public class ConcatFunction implements Function {
             }
         }
 
-        return new ONode(null);
+        return ctx.newNode();
     }
 }

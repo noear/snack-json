@@ -181,15 +181,15 @@ public class JsonPathTest3 {
         assert o.select("$.store.book[-1].title").pathList().size() == 1;
 
         //price大于10元的book
-        ONode list = o.select("$.store.book[?(price > 10)]");
+        ONode list = o.select("$.store.book[?(@.price > 10)]");
         System.out.println("price大于10元的book=::" + list);
 
         //price大于10元的title
-        ONode list2 = o.select("$.store.book[?(price > 10)].title");
+        ONode list2 = o.select("$.store.book[?(@.price > 10)].title");
         System.out.println("price大于10元的title=::" + list2);
 
         //category(类别)为科幻的book
-        ONode list3 = o.select("$.store.book[?(category == '科幻')]");
+        ONode list3 = o.select("$.store.book[?(@.category == '科幻')]");
         System.out.println("category(类别)为科幻的book=::" + list3);
 
 

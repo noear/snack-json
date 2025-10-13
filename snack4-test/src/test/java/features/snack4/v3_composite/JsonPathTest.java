@@ -1,5 +1,6 @@
 package features.snack4.v3_composite;
 
+import features.snack4.path.manual.AbsQueryTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
@@ -7,7 +8,7 @@ import org.noear.snack4.ONode;
 import java.util.List;
 
 
-public class JsonPathTest {
+public class JsonPathTest extends AbsQueryTest {
     @Test
     public void demo1() {
         //1.加载json
@@ -181,32 +182,24 @@ public class JsonPathTest {
         //1.加载json
         ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
 
-        ONode t0 = n.select("$..b");
-        assert  t0.size() ==4;
+        selectAssertSize(n,4,"$..b");
 
-        ONode t1 = n.select("$..b.c[?(@)]");
-        Assertions.assertEquals(3, t1.size());
+        selectAssertSize(n,3,"$..b.c[?(@)]");
 
-        ONode t2 = n.select("$..b.c[?(@ == 1)]");
-        Assertions.assertEquals(1, t2.size());
+        selectAssertSize(n,1,"$..b.c[?(@ == 1)]");
 
-        ONode t3 = n.select("$..[?(@.b.c == 12)]");
-        Assertions.assertEquals(0, t3.size());
+        selectAssertSize(n,0,"$..[?(@.b.c == 12)]");
 
-        ONode t4 = n.select("$..[?(@.b.c > 1)]");
-        assert  t4.size() ==2;
+        selectAssertSize(n,2,"$..[?(@.b.c > 1)]");
 
-        ONode t4_min = n.select("$..b.c[?(@ > 1)].min()");
+        ONode t4_min =  select(n,"$..b.c[?(@ > 1)].min()");
         Assertions.assertEquals(2, t4_min.getInt());
 
-        ONode t5 = n.select("$..[?(@.b.c in [1,2])]");
-        assert  t5.size() ==2;
+        selectAssertSize(n,2,"$..[?(@.b.c in [1,2])]");
 
-        ONode t6 = n.select("$..[?(@.b.c nin [1,2])]");
-        assert  t6.size() ==1;
+        selectAssertSize(n,1,"$..[?(@.b.c nin [1,2])]");
 
-        ONode t7 = n.select("$..[?(@.b.c =~ /\\d+/)]");
-        assert  t7.size() ==3;
+        selectAssertSize(n,3,"$..[?(@.b.c =~ /\\d+/)]");
     }
 
     @Test
@@ -250,17 +243,15 @@ public class JsonPathTest {
         //1.加载json
         ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
-        ONode t1 = n.select("$[?(@.c =~ /a+/)]");//
-        assert  t1.size() ==2;
+        selectAssertSize(n,1,"$[?(@.c =~ /a+/)]");//
 
-        ONode t2 = n.select("$[?(@.c =~ /a{4}/)]");//
-        assert  t2.size() ==1;
+        selectAssertSize(n,1,"$[?(@.c =~ /a{4}/)]");//
 
         ONode t3 = n.select("$..*");//
         assert  t3.size() ==6;
 
         ONode t4 = n.select("$..[?(@ =~ /c+/)]");//
-        assert  t4.size() ==2;
+        assert  t4.size() ==1;
     }
 
     @Test

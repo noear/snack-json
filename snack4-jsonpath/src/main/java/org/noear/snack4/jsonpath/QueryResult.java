@@ -44,7 +44,7 @@ public class QueryResult {
 
     public ONode asNode() {
         if (ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
-            return new ONode(ctx.getOptions(), currentNodes);
+            return ctx.newNode(currentNodes);
         } else {
             return autoNode();
         }
@@ -52,15 +52,15 @@ public class QueryResult {
 
     public ONode autoNode() {
         if (currentNodes.size() > 1) {
-            return new ONode(ctx.getOptions(), currentNodes);
+            return ctx.newNode(currentNodes);
         } else {
             if (ctx.isMultiple()) {
-                return new ONode(ctx.getOptions(), currentNodes);
+                return ctx.newNode(currentNodes);
             } else {
                 if (currentNodes.size() > 0) {
                     return currentNodes.get(0);
                 } else {
-                    return new ONode(ctx.getOptions());
+                    return ctx.newNode();
                 }
             }
         }

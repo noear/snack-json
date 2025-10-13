@@ -34,7 +34,7 @@ public class StddevFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
+            return ctx.newNode();
         }
 
         List<Double> doubleList = null;
@@ -55,6 +55,6 @@ public class StddevFunction implements Function {
 
         Double ref = MathUtil.calculateStdDev(doubleList);
 
-        return new ONode(ctx.getOptions(), ref);
+        return ctx.newNode(ref);
     }
 }

@@ -73,7 +73,7 @@ public class IndexFunction implements Function {
 
                 if (results.size() > 0) {
                     if (ctx.isMultiple()) {
-                        return new ONode(results);
+                        return ctx.newNode(results);
                     } else {
                         return results.get(0);
                     }
@@ -92,6 +92,6 @@ public class IndexFunction implements Function {
             }
         }
 
-        return new ONode(null);
+        return ctx.newNode();
     }
 }

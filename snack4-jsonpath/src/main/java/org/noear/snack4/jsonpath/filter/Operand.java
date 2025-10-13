@@ -64,10 +64,10 @@ public class Operand {
             } else {
                 if (ch == '\'') {
                     //字符串
-                    nodeValue = new ONode(Options.DEF_OPTIONS, value.substring(1, value.length() - 1));
+                    nodeValue = new ONode(value.substring(1, value.length() - 1));
                 } else if (ch == '/') {
                     //正则
-                    nodeValue = new ONode(Options.DEF_OPTIONS, value);
+                    nodeValue = new ONode(value);
                 } else {
                     if (value.indexOf(')') > 0) {
                         //函数

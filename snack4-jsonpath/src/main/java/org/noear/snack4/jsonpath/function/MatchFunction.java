@@ -38,8 +38,8 @@ public class MatchFunction implements Function {
 
         ONode o1 = argNodes.get(0);
 
-        if(o1.isNull()) {
-            return new ONode(false);
+        if (o1.isNull()) {
+            return ctx.newNode(false);
         }
 
         String arg0 = o1.toString();
@@ -48,6 +48,6 @@ public class MatchFunction implements Function {
         Pattern pattern = JsRegexUtil.of(arg1);
         boolean found = pattern.matcher(arg0).matches(); //与 SearchFunc 的区别就在这儿
 
-        return new ONode(found);
+        return ctx.newNode(found);
     }
 }

@@ -33,7 +33,7 @@ public class FirstFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
+            return ctx.newNode();
         }
 
         if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
@@ -49,7 +49,7 @@ public class FirstFunction implements Function {
                 if (results.size() == 1) {
                     return results.get(0);
                 } else {
-                    return new ONode(ctx.getOptions(), results);
+                    return ctx.newNode(results);
                 }
             } else {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");

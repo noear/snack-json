@@ -233,7 +233,10 @@ public class JsonPathTest extends AbsQueryTest{
         ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
         ONode t1 = select(n, "$[?(@.c =~ /a+/)]");//
-        assert  t1.size()==2;
+        assert  t1.size()==1;
+
+        t1 = select(n, "$[?(@.c =~ /c+a+/)]");//
+        assert  t1.size()==1;
 
         ONode t2 = select(n, "$[?(@.c =~ /a{4}/)]");//
         assert  t2.size()==1;
@@ -242,6 +245,9 @@ public class JsonPathTest extends AbsQueryTest{
         assert  t3.size()==6;
 
         ONode t4 = select(n, "$..[?(@ =~ /c+/)]");//
+        assert  t4.size()==1;
+
+        t4 = select(n, "$..[?(@ contains 'c')]");//
         assert  t4.size()==2;
     }
 

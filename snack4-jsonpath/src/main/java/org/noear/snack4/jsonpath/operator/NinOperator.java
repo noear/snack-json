@@ -35,6 +35,10 @@ public class NinOperator implements Operator {
             return false;
         }
 
+        if(leftNode.isUndefined()){
+            return false;
+        }
+
         return MatchUtil.isValueMatchPlus(rightNode, leftNode) == false;
     }
 }

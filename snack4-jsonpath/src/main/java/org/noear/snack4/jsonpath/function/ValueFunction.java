@@ -38,6 +38,6 @@ public class ValueFunction implements Function {
             }
         }
 
-        return new ONode(null);
+        return ctx.newNode();
     }
 }

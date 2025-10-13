@@ -31,11 +31,11 @@ public class CountFunction implements Function {
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.size() > 0) {
             ONode n = currentNodes.get(0);
-            if (n.isString()) return new ONode(ctx.getOptions(), n.getString().length());
-            if (n.isArray()) return new ONode(ctx.getOptions(), n.size());
-            if (n.isObject()) return new ONode(ctx.getOptions(), n.getObject().size());
+            if (n.isString()) return ctx.newNode(n.getString().length());
+            if (n.isArray()) return ctx.newNode(n.size());
+            if (n.isObject()) return ctx.newNode(n.getObject().size());
         }
 
-        return new ONode(null);
+        return ctx.newNode();
     }
 }

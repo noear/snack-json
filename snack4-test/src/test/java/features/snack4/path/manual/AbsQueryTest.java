@@ -1,5 +1,6 @@
 package features.snack4.path.manual;
 
+import org.junit.jupiter.api.Assertions;
 import org.noear.snack4.ONode;
 
 /**
@@ -15,5 +16,16 @@ public abstract class AbsQueryTest {
 
 
         return t1;
+    }
+
+    public void selectAssertSize(ONode node, int size, String jsonpath) {
+        System.out.println("-------------: " + jsonpath);
+        ONode t1 = node.select(jsonpath);
+        System.out.println(t1.toJson());
+
+        if (t1.size() != size) {
+            System.out.println(node.toJson());
+            Assertions.assertEquals(size, t1.size());
+        }
     }
 }

@@ -35,7 +35,7 @@ public class KeysFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
+            return ctx.newNode();
         }
 
         if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
@@ -62,7 +62,7 @@ public class KeysFunction implements Function {
                 }
 
                 if (results.size() > 0) {
-                    return new ONode(ctx.getOptions()).addAll(results);
+                    return ctx.newNode().addAll(results);
                 }
             } else {
                 ONode n1 = currentNodes.get(0);
@@ -73,6 +73,6 @@ public class KeysFunction implements Function {
             }
         }
 
-        return new ONode(ctx.getOptions());
+        return ctx.newNode();
     }
 }

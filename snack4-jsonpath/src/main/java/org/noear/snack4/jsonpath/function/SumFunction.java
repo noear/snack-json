@@ -34,7 +34,7 @@ public class SumFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.isEmpty()) {
-            return new ONode(ctx.getOptions());
+            return ctx.newNode();
         }
 
         List<Double> doubleList = null;
@@ -49,7 +49,7 @@ public class SumFunction implements Function {
             doubleList = MathUtil.getDoubleList(currentNodes);
 
             if (Asserts.isEmpty(doubleList)) {
-                return new ONode(ctx.getOptions());
+                return ctx.newNode();
             }
         }
 
@@ -59,6 +59,6 @@ public class SumFunction implements Function {
             ref += d;
         }
 
-        return new ONode(ctx.getOptions(), ref);
+        return ctx.newNode(ref);
     }
 }
