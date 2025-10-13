@@ -1,4 +1,4 @@
-package benchmark.snack4.load._models;
+package benchmark.snack4.json._models;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

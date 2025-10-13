@@ -1,4 +1,4 @@
-package benchmark.snack4.path;
+package benchmark.snack4.jsonpath;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;

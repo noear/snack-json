@@ -1,14 +1,14 @@
-package benchmark.snack4.load;
+package benchmark.snack4.json;
 
-import benchmark.snack4.load._models.UserGroupModel;
-import benchmark.snack4.load._models.UserModel;
+import benchmark.snack4.json._models.UserGroupModel;
+import benchmark.snack4.json._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 import java.util.*;
 
-public class SpeedSnack4LoadTest {
+public class SpeedSnack4Test {
 
     /** 测试性能（大json） */
     @Test
