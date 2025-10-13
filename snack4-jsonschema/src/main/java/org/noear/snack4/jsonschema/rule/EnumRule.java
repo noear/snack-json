@@ -46,4 +46,11 @@ public class EnumRule implements ValidationRule {
             throw new JsonSchemaException("Value not in enum list");
         }
     }
+
+    @Override
+    public String toString() {
+        return "EnumRule{" +
+                "allowedValues=" + allowedValues +
+                '}';
+    }
 }

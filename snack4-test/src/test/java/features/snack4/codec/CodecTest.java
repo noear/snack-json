@@ -27,7 +27,7 @@ public class CodecTest {
 
     @Test
     public void case1() throws Exception {
-        Bean bean = new Bean();
+        DemoBean bean = new DemoBean();
 
         bean.charset = Charset.forName("UTF-8");
         bean.longAdder = new LongAdder();
@@ -49,7 +49,7 @@ public class CodecTest {
         String json = ONode.serialize(bean);
         System.out.println(json);
 
-        Bean bean2 = ONode.deserialize(json, Bean.class);
+        DemoBean bean2 = ONode.deserialize(json, DemoBean.class);
         System.out.println(bean2);
 
         String json2 = ONode.serialize(bean2);
@@ -61,19 +61,19 @@ public class CodecTest {
     @Test
     public void case2() {
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'file':111}",  Bean.class);
+            ONode.deserialize("{'file':111}",  DemoBean.class);
         });
 
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'dateFormat':111}",  Bean.class);
+            ONode.deserialize("{'dateFormat':111}",  DemoBean.class);
         });
 
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'url':111}",  Bean.class);
+            ONode.deserialize("{'url':111}",  DemoBean.class);
         });
     }
 
-    static class Bean {
+    static class DemoBean {
         public Charset charset;
         public DoubleAdder doubleAdder;
         public LongAdder longAdder;
@@ -92,8 +92,8 @@ public class CodecTest {
 
         @Override
         public boolean equals(Object object) {
-            if (!(object instanceof Bean)) return false;
-            Bean bean = (Bean) object;
+            if (!(object instanceof DemoBean)) return false;
+            DemoBean bean = (DemoBean) object;
             return Objects.equals(charset, bean.charset) && Objects.equals(doubleAdder, bean.doubleAdder) && Objects.equals(longAdder, bean.longAdder) && Objects.equals(file, bean.file) && Objects.equals(address, bean.address) && Objects.equals(dateFormat, bean.dateFormat) && Objects.equals(sqlDate, bean.sqlDate) && Objects.equals(timeZone, bean.timeZone) && Objects.equals(uri, bean.uri) && Objects.equals(url, bean.url) && Objects.equals(uuid, bean.uuid);
         }
 

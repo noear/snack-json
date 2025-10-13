@@ -49,4 +49,11 @@ public class TypeRule implements ValidationRule {
             throw new JsonSchemaException("Type mismatch. Expected: " + allowedTypes + ", Actual: " + actualType);
         }
     }
+
+    @Override
+    public String toString() {
+        return "TypeRule{" +
+                "allowedTypes=" + allowedTypes +
+                '}';
+    }
 }

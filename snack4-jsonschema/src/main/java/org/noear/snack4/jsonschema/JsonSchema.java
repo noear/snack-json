@@ -58,6 +58,11 @@ public class JsonSchema {
         this.compiledRules = compileSchema(schema);
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(compiledRules);
+    }
+
     public String toJson(){
         return schema.toJson();
     }

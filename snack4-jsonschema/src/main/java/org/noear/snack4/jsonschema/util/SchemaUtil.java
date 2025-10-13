@@ -56,21 +56,27 @@ public class SchemaUtil {
      * */
     public static PropertyDesc propertyOf(AnnotatedElement ae) {
         ONodeAttr p1Anno = ae.getAnnotation(ONodeAttr.class);
+
         if (p1Anno == null) {
-            return null;
-        }
-
-        //断言
-        //Assert.notEmpty(p1Anno.description(), "Param description cannot be empty");
-
-        if (ae instanceof Parameter) {
-            Parameter p1 = (Parameter) ae;
-            String name = nameOr(p1Anno.name(), p1.getName());
-            return new PropertyDesc(name, p1.getParameterizedType(), p1Anno.required(), p1Anno.description());
+            if (ae instanceof Parameter) {
+                Parameter p1 = (Parameter) ae;
+                String name = p1.getName();
+                return new PropertyDesc(name, p1.getParameterizedType(), false, "");
+            } else {
+                Field p1 = (Field) ae;
+                String name = p1.getName();
+                return new PropertyDesc(name, p1.getGenericType(), false, "");
+            }
         } else {
-            Field p1 = (Field) ae;
-            String name = nameOr(p1Anno.name(), p1.getName());
-            return new PropertyDesc(name, p1.getGenericType(), p1Anno.required(), p1Anno.description());
+            if (ae instanceof Parameter) {
+                Parameter p1 = (Parameter) ae;
+                String name = nameOr(p1Anno.name(), p1.getName());
+                return new PropertyDesc(name, p1.getParameterizedType(), p1Anno.required(), p1Anno.description());
+            } else {
+                Field p1 = (Field) ae;
+                String name = nameOr(p1Anno.name(), p1.getName());
+                return new PropertyDesc(name, p1.getGenericType(), p1Anno.required(), p1Anno.description());
+            }
         }
     }
 
@@ -293,7 +299,8 @@ public class SchemaUtil {
 
         // 特殊类型处理: 大整型、大数字
         if(BigInteger.class.isAssignableFrom(clazz)) {
-            schemaNode.set("type", TYPE_INTEGER);
+            schemaNode.set("type", TYPE_NUMBER);
+            schemaNode.set("format", TYPE_INTEGER);
             return;
         }
 
@@ -391,7 +398,7 @@ public class SchemaUtil {
         if (type.equals(String.class) || type.equals(Date.class) || type.equals(BigDecimal.class) || type.equals(BigInteger.class)) {
             return TYPE_STRING;
         } else if (type.equals(Short.class) || type.equals(short.class) || type.equals(Integer.class) || type.equals(int.class) || type.equals(Long.class) || type.equals(long.class)) {
-            return TYPE_INTEGER;
+            return TYPE_NUMBER;//TYPE_INTEGER;
         } else if (type.equals(Double.class) || type.equals(double.class) || type.equals(Float.class) || type.equals(float.class) || type.equals(Number.class)) {
             return TYPE_NUMBER;
         } else if (type.equals(Boolean.class) || type.equals(boolean.class)) {

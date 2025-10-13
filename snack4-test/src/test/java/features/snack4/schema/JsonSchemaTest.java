@@ -1,13 +1,16 @@
 package features.snack4.schema;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.jsonschema.JsonSchema;
 import org.noear.snack4.jsonschema.JsonSchemaException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Date;
 
 /**
  * @author noear 2025/5/10 created
@@ -24,15 +27,9 @@ public class JsonSchemaTest {
     public void case2() {
         JsonSchema schema = JsonSchema.ofJson("{type:'object',properties:{userId:{type:'string'}}}"); //加载架构定义
 
-        Throwable err = null;
-        try {
+        Assertions.assertThrows(Throwable.class, () -> {
             schema.validate(ONode.ofJson("{userId:1}"));//校验格式
-        } catch (Throwable e) {
-            e.printStackTrace();
-            err = e;
-        }
-
-        assert err != null;
+        });
     }
 
 
@@ -64,4 +61,31 @@ public class JsonSchemaTest {
             // 输出: Value -5.0 < minimum(0.0) at $.age
         }
     }
+
+
+    @Test
+    public void case4() {
+        JsonSchema schema = JsonSchema.ofType(DemoBean.class);
+        System.out.println(schema);
+
+        Assertions.assertThrows(Throwable.class, () -> {
+            schema.validate(ONode.ofJson("{'name':1}"));//校验格式
+        });
+
+        Assertions.assertThrows(Throwable.class, () -> {
+            schema.validate(ONode.ofJson("{'name':'1'}"));//校验格式
+        });
+
+        Assertions.assertDoesNotThrow(() -> {
+            schema.validate(ONode.ofJson("{'name':'1','age':1}"));//校验格式
+        });
+    }
+
+    public static class DemoBean {
+        public String name;
+        @ONodeAttr
+        public int age;
+        public Date birthday;
+    }
+
 }

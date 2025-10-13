@@ -38,4 +38,11 @@ public class CompiledRule {
             rule.validate(data);
         }
     }
+
+    @Override
+    public String toString() {
+        return "CompiledRule{" +
+                "rules=" + rules +
+                '}';
+    }
 }
