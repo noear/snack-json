@@ -15,8 +15,8 @@
  */
 package org.noear.snack4.jsonpath.func;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
@@ -36,7 +36,7 @@ public class FirstFunc implements Func {
             return new ONode(ctx.getOptions());
         }
 
-        if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
             List<ONode> results = new ArrayList<>();
 
             for (ONode n1 : currentNodes) {

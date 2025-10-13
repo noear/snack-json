@@ -5,6 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.ONode;
 
 import java.util.List;
 
@@ -41,7 +42,15 @@ public class OperatorTest {
     }
 
     private List<Object> readPath(String path) {
-        return JsonPath.using(conf).parse(json).read(path);
+        System.out.println("::: " + path);
+
+        //ONode
+
+        List<Object> rst = JsonPath.using(conf).parse(json).read(path);
+
+        System.out.println(rst);
+
+        return rst;
     }
 
     // ===================================================================

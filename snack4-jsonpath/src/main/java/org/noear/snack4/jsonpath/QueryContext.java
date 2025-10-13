@@ -15,9 +15,9 @@
  */
 package org.noear.snack4.jsonpath;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.Standard;
 
 import java.util.function.Function;
 
@@ -31,7 +31,7 @@ public interface QueryContext {
     /**
      * 有使用标准？
      */
-    boolean hasStandard(Standard standard);
+    boolean hasFeature(Feature feature);
 
     /**
      * 是否为多输出

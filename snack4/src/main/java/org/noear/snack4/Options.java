@@ -40,8 +40,6 @@ public final class Options {
     public static final String DEF_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     //默认特性
     public static final int DEF_FEATURES = 0;
-    //默认规范
-    public static final int DEF_STANDARDS = 0;
 
     //默认选项（私有）
     public static final Options DEF_OPTIONS = new Options(true);
@@ -51,8 +49,6 @@ public final class Options {
     private final CodecLib codecLib = CodecLib.newInstance();
     //特性开关（使用位掩码存储）
     private int featuresValue = DEF_FEATURES;
-    //规范开关（使用位掩码存储）
-    private int standardsValue = DEF_STANDARDS;
     //时间格式
     private String dateFormat = DEF_DATETIME_FORMAT;
     //书写缩进
@@ -79,13 +75,6 @@ public final class Options {
      */
     public boolean hasFeature(Feature feature) {
         return Feature.hasFeature(this.featuresValue, feature);
-    }
-
-    /**
-     * 是否启用指定规范
-     */
-    public boolean hasStandard(Standard standard) {
-        return Standard.hasStandard(this.standardsValue, standard);
     }
 
     /**
@@ -241,31 +230,6 @@ public final class Options {
         this.featuresValue = Feature.removeFeature(this.featuresValue, features);
         return this;
     }
-
-    /**
-     * 添加规范
-     */
-    public Options addStandard(Standard... standards) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.standardsValue = Standard.addStandard(this.standardsValue, standards);
-        return this;
-    }
-
-    /**
-     * 移除规范
-     */
-    public Options removeStandard(Standard... standards) {
-        if (readonly) {
-            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
-        }
-
-        this.standardsValue = Standard.removeStandard(this.standardsValue, standards);
-        return this;
-    }
-
 
     /**
      * 注册自定义解码器

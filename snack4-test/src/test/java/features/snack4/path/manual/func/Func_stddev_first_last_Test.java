@@ -5,7 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.func.MathUtil;
+import org.noear.snack4.jsonpath.util.MathUtil;
 
 import java.util.Arrays;
 import java.util.List;

@@ -15,13 +15,12 @@
  */
 package org.noear.snack4.jsonpath.func;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class AppendFunc implements Func {
         if (arg0.isArray()) {
             List<ONode> oNodes = arg0.getArray();
 
-            if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+            if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
                 if (oNodes.size() > 0) {
                     for (ONode n1 : oNodes) {
                         if (n1.isArray()) {

@@ -1,7 +1,7 @@
 package features.snack4.path.jayway.func;
 
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.jsonpath.func.MathUtil;
+import org.noear.snack4.jsonpath.util.MathUtil;
 
 import java.util.Arrays;
 import java.util.List;

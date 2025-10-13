@@ -14,7 +14,7 @@ public class JsonPathCompatibleTest6 {
     public void test1() {
         String test = "{\"1\":{\"a1\":[{\"id\":\"a1\"},{\"id\":\"a2\"}],\"b1\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]},\"2\":{\"a2\":[{\"id\":\"a1\",\"id1\":\"a11\",\"userId\":\"a12\"},{\"id\":\"a2\"}],\"b2\":[{\"id\":\"b1\"},{\"id\":\"b2\"}]}}";
         String jsonPath = "$..*[?(@.id)]";
-        String json1 = ONode.ofJson(test, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonPath).toJson();
+        String json1 = ONode.ofJson(test, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonPath).toJson();
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
@@ -236,7 +236,7 @@ public class JsonPathCompatibleTest6 {
         Throwable err2 = null;
 
         try {
-            tmp = ONode.ofJson(json, Options.of().addStandard(Standard.JSONPath_Jayway)).select(jsonpathStr);
+            tmp = ONode.ofJson(json, Options.of().addStandard(Feature.JsonPath_Jayway)).select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Throwable ex) {
             err1 = ex;

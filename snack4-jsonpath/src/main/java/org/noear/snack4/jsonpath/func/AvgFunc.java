@@ -15,11 +15,12 @@
  */
 package org.noear.snack4.jsonpath.func;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.Func;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.util.MathUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class AvgFunc implements Func {
 
         List<Double> doubleList = null;
 
-        if (ctx.hasStandard(Standard.JSONPath_Jayway)) {
+        if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
             if (ctx.isDescendant()) {
                 doubleList = MathUtil.getDoubleList(currentNodes);
             } else {

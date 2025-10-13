@@ -217,7 +217,41 @@ public enum Feature {
      * 写入数字类型
      */
     Write_NumberTypeSuffix,
-    ;
+
+
+    /**
+     * IETF_RFC_9535 兼容模式
+     */
+    JsonPath_IETF_RFC_9535,
+    /**
+     * Jayway 兼容模式
+     */
+    JsonPath_Jayway,
+
+    /**
+     * 为缺少的叶子节点返回 null
+     */
+    JsonPath_DefaultPathLeafToNull,
+
+    /**
+     * 无论路径是否明确，总是返回一个 List
+     */
+    JsonPath_AlwaysReturnList,
+
+    /**
+     * 作为路径列表
+     */
+    JsonPath_AsPathList,
+
+    /**
+     * 抑制异常。如果启用了 ALWAYS_RETURN_LIST，返回空列表 []；否则返回 null。
+     */
+    JsonPath_SuppressExceptions,
+
+    /**
+     * 要求路径中定义的所有属性都必须存在
+     */
+    JsonPath_RequireProperties;;
 
 
     private final int _mask;

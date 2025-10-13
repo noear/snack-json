@@ -15,8 +15,8 @@
  */
 package org.noear.snack4.jsonpath.segment;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Standard;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.func.FuncHolder;
 import org.noear.snack4.jsonpath.util.SelectUtil;
@@ -54,7 +54,7 @@ public class FuncSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        boolean forJayway = ctx.hasStandard(Standard.JSONPath_Jayway);
+        boolean forJayway = ctx.hasFeature(Feature.JsonPath_Jayway);
 
         if (isDescendant()) {
             List<ONode> results = new ArrayList<>();
