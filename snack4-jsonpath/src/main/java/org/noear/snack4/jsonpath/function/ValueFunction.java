@@ -17,6 +17,7 @@ package org.noear.snack4.jsonpath.function;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
+import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
@@ -33,11 +34,11 @@ public class ValueFunction implements Function {
         if (ctx.isInFilter()) {
             n1 = argNodes.get(0);
         } else {
-            if (currentNodes.size() == 0) {
-                return ctx.newNode();
+            if (currentNodes.size() == 1) {
+                n1 = currentNodes.get(0);
+            } else {
+                throw new JsonPathException("Not a single-value array");
             }
-
-            n1 = currentNodes.get(0);
         }
 
         if (n1.isValue()) {

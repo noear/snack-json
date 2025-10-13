@@ -27,40 +27,51 @@ import java.util.List;
  */
 public class QueryResult {
     private final QueryContext ctx;
-    private final List<ONode> currentNodes;
+    private final List<ONode> nodeList;
 
-    public QueryResult(QueryContext ctx, List<ONode> currentNodes) {
+    public QueryResult(QueryContext ctx, List<ONode> nodeList) {
         this.ctx = ctx;
-        this.currentNodes = currentNodes;
+        this.nodeList = nodeList;
     }
 
     public QueryContext getContext() {
         return ctx;
     }
 
-    public List<ONode> getCurrentNodes() {
-        return currentNodes;
+    /**
+     * 节点列表
+     *
+     */
+    public List<ONode> getNodeList() {
+        return nodeList;
     }
 
+    /**
+     * 转为节点（相当于 Flux -> Mono）
+     *
+     */
     public ONode asNode() {
         if (ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
-            return ctx.newNode(currentNodes);
+            return ctx.newNode(nodeList);
         } else if (ctx.hasFeature(Feature.JsonPath_AsPathList)) {
-            return ctx.newNode(ctx.newNode(currentNodes).pathList());
+            return ctx.newNode(ctx.newNode(nodeList).pathList());
         } else {
             return autoNode();
         }
     }
 
+    /**
+     * 自转节点
+     */
     public ONode autoNode() {
-        if (currentNodes.size() > 1) {
-            return ctx.newNode(currentNodes);
+        if (nodeList.size() > 1) {
+            return ctx.newNode(nodeList);
         } else {
             if (ctx.isMultiple()) {
-                return ctx.newNode(currentNodes);
+                return ctx.newNode(nodeList);
             } else {
-                if (currentNodes.size() > 0) {
-                    return currentNodes.get(0);
+                if (nodeList.size() > 0) {
+                    return nodeList.get(0);
                 } else {
                     return ctx.newNode();
                 }

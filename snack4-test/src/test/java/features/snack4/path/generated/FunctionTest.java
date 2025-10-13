@@ -1,5 +1,6 @@
-package features.snack4.path.RFC9535;
+package features.snack4.path.generated;
 
+import features.snack4.path.RFC9535.AbsRFC9535;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author noear 2025/10/11 created
  *
  */
-public class RFC9535_s2490_Function1 extends AbsRFC9535 {
+public class FunctionTest extends AbsRFC9535 {
     // SQL/JSON Path (ISO/IEC 9075)
     // IETF JSONPath (RFC 9535) https://www.rfc-editor.org/rfc/rfc9535.html
 
@@ -49,8 +50,12 @@ public class RFC9535_s2490_Function1 extends AbsRFC9535 {
         queryAssertSize(value_json,"$.readings[?(value(@.type) == 'temperature')].value",1);
         queryAssertSize(value_json,"$.readings[?(value(@..unit) == 'hPa')].type",1);
         queryAssertSize(value_json,"$.readings[?(value(@.value) > 100)]",1);
-        queryAssertSize(value_json,"$[?(value($.location.lat) > 30)].device",1);
-        queryAssertSize(value_json,"$[?(value($.device) == 'weather-station-01')].readings",1);
+        queryAssertSize(value_json,"$[?(value($.location.lat) > 30)].device",0);
+        queryAssertSize(value_json,"$[?(value($.device) == 'weather-station-01')].readings",0);
+        queryAssertSize(value_json,"$.readings[?($.location.lat > 30)]",3);
+        queryAssertSize(value_json,"$.readings[?($.location.lat > 30)].type",3);
+        queryAssertSize(value_json,"$.readings[?(@.value > 50 && $.location.lat < 40)]",2);
+
     }
 
     @Test
@@ -182,11 +187,11 @@ public class RFC9535_s2490_Function1 extends AbsRFC9535 {
 
         JsonPath jsonPath = JsonPath.parse(expr);
 
-        List<ONode> actual = jsonPath.select(ofJson(json)).getCurrentNodes();
+        List<ONode> actual = jsonPath.select(ofJson(json)).getNodeList();
         System.out.println(ONode.serialize(actual));
 
         if (expected != actual.size()) {
-
+            System.out.println(json);
             assertEquals(expected, actual.size());
         }
     }
