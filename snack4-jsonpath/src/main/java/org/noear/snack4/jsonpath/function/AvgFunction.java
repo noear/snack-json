@@ -26,6 +26,7 @@ import org.noear.snack4.util.Asserts;
 import java.util.List;
 
 /**
+ * 提供数字数组的最大值
  *
  * @author noear 2025/10/12 created
  * @since 4.0

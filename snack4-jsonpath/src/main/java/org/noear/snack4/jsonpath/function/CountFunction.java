@@ -23,6 +23,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import java.util.List;
 
 /**
+ * 节点列表的大小
  *
  * @author noear 2025/10/11 created
  * @since 4.0

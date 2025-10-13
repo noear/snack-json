@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * 正则表达式子字符串匹配
  *
  * @author noear 2025/10/11 created
  * @since 4.0

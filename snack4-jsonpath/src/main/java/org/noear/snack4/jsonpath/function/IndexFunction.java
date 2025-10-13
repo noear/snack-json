@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 返回当前数组中索引为X的元素。X可以是负数（从末尾开始计算）
  *
  * @author noear 2025/10/12 created
  * @since 4.0

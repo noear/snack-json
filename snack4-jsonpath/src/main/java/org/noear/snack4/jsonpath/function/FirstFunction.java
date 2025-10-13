@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 返回当前数组的第一个元素
  *
  * @author noear 2025/10/12 created
  * @since 4.0

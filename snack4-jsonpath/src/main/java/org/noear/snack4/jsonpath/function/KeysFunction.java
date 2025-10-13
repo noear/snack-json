@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 提供对象的属性键集合
  *
  * @author noear 2025/10/12 created
  * @since 4.0

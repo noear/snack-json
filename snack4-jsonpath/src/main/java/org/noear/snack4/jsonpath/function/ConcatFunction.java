@@ -24,6 +24,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import java.util.List;
 
 /**
+ * 将一个项或集合和当前数组连接成一个新数组
  *
  * @author noear 2025/10/12 created
  * @since 4.0

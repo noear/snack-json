@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 字符串、数组或对象的长度
  *
  * @author noear 2025/10/11 created
  * @since 4.0
