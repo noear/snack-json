@@ -18,4 +18,11 @@ public class A {
     public void setB(B b) {
         this.b = b;
     }
+
+    @Override
+    public String toString() {
+        return "A{" +
+                "b=" + b +
+                '}';
+    }
 }

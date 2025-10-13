@@ -34,7 +34,7 @@ public class ComplicatedTest {
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.deserialize(json, Object.class);
+        Object obj2 = ONode.deserialize(json, Object.class, Feature.Read_AutoType);
         String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
         System.out.println(json2);
 
@@ -60,7 +60,7 @@ public class ComplicatedTest {
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.deserialize(json);
+        Object obj2 = ONode.deserialize(json, Feature.Read_AutoType);
         String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
 
         assert obj2 instanceof Map;
@@ -84,7 +84,7 @@ public class ComplicatedTest {
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.deserialize(json);
+        Object obj2 = ONode.deserialize(json, Feature.Read_AutoType);
         String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
 
         assert obj2 instanceof Map;

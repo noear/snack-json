@@ -135,7 +135,7 @@ public class BeanDecoder {
                 if (constructor.getParameterCount() == 0) {
                     target = constructor.newInstance();
                 } else {
-                    Object[] args = getConstructorArguments(constructor, node, visited, opts);
+                    Object[] args = getConstructorArguments(typeWrap, node, visited, opts);
                     target = constructor.newInstance(args);
                 }
             }
@@ -160,8 +160,18 @@ public class BeanDecoder {
 
         if (useOnlySetter) {
             //只能用 setter （以数据为主，支持 Read_FailOnUnknownProperties）
-            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
-                PropertyWrap propertyWrap = classWrap.getPropertyWrap(entry.getKey());
+            for (Map.Entry<String, ONode> kv : node.getObject().entrySet()) {
+                if (kv.getKey().startsWith(opts.getTypePropertyName())) {
+                    continue;
+                }
+
+                if(typeWrap.getConstructor() != null) {
+                    if(typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                        continue;
+                    }
+                }
+
+                PropertyWrap propertyWrap = classWrap.getPropertyWrap(kv.getKey());
 
                 if (propertyWrap != null) {
                     if (propertyWrap.getSetterWrap() != null) {
@@ -169,13 +179,19 @@ public class BeanDecoder {
                         setValueForProperty(node, property, target, visited, opts);
                     }
                 } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
-                    throw new SnackException("Unknown property : " + entry.getKey());
+                    throw new SnackException("Unknown property : " + kv.getKey());
                 }
             }
         } else {
             //允许用 setter （以类为主，支持 flat）
-            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWraps().entrySet()) {
-                PropertyWrap propertyWrap = entry.getValue();
+            for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWraps().entrySet()) {
+                if(typeWrap.getConstructor() != null) {
+                    if(typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                        continue;
+                    }
+                }
+
+                PropertyWrap propertyWrap = kv.getValue();
                 final Property property;
 
                 if (useSetter && propertyWrap.getSetterWrap() != null) {
@@ -278,6 +294,12 @@ public class BeanDecoder {
             }
 
             for (Map.Entry<String, ONode> kv : node.getObject().entrySet()) {
+                if (opts.hasFeature(Feature.Read_AutoType)) {
+                    if (kv.getKey().startsWith(opts.getTypePropertyName())) {
+                        continue;
+                    }
+                }
+
                 //Map 的值是新对象，递归调用时 target 传 null
                 Object k = convertKey(kv.getKey(), keyTypeWrap, opts);
                 Object v = convertValue(kv.getValue(), valueTypeWrap, null, null, visited, opts);
@@ -307,28 +329,19 @@ public class BeanDecoder {
         throw new IllegalArgumentException("Unsupported map key type: " + keyType.getType());
     }
 
-    private static Object[] getConstructorArguments(Constructor constructor, ONode node, Map<Object, Object> visited, Options opts) throws Exception {
+    private static Object[] getConstructorArguments(TypeWrap typeWrap, ONode node, Map<Object, Object> visited, Options opts) throws Exception {
         //只有带参数的构造函（像 java record, kotlin data）
-        Set<String> excNames = new LinkedHashSet<>();
-        Parameter[] argsP = constructor.getParameters();
-        Object[] argsV = new Object[argsP.length];
+        Object[] argsV = new Object[typeWrap.getParameterAry().size()];
 
-        for (int j = 0; j < argsP.length; j++) {
-            Parameter p = argsP[j];
-
-            //构造参数有的，进入排除
-            excNames.add(p.getName());
-
+        for (int j = 0; j < argsV.length; j++) {
+            Parameter p = typeWrap.getParameterAry().get(j);
             if (node.hasKey(p.getName())) {
                 ONodeAttrHolder attr = new ONodeAttrHolder(p.getAnnotation(ONodeAttr.class), false);
                 Object val = convertValue(node.get(p.getName()), TypeWrap.from(p.getParameterizedType()), null, attr, visited, opts);
                 argsV[j] = val;
+            } else {
+                argsV[j] = null;
             }
-        }
-
-        //移除已使用的节点
-        for (String excName : excNames) {
-            node.remove(excName);
         }
 
         return argsV;
@@ -366,7 +379,6 @@ public class BeanDecoder {
                 ONode n1 = oRef.getObject().get(opts.getTypePropertyName());
                 if (n1 != null) {
                     typeStr = n1.getString();
-                    oRef.getObject().remove(opts.getTypePropertyName());
                 }
             }
 

@@ -16,8 +16,7 @@
 package org.noear.snack4.codec.util;
 
 import java.lang.reflect.*;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -37,6 +36,8 @@ public class TypeWrap {
 
     private Class<?> type = Object.class;
     private Constructor<?> constructor;
+    private Map<String,Parameter> parameterMap;
+    private List<Parameter> parameterAry;
 
     public TypeWrap(Type genericType) {
         if (genericType instanceof Class<?>) {
@@ -78,11 +79,29 @@ public class TypeWrap {
                     constructor = c1;
                 }
             }
+
+            if (constructor != null) {
+                parameterMap = new HashMap<>();
+                parameterAry = new ArrayList<>();
+
+                for (Parameter p1 : constructor.getParameters()) {
+                    parameterMap.put(p1.getName(), p1);
+                    parameterAry.add(p1);
+                }
+            }
         }
     }
 
     public Constructor<?> getConstructor() {
        return constructor;
+    }
+
+    public Map<String, Parameter> getParameterMap() {
+        return parameterMap;
+    }
+
+    public List<Parameter> getParameterAry() {
+        return parameterAry;
     }
 
     public Class<?> getType() {

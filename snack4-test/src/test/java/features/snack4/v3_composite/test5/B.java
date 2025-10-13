@@ -19,4 +19,11 @@ public class B {
     public void setbList(List<String> bList) {
         this.bList = bList;
     }
+
+    @Override
+    public String toString() {
+        return "B{" +
+                "bList=" + bList +
+                '}';
+    }
 }

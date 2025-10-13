@@ -361,9 +361,9 @@ public class JsonSchema {
 
         if (schemaNode.hasKey("properties")) {
             ONode propsNode = schemaNode.get("properties");
-            for (Map.Entry<String, ONode> entry : propsNode.getObject().entrySet()) {
-                path.enterProperty(entry.getKey());
-                compileSchemaRecursive(entry.getValue(), rules, path);
+            for (Map.Entry<String, ONode> kv : propsNode.getObject().entrySet()) {
+                path.enterProperty(kv.getKey());
+                compileSchemaRecursive(kv.getValue(), rules, path);
                 path.exit();
             }
         }
