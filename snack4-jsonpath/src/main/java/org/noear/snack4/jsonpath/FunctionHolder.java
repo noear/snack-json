@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
@@ -29,9 +28,9 @@ import java.util.Objects;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class FuncHolder {
+public class FunctionHolder {
     public final String funcName;
-    public final Func func;
+    public final Function func;
     public final List<Object> args;
 
     @Override
@@ -39,14 +38,14 @@ public class FuncHolder {
         return funcName;
     }
 
-    public FuncHolder(String description) {
+    public FunctionHolder(String description) {
         int bl = description.indexOf('(');
 
         this.funcName = description.substring(0, bl);
         String argsStr0 = description.substring(bl + 1, description.length() - 1);
         List<String> argsStr = SelectUtil.splitSelectors(argsStr0);
 
-        this.func = FuncLib.get(funcName);
+        this.func = FunctionLib.get(funcName);
 
         Objects.requireNonNull(func, "The function not found: " + funcName);
 

@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
-import org.noear.snack4.jsonpath.func.FuncHolder;
+import org.noear.snack4.jsonpath.FunctionHolder;
 import org.noear.snack4.util.Asserts;
 
 /**
@@ -32,7 +32,7 @@ public class Operand {
     private final String value;
     private ONode nodeValue;
     private JsonPath queryValue;
-    private FuncHolder funcValue;
+    private FunctionHolder funcValue;
 
     public String getValue() {
         return value;
@@ -71,7 +71,7 @@ public class Operand {
                 } else {
                     if (value.indexOf(')') > 0) {
                         //函数
-                        funcValue = new FuncHolder(value);
+                        funcValue = new FunctionHolder(value);
                     } else {
                         //其它
                         nodeValue = ONode.ofJson(value);

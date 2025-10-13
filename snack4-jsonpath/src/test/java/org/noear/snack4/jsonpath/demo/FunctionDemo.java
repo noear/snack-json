@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.demo;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.FuncLib;
+import org.noear.snack4.jsonpath.FunctionLib;
 import org.noear.snack4.jsonpath.JsonPathException;
 
 /**
@@ -11,7 +11,7 @@ import org.noear.snack4.jsonpath.JsonPathException;
 public class FunctionDemo {
     public static void main(String[] args) {
         //定制聚合函数
-        FuncLib.register("parent", (ctx, currentNodes, argNodes) -> {
+        FunctionLib.register("parent", (ctx, currentNodes, argNodes) -> {
             if (currentNodes.size() == 1) {
                 ONode node = currentNodes.get(0);
                 if (node.parent() == null) {

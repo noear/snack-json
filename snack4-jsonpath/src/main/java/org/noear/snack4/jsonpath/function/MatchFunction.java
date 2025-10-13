@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath.function;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.JsRegexUtil;
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class MatchFunc implements Func {
+public class MatchFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (argNodes.size() != 2) {

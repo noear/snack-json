@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath.function;
 
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.Func;
+import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.MathUtil;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class StddevFunc implements Func {
+public class AvgFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (currentNodes.isEmpty()) {
@@ -51,10 +51,18 @@ public class StddevFunc implements Func {
             }
         } else {
             doubleList = MathUtil.getDoubleList(currentNodes);
+
+            if (Asserts.isEmpty(doubleList)) {
+                return new ONode(ctx.getOptions());
+            }
         }
 
-        Double ref = MathUtil.calculateStdDev(doubleList);
 
-        return new ONode(ctx.getOptions(), ref);
+        double ref = 0;
+        for (Double d : doubleList) {
+            ref += d;
+        }
+
+        return new ONode(ctx.getOptions(), ref / doubleList.size());
     }
 }

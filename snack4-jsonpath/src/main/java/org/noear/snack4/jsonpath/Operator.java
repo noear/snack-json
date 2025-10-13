@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.filter.Term;
 
 /**
- * JsonPath 操作符
+ * JsonPath 关系操作符
  *
  * @author noear 2025/5/5 created
  * @since 4.0

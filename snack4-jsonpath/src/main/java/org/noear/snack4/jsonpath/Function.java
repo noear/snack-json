@@ -13,31 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.jsonpath.func;
+package org.noear.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.jsonpath.Func;
-import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
 
 /**
+ * JsonPath 扩展函数（聚合函数，过滤函数）
  *
- * @author noear 2025/10/11 created
+ * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class ValueFunc implements Func {
-    @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (currentNodes.size() > 0) {
-            ONode n1 = currentNodes.get(0);
-            if (n1.isValue()) {
-                return n1;
-            } else if (n1.isArray()) {
-                return n1.get(0);
-            }
-        }
-
-        return new ONode(null);
-    }
+@FunctionalInterface
+public interface Function {
+    ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes);
 }
