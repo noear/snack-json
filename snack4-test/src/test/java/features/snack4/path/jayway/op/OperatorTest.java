@@ -44,10 +44,7 @@ public class OperatorTest {
                 .options(Option.ALWAYS_RETURN_LIST).build();
     }
 
-    static Options options = Options.of(
-            Feature.JsonPath_AlwaysReturnList,
-            //Feature.JsonPath_Jayway,
-            Feature.Write_Nulls);
+    static Options options = Options.of(Feature.JsonPath_AlwaysReturnList);
 
     private List<Object> readPath(String path) {
         System.out.println("--------------------------: " + path);
