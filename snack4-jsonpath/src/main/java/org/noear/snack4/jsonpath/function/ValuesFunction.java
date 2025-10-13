@@ -21,18 +21,14 @@ import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
- * 提供对象的属性键集合
  *
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class KeysFunction implements Function {
+public class ValuesFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (ctx.isInFilter()) {
@@ -48,37 +44,37 @@ public class KeysFunction implements Function {
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            Set<String> keys = new LinkedHashSet<>();
+            Collection<ONode> values = new  ArrayList<>();
 
             for (ONode n1 : currentNodes) {
-                if (n1.isObject()) {
-                    keys = n1.getObject().keySet();
+                if(n1.isObject()){
+                    values = n1.getObject().values();
                 }
             }
 
-            if (keys.size() > 0) {
-                return ctx.newNode().addAll(keys);
-            } else {
+            if(values.size() > 0){
+                return ctx.newNode(values);
+            }  else{
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
             }
         } else {
             if (currentNodes.size() > 1) {
-                Set<String> keys = new HashSet<>();
+                Collection<ONode> values = new  ArrayList<>();
 
                 for (ONode n1 : currentNodes) {
                     if (n1.isObject() && n1.getObject().size() > 0) {
-                        keys.addAll(n1.getObject().keySet());
+                        values.addAll(n1.getObject().values());
                     }
                 }
 
-                if (keys.size() > 0) {
-                    return ctx.newNode().addAll(keys);
+                if (values.size() > 0) {
+                    return ctx.newNode(values);
                 }
             } else {
                 ONode n1 = currentNodes.get(0);
 
                 if (n1.isObject() && n1.getObject().size() > 0) {
-                    return ctx.newNode().addAll(n1.getObject().keySet());
+                    return ctx.newNode(n1.getObject().values());
                 }
             }
         }

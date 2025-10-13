@@ -55,6 +55,12 @@ public class FunctionLib {
         register("match", new MatchFunction());
         register("search", new SearchFunction());
         register("value", new ValueFunction());
+
+        //for sql
+        register("abs", new AbsFunction());
+        register("ceil", new CeilFunction());
+        register("floor", new FloorFunction());
+        register("values", new ValuesFunction());
     }
 
     /**
