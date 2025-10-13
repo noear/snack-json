@@ -82,14 +82,13 @@ public class CompareOperator implements Operator {
         return false;
     }
 
-    private boolean compareNull(ONode a){
-        switch (type) {
-            case EQ:
-                return a.isNull();
-            case NEQ:
-                return a.isNull() == false;
-            default:
-                return false;
+    private boolean compareNull(ONode a) {
+        if (type.hasEq()) {
+            return a.isNull();
+        } else if (type == CompareType.NEQ) {
+            return a.isNull() == false;
+        } else {
+            return false;
         }
     }
 

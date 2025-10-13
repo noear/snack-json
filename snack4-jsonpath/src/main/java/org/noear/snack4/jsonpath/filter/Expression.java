@@ -24,6 +24,7 @@ import org.noear.snack4.util.Asserts;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  * 逻辑表达式
@@ -68,7 +69,7 @@ public class Expression {
             }
             return stack.pop();
         } catch (Throwable ex) {
-            return false;
+            throw new JsonPathException(ex);
         }
     }
 

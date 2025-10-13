@@ -63,8 +63,14 @@ public class RFC9535_s2353_Comparison extends AbsRFC9535 {
 
 
     private void comparisonAssert(String expr, boolean expected) {
+        System.out.println("----------------------: " + expr);
         ONode node = ofJson(comparisonJson);
         boolean actual = Expression.get(expr).test(node, new QueryContextImpl(node, QueryMode.SELECT));
-        assertEquals(expected, actual);
+
+        if (expected != actual) {
+            System.out.println("::: " + actual + " != " + expected);
+            System.out.println(comparisonJson);
+            assert false;
+        }
     }
 }

@@ -140,7 +140,7 @@ public class QueryContextImpl implements QueryContext {
      */
     public ONode nestedQuery(ONode target, JsonPath query) {
         if (query.isRooted()) {
-            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()));
+            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()).asNode());
         }
 
         if (getMode() == QueryMode.CREATE) {
