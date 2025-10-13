@@ -31,16 +31,19 @@ import java.util.List;
 public class CountFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode n1 = null;
         if (ctx.isInFilter()) {
             if (argNodes.size() != 1) {
                 throw new JsonPathException("Requires 1 parameters");
             }
 
-            n1 = argNodes.get(0);
-        } else {
-            n1 = currentNodes.get(0);
+            currentNodes = argNodes.get(0).getArray();
         }
+
+        if (currentNodes.isEmpty()) {
+            return ctx.newNode();
+        }
+
+        ONode n1 =  currentNodes.get(0);
 
         if (n1.isString()) return ctx.newNode(n1.getString().length());
         if (n1.isArray()) return ctx.newNode(n1.size());

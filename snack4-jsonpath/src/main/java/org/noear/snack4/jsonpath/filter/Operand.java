@@ -16,7 +16,6 @@
 package org.noear.snack4.jsonpath.filter;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.FunctionHolder;
@@ -40,7 +39,7 @@ public class Operand {
 
     public ONode getNode(QueryContext ctx, ONode node) {
         if (queryValue != null) {
-            return ctx.nestedQuery(node, queryValue);
+            return ctx.nestedQuery(node, queryValue).reduce();
         } else if (funcValue != null) {
             return funcValue.apply(ctx, node);
         } else {

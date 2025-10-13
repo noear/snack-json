@@ -38,8 +38,13 @@ public class LengthFunction implements Function {
                 throw new JsonPathException("Requires 1 parameters");
             }
 
-            ONode n = argNodes.get(0);
-            return lengthOf(ctx, n);
+            currentNodes = argNodes.get(0).getArray();
+
+            if (currentNodes.isEmpty()) {
+                return ctx.newNode();
+            }
+
+            return lengthOf(ctx, currentNodes.get(0));
         } else {
 
             if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {

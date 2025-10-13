@@ -138,15 +138,15 @@ public class QueryContextImpl implements QueryContext {
     /**
      * 内嵌查询
      */
-    public ONode nestedQuery(ONode target, JsonPath query) {
+    public QueryResult nestedQuery(ONode target, JsonPath query) {
         if (query.isRooted()) {
-            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()).asNode());
+            return cacheIfAbsent(query.getExpression(), k -> query.select(getRoot()));
         }
 
         if (getMode() == QueryMode.CREATE) {
-            return query.create(target).autoNode();
+            return query.create(target);
         } else {
-            return query.select(target).autoNode();
+            return query.select(target);
         }
     }
 }

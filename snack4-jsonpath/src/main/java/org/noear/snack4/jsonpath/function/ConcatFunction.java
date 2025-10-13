@@ -32,7 +32,6 @@ import java.util.List;
 public class ConcatFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode arg0 = null;
         ONode arg1 = null;
 
         if (ctx.isInFilter()) {
@@ -40,45 +39,42 @@ public class ConcatFunction implements Function {
                 throw new JsonPathException("Requires 2 parameters");
             }
 
-            arg0 = argNodes.get(0);
+            currentNodes = argNodes.get(0).getArray();
             arg1 = argNodes.get(1);
         } else {
             if (argNodes.size() != 1) {
                 throw new JsonPathException("Requires 1 parameter");
             }
-            arg0 = new ONode(currentNodes);
+
             arg1 = argNodes.get(0);
         }
 
-        if (arg0.isArray()) {
-            List<ONode> oNodes = arg0.getArray();
-
-            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-                if (oNodes.size() > 0) {
-                    for(ONode n1: oNodes) {
-                        if (n1.isString()) {
-                            n1.setValue(n1.toString().concat(arg1.toString()));
-                        } else {
-                            n1.setValue(arg1.toString());
-                        }
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+            if (currentNodes.size() > 0) {
+                for (ONode n1 : currentNodes) {
+                    if (n1.isString()) {
+                        n1.setValue(n1.toString().concat(arg1.toString()));
+                    } else {
+                        n1.setValue(arg1.toString());
                     }
                 }
+            }
 
-                if(ctx.isMultiple()) {
-                    return arg0;
-                } else {
-                    return arg0.get(0);
-                }
+            if (ctx.isMultiple()) {
+                return ctx.newNode(currentNodes);
             } else {
-                if (oNodes.size() > 1) {
-                    return arg0.add(arg1);
-                } else {
-                    ONode n1 = oNodes.get(0);
-                    if (n1.isArray()) {
-                        return n1.add(arg1);
-                    } else if (n1.isString()) {
-                        return new ONode(n1.getString().concat(arg1.getString()));
-                    }
+                return currentNodes.get(0);
+            }
+        } else {
+            if (currentNodes.size() > 1) {
+                currentNodes.add(arg1);
+                return ctx.newNode(currentNodes);
+            } else {
+                ONode n1 = currentNodes.get(0);
+                if (n1.isArray()) {
+                    return n1.add(arg1);
+                } else if (n1.isString()) {
+                    return new ONode(n1.getString().concat(arg1.getString()));
                 }
             }
         }

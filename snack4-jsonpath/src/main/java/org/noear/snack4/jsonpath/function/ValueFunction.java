@@ -31,20 +31,19 @@ import java.util.List;
 public class ValueFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode n1 = null;
         if (ctx.isInFilter()) {
             if (argNodes.size() != 1) {
                 throw new JsonPathException("Requires 1 parameters");
             }
 
-            n1 = argNodes.get(0);
-        } else {
-            if (currentNodes.size() == 1) {
-                n1 = currentNodes.get(0);
-            } else {
-                throw new JsonPathException("Not a single-value array");
-            }
+            currentNodes = argNodes.get(0).getArray();
         }
+
+        if (currentNodes.size() != 1) {
+            throw new JsonPathException("Not a single-value array");
+        }
+
+        ONode n1 = currentNodes.get(0);
 
         if (n1.isValue()) {
             return n1;

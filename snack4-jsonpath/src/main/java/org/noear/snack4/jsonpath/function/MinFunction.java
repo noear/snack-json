@@ -39,12 +39,7 @@ public class MinFunction implements Function {
                 throw new JsonPathException("Requires 1 parameters");
             }
 
-            ONode arg0 = argNodes.get(0);
-            if (arg0.isArray() == false) {
-                throw new JsonPathException("Requires 1 array parameters");
-            }
-
-            currentNodes = arg0.getArray();
+            currentNodes = argNodes.get(0).getArray();
         }
 
         if (currentNodes.isEmpty()) {

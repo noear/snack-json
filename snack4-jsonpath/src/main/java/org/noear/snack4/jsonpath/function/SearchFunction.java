@@ -33,21 +33,36 @@ import java.util.regex.Pattern;
 public class SearchFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (argNodes.size() != 2) {
-            throw new JsonPathException("Requires 2 parameters");
+        ONode arg1;
+
+        if (ctx.isInFilter()) {
+            if (argNodes.size() != 2) {
+                throw new JsonPathException("Requires 2 parameters");
+            }
+
+            currentNodes = argNodes.get(0).getArray();
+            arg1 = argNodes.get(1);
+        } else {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameters");
+            }
+
+            arg1 = argNodes.get(0);
         }
 
-        ONode o1 = argNodes.get(0);
-
-        if (o1.isNull()) {
-            return new ONode(false);
+        if (arg1.isNull()) {
+            return ctx.newNode(false);
         }
 
-        String arg0 = o1.toString();
-        String arg1 = argNodes.get(1).toString();
+        if (currentNodes.isEmpty()) {
+            return ctx.newNode();
+        }
 
-        Pattern pattern = RegexUtil.parse(arg1);
-        boolean found = pattern.matcher(arg0).find(); //与 MatchFunc 的区别就在这儿
+        String arg0Str = currentNodes.get(0).toString();
+        String arg1Str = arg1.toString();
+
+        Pattern pattern = RegexUtil.parse(arg1Str);
+        boolean found = pattern.matcher(arg0Str).find(); //与 MatchFunc 的区别就在这儿
 
         return new ONode(found);
     }

@@ -35,6 +35,14 @@ import java.util.Set;
 public class KeysFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
+        if (ctx.isInFilter()) {
+            if (argNodes.size() != 1) {
+                throw new JsonPathException("Requires 1 parameters");
+            }
+
+            currentNodes = argNodes.get(0).getArray();
+        }
+
         if (currentNodes.isEmpty()) {
             return ctx.newNode();
         }

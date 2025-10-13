@@ -56,24 +56,22 @@ public class QuerySelector implements Selector {
 
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
-                ONode dynamicIdx = ctx.nestedQuery(n1, jsonPath);
-
-                if (dynamicIdx.isNumber()) {
-                    IndexUtil.forIndex(ctx, n1, dynamicIdx.getInt(), results);
-                } else if (dynamicIdx.isString()) {
-                    IndexUtil.forKey(ctx, n1, dynamicIdx.getString(), results);
-                }
+                resolve(ctx, n1, results);
             });
         } else {
-            for (ONode node : currentNodes) {
-                ONode dynamicIdx = ctx.nestedQuery(node, jsonPath);
-
-                if (dynamicIdx.isNumber()) {
-                    IndexUtil.forIndex(ctx, node, dynamicIdx.getInt(), results);
-                } else if (dynamicIdx.isString()) {
-                    IndexUtil.forKey(ctx, node, dynamicIdx.getString(), results);
-                }
+            for (ONode n1 : currentNodes) {
+                resolve(ctx, n1, results);
             }
+        }
+    }
+
+    private void resolve(QueryContext ctx, ONode n1, List<ONode> results) {
+        ONode dynamicIdx = ctx.nestedQuery(n1, jsonPath).reduce();
+
+        if (dynamicIdx.isNumber()) {
+            IndexUtil.forIndex(ctx, n1, dynamicIdx.getInt(), results);
+        } else if (dynamicIdx.isString()) {
+            IndexUtil.forKey(ctx, n1, dynamicIdx.getString(), results);
         }
     }
 }

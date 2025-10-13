@@ -56,14 +56,14 @@ public class QueryResult {
         } else if (ctx.hasFeature(Feature.JsonPath_AsPathList)) {
             return ctx.newNode().addAll(ctx.newNode(nodeList).pathList());
         } else {
-            return autoNode();
+            return reduce();
         }
     }
 
     /**
-     * 自转节点
+     * 收缩节点
      */
-    public ONode autoNode() {
+    public ONode reduce() {
         if (nodeList.size() > 1) {
             return ctx.newNode(nodeList);
         } else {

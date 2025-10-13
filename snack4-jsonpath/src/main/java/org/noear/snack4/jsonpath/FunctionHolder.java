@@ -87,8 +87,8 @@ public class FunctionHolder {
 
         for (Object arg : args) {
             if (arg instanceof JsonPath) {
-                ONode n1 = ctx.nestedQuery(node, (JsonPath) arg);
-                argNodes.add(n1);
+                List<ONode> currentNodes = ctx.nestedQuery(node, (JsonPath) arg).getNodeList();
+                argNodes.add(ctx.newNode(currentNodes));
             } else {
                 argNodes.add((ONode) arg);
             }

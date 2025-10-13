@@ -20,6 +20,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
+import org.noear.snack4.jsonpath.QueryMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ import java.util.List;
 public class IndexFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode arg0 = null;
         ONode arg1 = null;
 
         if (ctx.isInFilter()) {
@@ -41,13 +41,13 @@ public class IndexFunction implements Function {
                 throw new JsonPathException("Requires 2 parameters");
             }
 
-            arg0 = argNodes.get(0);
+            currentNodes = argNodes.get(0).getArray();
             arg1 = argNodes.get(1);
         } else {
             if (argNodes.size() != 1) {
                 throw new JsonPathException("Requires 1 parameter");
             }
-            arg0 = new ONode(currentNodes);
+
             arg1 = argNodes.get(0);
         }
 
@@ -55,40 +55,54 @@ public class IndexFunction implements Function {
             throw new JsonPathException("Requires arg1 is number");
         }
 
-        if (arg0.isArray()) {
-            List<ONode> oNodes = arg0.getArray();
+        int index = arg1.getInt();
 
-            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-                List<ONode> results = new ArrayList<>();
+        if (currentNodes.isEmpty()) {
+            if (ctx.getMode() == QueryMode.CREATE) {
+                currentNodes.add(ctx.newNode().getOrNew(index));
+            } else {
+                return ctx.newNode();
+            }
+        }
 
-                if (oNodes.size() > 0) {
-                    for (ONode n1 : oNodes) {
-                        if (n1.isArray()) {
-                            ONode tmp = n1.get(arg1.getInt());
-                            if (tmp.isNull() == false) {
-                                results.add(tmp);
-                            }
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+            List<ONode> results = new ArrayList<>();
+
+            if (currentNodes.size() > 0) {
+                for (ONode n1 : currentNodes) {
+                    if (n1.isArray()) {
+                        ONode tmp = n1.get(index);
+                        if (tmp.isNull() == false) {
+                            results.add(tmp);
                         }
                     }
                 }
+            }
 
-                if (results.size() > 0) {
-                    if (ctx.isMultiple()) {
-                        return ctx.newNode(results);
-                    } else {
-                        return results.get(0);
-                    }
+            if (results.size() > 0) {
+                if (ctx.isMultiple()) {
+                    return ctx.newNode(results);
                 } else {
-                    throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+                    return results.get(0);
                 }
             } else {
-                if (oNodes.size() > 1) {
-                    return arg0.get(arg1.getInt());
+                throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+            }
+        } else {
+            if (currentNodes.size() > 1) {
+                if (index < 0) {
+                    index = index + currentNodes.size();
+                }
+
+                if (index < currentNodes.size()) {
+                    return currentNodes.get(index);
                 } else {
-                    ONode n1 = oNodes.get(0);
-                    if (n1.isArray()) {
-                        return n1.get(arg1.getInt());
-                    }
+                    return ctx.newNode();
+                }
+            } else {
+                ONode n1 = currentNodes.get(0);
+                if (n1.isArray()) {
+                    return n1.get(index);
                 }
             }
         }

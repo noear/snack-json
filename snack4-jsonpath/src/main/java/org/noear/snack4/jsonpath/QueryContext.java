@@ -82,7 +82,7 @@ public interface QueryContext {
     /**
      * 内嵌查询（`@.user.name`）
      */
-    ONode nestedQuery(ONode target, JsonPath query);
+    QueryResult nestedQuery(ONode target, JsonPath query);
 
     /**
      * 新建节点
