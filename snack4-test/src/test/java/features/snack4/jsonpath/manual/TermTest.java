@@ -31,6 +31,11 @@ public class TermTest {
         testTerm("@.a not like '1'", "@.a", "not like", "'1'");
     }
 
+    @Test
+    public void case3() {
+        testTerm("@.a starts with '1'", "@.a", "starts with", "'1'");
+    }
+
     public void testTerm(String token, String left, String op, String right) {
         System.out.println("------------: " + token);
 
