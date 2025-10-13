@@ -42,8 +42,17 @@ public class CompareOperator implements Operator {
         ONode rightNode = term.getRightNode(ctx, node);
 
         if (rightNode.isNull()) {
+            //右侧为 null
             return compareNull(leftNode);
         } else if(leftNode.isNull()) {
+            //左侧为 null
+            if(ctx.getMode() == QueryMode.CREATE){
+                if (type.hasEq()) {
+                    leftNode.fill(rightNode);
+                    return true;
+                }
+            }
+
             return compareNull(rightNode);
         }
 
@@ -63,13 +72,6 @@ public class CompareOperator implements Operator {
                 }
             }
         } else {
-            if (ctx.getMode() == QueryMode.CREATE && leftNode.isNull()) {
-                if (type == CompareType.EQ) {
-                    leftNode.fill(rightNode);
-                    return true;
-                }
-            }
-
             if (leftNode.isNull()) {
                 return false;
             }
