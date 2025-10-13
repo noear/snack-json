@@ -79,8 +79,8 @@ public class BeanEncoder {
 
             return oNode;
         } catch (Throwable e) {
-            if (e instanceof CodecException) {
-                throw (CodecException) e;
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
             }
             throw new CodecException("Failed to encode bean to ONode", e);
         }

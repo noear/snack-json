@@ -80,8 +80,8 @@ public class BeanDecoder {
         try {
             return (T) convertValue(source0, typeWrap, target0, null);
         } catch (Throwable e) {
-            if (e instanceof CodecException) {
-                throw (CodecException) e;
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
             }
             throw new CodecException("Failed to decode bean from ONode", e);
         }
