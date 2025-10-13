@@ -167,8 +167,15 @@ public class CodecLib {
         addFactory( new _ThrowablePatternFactory());
 
         addFactory(Map.class, new MapFactory());
+        addFactory(HashMap.class, ((opts, node, clazz) ->  new HashMap()));
+        addFactory(LinkedHashMap.class, ((opts, node, clazz) ->  new LinkedHashMap()));
+
         addFactory(List.class, new ListFactory());
+        addFactory(ArrayList.class, ((opts, node, clazz) ->  new ArrayList()));
+
         addFactory(Set.class, new SetFactory());
+        addFactory(HashSet.class, ((opts, node, clazz) ->  new HashSet()));
+
         addFactory(Collection.class, new CollectionFactory());
     }
 
@@ -280,8 +287,8 @@ public class CodecLib {
     }
 
     private CodecLib loadDefault() {
-        loadDefaultDecoders();
         loadDefaultFactories();
+        loadDefaultDecoders();
         loadDefaultEncoders();
         return this;
     }
