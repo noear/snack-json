@@ -47,10 +47,10 @@ public class RFC9535_s2490_Function1 extends AbsRFC9535 {
     @Test
     public void valueTest(){
         queryAssertSize(value_json,"$.readings[?(value(@.type) == 'temperature')].value",1);
-        queryAssertSize(value_json,"$[?(value($.device) == 'weather-station-01')].readings",1);
         queryAssertSize(value_json,"$.readings[?(value(@..unit) == 'hPa')].type",1);
         queryAssertSize(value_json,"$.readings[?(value(@.value) > 100)]",1);
         queryAssertSize(value_json,"$[?(value($.location.lat) > 30)].device",1);
+        queryAssertSize(value_json,"$[?(value($.device) == 'weather-station-01')].readings",1);
     }
 
     @Test
