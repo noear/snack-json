@@ -17,7 +17,7 @@ package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.ObjectPatternEncoder;
 
 import java.util.Currency;
 
@@ -26,7 +26,12 @@ import java.util.Currency;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class CurrencyEncoder implements ObjectEncoder<Currency> {
+public class _CurrencyPatternEncoder implements ObjectPatternEncoder<Currency> {
+    @Override
+    public boolean canEncode(Object value) {
+        return value instanceof Currency;
+    }
+
     @Override
     public ONode encode(EncodeContext ctx, Currency value, ONode target) {
         return target.setValue(value.getCurrencyCode());

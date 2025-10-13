@@ -11,6 +11,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Currency;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -39,6 +41,8 @@ public class BeanTest {
         bean.uri = URI.create("http://127.0.0.1:8080/a.j");
         bean.url = bean.uri.toURL();
         bean.uuid = UUID.randomUUID();
+        bean.currency =  Currency.getInstance("USD");
+        bean.duration = Duration.ofSeconds(30);
 
 
         String json = ONode.serialize(bean);
@@ -65,6 +69,8 @@ public class BeanTest {
         public URI uri;
         public URL  url;
         public UUID uuid;
+        public Currency currency;
+        public Duration duration;
 
         @Override
         public boolean equals(Object object) {

@@ -179,6 +179,7 @@ public class CodecLib {
 
         addDecoder(Charset.class, new _CharsetPatternDecoder());
         addDecoder(TimeZone.class, new _TimeZonePatternDecoder());
+        addDecoder(Currency.class, new _CurrencytPatternDecoder());
 
         addDecoder(StackTraceElement.class, new StackTraceElementDecoder());
         addDecoder(InetSocketAddress.class, new InetSocketAddressDecoder());
@@ -247,13 +248,13 @@ public class CodecLib {
         addEncoder(Calendar.class, new _CalendarPatternEncoder());
         addEncoder(Clob.class, new _ClobPatternEncoder());
         addEncoder(TimeZone.class, new _TimeZonePatternEncoder());
+        addEncoder(Currency.class, new _CurrencyPatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
         addEncoder(File.class, new FileEncoder());
         addEncoder(Class.class, new ClassEncoder());
-        addEncoder(Currency.class, new CurrencyEncoder());
         addEncoder(UUID.class, new UUIDEncoder());
         addEncoder(Duration.class, new DurationEncoder());
 
