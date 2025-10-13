@@ -218,7 +218,7 @@ public enum Feature {
      * 写入数字类型
      */
     Write_NumberTypeSuffix,
-    
+
     /**
      * 写入长整型时使用字符串模式
      */
