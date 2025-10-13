@@ -40,6 +40,7 @@ public class FunctionLib {
 
         register("sum", new SumFunction());
         register("keys", new KeysFunction());
+        register("values", new ValuesFunction());
 
         register("concat", new ConcatFunction());
         register("append", new AppendFunction());
@@ -55,12 +56,6 @@ public class FunctionLib {
         register("match", new MatchFunction());
         register("search", new SearchFunction());
         register("value", new ValueFunction());
-
-        //for sql
-        register("abs", new AbsFunction());
-        register("ceil", new CeilFunction());
-        register("floor", new FloorFunction());
-        register("values", new ValuesFunction());
     }
 
     /**
