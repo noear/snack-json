@@ -39,4 +39,20 @@ public abstract class AbstractFunction implements Function {
             return currentNodes;
         }
     }
+
+    protected ONode getArgAt(QueryContext ctx, List<ONode> argNodes, int index) {
+        if (ctx.isInFilter()) {
+            if (argNodes.size() < (index + 1)) {
+                throw new JsonPathException("Requires " + (index + 1) + " parameters");
+            }
+
+            return argNodes.get(index);
+        } else {
+            if (argNodes.size() < index) {
+                throw new JsonPathException("Requires " + index + " parameter");
+            }
+
+            return argNodes.get(index - 1);
+        }
+    }
 }

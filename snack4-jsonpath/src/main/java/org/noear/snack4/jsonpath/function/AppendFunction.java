@@ -18,7 +18,6 @@ package org.noear.snack4.jsonpath.function;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
-import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
@@ -28,25 +27,11 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class AppendFunction implements Function {
+public class AppendFunction extends AbstractFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode arg1 = null;
-
-        if (ctx.isInFilter()) {
-            if (argNodes.size() != 2) {
-                throw new JsonPathException("Requires 2 parameters");
-            }
-
-            currentNodes = argNodes.get(0).getArray();
-            arg1 = argNodes.get(1);
-        } else {
-            if (argNodes.size() != 1) {
-                throw new JsonPathException("Requires 1 parameter");
-            }
-
-            arg1 = argNodes.get(0);
-        }
+        currentNodes = getNodeList(ctx, currentNodes, argNodes); //arg0
+        ONode arg1 = getArgAt(ctx, argNodes, 1);
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             if (currentNodes.size() > 0) {

@@ -30,25 +30,11 @@ import java.util.regex.Pattern;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class SearchFunction implements Function {
+public class SearchFunction extends AbstractFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        ONode arg1;
-
-        if (ctx.isInFilter()) {
-            if (argNodes.size() != 2) {
-                throw new JsonPathException("Requires 2 parameters");
-            }
-
-            currentNodes = argNodes.get(0).getArray();
-            arg1 = argNodes.get(1);
-        } else {
-            if (argNodes.size() != 1) {
-                throw new JsonPathException("Requires 1 parameters");
-            }
-
-            arg1 = argNodes.get(0);
-        }
+        currentNodes = getNodeList(ctx, currentNodes, argNodes); //arg0
+        ONode arg1 = getArgAt(ctx, argNodes, 1);
 
         if (arg1.isNull()) {
             return ctx.newNode(false);
