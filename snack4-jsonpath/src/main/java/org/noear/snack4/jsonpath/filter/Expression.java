@@ -24,7 +24,6 @@ import org.noear.snack4.util.Asserts;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 /**
  * 逻辑表达式
@@ -88,29 +87,11 @@ public class Expression {
                 continue;
             }
 
-            // 检查是否是独立的右括号（不在函数调用内部的）
-            if (c == ')') {
-                // 检查前面是否有对应的函数调用
-                boolean isFunctionParen = false;
-                if (!tokens.isEmpty()) {
-                    Token lastToken = tokens.get(tokens.size() - 1);
-                    // 如果前一个token是函数调用的开始部分，那么这个右括号属于函数调用
-                    if (lastToken.type == TokenType.ATOM &&
-                            (lastToken.value.contains("(") && !lastToken.value.contains(")"))) {
-                        isFunctionParen = true;
-                    }
-                }
-
-                if (!isFunctionParen) {
-                    tokens.add(new Token(TokenType.RPAREN, ")"));
-                    index++;
-                    continue;
-                }
-                // 如果是函数调用的右括号，继续处理作为ATOM的一部分
-            }
-
             if (c == '(') {
                 tokens.add(new Token(TokenType.LPAREN, "("));
+                index++;
+            } else if (c == ')') {
+                tokens.add(new Token(TokenType.RPAREN, ")"));
                 index++;
             } else if (c == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
                 tokens.add(new Token(TokenType.AND, "&&"));
@@ -119,69 +100,70 @@ public class Expression {
                 tokens.add(new Token(TokenType.OR, "||"));
                 index += 2;
             } else {
+                // 扫描 ATOM (逻辑项，如 @.book.price > 10)
                 int start = index;
-                boolean inQuotes = false;
+                char quoteChar = 0; // 0 表示不在引号内
                 int parenCount = 0;
                 boolean hasContent = false;
 
                 while (index < len) {
                     char curr = filter.charAt(index);
 
-                    // 处理引号内的内容
-                    if (curr == '\'' || curr == '"') {
-                        inQuotes = !inQuotes;
+                    // 1. 引号处理：处理函数参数或字面量中的引号
+                    if (quoteChar != 0) {
+                        if (curr == quoteChar) {
+                            quoteChar = 0;
+                        }
+                    } else if (curr == '\'' || curr == '"') {
+                        quoteChar = curr;
                     }
 
-                    // 如果不在引号内，检查括号和操作符
-                    if (!inQuotes) {
+                    // 2. 逻辑操作符和括号边界检测 (不在引号内时)
+                    else {
                         if (curr == '(') {
                             parenCount++;
-                            hasContent = true;
                         } else if (curr == ')') {
                             if (parenCount > 0) {
                                 parenCount--; // 匹配函数内部的右括号
                             } else {
-                                // 独立的右括号，停止当前token
+                                // 独立的右括号，停止当前token，让外层循环处理
                                 break;
                             }
                         }
 
-                        // 检查是否遇到逻辑操作符（不在括号内时）
+                        // 检查是否遇到顶级逻辑操作符（不在任何括号内时）
                         if (parenCount == 0) {
                             if (curr == '&' && index + 1 < len && filter.charAt(index + 1) == '&') {
-                                break;
+                                break; // 遇到顶级 &&，终止 ATOM
                             }
                             if (curr == '|' && index + 1 < len && filter.charAt(index + 1) == '|') {
+                                break; // 遇到顶级 ||，终止 ATOM
+                            }
+                            if (curr == '(') {
+                                // 遇到独立的左括号，终止 ATOM，让外层循环处理
                                 break;
                             }
-                            if (curr == '(' || curr == ')') {
-                                // 独立的括号，已经在上面的条件中处理
-                                if (curr == '(') {
-                                    // 独立的左括号，需要单独处理
-                                    if (index == start) {
-                                        index++; // 让外层循环处理这个左括号
-                                        break;
-                                    } else {
-                                        // 当前token已经有一些内容，遇到独立的左括号就停止
-                                        break;
-                                    }
-                                }
-                            }
                         }
+
+                        if (Character.isWhitespace(curr)) {
+                            // 遇到空格，继续扫描直到遇到操作符或非空格
+                        }
+
                     }
 
                     index++;
                     hasContent = true;
                 }
 
-                // 如果没有读取到任何内容，向前移动一位避免无限循环
-                if (!hasContent && index == start) {
-                    index++;
-                } else if (hasContent) {
+                // 提取 ATOM
+                if (hasContent) {
                     String atom = filter.substring(start, index).trim();
                     if (!atom.isEmpty()) {
                         tokens.add(new Token(TokenType.ATOM, atom));
                     }
+                } else if (index == start) {
+                    // 如果没有读取到任何内容，向前移动一位避免无限循环 (理论上不会发生)
+                    index++;
                 }
             }
         }
@@ -236,15 +218,8 @@ public class Expression {
     private boolean evaluateTerm(QueryContext ctx, ONode node, String termStr) {
         Term term = Term.get(termStr);
 
-        boolean isOk;
-        if (term.isNot()) {
-            isOk = !doEvaluateTerm(ctx, node, term);
-        } else {
-            isOk = doEvaluateTerm(ctx, node, term);
-        }
-
-        //方便调试
-        return isOk;
+        boolean result = doEvaluateTerm(ctx, node, term);
+        return term.isNot() ? !result : result;
     }
 
 
@@ -285,7 +260,7 @@ public class Expression {
         return !leftNode.isNull();
     }
 
-    private enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
+    private static enum TokenType {ATOM, AND, OR, LPAREN, RPAREN}
 
     public static class Token {
         final TokenType type;

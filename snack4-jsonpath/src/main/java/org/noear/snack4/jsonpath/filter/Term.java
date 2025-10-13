@@ -65,7 +65,6 @@ public class Term {
 
         String[] result = TermUtil.resolve(expr);
 
-
         this.left = new Operand(result[0]);
         this.op = result[1];
         this.right = new Operand(result[2]);
