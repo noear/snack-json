@@ -16,10 +16,14 @@ public class SizeOperator implements Operator {
         ONode leftNode = term.getLeftNode(ctx, node);
         ONode rightNode = term.getRightNode(ctx, node);
 
-        if (rightNode.isNumber() == false) {
+        if (rightNode.isNumber() == false || leftNode.isNull()) { //右侧必须为数字
             return false;
         }
 
-        return leftNode.size() == rightNode.getInt();
+        if (leftNode.isValue()) {
+            return leftNode.getString().length() == rightNode.getInt();
+        } else {
+            return leftNode.size() == rightNode.getInt();
+        }
     }
 }

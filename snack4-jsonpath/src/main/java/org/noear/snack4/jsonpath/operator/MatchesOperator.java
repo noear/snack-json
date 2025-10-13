@@ -36,7 +36,7 @@ public class MatchesOperator implements Operator {
         if (leftNode.isValue()) {
             if (rightNode.isString()) {
                 String v = rightNode.getString();//.replace("\\/", "/");
-                found = JsRegexUtil.of(v).matcher(leftNode.getString()).find();
+                found = JsRegexUtil.of(v).matcher(leftNode.getString()).matches(); //不能用 find
             }
         }
 

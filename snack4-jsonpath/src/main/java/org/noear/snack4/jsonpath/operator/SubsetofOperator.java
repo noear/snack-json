@@ -14,17 +14,30 @@ public class SubsetofOperator implements Operator {
     @Override
     public boolean apply(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
+        ONode rightNode = term.getRightNode(ctx, node);
 
-        if (leftNode.isNull() == false) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray() == false) {
-                return false;
-            }
-
-            return rightNode.getArray().stream()
-                    .allMatch(v -> MatchUtil.isValueMatch(leftNode, v));
+        if (rightNode.isArray() == false || leftNode.isArray() == false) {
+            return false;
         }
 
-        return false;
+        return resolve(leftNode, rightNode);
+    }
+
+    boolean resolve(ONode leftNode, ONode rightNode) {
+        boolean rst = true;
+
+        if (leftNode.isArray()) {
+            if (leftNode.getArray().size() == 0) {
+                return true; //(空集是任何集合的子集)
+            }
+
+            for (ONode ref : leftNode.getArray()) {
+                rst &= MatchUtil.isValueMatch(rightNode, ref);
+            }
+        } else {
+            rst &= MatchUtil.isValueMatch(rightNode, leftNode);
+        }
+
+        return rst;
     }
 }

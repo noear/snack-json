@@ -20,10 +20,10 @@ public class NoneofOperator implements Operator {
             return false;
         }
 
-        return !applyDo(ctx, leftNode, rightNode);
+        return !resolve(leftNode, rightNode);
     }
 
-    boolean applyDo(QueryContext ctx, ONode leftNode, ONode rightNode) {
+    boolean resolve(ONode leftNode, ONode rightNode) {
         boolean rst = false;
 
         if (leftNode.isArray()) {
