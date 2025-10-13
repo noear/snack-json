@@ -1,9 +1,8 @@
 package features.snack4.jsonpath.manual;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.jsonpath.filter.Term;
-
-import java.util.function.Predicate;
+import org.noear.snack4.jsonpath.util.TermUtil;
 
 /**
  *
@@ -13,30 +12,31 @@ import java.util.function.Predicate;
 public class TermTest {
     @Test
     public void case1() {
-        testTerm("match(@.b, '[jk]')", o -> o.getOp() == null);
-        testTerm("size(@.b) > 5", o -> o.getOp().equals(">"));
-        testTerm("!match(@.name, '^J.*')", o -> o.isNot() && o.getOp() == null);
-        testTerm("!(match(@.name, '^J.*'))", o -> o.isNot() && o.getOp() == null);
-        testTerm("(size(@.items) > 3)", o -> o.getOp().equals(">") && o.getRight().getValue().equals("3"));
-        testTerm("$.absent1 == $.absent2", o -> o.getOp().equals("=="));
-        testTerm("1 <= $.arr", o -> o.getOp().equals("<="));
-        testTerm("$.a > 12", o -> o.getOp().equals(">"));
+        testTerm("match(@.b, '[jk]')", "match(@.b, '[jk]')", null, null);
+        testTerm("size(@.b) > 5", "size(@.b)", ">", "5");
+        testTerm("match(@.name, '^J.*')", "match(@.name, '^J.*')", null, null);
+        testTerm("$.absent1 == $.absent2", "$.absent1", "==", "$.absent2");
+        testTerm("1 <= $.arr", "1", "<=", "$.arr");
+        testTerm("$.a > 12", "$.a", ">", "12");
 
-        testTerm("@.a like '1'", o -> o.getOp().equals("like"));
+        testTerm("@.a in [1,2,3]", "@.a", "in", "[1,2,3]");
+        testTerm("@.a like '1'", "@.a", "like", "'1'");
 
-        //testTerm("@.a not like '1'", o -> o.getOp().equals("not like"));
-        //testTerm("@.a notLike '1'", o -> o.getOp().equals("notLike"));
-
-        //testTerm("@.a starts with '1'", o -> o.getOp().equals("starts with"));
-        //testTerm("@.a startsWith '1'", o -> o.getOp().equals("startsWith"));
-        //testTerm("@.columnCode == \"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\"", o -> o.getOp().equals("=="));
+        testTerm("@.columnCode == \"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\"", "@.columnCode", "==", "\"#YEAR#YTD#Period#Actual#ACCOUNT#[ICP None]#[None]#BB#REPORT#PRCTotal\"");
     }
 
-    public void testTerm(String token, Predicate<Term> predicate) {
-        Term o = Term.get(token);
+    @Test
+    public void case2() {
+        testTerm("@.a not like '1'", "@.a", "not like", "'1'");
+    }
 
-        if (predicate.test(o) == false) {
-            assert false;
-        }
+    public void testTerm(String token, String left, String op, String right) {
+        System.out.println("------------: " + token);
+
+        String[] result = TermUtil.resolve(token);
+
+        Assertions.assertEquals(left, result[0]);
+        Assertions.assertEquals(op, result[1]);
+        Assertions.assertEquals(right, result[2]);
     }
 }

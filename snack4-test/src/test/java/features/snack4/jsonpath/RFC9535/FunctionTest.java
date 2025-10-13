@@ -1,6 +1,5 @@
-package features.snack4.jsonpath.generated;
+package features.snack4.jsonpath.RFC9535;
 
-import features.snack4.jsonpath.RFC9535.AbsRFC9535;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
