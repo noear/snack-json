@@ -13,6 +13,7 @@ public class TermTest {
     @Test
     public void case1() {
         testTerm("match(@.b, '[jk]')", "match(@.b, '[jk]')", null, null);
+        testTerm("append(@.b, {'a':'1'})", "append(@.b, {'a':'1'})", null, null);
         testTerm("size(@.b) > 5", "size(@.b)", ">", "5");
         testTerm("match(@.name, '^J.*')", "match(@.name, '^J.*')", null, null);
         testTerm("$.absent1 == $.absent2", "$.absent1", "==", "$.absent2");
