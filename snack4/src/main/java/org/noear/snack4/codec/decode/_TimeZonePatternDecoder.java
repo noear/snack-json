@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.encode;
+package org.noear.snack4.codec.decode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.EncodeContext;
-import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.DecodeContext;
+import org.noear.snack4.codec.ObjectPatternDecoder;
 
 import java.util.TimeZone;
 
 /**
  *
- * @author noear 2025/10/3 created
+ * @author noear 2025/10/6 created
  * @since 4.0
  */
-public class TimeZoneEncoder implements ObjectEncoder<TimeZone> {
+public class _TimeZonePatternDecoder implements ObjectPatternDecoder<TimeZone> {
     @Override
-    public ONode encode(EncodeContext ctx, TimeZone value, ONode target) {
-        return target.setValue(value.getID());
+    public boolean canDecode(Class<?> clazz) {
+        return TimeZone.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    public TimeZone decode(DecodeContext ctx, ONode node) {
+        return TimeZone.getTimeZone(node.getString());
     }
 }

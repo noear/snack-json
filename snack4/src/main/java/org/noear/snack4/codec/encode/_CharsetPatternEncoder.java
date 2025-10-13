@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.decode;
+package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.DecodeContext;
-import org.noear.snack4.codec.ObjectDecoder;
+import org.noear.snack4.codec.EncodeContext;
+import org.noear.snack4.codec.ObjectPatternEncoder;
 
 import java.nio.charset.Charset;
 
@@ -26,9 +26,14 @@ import java.nio.charset.Charset;
  * @author noear 2025/10/7 created
  * @since 4.0
  */
-public class CharsetDecoder implements ObjectDecoder<Charset> {
+public class _CharsetPatternEncoder implements ObjectPatternEncoder<Charset> {
     @Override
-    public Charset decode(DecodeContext<Charset> ctx, ONode node) {
-        return Charset.forName(node.getString());
+    public boolean canEncode(Object value) {
+        return value instanceof Charset;
+    }
+
+    @Override
+    public ONode encode(EncodeContext ctx, Charset value, ONode target) {
+        return target.setValue(value.name());
     }
 }

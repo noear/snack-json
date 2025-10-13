@@ -84,9 +84,9 @@ public class CodecLib {
     public <T> void addDecoder(Class<T> type, ObjectDecoder<T> decoder) {
         if (decoder instanceof ObjectPatternDecoder<?>) {
             patternDecoders.add((ObjectPatternDecoder<?>) decoder);
-        } else {
-            decoders.put(type, decoder);
         }
+
+        decoders.put(type, decoder);
     }
 
     /**
@@ -102,9 +102,9 @@ public class CodecLib {
     public <T> void addEncoder(Class<T> type, ObjectEncoder<T> encoder) {
         if (encoder instanceof ObjectPatternEncoder) {
             patternEncoders.add((ObjectPatternEncoder<T>) encoder);
-        } else {
-            encoders.put(type, encoder);
         }
+
+        encoders.put(type, encoder);
     }
 
     public ObjectDecoder getDecoder(Class<?> clazz) {
@@ -177,11 +177,13 @@ public class CodecLib {
         addDecoder(new _EnumPatternDecoder());
         addDecoder(new _PropertiesPatternDecoder());
 
+        addDecoder(Charset.class, new _CharsetPatternDecoder());
+        addDecoder(TimeZone.class, new _TimeZonePatternDecoder());
+
         addDecoder(StackTraceElement.class, new StackTraceElementDecoder());
         addDecoder(InetSocketAddress.class, new InetSocketAddressDecoder());
         addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
         addDecoder(File.class, new FileDecoder());
-        addDecoder(TimeZone.class, new TimeZoneDecoder());
         addDecoder(Class.class, new ClassDecoder());
         addDecoder(UUID.class, new UUIDDecoder());
         addDecoder(Duration.class, new DurationDecoder());
@@ -192,7 +194,6 @@ public class CodecLib {
         addDecoder(String.class, new StringDecoder());
 
         addDecoder(Date.class, new DateDecoder());
-        addDecoder(Charset.class, new CharsetDecoder());
 
         addDecoder(LongAdder.class, new LongAdderDecoder());
         addDecoder(DoubleAdder.class, new DoubleAdderDecoder());
@@ -237,21 +238,22 @@ public class CodecLib {
 
 
     private void loadDefaultEncoders() {
-        addEncoder(new _CalendarPatternEncoder());
-        addEncoder(new _ClobPatternEncoder());
-        addEncoder(new _DatePatternEncoder());
         addEncoder(new _EnumPatternEncoder());
         addEncoder(new _PropertiesPatternEncoder());
+
+        addEncoder(Charset.class, new _CharsetPatternEncoder());
+        addEncoder(Date.class, new _DatePatternEncoder());
+        addEncoder(Number.class, new _NumberPatternEncoder());
+        addEncoder(Calendar.class, new _CalendarPatternEncoder());
+        addEncoder(Clob.class, new _ClobPatternEncoder());
+        addEncoder(TimeZone.class, new _TimeZonePatternEncoder());
 
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
         addEncoder(File.class, new FileEncoder());
-        addEncoder(Calendar.class, new _CalendarPatternEncoder());
         addEncoder(Class.class, new ClassEncoder());
-        addEncoder(Clob.class, new _ClobPatternEncoder());
         addEncoder(Currency.class, new CurrencyEncoder());
-        addEncoder(TimeZone.class, new TimeZoneEncoder());
         addEncoder(UUID.class, new UUIDEncoder());
         addEncoder(Duration.class, new DurationEncoder());
 
@@ -259,7 +261,6 @@ public class CodecLib {
         addEncoder(URL.class, new URLEncoder());
 
         addEncoder(String.class, new StringEncoder());
-        addEncoder(Charset.class, new CharsetEncoder());
 
         addEncoder(LongAdder.class, new LongAdderEncoder());
         addEncoder(DoubleAdder.class, new DoubleAdderEncoder());
@@ -275,8 +276,6 @@ public class CodecLib {
 
         addEncoder(Boolean.class, new BooleanEncoder());
         addEncoder(Boolean.TYPE, new BooleanEncoder());
-
-        addEncoder(Number.class, new _NumberPatternEncoder());
     }
 
     private CodecLib loadDefault() {
