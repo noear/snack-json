@@ -1,6 +1,5 @@
-package features.snack4.v3_composite;
+package features.snack4.jsonpath.manual;//package features.query.manual;
 
-import features.snack4.jsonpath.manual.AbsQueryTest;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 
@@ -8,7 +7,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JsonPathTest3 extends AbsQueryTest {
+public class JsonPathTest3 {
     public static class Entity {
         public int id;
         public String name;
@@ -47,11 +46,11 @@ public class JsonPathTest3 extends AbsQueryTest {
         entities.add(new Entity("ljw2083"));
         ONode n = ONode.ofBean(entities);
 
-        List<String> names = n.select("$..name").toBean(List.class);
+        List<String> names = n.select("$.*.name").toBean(List.class); // $.name 不合语法
         assert names.size() == 2;
 
-        System.out.println(n.select("$..name"));
-        assert n.select("$..name").pathList().size() == 2;
+        System.out.println(n.select("$.*.name"));
+        assert n.select("$.*.name").pathList().size() == 2;
     }
 
     @Test
@@ -97,27 +96,11 @@ public class JsonPathTest3 extends AbsQueryTest {
         ONode n = ONode.ofBean(entities);
 
         ONode rst = n.select("$[?(@.id in [1001,1002])]");
+        assertEquals(2, rst.size());
+
         System.out.println(rst);
-
-        assert rst.size() == 2;
+        System.out.println(rst.pathList());
         assert rst.pathList().size() == 2;
-    }
-
-    @Test
-    public void test6() {
-        Entity entity = new Entity(1001, "ljw2083");
-        ONode n = ONode.ofBean(entity);
-
-        System.out.println(n.select("$[?(@.id == 1001)].first()").toJson());
-
-        assert n.select("$..[?(@.id == 1001)].first()").isObject();
-        assert n.select("$..[?(@.id == 1002)].first()").isNull();
-
-        n.select("$").set("id", 123456);
-        assert n.get("id").getInt() == 123456;
-
-        n.get("value").setValue(null).add(1).add(2).add(3);
-        assert n.get("value").size() == 3;
     }
 
     @Test
@@ -175,7 +158,8 @@ public class JsonPathTest3 extends AbsQueryTest {
         System.out.println("books=::" + books);
         assert books.isArray();
         assert books.size() == 2;
-        assert books.pathList().size() == 1;
+        System.out.println(o.select("$.store.book"));
+        assert o.select("$.store.book").pathList().size() == 1;
 
 
         //得到所有的书名
@@ -252,5 +236,66 @@ public class JsonPathTest3 extends AbsQueryTest {
 
         oNode1 = oNode.select("$..manSum.sum()");
         System.out.println(oNode1.toJson());
+    }
+
+
+    @Test
+    public void demo1() {
+        //1.加载json
+        ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+
+        //2.取一个属性的值
+        String msg = n.get("msg").getString();
+        assert "Hello world".equals(msg);
+
+        //3.取列表里的一项
+        int li2  = n.get("data").get("list").get(2).getInt();
+        assert li2 == 3;
+
+        //4.获取一个数组
+        //List<Integer> list = n.get("data").get("list").toBean(List.class);
+        List<Integer> list = n.select("$.data.list").toBean(List.class);
+        assert list.size() == 5;
+
+
+
+        //int mi = n.get("data").get("list").get(0).getInt();
+        int mi = n.select("$.data.list[-1]").getInt();
+
+        List<Integer> list2 = n.select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list3 = n.select("$.data.list[2:4]").toBean(List.class);
+        assert list2.size() == 2;
+        assert list3.size() == 2;
+
+
+        List<Integer> list22 = n.select("$.data.list[2,4]").toBean(List.class);
+        List<Integer> list32 = n.select("$.data.list[2:4]").toBean(List.class);
+        assert list22.size() == 2;
+        assert list32.size() == 2;
+
+        ONode ary2_a = n.select("$.data.ary2[*].b.c");
+        assert ary2_a.size() == 1;
+
+        ONode ary2_a2 = n.select("$.data.ary2[*].b.c");
+        assert ary2_a2.size() == 1;
+        assert ary2_a2.get(0).parent().parent().parent().equals(ary2_a2.get(0).parents(3));
+        assert "{\"a\":3,\"b\":{\"c\":\"ddd\"}}".equals(ary2_a2.get(0).parents(2).toJson());
+
+        assert list.size() == 5;
+    }
+
+
+    @Test
+    public void test10_3() {
+        String json = "{\"result\":[]}";
+
+        ONode oNode = ONode.ofJson(json).select("$.result[*].amount.max()");
+        System.out.println(oNode.toString());
+
+        assert oNode.getLong() == 0L;
+
+
+        System.out.println(ONode.ofJson(json).select("$.result[*].amount.max()").pathList());
+        assert ONode.ofJson(json).select("$.result[*].amount.max()").pathList().size() == 0;
     }
 }

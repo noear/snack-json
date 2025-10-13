@@ -1,6 +1,6 @@
 package features.snack4.v3_composite;
 
-import features.snack4.path.manual.AbsQueryTest;
+import features.snack4.jsonpath.manual.AbsQueryTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
