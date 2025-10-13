@@ -63,24 +63,18 @@ public class FilterSelector implements Selector {
             });
         } else {
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
-                for (ONode n : currentNodes) { //其实只有一条
-                    if (n.isNull()) {
-                        n.asArray().addNew();
-                    }
+                ONode n = currentNodes.get(0);
 
-                    if (forJayway) {
-                        flattenResolveJayway(ctx, n, results);
-                    } else {
-                        flattenResolveIetf(ctx, n, results);
-                    }
+                if (n.isNull()) {
+                    n.asArray().addNew();
                 }
-            } else {
-                for (ONode n : currentNodes) {
-                    if (forJayway) {
-                        flattenResolveJayway(ctx, n, results);
-                    } else {
-                        flattenResolveIetf(ctx, n, results);
-                    }
+            }
+
+            for (ONode n : currentNodes) {
+                if (forJayway) {
+                    flattenResolveJayway(ctx, n, results);
+                } else {
+                    flattenResolveIetf(ctx, n, results);
                 }
             }
         }

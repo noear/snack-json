@@ -29,13 +29,21 @@ import java.util.List;
 public class ValueFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (currentNodes.size() > 0) {
-            ONode n1 = currentNodes.get(0);
-            if (n1.isValue()) {
-                return n1;
-            } else if (n1.isArray()) {
-                return n1.get(0);
+        ONode n1 = null;
+        if (ctx.isInFilter()) {
+            n1 = argNodes.get(0);
+        } else {
+            if (currentNodes.size() == 0) {
+                return ctx.newNode();
             }
+
+            n1 = currentNodes.get(0);
+        }
+
+        if (n1.isValue()) {
+            return n1;
+        } else if (n1.isArray()) {
+            return n1.get(0);
         }
 
         return ctx.newNode();

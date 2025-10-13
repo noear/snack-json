@@ -32,7 +32,6 @@ import java.util.List;
 public class LengthFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-
         if (ctx.hasFeature(Feature.JsonPath_Jayway)) {
             List<ONode> results = new ArrayList<>();
 
@@ -54,16 +53,16 @@ public class LengthFunction implements Function {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            if (currentNodes.size() > 0) {
-                if (currentNodes.size() > 1) {
-                    return ctx.newNode(currentNodes.size());
-                } else {
-                    ONode n = currentNodes.get(0);
-                    if (n.isString()) return ctx.newNode(n.getString().length());
-                    if (n.isArray()) return ctx.newNode(n.size());
-                    if (n.isObject()) return ctx.newNode(n.getObject().size());
-                }
+            ONode n1 = null;
+            if (ctx.isInFilter()) {
+                n1 = argNodes.get(0);
+            } else {
+                n1 = currentNodes.get(0);
             }
+
+            if (n1.isString()) return ctx.newNode(n1.getString().length());
+            if (n1.isArray()) return ctx.newNode(n1.size());
+            if (n1.isObject()) return ctx.newNode(n1.getObject().size());
         }
 
         return ctx.newNode();

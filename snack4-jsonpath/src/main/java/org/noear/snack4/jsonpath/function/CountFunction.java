@@ -29,12 +29,16 @@ import java.util.List;
 public class CountFunction implements Function {
     @Override
     public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        if (currentNodes.size() > 0) {
-            ONode n = currentNodes.get(0);
-            if (n.isString()) return ctx.newNode(n.getString().length());
-            if (n.isArray()) return ctx.newNode(n.size());
-            if (n.isObject()) return ctx.newNode(n.getObject().size());
+        ONode n1 = null;
+        if (ctx.isInFilter()) {
+            n1 = argNodes.get(0);
+        } else {
+            n1 = currentNodes.get(0);
         }
+
+        if (n1.isString()) return ctx.newNode(n1.getString().length());
+        if (n1.isArray()) return ctx.newNode(n1.size());
+        if (n1.isObject()) return ctx.newNode(n1.getObject().size());
 
         return ctx.newNode();
     }
