@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.segment.FuncSegment;
 import org.noear.snack4.jsonpath.segment.Segment;
@@ -70,7 +71,7 @@ public class JsonPath {
             ctx.multipleOf(seg);
         }
 
-        if (currentNodes.size() > 1) {
+        if (currentNodes.size() > 1 || ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
             return new ONode(root.options(), currentNodes);
         } else {
             if (ctx.isMultiple()) {
@@ -98,7 +99,7 @@ public class JsonPath {
             ctx.multipleOf(seg);
         }
 
-        if (currentNodes.size() > 1) {
+        if (currentNodes.size() > 1 || ctx.hasFeature(Feature.JsonPath_AlwaysReturnList)) {
             return new ONode(root.options(), currentNodes);
         } else {
             if (ctx.isMultiple()) {

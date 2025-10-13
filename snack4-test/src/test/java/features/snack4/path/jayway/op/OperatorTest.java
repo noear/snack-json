@@ -5,8 +5,11 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,16 +44,24 @@ public class OperatorTest {
                 .options(Option.ALWAYS_RETURN_LIST).build();
     }
 
+    static Options options = Options.of(Feature.JsonPath_AlwaysReturnList);
     private List<Object> readPath(String path) {
-        System.out.println("::: " + path);
+        System.out.println("--------------------------: " + path);
 
-        //ONode
+        ONode rst1 = ONode.ofJson(json, options).select(path);
+        System.out.println(rst1.toJson());
 
-        List<Object> rst = JsonPath.using(conf).parse(json).read(path);
+        List<Object> rst2 = JsonPath.using(conf).parse(json).read(path);
+        System.out.println(rst2);
 
-        System.out.println(rst);
+        if (rst1.toJson().equals(rst2.toString()) == false) {
+            System.out.println("");
+            System.out.println(json);
+            assert false;
+        }
 
-        return rst;
+
+        return rst2;
     }
 
     // ===================================================================
