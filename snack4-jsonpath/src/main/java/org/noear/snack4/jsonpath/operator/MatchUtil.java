@@ -42,6 +42,10 @@ public class MatchUtil {
                 Boolean itemBool = refere.getBoolean();
                 return itemBool == source.getBoolean();
             }
+        } else if (refere.isNull()) {
+            if (source.isNull()) {
+                return true;
+            }
         }
 
         return false;

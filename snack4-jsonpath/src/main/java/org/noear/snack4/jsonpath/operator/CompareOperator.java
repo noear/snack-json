@@ -43,6 +43,8 @@ public class CompareOperator implements Operator {
 
         if (rightNode.isNull()) {
             return compareNull(leftNode);
+        } else if(leftNode.isNull()) {
+            return compareNull(rightNode);
         }
 
         if (leftNode.getType() == rightNode.getType()) {

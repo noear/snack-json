@@ -30,15 +30,11 @@ public class NinOperator implements Operator {
     public boolean apply(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
 
-        if (leftNode.isNull() == false) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray() == false) {
-                return false;
-            }
-
-            return MatchUtil.isValueMatchPlus(rightNode, leftNode) == false;
+        ONode rightNode = term.getRightNode(ctx, node);
+        if (rightNode.isArray() == false) {
+            return false;
         }
 
-        return false;
+        return MatchUtil.isValueMatchPlus(rightNode, leftNode) == false;
     }
 }

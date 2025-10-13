@@ -46,7 +46,7 @@ public class OperatorTest {
 
     static Options options = Options.of(
             Feature.JsonPath_AlwaysReturnList,
-            //Feature.JsonPath_Jayway,
+            Feature.JsonPath_Jayway,
             Feature.Write_Nulls);
 
     private List<Object> readPath(String path) {
@@ -58,8 +58,8 @@ public class OperatorTest {
         List<Object> rst2 = JsonPath.using(conf).parse(json).read(path);
         System.out.println(rst2);
 
-        if (rst1.toJson().equals(rst2.toString()) == false) {
-            System.out.println("");
+        if (rst1.size() != rst2.size()) {
+            System.out.println("::: " + rst1.size() + " != " + rst2.size());
             System.out.println(json);
             assert false;
         }

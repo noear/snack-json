@@ -13,22 +13,31 @@ import org.noear.snack4.jsonpath.filter.Term;
 public class NoneofOperator implements Operator {
     @Override
     public boolean apply(QueryContext ctx, ONode node, Term term) {
-        return !doApply(ctx, node, term);
-    }
-
-    boolean doApply(QueryContext ctx, ONode node, Term term) {
         ONode leftNode = term.getLeftNode(ctx, node);
+        ONode rightNode = term.getRightNode(ctx, node);
 
-        if (leftNode.isNull() == false) {
-            ONode rightNode = term.getRightNode(ctx, node);
-            if (rightNode.isArray() == false) {
-                return false;
-            }
-
-            return rightNode.getArray().stream()
-                    .anyMatch(v -> MatchUtil.isValueMatch(leftNode, v));
+        if (rightNode.isArray() == false || leftNode.isArray() == false) {
+            return false;
         }
 
-        return false;
+        return !applyDo(ctx, leftNode, rightNode);
+    }
+
+    boolean applyDo(QueryContext ctx, ONode leftNode, ONode rightNode) {
+        boolean rst = true;
+
+        if (leftNode.isArray()) {
+            if (leftNode.size() == 0) {
+                rst = false;
+            } else {
+                for (ONode ref : leftNode.getArray()) {
+                    rst &= MatchUtil.isValueMatch(rightNode, ref);
+                }
+            }
+        } else {
+            rst &= MatchUtil.isValueMatch(rightNode, leftNode);
+        }
+
+        return rst;
     }
 }
