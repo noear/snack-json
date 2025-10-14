@@ -83,7 +83,10 @@ public class Func_concat_append_index_Test_no {
 
         compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price");
         compatible_str("4", "[\"9.0\",\"9.0\"]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
+    }
 
+    @Test
+    public void concatTest2() {
         compatible_str("5", "[\"Sayings of the Century\"]", "$.store.book[?(@.category == 'reference')].title");
         compatible_str("5", "\"Sayings of the Century New Ref\"", "$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
     }
