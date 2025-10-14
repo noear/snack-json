@@ -39,6 +39,10 @@ public class ConcatFunction implements Function {
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
         ONode arg1 = argNodes.get(1);
 
+        if (arg0.isEmpty()) {
+            return ctx.newNode();
+        }
+
         if (arg1.isArray()) {
             arg1 = arg1.get(0);
         }
@@ -60,18 +64,15 @@ public class ConcatFunction implements Function {
 
             return arg0;
         } else {
-            if (arg0.isEmpty()) {
-                return ctx.newNode();
-            } else {
-                ONode n1 = arg0.get(0);
-                if (n1.isString()) {
-                    n1 = ctx.newNode(n1.getString().concat(arg1.getString()));
-                } else {
-                    n1.setValue(arg1.getString());
-                }
+            ONode n1 = arg0.get(0);
 
-                return n1;
+            if (n1.isString()) {
+                n1 = ctx.newNode(n1.getString().concat(arg1.getString()));
+            } else {
+                n1.setValue(arg1.getString());
             }
+
+            return n1;
         }
     }
 }
