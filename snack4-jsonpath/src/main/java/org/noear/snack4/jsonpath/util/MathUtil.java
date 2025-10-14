@@ -16,6 +16,7 @@
 package org.noear.snack4.jsonpath.util;
 
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,38 +27,32 @@ import java.util.List;
  * @since 4.0
  */
 public class MathUtil {
-    public static List<Double> getDoubleList(List<ONode> oNodes) {
-        List<Double> list = new ArrayList<>();
+    public static List<Double> getDoubleList(QueryContext ctx, ONode arg0) {
+        List<Double> doubleList = new ArrayList<>();
 
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        list.add(o.getDouble());
-                    }
+        if (ctx.isMultiple()) {
+            for(ONode n1 : arg0.getArray()) {
+                if(n1.isNumber()){
+                    doubleList.add(n1.getDouble());
                 }
-            } else if (n.isNumber()) {
-                list.add(n.getDouble());
             }
-        }
+        } else {
+            if (arg0.size() == 1) {
+                ONode node = arg0.get(0);
 
-        return list;
-    }
-
-    public static List<Double> getDoubleListByChild(List<ONode> oNodes) {
-        List<Double> list = new ArrayList<>();
-
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        list.add(o.getDouble());
+                if (node.isArray()) {
+                    for (ONode n1 : node.getArray()) {
+                        if (n1.isNumber()) {
+                            doubleList.add(n1.getDouble());
+                        }
                     }
+                } else if (node.isNumber()) {
+                    doubleList.add(node.getDouble());
                 }
             }
         }
 
-        return list;
+        return doubleList;
     }
 
     /**
@@ -95,95 +90,5 @@ public class MathUtil {
 
         // 步骤 4: 计算标准差 (StdDev) - 方差的平方根
         return Math.sqrt(variance);
-    }
-
-    public static Double sum(List<ONode> oNodes){
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            } else if (n.isNumber()) {
-                ref += n.getDouble();
-                count++;
-            }
-        }
-
-        if (count > 0) {
-            return ref;
-        } else {
-            return null;
-        }
-    }
-
-    public static Double sumByChild(List<ONode> oNodes){
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            }
-        }
-
-        if (count > 0) {
-            return ref;
-        } else {
-            return null;
-        }
-    }
-
-    public static Double avg(List<ONode> oNodes) {
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            } else if (n.isNumber()) {
-                ref += n.getDouble();
-                count++;
-            }
-        }
-
-        if (count > 0) {
-            return ref / count;
-        } else {
-            return null;
-        }
-    }
-
-    public static Double avgByChild(List<ONode> oNodes) {
-        double ref = 0D;
-        int count = 0;
-        for (ONode n : oNodes) {
-            if (n.isArray()) {
-                for (ONode o : n.getArray()) {
-                    if (o.isNumber()) {
-                        ref += o.getDouble();
-                        count++;
-                    }
-                }
-            }
-        }
-
-        if (count > 0) {
-            return ref / count;
-        } else {
-            return null;
-        }
     }
 }

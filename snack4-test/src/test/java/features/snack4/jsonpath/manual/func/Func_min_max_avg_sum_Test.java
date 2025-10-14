@@ -57,7 +57,9 @@ public class Func_min_max_avg_sum_Test {
 
     @Test
     public void avgTest() {
+        compatible_num("1", "xxx", "$.store.book[*].price");
         compatible_num("1", "13.48", "$.store.book[*].price.avg()");
+
         compatible_num("2", "12.5", "$.store.inventory.avg()");
         compatible_num("3", "8.97", "$.store.book[?(@.price < 10)].price.avg()");
         compatible_num("4", "5.0", "$.store.book[1].ratings.avg()");
@@ -68,7 +70,10 @@ public class Func_min_max_avg_sum_Test {
     void sumTest() {
         compatible_num("1", "53.92", "$.store.book[*].price.sum()");
         compatible_num("2", "50.0", "$.store.inventory.sum()");
+
+        compatible_str("3", "xxx", "$.totalPrice");
         compatible_num("3", "53.92", "$.totalPrice.sum()");
+
         compatible_num("4", "15.0", "$.store.book[?(@.author =~ /.*Waugh/)].ratings[*].sum()");
         compatible_num("5", "95.0", "$.store.staff[*].age.sum()");
     }

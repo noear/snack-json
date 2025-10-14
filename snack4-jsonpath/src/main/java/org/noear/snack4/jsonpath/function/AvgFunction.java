@@ -23,6 +23,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.MathUtil;
 import org.noear.snack4.util.Asserts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,17 +45,7 @@ public class AvgFunction implements Function {
             return ctx.newNode();
         }
 
-        List<Double> doubleList = null;
-
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            if (ctx.isDescendant()) {
-                doubleList = MathUtil.getDoubleList(arg0.getArray());
-            } else {
-                doubleList = MathUtil.getDoubleListByChild(arg0.getArray());
-            }
-        } else {
-            doubleList = MathUtil.getDoubleList(arg0.getArray());
-        }
+        List<Double> doubleList = MathUtil.getDoubleList(ctx, arg0);
 
         if (Asserts.isEmpty(doubleList)) {
             if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
