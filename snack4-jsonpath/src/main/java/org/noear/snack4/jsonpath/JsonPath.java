@@ -61,17 +61,25 @@ public class JsonPath {
                 '}';
     }
 
-    public QueryResult select(ONode root) {
+    /**
+     * 执行
+     */
+    protected QueryResult evaluate(QueryContextImpl ctx, ONode root) {
         List<ONode> currentNodes = Collections.singletonList(root);
+
+        for (Segment seg : segments) {
+            currentNodes = seg.resolve(ctx, currentNodes);
+            ctx.multipleOf(seg);
+        }
+
+        return new QueryResult(ctx, currentNodes);
+    }
+
+    public QueryResult select(ONode root) {
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.SELECT);
 
         try {
-            for (Segment seg : segments) {
-                currentNodes = seg.resolve(ctx, currentNodes);
-                ctx.multipleOf(seg);
-            }
-
-            return new QueryResult(ctx, currentNodes);
+            return evaluate(ctx, root);
         } catch (Throwable ex) {
             if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
                 return new QueryResult(ctx, Collections.emptyList());
@@ -82,7 +90,6 @@ public class JsonPath {
     }
 
     public QueryResult create(ONode root) {
-        List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.CREATE);
 
         try {
@@ -90,12 +97,7 @@ public class JsonPath {
                 throw new JsonPathException("The create mode not support descendant selector");
             }
 
-            for (Segment seg : segments) {
-                currentNodes = seg.resolve(ctx, currentNodes);
-                ctx.multipleOf(seg);
-            }
-
-            return new QueryResult(ctx, currentNodes);
+            return evaluate(ctx, root);
         } catch (Throwable ex) {
             if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
                 return new QueryResult(ctx, Collections.emptyList());
@@ -106,27 +108,21 @@ public class JsonPath {
     }
 
     public void delete(ONode root) {
-        List<ONode> currentNodes = Collections.singletonList(root);
         QueryContextImpl ctx = new QueryContextImpl(root, QueryMode.DELETE);
 
         try {
-            for (Segment seg : segments) {
-                currentNodes = seg.resolve(ctx, currentNodes);
-                ctx.multipleOf(seg);
-            }
+            QueryResult result = evaluate(ctx, root);
 
-            if (currentNodes.size() == 1) {
-                for (ONode n1 : currentNodes) {
-                    if (n1.source != null) {
-                        if (n1.source.key != null) {
-                            if ("*".equals(n1.source.key)) {
-                                n1.source.parent.clear();
-                            } else {
-                                n1.source.parent.remove(n1.source.key);
-                            }
+            for (ONode n1 : result.getNodeList()) {
+                if (n1.source != null) {
+                    if (n1.source.key != null) {
+                        if ("*".equals(n1.source.key)) {
+                            n1.source.parent.clear();
                         } else {
-                            n1.source.parent.remove(n1.source.index);
+                            n1.source.parent.remove(n1.source.key);
                         }
+                    } else {
+                        n1.source.parent.remove(n1.source.index);
                     }
                 }
             }
