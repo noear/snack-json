@@ -60,7 +60,7 @@ public class BeanEncoder {
 
     private final Map<Object, Object> visited;
 
-    private BeanEncoder(Object value, Options opts){
+    private BeanEncoder(Object value, Options opts) {
         this.source0 = value;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
         this.visited = new IdentityHashMap<>();
@@ -71,7 +71,7 @@ public class BeanEncoder {
      */
     public ONode encode() {
         try {
-            ONode oNode = convertValueToNode(source0, null);
+            ONode oNode = encodeValueToNode(source0, null);
 
             if (oNode.isObject() && opts.hasFeature(Feature.Write_NotRootClassName)) {
                 oNode.remove(opts.getTypePropertyName());
@@ -87,7 +87,7 @@ public class BeanEncoder {
     }
 
     // 值转ONode处理
-    private  ONode convertValueToNode(Object value, ONodeAttrHolder attr) throws Exception {
+    private ONode encodeValueToNode(Object value, ONodeAttrHolder attr) throws Exception {
         if (value == null) {
             return new ONode(opts, null);
         }
@@ -107,20 +107,20 @@ public class BeanEncoder {
         }
 
         if (value instanceof Collection) {
-            return convertCollectionToNode((Collection<?>) value);
+            return encodeCollectionToNode((Collection<?>) value);
         } else if (value instanceof Map) {
-            return convertMapToNode((Map<?, ?>) value);
+            return encodeMapToNode((Map<?, ?>) value);
         } else {
             if (value.getClass().isArray()) {
-                return convertArrayToNode(value);
+                return encodeArrayToNode(value);
             } else {
-                return convertBeanToNode(value);
+                return encodeBeanToNode(value);
             }
         }
     }
 
     // 对象转ONode核心逻辑
-    private  ONode convertBeanToNode(Object bean) throws Exception {
+    private ONode encodeBeanToNode(Object bean) throws Exception {
         // 循环引用检测
         if (visited.containsKey(bean)) {
             return null;
@@ -198,7 +198,7 @@ public class BeanEncoder {
                     }
                 }
 
-                ONode propertyNode = convertValueToNode(propertyValue, property.getAttr());
+                ONode propertyNode = encodeValueToNode(propertyValue, property.getAttr());
 
                 if (propertyNode != null) {
                     if (property.getAttr().isFlat()) {
@@ -218,26 +218,26 @@ public class BeanEncoder {
     }
 
     // 处理数组类型
-    private  ONode convertArrayToNode(Object array) throws Exception {
+    private ONode encodeArrayToNode(Object array) throws Exception {
         ONode tmp = new ONode(opts).asArray();
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
-            tmp.add(convertValueToNode(Array.get(array, i), null));
+            tmp.add(encodeValueToNode(Array.get(array, i), null));
         }
         return tmp;
     }
 
     // 处理集合类型
-    private  ONode convertCollectionToNode(Collection<?> collection) throws Exception {
+    private ONode encodeCollectionToNode(Collection<?> collection) throws Exception {
         ONode tmp = new ONode(opts).asArray();
         for (Object item : collection) {
-            tmp.add(convertValueToNode(item, null));
+            tmp.add(encodeValueToNode(item, null));
         }
         return tmp;
     }
 
     // 处理Map类型
-    private  ONode convertMapToNode(Map<?, ?> map) throws Exception {
+    private ONode encodeMapToNode(Map<?, ?> map) throws Exception {
         if (visited.containsKey(map)) {
             return null;
         } else {
@@ -252,7 +252,7 @@ public class BeanEncoder {
             }
 
             for (Map.Entry<?, ?> entry : map.entrySet()) {
-                ONode valueNode = convertValueToNode(entry.getValue(), null);
+                ONode valueNode = encodeValueToNode(entry.getValue(), null);
                 tmp.set(String.valueOf(entry.getKey()), valueNode);
             }
             return tmp;
@@ -261,7 +261,7 @@ public class BeanEncoder {
         }
     }
 
-    private  boolean isWriteClassName(Options opts, Object obj) {
+    private boolean isWriteClassName(Options opts, Object obj) {
         if (obj == null) {
             return false;
         }
@@ -273,7 +273,6 @@ public class BeanEncoder {
         if (obj instanceof Map && opts.hasFeature(Feature.Write_NotMapClassName)) {
             return false;
         }
-
 
         return true;
     }
