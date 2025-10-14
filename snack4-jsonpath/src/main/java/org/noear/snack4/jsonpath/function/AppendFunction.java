@@ -38,34 +38,25 @@ public class AppendFunction implements Function {
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
         ONode arg1 = argNodes.get(1);
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            if (arg0.size() > 0) {
-                for (ONode n1 : arg0.getArray()) {
-                    if (n1.isArray()) {
-                        n1.add(arg1);
-                    }
+        if (ctx.isMultiple()) {
+            for (ONode n1 : arg0.getArray()) {
+                if (n1.isArray()) {
+                    n1.add(arg1);
                 }
             }
 
-            if (ctx.isMultiple()) {
-                return arg0;
-            } else {
-                return arg0.get(0);
-            }
+            return arg0;
         } else {
-            if (arg0.size() > 1) {
-                arg0.add(arg1);
-                return arg0;
+            if (arg0.isEmpty()) {
+                return ctx.newNode();
             } else {
                 ONode n1 = arg0.get(0);
                 if (n1.isArray()) {
-                    return n1.add(arg1);
-                } else if (n1.isString()) {
-                    return new ONode(n1.getString().concat(arg1.getString()));
+                    n1.add(arg1);
                 }
+
+                return n1;
             }
         }
-
-        return ctx.newNode();
     }
 }

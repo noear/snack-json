@@ -97,9 +97,9 @@ public final class ONode {
 
     public boolean isEmpty() {
         return isNull() ||
-                (isArray() && Asserts.isEmpty(getArray())) ||
-                (isObject() && Asserts.isEmpty(getObject())) ||
-                (isString() && Asserts.isEmpty(getString()));
+                (isArray() && getArray().isEmpty()) ||
+                (isObject() && getObject().isEmpty()) ||
+                (isString() && getString().isEmpty());
     }
 
     public boolean isBoolean() {
