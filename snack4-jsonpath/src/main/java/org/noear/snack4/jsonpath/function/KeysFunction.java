@@ -41,23 +41,21 @@ public class KeysFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-        if (arg0.isEmpty()) {
-            return ctx.newNode();
-        }
-
-        if (ctx.isMultiple()) {
-            Set<String> keys = new LinkedHashSet<>();
-            for (ONode n1 : arg0.getArray()) {
-                if (n1.isObject()) {
-                    keys.addAll(n1.getObject().keySet());
+        if (arg0.getArray().size() > 0) {
+            if (ctx.isMultiple()) {
+                Set<String> keys = new LinkedHashSet<>();
+                for (ONode n1 : arg0.getArray()) {
+                    if (n1.isObject()) {
+                        keys.addAll(n1.getObject().keySet());
+                    }
                 }
-            }
 
-            return ctx.newNode().addAll(keys);
-        } else {
-            ONode n1 = arg0.get(0);
-            if (n1.isObject()) {
-                return ctx.newNode().addAll(n1.getObject().keySet());
+                return ctx.newNode().addAll(keys);
+            } else {
+                ONode n1 = arg0.get(0);
+                if (n1.isObject()) {
+                    return ctx.newNode().addAll(n1.getObject().keySet());
+                }
             }
         }
 

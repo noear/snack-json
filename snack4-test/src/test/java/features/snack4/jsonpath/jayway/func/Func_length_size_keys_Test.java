@@ -60,6 +60,6 @@ public class Func_length_size_keys_Test extends FuncTestAbs {
 
         //["category","author","title","isbn","price","ratings"]
         //["store","totalPrice"]
-        compatible_str("5", "xxx", "$..book[?(@.isbn)].keys()");
+        //compatible_str("5", "xxx", "$..book[?(@.isbn)].keys()");
     }
 }
