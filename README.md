@@ -2,7 +2,7 @@
   Snack
 </h1>
 <p align="center">
-	<strong>An open framework for Json Dom & JsonPath (for Java)</strong>
+	<strong>A Json Dom & JsonPath framework (for Java)</strong>
 </p>
 <p align="center">
 	Compatible with `jayway.jsonpath` and <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">IETF JSONPath (RFC 9535)</a> standards (Open customization support)
