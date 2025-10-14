@@ -63,8 +63,8 @@ public class CodecLib {
     /**
      * 添加创造器
      */
-    public <T> void addCreator(Class<T> type, ObjectCreator<T> factory) {
-        creators.put(type, factory);
+    public <T> void addCreator(Class<T> type, ObjectCreator<T> creator) {
+        creators.put(type, creator);
     }
 
     /**
@@ -132,9 +132,9 @@ public class CodecLib {
         ObjectCreator creator = creators.get(clazz);
 
         if (creator == null) {
-            for(ObjectPatternCreator<?> factory1 : patternCreators) {
-                if(factory1.calCreate(clazz)) {
-                    return factory1;
+            for(ObjectPatternCreator<?> creator1 : patternCreators) {
+                if(creator1.calCreate(clazz)) {
+                    return creator1;
                 }
             }
 
