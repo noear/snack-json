@@ -15,10 +15,10 @@
  */
 package org.noear.snack4.json;
 
-import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.codec.util.IoUtil;
+import org.noear.snack4.json.util.IoUtil;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -403,7 +403,7 @@ public class JsonReader {
                         // 兼容旧的八进制转义（虽然 JSON 不支持）
                         if (c >= '0' && c <= '7') {
                             // 假设 IoUtil.CHARS_MARK_REV 存在并能正确映射
-                            sb.append(org.noear.snack4.codec.util.IoUtil.CHARS_MARK_REV[(int) c]);
+                            sb.append(IoUtil.CHARS_MARK_REV[(int) c]);
                         } else if (opts.hasFeature(Feature.Read_AllowInvalidEscapeCharacter)) {
                             sb.append(c); // 忽略转义，直接追加字符
                         } else if (opts.hasFeature(Feature.Read_AllowBackslashEscapingAnyCharacter)) {

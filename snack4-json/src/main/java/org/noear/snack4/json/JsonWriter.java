@@ -15,11 +15,11 @@
  */
 package org.noear.snack4.json;
 
-import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
+import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.codec.util.IoUtil;
+import org.noear.snack4.json.util.IoUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
@@ -38,8 +38,12 @@ import java.util.Objects;
 public class JsonWriter {
     public static String write(ONode node, Options opts) throws IOException {
         StringWriter writer = new StringWriter();
-        new JsonWriter(opts, writer).write(node);
+        write(node, opts, writer);
         return writer.toString();
+    }
+
+    public static void write(ONode node, Options opts, Writer writer) throws IOException {
+        new JsonWriter(opts, writer).write(node);
     }
 
     /// ////////////

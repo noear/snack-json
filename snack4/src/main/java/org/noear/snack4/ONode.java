@@ -19,9 +19,9 @@ import org.noear.snack4.codec.BeanDecoder;
 import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.json.JsonReader;
+import org.noear.snack4.json.JsonProvider;
+import org.noear.snack4.json.JsonProviderWarn;
 import org.noear.snack4.json.JsonType;
-import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.jsonpath.JsonPathProviderWarn;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
@@ -39,11 +39,17 @@ import java.util.function.Consumer;
  * @since 4.0
  */
 public final class ONode {
+    private static JsonProvider jsonProvider = new JsonProviderWarn();
     private static JsonPathProvider jsonPathProvider = new JsonPathProviderWarn();
 
     static {
-        ServiceLoader<JsonPathProvider> serviceLoader = ServiceLoader.load(JsonPathProvider.class);
-        for (JsonPathProvider provider : serviceLoader) {
+        ServiceLoader<JsonProvider> serviceLoader1 = ServiceLoader.load(JsonProvider.class);
+        for (JsonProvider provider : serviceLoader1) {
+            jsonProvider = provider;
+        }
+
+        ServiceLoader<JsonPathProvider> serviceLoader2 = ServiceLoader.load(JsonPathProvider.class);
+        for (JsonPathProvider provider : serviceLoader2) {
             jsonPathProvider = provider;
         }
     }
@@ -593,7 +599,7 @@ public final class ONode {
 
     public static ONode ofJson(String json, Options opts) {
         try {
-            return JsonReader.read(json, opts);
+            return jsonProvider.read(json, opts);
         } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -671,7 +677,7 @@ public final class ONode {
 
     public String toJson() {
         try {
-            return JsonWriter.write(this, options);
+            return jsonProvider.write(this, options);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {

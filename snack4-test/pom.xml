@@ -23,6 +23,11 @@
 
         <dependency>
             <groupId>org.noear</groupId>
+            <artifactId>snack4-json</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
             <artifactId>snack4-jsonpath</artifactId>
         </dependency>
 
