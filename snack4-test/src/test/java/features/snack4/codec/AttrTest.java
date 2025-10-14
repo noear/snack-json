@@ -8,6 +8,8 @@ import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.util.DateUtil;
+import org.noear.snack4.util.Asserts;
 
 import java.util.Date;
 
@@ -19,19 +21,27 @@ import java.util.Date;
 public class AttrTest {
     @Test
     public void case1() {
-        Options options = Options.of().addEncoder(Date.class, (ctx, value, target) -> target.setValue(value.getTime()));
+        Options options = Options.of().addEncoder(Date.class, (ctx, value, target) -> {
+            if (ctx.getAttr() != null) {
+                if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
+                    return target.setValue(DateUtil.format(value, ctx.getAttr().getFormat()));
+                }
+            }
+
+            return target.setValue(value.getTime());
+        });
 
         CustomDateDo dateDo = new CustomDateDo();
 
         String json = ONode.serialize(dateDo, options);
         System.out.println(json);
-        assert json.contains("-");
+        assert "{\"date\":1760453997855,\"date2\":\"2025-10-14\"}".equals(json);
     }
 
 
     @Setter
     @Getter
-    public class CustomDateDo {
+    public static class CustomDateDo {
         private Date date = new Date(1760453997855L);
 
         @ONodeAttr(format = "yyyy-MM-dd")
