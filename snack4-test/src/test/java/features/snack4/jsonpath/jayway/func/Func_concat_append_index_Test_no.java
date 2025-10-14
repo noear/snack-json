@@ -68,7 +68,7 @@ public class Func_concat_append_index_Test_no extends FuncTestAbs {
         compatible_str("1", "xxx", "$.store.book.index(1)"); //第二个 Book 对象 (Sword of Honour)
         compatible_str("2", "10", "$.store.inventory.index(0)");
 
-        compatible_str("3", "\"Charlie\"", "$.store.staff[*].name");
+        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\"]", "$.store.staff[*].name");
         compatible_str("3", "\"Charlie\"", "$.store.staff[*].name.index(-1)");
 
         compatible_str("4", "5", "$.store.book[3].ratings");

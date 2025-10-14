@@ -62,7 +62,10 @@ public class Func_length_size_keys_Test {
         compatible_str("2", "[\"color\",\"price\",\"stock\"]", "$.store.bicycle.keys()");
         compatible_str("3", "[\"category\",\"author\",\"title\",\"price\",\"ratings\"]", "$.store.book[0].keys()");
         compatible_str("4", "[\"store\",\"totalPrice\"]", "$.keys()");
+
         compatible_str("5", "", "$..book[?(@.isbn)]");
+        //["category","author","title","isbn","price","ratings"]
+        //["store","totalPrice"]
         compatible_str("5", "[\"category\",\"author\",\"title\",\"isbn\",\"price\",\"ratings\"]", "$..book[?(@.isbn)].keys()");
     }
 

@@ -55,48 +55,17 @@ public class IndexFunction implements Function {
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            List<ONode> results = new ArrayList<>();
-
-            if (arg0.size() > 0) {
-                for (ONode n1 : arg0.getArray()) {
-                    if (n1.isArray()) {
-                        ONode tmp = n1.get(index);
-                        if (tmp.isNull() == false) {
-                            results.add(tmp);
-                        }
-                    }
-                }
-            }
-
-            if (results.size() > 0) {
-                if (ctx.isMultiple()) {
-                    return ctx.newNode(results);
-                } else {
-                    return results.get(0);
-                }
-            } else {
-                throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
-            }
-        } else {
-            if (arg0.size() > 1) {
-                if (index < 0) {
-                    index = index + arg0.size();
-                }
-
-                if (index < arg0.size()) {
-                    return arg0.get(index);
-                } else {
-                    return ctx.newNode();
-                }
-            } else {
-                ONode n1 = arg0.get(0);
-                if (n1.isArray()) {
-                    return n1.get(index);
-                }
+        if (ctx.isMultiple() == false) {
+            ONode n1 = arg0.get(0);
+            if (n1.isArray()) {
+                return n1.get(index);
             }
         }
 
-        return ctx.newNode();
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+            throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+        } else {
+            return ctx.newNode();
+        }
     }
 }

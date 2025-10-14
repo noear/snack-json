@@ -45,42 +45,26 @@ public class KeysFunction implements Function {
             return ctx.newNode();
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+        if (ctx.isMultiple()) {
             Set<String> keys = new LinkedHashSet<>();
-
             for (ONode n1 : arg0.getArray()) {
                 if (n1.isObject()) {
-                    keys = n1.getObject().keySet();
+                    keys.addAll(n1.getObject().keySet());
                 }
             }
 
-            if (keys.size() > 0) {
-                return ctx.newNode().addAll(keys);
-            } else {
-                throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
-            }
+            return ctx.newNode().addAll(keys);
         } else {
-            if (arg0.size() > 1) {
-                Set<String> keys = new HashSet<>();
-
-                for (ONode n1 : arg0.getArray()) {
-                    if (n1.isObject() && n1.getObject().size() > 0) {
-                        keys.addAll(n1.getObject().keySet());
-                    }
-                }
-
-                if (keys.size() > 0) {
-                    return ctx.newNode().addAll(keys);
-                }
-            } else {
-                ONode n1 = arg0.get(0);
-
-                if (n1.isObject() && n1.getObject().size() > 0) {
-                    return ctx.newNode().addAll(n1.getObject().keySet());
-                }
+            ONode n1 = arg0.get(0);
+            if (n1.isObject()) {
+                return ctx.newNode().addAll(n1.getObject().keySet());
             }
         }
 
-        return ctx.newNode();
+        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+            throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
+        } else {
+            return ctx.newNode();
+        }
     }
 }
