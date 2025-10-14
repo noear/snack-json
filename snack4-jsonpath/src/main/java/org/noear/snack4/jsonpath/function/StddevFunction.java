@@ -52,12 +52,16 @@ public class StddevFunction implements Function {
             } else {
                 doubleList = MathUtil.getDoubleListByChild(arg0.getArray());
             }
-
-            if (Asserts.isEmpty(doubleList)) {
-                throw new JsonPathException("Function attempted to calculate value using empty array");
-            }
         } else {
             doubleList = MathUtil.getDoubleList(arg0.getArray());
+        }
+
+        if (Asserts.isEmpty(doubleList)) {
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                return ctx.newNode();
+            } else {
+                throw new JsonPathException("The function is using an invalid array");
+            }
         }
 
         Double ref = MathUtil.calculateStdDev(doubleList);

@@ -48,18 +48,17 @@ public class SumFunction implements Function {
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             doubleList = MathUtil.getDoubleListByChild(arg0.getArray());
-
-            if (Asserts.isEmpty(doubleList)) {
-                throw new JsonPathException("Function attempted to calculate value using empty array");
-            }
         } else {
             doubleList = MathUtil.getDoubleList(arg0.getArray());
-
-            if (Asserts.isEmpty(doubleList)) {
-                return ctx.newNode();
-            }
         }
 
+        if (Asserts.isEmpty(doubleList)) {
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                return ctx.newNode();
+            } else {
+                throw new JsonPathException("The function is using an invalid array");
+            }
+        }
 
         double ref = 0;
         for (Double d : doubleList) {

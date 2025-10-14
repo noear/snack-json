@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath.function;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
@@ -37,7 +38,7 @@ public class ValueFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-        if (arg0.size() == 1) {
+        if (arg0.getArray().size() > 0) {
             ONode n1 = arg0.get(0);
 
             if (n1.isValue()) {
@@ -47,6 +48,10 @@ public class ValueFunction implements Function {
             }
         }
 
-        return ctx.newNode();
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+            return ctx.newNode();
+        } else {
+            throw new JsonPathException("The function is using an invalid value|array");
+        }
     }
 }

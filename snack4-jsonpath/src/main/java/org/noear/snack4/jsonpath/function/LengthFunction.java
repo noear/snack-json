@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath.function;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
@@ -40,17 +41,19 @@ public class LengthFunction implements Function {
         if (ctx.isMultiple()) {
             return ctx.newNode(arg0.size());
         } else {
-            if (arg0.isEmpty()) {
-                return ctx.newNode();
+            if (arg0.getArray().size() > 0) {
+                ONode n1 = arg0.get(0);
+
+                if (n1.isString()) return ctx.newNode(n1.getString().length());
+                if (n1.isArray()) return ctx.newNode(n1.size());
+                if (n1.isObject()) return ctx.newNode(n1.getObject().size());
             }
 
-            ONode n1 = arg0.get(0);
-
-            if (n1.isString()) return ctx.newNode(n1.getString().length());
-            if (n1.isArray()) return ctx.newNode(n1.size());
-            if (n1.isObject()) return ctx.newNode(n1.getObject().size());
-
-            return ctx.newNode();
+            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+                return ctx.newNode();
+            } else {
+                throw new JsonPathException("The function is using an invalid string|array|object");
+            }
         }
     }
 }

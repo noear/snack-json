@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath.function;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
@@ -44,16 +45,20 @@ public class MatchFunction implements Function {
             return ctx.newNode(false);
         }
 
-        if (arg0.isEmpty()) {
-            return ctx.newNode();
+        if (arg0.getArray().size() > 0) {
+            String arg0Str = arg0.get(0).toString();
+            String arg1Str = arg1.toString();
+
+            Pattern pattern = RegexUtil.parse(arg1Str);
+            boolean found = pattern.matcher(arg0Str).matches(); //与 SearchFunc 的区别就在这儿
+
+            return ctx.newNode(found);
         }
 
-        String arg0Str = arg0.get(0).toString();
-        String arg1Str = arg1.toString();
-
-        Pattern pattern = RegexUtil.parse(arg1Str);
-        boolean found = pattern.matcher(arg0Str).matches(); //与 SearchFunc 的区别就在这儿
-
-        return ctx.newNode(found);
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+            return ctx.newNode(false);
+        } else {
+            throw new JsonPathException("The function is using an invalid string");
+        }
     }
 }

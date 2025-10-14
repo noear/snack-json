@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath.function;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;
@@ -38,40 +39,44 @@ public class ConcatFunction implements Function {
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
         ONode arg1 = argNodes.get(1);
 
-        if (arg0.isEmpty()) {
-            return ctx.newNode();
-        }
+        if (arg0.getArray().size() > 0) {
+            if (arg1.isArray()) {
+                arg1 = arg1.get(0);
+            }
 
-        if (arg1.isArray()) {
-            arg1 = arg1.get(0);
-        }
+            if (ctx.isMultiple()) {
+                ONode results = ctx.newNode().asArray();
 
-        if (ctx.isMultiple()) {
-            if (ctx.isExpanded()) {
-                for (ONode n1 : arg0.getArray()) {
-                    n1.setValue("");
-                }
-            } else {
-                for (ONode n1 : arg0.getArray()) {
-                    if (n1.isString()) {
-                        n1.setValue(n1.getString().concat(arg1.getString()));
-                    } else {
-                        n1.setValue(arg1.getString());
+                if (ctx.isExpanded()) {
+                    for (ONode n1 : arg0.getArray()) {
+                        results.add(""); //兼容 jayway
+                    }
+                } else {
+                    for (ONode n1 : arg0.getArray()) {
+                        if (n1.isString()) {
+                            results.add(n1.getString().concat(arg1.getString()));
+                        } else {
+                            results.add(arg1.getString());
+                        }
                     }
                 }
-            }
 
-            return arg0;
-        } else {
-            ONode n1 = arg0.get(0);
-
-            if (n1.isString()) {
-                n1 = ctx.newNode(n1.getString().concat(arg1.getString()));
+                return results;
             } else {
-                n1.setValue(arg1.getString());
-            }
+                ONode n1 = arg0.get(0);
 
-            return n1;
+                if (n1.isString()) {
+                    return ctx.newNode(n1.getString().concat(arg1.getString()));
+                } else {
+                    return ctx.newNode(arg1.getString());
+                }
+            }
+        }
+
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+            return ctx.newNode();
+        } else {
+            throw new JsonPathException("The function is using an invalid string");
         }
     }
 }

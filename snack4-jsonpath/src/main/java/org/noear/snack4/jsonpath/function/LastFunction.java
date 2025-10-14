@@ -64,10 +64,10 @@ public class LastFunction implements Function {
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            throw new JsonPathException("Function attempted to calculate value using empty array");
-        } else {
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
             return ctx.newNode();
+        } else {
+            throw new JsonPathException("The function is using an invalid array");
         }
     }
 }

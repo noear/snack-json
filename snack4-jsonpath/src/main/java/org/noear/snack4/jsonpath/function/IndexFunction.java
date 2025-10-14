@@ -54,17 +54,21 @@ public class IndexFunction implements Function {
             }
         }
 
-        if (ctx.isMultiple() == false) {
+        if (ctx.isMultiple()) {
+            if (arg0.size() > 0) {
+                return arg0.get(index);
+            }
+        } else {
             ONode n1 = arg0.get(0);
             if (n1.isArray()) {
                 return n1.get(index);
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            throw new JsonPathException("Function attempted to calculate value using empty array");
-        } else {
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
             return ctx.newNode();
+        } else {
+            throw new JsonPathException("The function is using an invalid array");
         }
     }
 }
