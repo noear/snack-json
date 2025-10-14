@@ -11,7 +11,7 @@ import java.util.List;
  * @author noear 2025/10/11 created
  *
  */
-public class TokenizeTest {
+public class _TokenizeTest {
     @Test
     public void case1() {
         // 测试函数调用

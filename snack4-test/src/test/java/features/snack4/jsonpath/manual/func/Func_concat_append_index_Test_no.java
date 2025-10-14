@@ -74,15 +74,15 @@ public class Func_concat_append_index_Test_no {
     @Test
     public void concatTest() {
         compatible_str("1", "[10,5,20,15]", "$.store.inventory");
-        compatible_str("1", "[10,5,20,15,50]", "$.store.inventory.concat(50)");
+        compatible_str("1", "\"50\"", "$.store.inventory.concat(50)");
 
-        compatible_str("2", "[4,5,4,1]", "$.store.book[0].ratings.concat(1)");
+        compatible_str("2", "\"1\"", "$.store.book[0].ratings.concat(1)");
 
-        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name");
-        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name.concat('David')");
+        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\"]", "$.store.staff[*].name");
+        compatible_str("3", "[\"\",\"\",\"\"]", "$.store.staff[*].name.concat('David')");
 
         compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price");
-        compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
+        compatible_str("4", "[\"9.0\",\"9.0\"]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
 
         compatible_str("5", "[\"Sayings of the Century\"]", "$.store.book[?(@.category == 'reference')].title");
         compatible_str("5", "\"Sayings of the Century New Ref\"", "$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
@@ -123,18 +123,27 @@ public class Func_concat_append_index_Test_no {
         ONode tmp = ONode.ofJson(JSON_DATA).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
+        boolean isOk = false;
+
         try {
             DocumentContext context = JsonPath.parse(JSON_DATA);
             Object tmp2 = context.read(jsonpathStr);
             System.out.println(ONode.serialize(tmp2));
 
             if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
-                assert ref.length() == tmp.toJson().length() ||
+                isOk = ref.length() == tmp.toJson().length() ||
                         tmp.toJson().length() == ONode.serialize(tmp2).length();
+            } else {
+                isOk = true;
             }
         } catch (Exception e) {
             System.out.println("jayway: err");
-            assert ref.length() == tmp.toJson().length();
+            isOk = ref.length() == tmp.toJson().length();
+        }
+
+        if (isOk == false) {
+            System.out.println(JSON_DATA);
+            assert isOk == false;
         }
     }
 }

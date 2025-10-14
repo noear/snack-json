@@ -38,6 +38,7 @@ public class QueryContextImpl implements QueryContext {
     private final Options options;
 
     private boolean multiple;
+    private boolean expanded;
     private boolean descendant;
     private boolean inFilter;
 
@@ -62,6 +63,8 @@ public class QueryContextImpl implements QueryContext {
         } else {
             multiple = multiple || seg.isMultiple();
         }
+
+        expanded = expanded || seg.isExpanded();
     }
 
     public void setInFilter(boolean inFilter) {
@@ -76,6 +79,11 @@ public class QueryContextImpl implements QueryContext {
     @Override
     public boolean isMultiple() {
         return multiple;
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return expanded;
     }
 
     @Override

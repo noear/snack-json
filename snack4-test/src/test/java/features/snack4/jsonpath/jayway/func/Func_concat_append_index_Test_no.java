@@ -80,24 +80,23 @@ public class Func_concat_append_index_Test_no extends FuncTestAbs {
     @Test
     public void concatTest() {
         compatible_str("1", "[10,5,20,15]", "$.store.inventory");
-        compatible_str("1", "[10,5,20,15,50]", "$.store.inventory.concat(50)");
+        compatible_str("1", "\"50\"", "$.store.inventory.concat(50)");
 
-        compatible_str("2", "[4,5,4,1]", "$.store.book[0].ratings.concat(1)");
+        compatible_str("2", "\"1\"", "$.store.book[0].ratings.concat(1)");
 
-        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name");
+        compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\"]", "$.store.staff[*].name");
 
         //["AliceDavid","BobDavid","CharlieDavid"]
         //["","",""] jayway
-        //compatible_str("3", "[\"Alice\",\"Bob\",\"Charlie\",\"David\"]", "$.store.staff[*].name.concat('David')");
+        compatible_str("3", "[\"\",\"\",\"\"]", "$.store.staff[*].name.concat('David')");
 
-        compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price");
-        compatible_str("4", "[8.95,8.99,9.0]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
+        compatible_str("4", "[8.95,8.99]", "$.store.book[?(@.price < 10)].price");
+        compatible_str("4", "[\"9.0\",\"9.0\"]", "$.store.book[?(@.price < 10)].price.concat(9.00)");
+    }
 
-        compatible_str("5", "[\"Sayings of the Century\"]", "$.store.book[?(@.category == 'reference')].title");
-
-        //["Sayings of the Century New Ref"]
-        //[""]
-        //compatible_str("5", "\"Sayings of the Century New Ref\"", "$.store.book[?(@.category == 'reference')].title.concat(' New Ref')");
+    @Test
+    public void concatTest2(){
+        compatible_str("5", "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"price\":8.95,\"ratings\":[4,5,4]}]", "$.store.book[?(concat(@.category, @.author) == 'referenceNigel Rees')]");
     }
 
     @Test

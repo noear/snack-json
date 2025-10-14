@@ -41,6 +41,11 @@ public class WildcardSelector implements Selector {
     }
 
     @Override
+    public boolean isExpanded() {
+        return true;
+    }
+
+    @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）

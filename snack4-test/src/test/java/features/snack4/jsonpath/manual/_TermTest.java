@@ -9,7 +9,7 @@ import org.noear.snack4.jsonpath.util.TermUtil;
  * @author noear 2025/10/13 created
  *
  */
-public class TermTest {
+public class _TermTest {
     @Test
     public void case1() {
         testTerm("match(@.b, '[jk]')", "match(@.b, '[jk]')", null, null);

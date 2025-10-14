@@ -53,6 +53,11 @@ public class FuncSegment extends AbstractSegment {
     }
 
     @Override
+    public boolean isExpanded() {
+        return false;
+    }
+
+    @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 

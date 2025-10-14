@@ -40,6 +40,11 @@ public interface QueryContext {
     boolean isMultiple();
 
     /**
+     * 是否为展开的
+     */
+    boolean isExpanded();
+
+    /**
      * 是否有后代选择
      */
     boolean isDescendant();

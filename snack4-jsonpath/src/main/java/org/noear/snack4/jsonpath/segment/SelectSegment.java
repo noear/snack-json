@@ -34,6 +34,7 @@ public class SelectSegment extends AbstractSegment {
     private final String description;
     private List<Selector> selectors = new ArrayList<>();
     private boolean isMultiple;
+    private boolean isExpanded;
 
     public SelectSegment(String description) {
         this.description = description;
@@ -65,6 +66,7 @@ public class SelectSegment extends AbstractSegment {
 
                 if (selector != null) {
                     isMultiple = isMultiple || selector.isMultiple();
+                    isExpanded = isExpanded || selector.isExpanded();
                     selectors.add(selector);
                 }
             }
@@ -80,6 +82,11 @@ public class SelectSegment extends AbstractSegment {
     @Override
     public boolean isMultiple() {
         return isMultiple;
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return isExpanded;
     }
 
     @Override

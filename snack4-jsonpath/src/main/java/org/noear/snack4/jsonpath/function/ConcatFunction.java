@@ -39,36 +39,106 @@ public class ConcatFunction implements Function {
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
         ONode arg1 = argNodes.get(1);
 
-        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            if (arg0.size() > 0) {
+        if(arg1.isArray()){
+            arg1 = arg1.get(0);
+        }
+
+        if (ctx.isMultiple()) {
+            if(ctx.isExpanded()) {
+                for (ONode n1 : arg0.getArray()) {
+                    n1.setValue("");
+                }
+            } else {
                 for (ONode n1 : arg0.getArray()) {
                     if (n1.isString()) {
-                        n1.setValue(n1.toString().concat(arg1.toString()));
+                        n1.setValue(n1.getString().concat(arg1.getString()));
                     } else {
-                        n1.setValue(arg1.toString());
+                        n1.setValue(arg1.getString());
                     }
                 }
             }
 
-            if (ctx.isMultiple()) {
-                return arg0;
-            } else {
-                return arg0.get(0);
-            }
+            return arg0;
         } else {
-            if (arg0.size() > 1) {
-                arg0.add(arg1);
-                return arg0;
+            if (arg0.isEmpty()) {
+                return ctx.newNode();
             } else {
                 ONode n1 = arg0.get(0);
-                if (n1.isArray()) {
-                    return n1.add(arg1);
-                } else if (n1.isString()) {
-                    return new ONode(n1.getString().concat(arg1.getString()));
+                if (n1.isString()) {
+                    n1 = ctx.newNode(n1.getString().concat(arg1.getString()));
+                } else {
+                    n1.setValue(arg1.getString());
                 }
+
+                return n1;
             }
         }
 
-        return ctx.newNode();
+//        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+//            if (arg0.size() > 0) {
+//                for (ONode n1 : arg0.getArray()) {
+//                    if (n1.isString()) {
+//                        n1.setValue(n1.toString().concat(arg1.toString()));
+//                    } else {
+//                        n1.setValue(arg1.toString());
+//                    }
+//                }
+//            }
+//
+//            if (ctx.isMultiple()) {
+//                return arg0;
+//            } else {
+//                return arg0.get(0);
+//            }
+//        } else {
+//
+//        }
+
+
+//        if (arg0.size() > 1) {
+//            arg0.add(arg1);
+//            return arg0;
+//        } else {
+//            ONode n1 = arg0.get(0);
+//            if (n1.isArray()) {
+//                return n1.add(arg1);
+//            } else if (n1.isString()) {
+//                return new ONode();
+//            }
+//        }
+
+
+//        if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+//            if (arg0.size() > 0) {
+//                for (ONode n1 : arg0.getArray()) {
+//                    if (n1.isString()) {
+//                        n1.setValue(n1.toString().concat(arg1.toString()));
+//                    } else {
+//                        n1.setValue(arg1.toString());
+//                    }
+//                }
+//            }
+//
+//            if (ctx.isMultiple()) {
+//                return arg0;
+//            } else {
+//                return arg0.get(0);
+//            }
+//        } else {
+//            if (arg0.size() > 1) {
+//                arg0.add(arg1);
+//                return arg0;
+//            } else {
+//                ONode n1 = arg0.get(0);
+//                if (n1.isArray()) {
+//                    return n1.add(arg1);
+//                } else if (n1.isString()) {
+//                    return new ONode(n1.getString().concat(arg1.getString()));
+//                }
+//            }
+//        }
+//
+//        return ctx.newNode();
+
     }
 }

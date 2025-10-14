@@ -33,6 +33,11 @@ public interface Segment {
     boolean isMultiple();
 
     /**
+     * 是否为展开
+     */
+    boolean isExpanded();
+
+    /**
      * 分析
      *
      * @param currentNodes 当前节点

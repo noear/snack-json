@@ -37,6 +37,11 @@ public class DescendantSegment extends AbstractSegment {
     }
 
     @Override
+    public boolean isExpanded() {
+        return true;
+    }
+
+    @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         return currentNodes;
     }

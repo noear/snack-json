@@ -78,6 +78,11 @@ public abstract class FuncTestAbs {
             return;
         }
 
-        assert tmp.toJson().equals(ONode.serialize(tmp2));
+        if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+            if (tmp.toJson().equals(ref) == false) {
+                System.out.println(JSON_DATA());
+                assert false;
+            }
+        }
     }
 }

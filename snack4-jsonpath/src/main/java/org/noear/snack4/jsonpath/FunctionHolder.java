@@ -83,11 +83,16 @@ public class FunctionHolder {
     public ONode apply(QueryContext ctx, ONode node) {
         List<ONode> argNodes = new ArrayList<>();
 
+        QueryContext ctx2 = null;
+
         for (Object arg : args) {
             if (arg instanceof JsonPath) {
                 QueryResult rst = ctx.nestedQuery(node, (JsonPath) arg);
                 List<ONode> currentNodes = rst.getNodeList();
-                ctx = rst.getContext(); //换掉 ctx（可获取查询的 isDescendant）
+
+                if (ctx2 == null) {
+                    ctx2 = rst.getContext(); //换掉 ctx（可获取查询的 isDescendant）
+                }
 
                 argNodes.add(ctx.newNode(currentNodes));
             } else {
@@ -95,11 +100,11 @@ public class FunctionHolder {
             }
         }
 
-        QueryContextImpl ctx0 = (QueryContextImpl) ctx;
+        QueryContextImpl ctx0 = (QueryContextImpl) (ctx2 == null ? ctx : ctx2);
 
         try {
             ctx0.setInFilter(true);
-            return func.apply(ctx, argNodes);
+            return func.apply(ctx0, argNodes);
         } finally {
             ctx0.setInFilter(false);
         }

@@ -18,6 +18,11 @@ public interface Selector {
     boolean isMultiple();
 
     /**
+     * 是否为展开
+     */
+    boolean isExpanded();
+
+    /**
      * 选择
      *
      * @param currentNodes 当前节点

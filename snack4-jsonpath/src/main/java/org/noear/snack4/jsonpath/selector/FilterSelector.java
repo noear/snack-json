@@ -51,6 +51,11 @@ public class FilterSelector implements Selector {
         return true;
     }
 
+    @Override
+    public boolean isExpanded() {
+        return false;
+    }
+
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
 

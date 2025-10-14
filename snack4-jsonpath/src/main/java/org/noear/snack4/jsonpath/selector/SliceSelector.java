@@ -80,6 +80,11 @@ public class SliceSelector implements Selector {
     }
 
     @Override
+    public boolean isExpanded() {
+        return false;
+    }
+
+    @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (step == 0) {
             return;
