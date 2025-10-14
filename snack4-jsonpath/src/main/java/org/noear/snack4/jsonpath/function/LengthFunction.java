@@ -39,53 +39,20 @@ public class LengthFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-        if (arg0.isEmpty()) {
-            return ctx.newNode();
-        }
-
-        if (ctx.isInFilter()) {
-            return lengthOf(ctx, arg0.get(0));
+        if (ctx.isMultiple()) {
+            return ctx.newNode(arg0.size());
         } else {
-            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-                List<ONode> results = new ArrayList<>();
-
-                for (ONode n1 : arg0.getArray()) {
-                    if (n1.isArray()) {
-                        results.add(ctx.newNode(n1.getArray().size()));
-                    } else {
-                        results.add(ctx.newNode());
-                    }
-                }
-
-                if (results.size() > 0) {
-                    if (ctx.isMultiple()) {
-                        return ctx.newNode(results);
-                    } else {
-                        return results.get(0);
-                    }
-                } else {
-                    throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
-                }
-            } else {
-                if (arg0.size() > 0) {
-                    if (arg0.size() > 1) {
-                        return ctx.newNode(arg0.size());
-                    } else {
-                        ONode n = arg0.get(0);
-                        return lengthOf(ctx, n);
-                    }
-                }
+            if (arg0.isEmpty()) {
+                return ctx.newNode();
             }
 
+            ONode n1 = arg0.get(0);
+
+            if (n1.isString()) return ctx.newNode(n1.getString().length());
+            if (n1.isArray()) return ctx.newNode(n1.size());
+            if (n1.isObject()) return ctx.newNode(n1.getObject().size());
+
             return ctx.newNode();
         }
-    }
-
-    private ONode lengthOf(QueryContext ctx, ONode n) {
-        if (n.isString()) return ctx.newNode(n.getString().length());
-        if (n.isArray()) return ctx.newNode(n.size());
-        if (n.isObject()) return ctx.newNode(n.getObject().size());
-
-        return ctx.newNode();
     }
 }
