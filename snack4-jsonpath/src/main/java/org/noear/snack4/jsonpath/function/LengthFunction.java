@@ -44,16 +44,16 @@ public class LengthFunction implements Function {
             if (arg0.getArray().size() > 0) {
                 ONode n1 = arg0.get(0);
 
-                if (n1.isString()) return ctx.newNode(n1.getString().length());
                 if (n1.isArray()) return ctx.newNode(n1.size());
                 if (n1.isObject()) return ctx.newNode(n1.getObject().size());
+
+                if (ctx.hasFeature(Feature.JsonPath_JaywayMode) == false) {
+                    if (n1.isString()) return ctx.newNode(n1.getString().length());
+                }
             }
 
-            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-                return ctx.newNode();
-            } else {
-                throw new JsonPathException("The function is using an invalid string|array|object");
-            }
+            //不出异常，兼容 jayway
+            return ctx.newNode();
         }
     }
 }

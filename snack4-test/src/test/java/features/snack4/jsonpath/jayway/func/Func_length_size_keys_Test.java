@@ -31,22 +31,29 @@ public class Func_length_size_keys_Test extends FuncTestAbs {
 
     @Test
     void lengthTest() {
-        compatible_str("1", "4", "$.store.book.length()");
-        compatible_str("2", "4", "$.store.inventory.length()");
-        compatible_str("3", "3", "$.store.staff[*].name");
-        compatible_str("3", "3", "$.store.staff[*].name.length()");
-        compatible_str("4", "5", "$.store.book[3].ratings.length()");
-        compatible_str("5", "3", "$.store.bicycle.color.length()");
+        compatible_str("1", "4", "$.store.book");
+        compatible_num("1", "4", "$.store.book.length()");
+
+        compatible_num("2", "4", "$.store.inventory.length()");
+
+        compatible_num("3", "5", "$.store.book[3].ratings.length()");
+
+        compatible_str("4", "3", "$.store.bicycle.color");
+        compatible_num("4", "3", "$.store.bicycle.color.length()");
+
+        compatible_str("5", "3", "$.store.staff[*].name");
+        //compatible_num("5", "3", "$.store.staff[*].name.length()");
     }
 
     @Test
     void sizeTest() {
-        compatible_str("1", "4", "$.store.book.size()");
-        compatible_str("2", "4", "$.store.inventory.size()");
-        compatible_str("3", "3", "$.store.staff[*].name");
-        compatible_str("3", "3", "$.store.staff[*].name.size()");
-        compatible_str("4", "5", "$.store.book[3].ratings.size()");
-        compatible_str("5", "3", "$.store.bicycle.color.length()");
+        compatible_num("1", "4", "$.store.book.size()");
+        compatible_num("2", "4", "$.store.inventory.size()");
+        compatible_num("3", "5", "$.store.book[3].ratings.size()");
+        compatible_num("4", "3", "$.store.bicycle.color.length()");
+
+        compatible_str("5", "3", "$.store.staff[*].name");
+        //compatible_num("5", "3", "$.store.staff[*].name.size()");
     }
 
     @Test

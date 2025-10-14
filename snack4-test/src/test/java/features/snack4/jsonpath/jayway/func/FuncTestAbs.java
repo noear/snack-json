@@ -18,7 +18,7 @@ public abstract class FuncTestAbs {
         System.out.println("::::" + tag + " - " + jsonpathStr);
 
         ONode tmp = null;
-        Double tmp2 = null;
+        Number tmp2 = null;
         Throwable err1 = null;
         Throwable err2 = null;
 
@@ -44,8 +44,17 @@ public abstract class FuncTestAbs {
             return;
         }
 
-        assert Math.abs(tmp.getDouble() - tmp2) < 0.001;
-        ;
+        if(tmp.isNull() && tmp2 == null) {
+            return;
+        }
+
+        assert Math.abs(tmp.getDouble() - tmp2.doubleValue()) < 0.001;
+
+//        if (tmp2 != null) {
+//            assert Math.abs(tmp.getDouble() - tmp2) < 0.001;
+//        } else {
+//            assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
+//        }
     }
 
     protected void compatible_str(String tag, String ref, String jsonpathStr) {

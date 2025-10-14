@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.jsonpath.util;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
 
@@ -31,8 +32,15 @@ public class MathUtil {
         List<Double> doubleList = new ArrayList<>();
 
         if (ctx.isMultiple()) {
-            for(ONode n1 : arg0.getArray()) {
-                if(n1.isNumber()){
+            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+                if (ctx.isDescendant() == false) {
+                    //兼容 jayway （这个效果是不太让人理解的）
+                    return doubleList;
+                }
+            }
+
+            for (ONode n1 : arg0.getArray()) {
+                if (n1.isNumber()) {
                     doubleList.add(n1.getDouble());
                 }
             }
@@ -46,8 +54,12 @@ public class MathUtil {
                             doubleList.add(n1.getDouble());
                         }
                     }
-                } else if (node.isNumber()) {
-                    doubleList.add(node.getDouble());
+                }
+
+                if (node.isNumber()) {
+                    if (ctx.hasFeature(Feature.JsonPath_JaywayMode) == false) {
+                        doubleList.add(node.getDouble());
+                    }
                 }
             }
         }
