@@ -168,7 +168,7 @@ public class BeanDecoder {
     }
 
     private Object convertToBean(ONode node, TypeWrap typeWrap, Object target) throws Exception {
-        boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseOnlySetter);
+        boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseSetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
         ClassWrap classWrap = ClassWrap.from(typeWrap);

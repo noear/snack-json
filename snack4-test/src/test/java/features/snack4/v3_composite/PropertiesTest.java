@@ -140,7 +140,7 @@ public class PropertiesTest {
         assert userModel.getUserName() == null;
 
 
-        userModel = ONode.ofJson(json, Feature.Write_OnlyUseOnlySetter).toBean(UserModel.class);
+        userModel = ONode.ofJson(json, Feature.Write_OnlyUseSetter).toBean(UserModel.class);
         assert "a".equals(userModel.getUserName());
     }
 

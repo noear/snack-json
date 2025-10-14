@@ -147,7 +147,7 @@ public enum Feature {
      * 写入只能使用设置器
      *
      */
-    Write_OnlyUseOnlySetter,
+    Write_OnlyUseSetter,
 
     /**
      * 写入时使用漂亮格式（带缩进和换行）

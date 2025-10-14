@@ -163,7 +163,7 @@ public class JsonTest {
     @Test
     public void test42() throws IOException {
         Assertions.assertThrows(Throwable.class, () -> {
-            ONode.ofJson("{aaa:1,bbb:2}", Feature.Write_FailOnUnknownProperties, Feature.Write_OnlyUseOnlySetter).toBean(Test42Bean.class);
+            ONode.ofJson("{aaa:1,bbb:2}", Feature.Write_FailOnUnknownProperties, Feature.Write_OnlyUseSetter).toBean(Test42Bean.class);
         });
     }
 

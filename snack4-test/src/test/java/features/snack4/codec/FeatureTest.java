@@ -182,7 +182,7 @@ public class FeatureTest {
         ONode.deserialize(json, NumberBean.class);
 
         Assertions.assertThrows(Throwable.class, () -> {
-            ONode.deserialize(json, NumberBean.class, Feature.Write_OnlyUseOnlySetter, Feature.Write_FailOnUnknownProperties);
+            ONode.deserialize(json, NumberBean.class, Feature.Write_OnlyUseSetter, Feature.Write_FailOnUnknownProperties);
         });
     }
 
@@ -283,7 +283,7 @@ public class FeatureTest {
         System.out.println(bean);
         Assertions.assertEquals("NumberBean{a=11, b=12, c=13.0, d=14.0}", bean.toString());
 
-        bean = ONode.ofJson(json0, Feature.Write_OnlyUseOnlySetter).toBean(NumberBean.class);
+        bean = ONode.ofJson(json0, Feature.Write_OnlyUseSetter).toBean(NumberBean.class);
         System.out.println(bean);
         Assertions.assertEquals("NumberBean{a=111, b=2, c=3.0, d=4.0}", bean.toString());
     }
