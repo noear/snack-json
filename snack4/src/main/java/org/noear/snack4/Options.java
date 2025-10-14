@@ -131,10 +131,10 @@ public final class Options {
     }
 
     /**
-     * 获取对象工厂
+     * 获取创造器
      */
-    public ObjectFactory<?> getFactory(Class<?> clazz) {
-        return codecLib.getFactory(clazz);
+    public ObjectCreator<?> getCreator(Class<?> clazz) {
+        return codecLib.getCreator(clazz);
     }
 
     /**
@@ -280,26 +280,26 @@ public final class Options {
     }
 
     /**
-     * 注册自定义工厂
+     * 注册自定义创造器
      */
-    public <T> Options addFactory(Class<T> type, ObjectFactory<T> factory) {
+    public <T> Options addCreator(Class<T> type, ObjectCreator<T> creator) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        codecLib.addFactory(type, factory);
+        codecLib.addCreator(type, creator);
         return this;
     }
 
     /**
-     * 注册自定义工厂
+     * 注册自定义创造器
      */
-    public <T> Options addFactory(ObjectPatternFactory<T> factory) {
+    public <T> Options addCreator(ObjectPatternCreator<T> creator) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        codecLib.addFactory(factory);
+        codecLib.addCreator(creator);
         return this;
     }
 

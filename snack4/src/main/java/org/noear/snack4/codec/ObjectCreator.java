@@ -15,11 +15,18 @@
  */
 package org.noear.snack4.codec;
 
+import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+
 /**
+ * 对象创造器
  *
- * @author noear 2025/10/8 created
+ * @author noear 2025/10/3 created
  * @since 4.0
  */
-public interface ObjectPatternFactory<T> extends ObjectFactory<T> {
-    boolean calCreate(Class<?> clazz);
+public interface ObjectCreator<T> {
+    /**
+     * 创造
+     */
+    T create(Options opts, ONode node, Class<?> clazz);
 }

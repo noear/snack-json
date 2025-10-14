@@ -124,9 +124,9 @@ public class BeanDecoder {
 
         if (target == null) {
             // 如果没有传入 target，则执行原有的创建新对象的逻辑
-            ObjectFactory factory = opts.getFactory(typeWrap.getType());
-            if (factory != null) {
-                target = factory.create(opts, node, typeWrap.getType());
+            ObjectCreator creator = opts.getCreator(typeWrap.getType());
+            if (creator != null) {
+                target = creator.create(opts, node, typeWrap.getType());
             }
 
             if (target == null) {

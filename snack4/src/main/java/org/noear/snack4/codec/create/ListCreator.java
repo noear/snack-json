@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.factory;
+package org.noear.snack4.codec.create;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.codec.ObjectFactory;
+import org.noear.snack4.codec.ObjectCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
-public class ListFactory implements ObjectFactory<List> {
+public class ListCreator implements ObjectCreator<List> {
     @Override
     public List create(Options opts, ONode node, Class<?> clazz) {
         return new ArrayList();

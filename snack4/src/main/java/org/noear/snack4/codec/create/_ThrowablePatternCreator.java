@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.factory;
+package org.noear.snack4.codec.create;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.codec.ObjectPatternFactory;
+import org.noear.snack4.codec.ObjectPatternCreator;
 
 /**
  *
  * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class _ThrowablePatternFactory implements ObjectPatternFactory<Throwable> {
+public class _ThrowablePatternCreator implements ObjectPatternCreator<Throwable> {
     @Override
     public boolean calCreate(Class<?> clazz) {
         return Throwable.class.isAssignableFrom(clazz);

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.SnackException;
-import org.noear.snack4.codec.ObjectPatternFactory;
+import org.noear.snack4.codec.ObjectPatternCreator;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ import java.util.*;
 public class TypeSafety {
     @Test
     public void case1() {
-        Options options = Options.of().addFactory(new ObjectPatternFactory<Object>() {
+        Options options = Options.of().addCreator(new ObjectPatternCreator<Object>() {
             @Override
             public boolean calCreate(Class<?> clazz) {
                 return true;
@@ -49,10 +49,10 @@ public class TypeSafety {
     public void case2() {
         Options options = Options.of();
 
-        options.addFactory(Map.class, (opts, node, clazz) -> new HashMap());
-        options.addFactory(List.class, (opts, node, clazz) -> new ArrayList());
+        options.addCreator(Map.class, (opts, node, clazz) -> new HashMap());
+        options.addCreator(List.class, (opts, node, clazz) -> new ArrayList());
 
-        options.addFactory(new ObjectPatternFactory<Object>() {
+        options.addCreator(new ObjectPatternCreator<Object>() {
             @Override
             public boolean calCreate(Class<?> clazz) {
                 return true;

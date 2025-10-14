@@ -17,7 +17,7 @@ package org.noear.snack4.codec;
 
 import org.noear.snack4.codec.decode.*;
 import org.noear.snack4.codec.encode.*;
-import org.noear.snack4.codec.factory.*;
+import org.noear.snack4.codec.create.*;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -41,8 +41,8 @@ import java.util.concurrent.atomic.LongAdder;
 public class CodecLib {
     private static CodecLib DEFAULT = new CodecLib(null).loadDefault();
 
-    private final Map<Class<?>, ObjectFactory<?>> factorys = new HashMap<>();
-    private final List<ObjectPatternFactory<?>> patternFactorys = new ArrayList<>();
+    private final Map<Class<?>, ObjectCreator<?>> creators = new HashMap<>();
+    private final List<ObjectPatternCreator<?>> patternCreators = new ArrayList<>();
 
     private final Map<Class<?>, ObjectDecoder<?>> decoders = new HashMap<>();
     private final List<ObjectPatternDecoder<?>> patternDecoders = new ArrayList<>();
@@ -61,14 +61,17 @@ public class CodecLib {
     }
 
     /**
-     * 添加工厂
+     * 添加创造器
      */
-    public <T> void addFactory(Class<T> type, ObjectFactory<T> factory) {
-        factorys.put(type, factory);
+    public <T> void addCreator(Class<T> type, ObjectCreator<T> factory) {
+        creators.put(type, factory);
     }
 
-    public void addFactory(ObjectPatternFactory factory) {
-        patternFactorys.add(factory);
+    /**
+     * 添加创造器
+     */
+    public void addCreator(ObjectPatternCreator creator) {
+        patternCreators.add(creator);
     }
 
     /**
@@ -125,22 +128,22 @@ public class CodecLib {
         return decoder;
     }
 
-    public ObjectFactory getFactory(Class<?> clazz) {
-        ObjectFactory factory = factorys.get(clazz);
+    public ObjectCreator getCreator(Class<?> clazz) {
+        ObjectCreator creator = creators.get(clazz);
 
-        if (factory == null) {
-            for(ObjectPatternFactory<?> factory1 : patternFactorys) {
+        if (creator == null) {
+            for(ObjectPatternCreator<?> factory1 : patternCreators) {
                 if(factory1.calCreate(clazz)) {
                     return factory1;
                 }
             }
 
             if (parent != null) {
-                return parent.getFactory(clazz);
+                return parent.getCreator(clazz);
             }
         }
 
-        return factory;
+        return creator;
     }
 
     public ObjectEncoder getEncoder(Object value) {
@@ -163,20 +166,20 @@ public class CodecLib {
 
     /// //////////////////////
 
-    private void loadDefaultFactories() {
-        addFactory( new _ThrowablePatternFactory());
+    private void loadDefaultCreators() {
+        addCreator( new _ThrowablePatternCreator());
 
-        addFactory(Map.class, new MapFactory());
-        addFactory(HashMap.class, ((opts, node, clazz) ->  new HashMap()));
-        addFactory(LinkedHashMap.class, ((opts, node, clazz) ->  new LinkedHashMap()));
+        addCreator(Map.class, new MapCreator());
+        addCreator(HashMap.class, ((opts, node, clazz) ->  new HashMap()));
+        addCreator(LinkedHashMap.class, ((opts, node, clazz) ->  new LinkedHashMap()));
 
-        addFactory(List.class, new ListFactory());
-        addFactory(ArrayList.class, ((opts, node, clazz) ->  new ArrayList()));
+        addCreator(List.class, new ListCreator());
+        addCreator(ArrayList.class, ((opts, node, clazz) ->  new ArrayList()));
 
-        addFactory(Set.class, new SetFactory());
-        addFactory(HashSet.class, ((opts, node, clazz) ->  new HashSet()));
+        addCreator(Set.class, new SetCreator());
+        addCreator(HashSet.class, ((opts, node, clazz) ->  new HashSet()));
 
-        addFactory(Collection.class, new CollectionFactory());
+        addCreator(Collection.class, new CollectionCreator());
     }
 
     private void loadDefaultDecoders() {
@@ -287,7 +290,7 @@ public class CodecLib {
     }
 
     private CodecLib loadDefault() {
-        loadDefaultFactories();
+        loadDefaultCreators();
         loadDefaultDecoders();
         loadDefaultEncoders();
         return this;
