@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class FeatureDemo {
     public static void main(String[] args) {
-        Options options = Options.of().addFeature(Feature.Write_BigNumbersAsString);
+        Options options = Options.of().addFeatures(Feature.Write_BigNumbersAsString);
 
         Map<String, Object> data = new HashMap<>();
         data.put("a", 1);

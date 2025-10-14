@@ -208,8 +208,8 @@ public class _test {
         //
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.ofJson(txt,Options.of()
-                .addFeature(Feature.Write_UseSingleQuotes) //采用单引号
-                .addFeature(Feature.Write_UnquotedFieldNames));//取消字段引号
+                .addFeatures(Feature.Write_UseSingleQuotes) //采用单引号
+                .addFeatures(Feature.Write_UnquotedFieldNames));//取消字段引号
 
         String txt2 = tmp.toJson();
 

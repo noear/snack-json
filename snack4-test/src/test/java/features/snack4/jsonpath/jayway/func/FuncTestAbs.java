@@ -23,7 +23,7 @@ public abstract class FuncTestAbs {
         Throwable err2 = null;
 
         try {
-            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeature(Feature.JsonPath_JaywayMode));
+            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeatures(Feature.JsonPath_JaywayMode));
             tmp = oNode.select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public abstract class FuncTestAbs {
         Throwable err2 = null;
 
         try {
-            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeature(Feature.JsonPath_JaywayMode));
+            ONode oNode = ONode.ofJson(JSON_DATA(), Options.of().addFeatures(Feature.JsonPath_JaywayMode));
             tmp = oNode.select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Exception e) {

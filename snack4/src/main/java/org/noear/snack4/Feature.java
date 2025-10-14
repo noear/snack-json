@@ -264,14 +264,14 @@ public enum Feature {
         return _mask;
     }
 
-    public static int addFeature(int ref, Feature... features) {
+    public static int addFeatures(int ref, Feature... features) {
         for (Feature feature : features) {
             ref |= feature.mask();
         }
         return ref;
     }
 
-    public static int removeFeature(int ref, Feature... features) {
+    public static int removeFeatures(int ref, Feature... features) {
         for (Feature feature : features) {
             ref &= ~feature.mask();
         }

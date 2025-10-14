@@ -40,7 +40,7 @@ public class JsonPathCompatibleTest5 {
         System.out.println(tmp);
         assert tmp.size() == 5;
 
-        ONode tmp2 = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_JaywayMode)).select("$..*[?(@.treePath)]");
+        ONode tmp2 = ONode.ofJson(json, Options.of().addFeatures(Feature.JsonPath_JaywayMode)).select("$..*[?(@.treePath)]");
         System.out.println(tmp2.toJson());
         assert tmp2.isArray();
         Assertions.assertEquals(5, tmp2.size());
@@ -162,7 +162,7 @@ public class JsonPathCompatibleTest5 {
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_JaywayMode)).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json, Options.of().addFeatures(Feature.JsonPath_JaywayMode)).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);

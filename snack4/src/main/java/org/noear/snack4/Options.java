@@ -69,14 +69,6 @@ public final class Options {
         this.readonly = readonly;
     }
 
-
-    /**
-     * 是否启用指定特性
-     */
-    public boolean hasFeature(Feature feature) {
-        return Feature.hasFeature(this.featuresValue, feature);
-    }
-
     /**
      * 加载类
      */
@@ -92,6 +84,12 @@ public final class Options {
         }
     }
 
+    /**
+     * 是否启用指定特性
+     */
+    public boolean hasFeature(Feature feature) {
+        return Feature.hasFeature(this.featuresValue, feature);
+    }
 
     public int getFeatures() {
         return featuresValue;
@@ -210,24 +208,33 @@ public final class Options {
     /**
      * 添加特性
      */
-    public Options addFeature(Feature... features) {
+    public Options addFeatures(Feature... features) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        this.featuresValue = Feature.addFeature(this.featuresValue, features);
+        this.featuresValue = Feature.addFeatures(this.featuresValue, features);
+        return this;
+    }
+
+    public Options setFeatures(Feature... features) {
+        if (readonly) {
+            throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
+        }
+
+        this.featuresValue = Feature.addFeatures(0, features);
         return this;
     }
 
     /**
      * 移除特性
      */
-    public Options removeFeature(Feature... features) {
+    public Options removeFeatures(Feature... features) {
         if (readonly) {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        this.featuresValue = Feature.removeFeature(this.featuresValue, features);
+        this.featuresValue = Feature.removeFeatures(this.featuresValue, features);
         return this;
     }
 
@@ -306,7 +313,7 @@ public final class Options {
     public static Options of(Feature... features) {
         Options tmp = new Options(false);
         for (Feature f : features) {
-            tmp.addFeature(f);
+            tmp.addFeatures(f);
         }
         return tmp;
     }

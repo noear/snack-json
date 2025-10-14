@@ -18,7 +18,7 @@ public class DemoApp {
                 .addEncoder(Date.class, (ctx, value, target) ->
                         target.setValue(DateUtil.format(value, "yyyy-MM-dd"))
                 )
-                .addFeature(Feature.Write_PrettyFormat)
+                .addFeatures(Feature.Write_PrettyFormat)
                 .dateFormat("yyyy-MM");
 
         String json = ONode.ofJson(null, options).toJson();

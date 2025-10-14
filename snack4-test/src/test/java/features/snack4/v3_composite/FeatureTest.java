@@ -18,7 +18,7 @@ public class FeatureTest {
         assert options.hasFeature(Feature.Write_NullStringAsEmpty) == false;
         assert oNode.get("name").getString() == null;
 
-        options.addFeature(Feature.Write_NullStringAsEmpty);
+        options.addFeatures(Feature.Write_NullStringAsEmpty);
         System.out.println(options.getFeatures());
         assert options.hasFeature(Feature.Write_NullStringAsEmpty);
         assert oNode.get("name").getString() != null;

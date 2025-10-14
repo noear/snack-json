@@ -68,7 +68,7 @@ public class ONodeAttrHolder {
                 decoder = ClassUtil.newInstance(attrAnno.decoder());
             }
 
-            featuresValue = Feature.addFeature(0, attrAnno.features());
+            featuresValue = Feature.addFeatures(0, attrAnno.features());
         }
 
         if (isTransient) {

@@ -149,8 +149,8 @@ public class _demo {
     @Test
     public void demo40() {
         Options options = Options.of()
-                .addFeature(Feature.Write_UseSingleQuotes)
-                .addFeature(Feature.Write_UnquotedFieldNames);
+                .addFeatures(Feature.Write_UseSingleQuotes)
+                .addFeatures(Feature.Write_UnquotedFieldNames);
 
         String txt = "{id:1,name:'x'}";
         ONode tmp = ONode.ofJson(txt, options);

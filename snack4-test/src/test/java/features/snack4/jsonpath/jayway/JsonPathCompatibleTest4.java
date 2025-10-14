@@ -95,7 +95,7 @@ public class JsonPathCompatibleTest4 {
         Throwable err2 = null;
 
         try {
-            tmp = ONode.ofJson(json, Options.of().addFeature(Feature.JsonPath_JaywayMode)).select(jsonpathStr);
+            tmp = ONode.ofJson(json, Options.of().addFeatures(Feature.JsonPath_JaywayMode)).select(jsonpathStr);
             System.out.println(tmp.toJson());
         } catch (Throwable e) {
             err1 = e;

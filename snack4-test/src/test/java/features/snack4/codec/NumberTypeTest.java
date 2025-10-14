@@ -17,7 +17,7 @@ public class NumberTypeTest {
 
     @Test
     public void case1(){
-        Options options = Options.of().addFeature(Feature.Write_BigNumbersAsString);
+        Options options = Options.of().addFeatures(Feature.Write_BigNumbersAsString);
 
         Map<String, Object> data = new HashMap<>();
         data.put("a", 1);
@@ -41,7 +41,7 @@ public class NumberTypeTest {
 
     @Test
     public void case2(){
-        Options options = Options.of().addFeature(Feature.Write_LongAsString);
+        Options options = Options.of().addFeatures(Feature.Write_LongAsString);
 
         Map<String, Object> data = new HashMap<>();
         data.put("a", 1);
