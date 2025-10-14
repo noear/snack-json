@@ -62,7 +62,7 @@ public class JsonPathCompatibleTest1 {
 
         ONode tmp2 = ONode.ofJson(json).select("$..[?(@.treePath)]");
         System.out.println(tmp2);
-        assertEquals(3,  tmp2.size());
+        assertEquals(3, tmp2.size());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class JsonPathCompatibleTest1 {
     }
 
     @Test
-    public void test10(){
+    public void test10() {
         String json = "{\"request1\":{\"result\":[{\"relTickers\":[{\"tickerId\":1},{\"tickerId\":1.1}],\"accountId\":400006},{\"relTickers\":[{\"tickerId\":2},{\"tickerId\":2.2}]},{\"relTickers\":[{\"tickerId\":3}]},{\"relTickers\":[{\"tickerId\":4}]},{\"relTickers\":[{\"tickerId\":5}]},{\"relTickers\":[{\"tickerId\":6}]}]}}\n";
 
         compatible_do("1", json, "$.request1.result[*].relTickers");
@@ -149,7 +149,7 @@ public class JsonPathCompatibleTest1 {
     }
 
     @Test
-    public void test11(){
+    public void test11() {
         String jsonpathStr1 = "$.store.book.size()";
         compatible_do("1", JsonPathSelectComplexTest.JSON, jsonpathStr1);
     }
@@ -164,6 +164,10 @@ public class JsonPathCompatibleTest1 {
         Object tmp2 = JsonPath.read(json, jsonpathStr);
         System.out.println(tmp2);
 
-        assert tmp.toJson().equals(tmp2.toString());
+        if (tmp.toJson().equals(tmp2.toString()) == false) {
+            System.out.println(json);
+
+            assert false;
+        }
     }
 }
