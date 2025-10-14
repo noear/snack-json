@@ -55,10 +55,6 @@ public class MatchFunction implements Function {
             return ctx.newNode(found);
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-            return ctx.newNode(false);
-        } else {
-            throw new JsonPathException("The function is using an invalid string");
-        }
+        return ctx.newNode();
     }
 }

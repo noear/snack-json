@@ -255,6 +255,10 @@ public class JsonPathCompatibleTest6 {
             return;
         }
 
+        if(tmp.isNull() && tmp2 == null) {
+            return;
+        }
+
         assert tmp.toJson().equals(tmp2.toString());
     }
 

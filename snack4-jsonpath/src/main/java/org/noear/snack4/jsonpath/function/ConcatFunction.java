@@ -73,10 +73,6 @@ public class ConcatFunction implements Function {
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-            return ctx.newNode();
-        } else {
-            throw new JsonPathException("The function is using an invalid string");
-        }
+        return ctx.newNode();
     }
 }

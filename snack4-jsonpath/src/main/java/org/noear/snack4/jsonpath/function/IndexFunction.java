@@ -65,10 +65,6 @@ public class IndexFunction implements Function {
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-            return ctx.newNode();
-        } else {
-            throw new JsonPathException("The function is using an invalid array");
-        }
+        return ctx.newNode();
     }
 }

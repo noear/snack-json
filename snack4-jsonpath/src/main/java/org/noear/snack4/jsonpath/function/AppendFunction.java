@@ -46,9 +46,7 @@ public class AppendFunction implements Function {
 
             return arg0;
         } else {
-            if (arg0.isEmpty()) {
-                return ctx.newNode();
-            } else {
+            if (arg0.getArray().size() > 0) {
                 ONode n1 = arg0.get(0);
                 if (n1.isArray()) {
                     n1.add(arg1);
@@ -56,6 +54,8 @@ public class AppendFunction implements Function {
 
                 return n1;
             }
+
+            return ctx.newNode();
         }
     }
 }

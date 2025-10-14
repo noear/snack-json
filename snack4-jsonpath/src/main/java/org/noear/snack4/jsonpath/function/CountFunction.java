@@ -49,10 +49,6 @@ public class CountFunction implements Function {
             }
         }
 
-        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-            return ctx.newNode();
-        } else {
-            throw new JsonPathException("The function is using an invalid string|array|object");
-        }
+        return ctx.newNode();
     }
 }
