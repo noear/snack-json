@@ -31,7 +31,7 @@ import java.time.ZonedDateTime;
 public class ZonedDateTimeDecoder implements ObjectDecoder<ZonedDateTime> {
     @Override
     public ZonedDateTime decode(DecodeContext ctx, ONode node) {
-        if(node.isNullOrEmpty()){
+        if(node.isEmpty()){
             return null;
         }
 

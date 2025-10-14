@@ -30,7 +30,7 @@ import java.util.Date;
 public class DateDecoder implements ObjectDecoder<Date> {
     @Override
     public Date decode(DecodeContext ctx, ONode node) {
-        if(node.isNullOrEmpty()){
+        if(node.isEmpty()){
             return null;
         }
 

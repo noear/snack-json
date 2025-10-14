@@ -29,7 +29,7 @@ import java.time.Duration;
 public class DurationDecoder implements ObjectDecoder<Duration> {
     @Override
     public Duration decode(DecodeContext ctx, ONode node) {
-        if (node.isNullOrEmpty()) {
+        if (node.isEmpty()) {
             return null;
         } else {
             String tmp = node.getString().toUpperCase();

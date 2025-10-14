@@ -31,7 +31,7 @@ import java.time.ZoneId;
 public class OffsetDateTimeDecoder implements ObjectDecoder<OffsetDateTime> {
     @Override
     public OffsetDateTime decode(DecodeContext ctx, ONode node) {
-        if(node.isNullOrEmpty()){
+        if(node.isEmpty()){
             return null;
         }
 

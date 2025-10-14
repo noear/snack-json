@@ -32,7 +32,7 @@ public class LocalTimeDecoder implements ObjectDecoder<LocalTime> {
 
     @Override
     public LocalTime decode(DecodeContext ctx, ONode node) {
-        if(node.isNullOrEmpty()){
+        if(node.isEmpty()){
             return null;
         }
 

@@ -27,5 +27,5 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface Function {
-    ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes);
+    ONode apply(QueryContext ctx, List<ONode> argNodes);
 }

@@ -30,22 +30,26 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class LengthFunction extends AbstractFunction implements Function {
+public class LengthFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
 
-        if (currentNodes.isEmpty()) {
+        ONode arg0 = argNodes.get(0);
+
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
         if (ctx.isInFilter()) {
-            return lengthOf(ctx, currentNodes.get(0));
+            return lengthOf(ctx, arg0.get(0));
         } else {
             if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
                 List<ONode> results = new ArrayList<>();
 
-                for (ONode n1 : currentNodes) {
+                for (ONode n1 : arg0.getArray()) {
                     if (n1.isArray()) {
                         results.add(ctx.newNode(n1.getArray().size()));
                     } else {
@@ -63,11 +67,11 @@ public class LengthFunction extends AbstractFunction implements Function {
                     throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
                 }
             } else {
-                if (currentNodes.size() > 0) {
-                    if (currentNodes.size() > 1) {
-                        return ctx.newNode(currentNodes.size());
+                if (arg0.size() > 0) {
+                    if (arg0.size() > 1) {
+                        return ctx.newNode(arg0.size());
                     } else {
-                        ONode n = currentNodes.get(0);
+                        ONode n = arg0.get(0);
                         return lengthOf(ctx, n);
                     }
                 }

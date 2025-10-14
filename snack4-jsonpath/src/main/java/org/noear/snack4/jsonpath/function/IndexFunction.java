@@ -31,11 +31,15 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class IndexFunction extends AbstractFunction implements Function {
+public class IndexFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes); //arg0
-        ONode arg1 = getArgAt(ctx, argNodes, 1);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 2) {
+            throw new JsonPathException("Requires 2 parameters");
+        }
+
+        ONode arg0 = argNodes.get(0);
+        ONode arg1 = argNodes.get(1);
 
         if (arg1.isNumber() == false) {
             throw new JsonPathException("Requires arg1 is number");
@@ -43,9 +47,9 @@ public class IndexFunction extends AbstractFunction implements Function {
 
         int index = arg1.getInt();
 
-        if (currentNodes.isEmpty()) {
+        if (arg0.isEmpty()) {
             if (ctx.getMode() == QueryMode.CREATE) {
-                currentNodes.add(ctx.newNode().getOrNew(index));
+                arg0.add(ctx.newNode().getOrNew(index));
             } else {
                 return ctx.newNode();
             }
@@ -54,8 +58,8 @@ public class IndexFunction extends AbstractFunction implements Function {
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             List<ONode> results = new ArrayList<>();
 
-            if (currentNodes.size() > 0) {
-                for (ONode n1 : currentNodes) {
+            if (arg0.size() > 0) {
+                for (ONode n1 : arg0.getArray()) {
                     if (n1.isArray()) {
                         ONode tmp = n1.get(index);
                         if (tmp.isNull() == false) {
@@ -75,18 +79,18 @@ public class IndexFunction extends AbstractFunction implements Function {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            if (currentNodes.size() > 1) {
+            if (arg0.size() > 1) {
                 if (index < 0) {
-                    index = index + currentNodes.size();
+                    index = index + arg0.size();
                 }
 
-                if (index < currentNodes.size()) {
-                    return currentNodes.get(index);
+                if (index < arg0.size()) {
+                    return arg0.get(index);
                 } else {
                     return ctx.newNode();
                 }
             } else {
-                ONode n1 = currentNodes.get(0);
+                ONode n1 = arg0.get(0);
                 if (n1.isArray()) {
                     return n1.get(index);
                 }

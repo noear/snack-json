@@ -131,7 +131,7 @@ public class BeanDecoder {
 
             if (target == null) {
                 if (typeWrap.getType().isInterface()) {
-                    if (node.isNullOrEmpty()) {
+                    if (node.isEmpty()) {
                         return null;
                     }
 

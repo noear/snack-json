@@ -27,7 +27,6 @@ import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
 
-import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.*;
@@ -96,11 +95,11 @@ public final class ONode {
         return type == JsonType.Null || isUndefined();
     }
 
-    public boolean isNullOrEmpty() {
+    public boolean isEmpty() {
         return isNull() ||
-                (isString() && Asserts.isEmpty(getString())) ||
+                (isArray() && Asserts.isEmpty(getArray())) ||
                 (isObject() && Asserts.isEmpty(getObject())) ||
-                (isArray() && Asserts.isEmpty(getArray()));
+                (isString() && Asserts.isEmpty(getString()));
     }
 
     public boolean isBoolean() {
@@ -242,7 +241,7 @@ public final class ONode {
     public Integer getInt(Integer def) {
         if (isNumber()) {
             return getNumber().intValue();
-        } else if (isNullOrEmpty()) {
+        } else if (isEmpty()) {
             return def;
         } else if (isString()) {
             return Integer.parseInt(getString());
@@ -258,7 +257,7 @@ public final class ONode {
     public Long getLong(Long def) {
         if (isNumber()) {
             return getNumber().longValue();
-        } else if (isNullOrEmpty()) {
+        } else if (isEmpty()) {
             return def;
         } else if (isString()) {
             return Long.getLong(getString());
@@ -274,7 +273,7 @@ public final class ONode {
     public Float getFloat(Float def) {
         if (isNumber()) {
             return getNumber().floatValue();
-        } else if (isNullOrEmpty()) {
+        } else if (isEmpty()) {
             return def;
         } else if (isString()) {
             return Float.parseFloat(getString());
@@ -290,7 +289,7 @@ public final class ONode {
     public Double getDouble(Double def) {
         if (isNumber()) {
             return getNumber().doubleValue();
-        } else if (isNullOrEmpty()) {
+        } else if (isEmpty()) {
             return def;
         } else if (isString()) {
             return Double.parseDouble(getString());

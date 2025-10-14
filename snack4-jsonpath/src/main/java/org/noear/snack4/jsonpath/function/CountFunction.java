@@ -28,16 +28,19 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class CountFunction extends AbstractFunction implements Function {
+public class CountFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
+        ONode arg0 = argNodes.get(0);
 
-        if (currentNodes.isEmpty()) {
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
-        ONode n1 =  currentNodes.get(0);
+        ONode n1 =  arg0.get(0);
 
         if (n1.isString()) return ctx.newNode(n1.getString().length());
         if (n1.isArray()) return ctx.newNode(n1.size());

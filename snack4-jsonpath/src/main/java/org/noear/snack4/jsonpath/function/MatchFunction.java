@@ -30,21 +30,25 @@ import java.util.regex.Pattern;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class MatchFunction extends AbstractFunction implements Function {
+public class MatchFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes); //arg0
-        ONode arg1 = getArgAt(ctx, argNodes, 1);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 2) {
+            throw new JsonPathException("Requires 2 parameters");
+        }
+
+        ONode arg0 = argNodes.get(0);
+        ONode arg1 = argNodes.get(1);
 
         if (arg1.isNull()) {
             return ctx.newNode(false);
         }
 
-        if (currentNodes.isEmpty()) {
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
-        String arg0Str = currentNodes.get(0).toString();
+        String arg0Str = arg0.get(0).toString();
         String arg1Str = arg1.toString();
 
         Pattern pattern = RegexUtil.parse(arg1Str);

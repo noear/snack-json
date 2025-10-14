@@ -30,19 +30,23 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class FirstFunction extends AbstractFunction implements Function {
+public class FirstFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
 
-        if (currentNodes.isEmpty()) {
+        ONode arg0 = argNodes.get(0);
+
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             List<ONode> results = new ArrayList<>();
 
-            for (ONode n1 : currentNodes) {
+            for (ONode n1 : arg0.getArray()) {
                 if (n1.isArray()) {
                     results.add(n1.get(0));
                 }
@@ -58,10 +62,10 @@ public class FirstFunction extends AbstractFunction implements Function {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            if (currentNodes.size() > 1) {
-                return currentNodes.get(0);
+            if (arg0.size() > 1) {
+                return arg0.get(0);
             } else {
-                ONode n1 = currentNodes.get(0);
+                ONode n1 = arg0.get(0);
                 if (n1.isArray()) {
                     return n1.get(0);
                 } else {

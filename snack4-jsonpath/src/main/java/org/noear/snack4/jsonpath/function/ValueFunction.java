@@ -28,16 +28,20 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class ValueFunction extends AbstractFunction implements Function {
+public class ValueFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
 
-        if (currentNodes.size() != 1) {
+        ONode arg0 = argNodes.get(0);
+
+        if (arg0.size() != 1) {
             throw new JsonPathException("Not a single-value array");
         }
 
-        ONode n1 = currentNodes.get(0);
+        ONode n1 = arg0.get(0);
 
         if (n1.isValue()) {
             return n1;

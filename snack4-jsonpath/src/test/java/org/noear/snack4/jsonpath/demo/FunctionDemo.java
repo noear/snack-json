@@ -11,9 +11,10 @@ import org.noear.snack4.jsonpath.JsonPathException;
 public class FunctionDemo {
     public static void main(String[] args) {
         //定制聚合函数
-        FunctionLib.register("parent", (ctx, currentNodes, argNodes) -> {
-            if (currentNodes.size() == 1) {
-                ONode node = currentNodes.get(0);
+        FunctionLib.register("parent", (ctx, argNodes) -> {
+            ONode arg = argNodes.get(0);
+            if (arg.size() == 1) {
+                ONode node = arg.get(0);
                 if (node.parent() == null) {
                     return node;
                 } else {

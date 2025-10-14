@@ -69,17 +69,15 @@ public class FunctionHolder {
     }
 
     public ONode apply(QueryContext ctx, List<ONode> currentNodes) {
-        if (args.isEmpty()) {
-            return func.apply(ctx, currentNodes, Collections.emptyList());
-        } else {
-            List<ONode> argNodes = new ArrayList<>();
+        List<ONode> argNodes = new ArrayList<>();
 
-            for (Object arg : args) {
-                argNodes.add((ONode) arg);
-            }
+        argNodes.add(ctx.newNode(currentNodes));
 
-            return func.apply(ctx, currentNodes, argNodes);
+        for (Object arg : args) {
+            argNodes.add((ONode) arg);
         }
+
+        return func.apply(ctx, argNodes);
     }
 
     public ONode apply(QueryContext ctx, ONode node) {
@@ -87,9 +85,10 @@ public class FunctionHolder {
 
         for (Object arg : args) {
             if (arg instanceof JsonPath) {
-                QueryResult result = ctx.nestedQuery(node, (JsonPath) arg);
-                List<ONode> currentNodes = result.getNodeList();
-                ctx = result.getContext(); //换掉 ctx
+                QueryResult rst = ctx.nestedQuery(node, (JsonPath) arg);
+                List<ONode> currentNodes = rst.getNodeList();
+                ctx = rst.getContext(); //换掉 ctx（可获取查询的 isDescendant）
+
                 argNodes.add(ctx.newNode(currentNodes));
             } else {
                 argNodes.add((ONode) arg);
@@ -100,7 +99,7 @@ public class FunctionHolder {
 
         try {
             ctx0.setInFilter(true);
-            return func.apply(ctx, null, argNodes);
+            return func.apply(ctx, argNodes);
         } finally {
             ctx0.setInFilter(false);
         }

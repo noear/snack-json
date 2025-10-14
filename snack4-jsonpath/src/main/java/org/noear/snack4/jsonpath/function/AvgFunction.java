@@ -31,12 +31,16 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class AvgFunction extends AbstractFunction implements Function {
+public class AvgFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
 
-        if (currentNodes.isEmpty()) {
+        ONode arg0 = argNodes.get(0);
+
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
@@ -44,16 +48,16 @@ public class AvgFunction extends AbstractFunction implements Function {
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             if (ctx.isDescendant()) {
-                doubleList = MathUtil.getDoubleList(currentNodes);
+                doubleList = MathUtil.getDoubleList(arg0.getArray());
             } else {
-                doubleList = MathUtil.getDoubleListByChild(currentNodes);
+                doubleList = MathUtil.getDoubleListByChild(arg0.getArray());
             }
 
             if (Asserts.isEmpty(doubleList)) {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
             }
         } else {
-            doubleList = MathUtil.getDoubleList(currentNodes);
+            doubleList = MathUtil.getDoubleList(arg0.getArray());
 
             if (Asserts.isEmpty(doubleList)) {
                 return ctx.newNode();

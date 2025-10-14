@@ -239,18 +239,18 @@ public class JsonPathSelectSimpleTest {
     @Test
     public void testNegativeIndexOutOfBounds() {
         ONode root = ONode.ofJson(JSON);
-        assert JsonPath.select(root, "$.store.book[-10]").isNullOrEmpty();
+        assert JsonPath.select(root, "$.store.book[-10]").isEmpty();
     }
 
     @Test
     public void testPositiveIndexOutOfBounds() {
         ONode root = ONode.ofJson(JSON);
-        assert JsonPath.select(root, "$.store.book[10]").isNullOrEmpty();
+        assert JsonPath.select(root, "$.store.book[10]").isEmpty();
     }
 
     @Test
     public void testNonExistentKey() {
         ONode root = ONode.ofJson(JSON);
-        assertTrue(JsonPath.select(root, "$.store.nonExistentKey").isNullOrEmpty());
+        assertTrue(JsonPath.select(root, "$.store.nonExistentKey").isEmpty());
     }
 }

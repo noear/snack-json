@@ -28,19 +28,23 @@ import java.util.*;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class ValuesFunction extends AbstractFunction implements Function {
+public class ValuesFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 1) {
+            throw new JsonPathException("Requires 1 parameters");
+        }
 
-        if (currentNodes.isEmpty()) {
+        ONode arg0 = argNodes.get(0);
+
+        if (arg0.isEmpty()) {
             return ctx.newNode();
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
             Collection<ONode> values = new  ArrayList<>();
 
-            for (ONode n1 : currentNodes) {
+            for (ONode n1 : arg0.getArray()) {
                 if(n1.isObject()){
                     values = n1.getObject().values();
                 }
@@ -52,10 +56,10 @@ public class ValuesFunction extends AbstractFunction implements Function {
                 throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
             }
         } else {
-            if (currentNodes.size() > 1) {
+            if (arg0.size() > 1) {
                 Collection<ONode> values = new  ArrayList<>();
 
-                for (ONode n1 : currentNodes) {
+                for (ONode n1 : arg0.getArray()) {
                     if (n1.isObject() && n1.getObject().size() > 0) {
                         values.addAll(n1.getObject().values());
                     }
@@ -65,7 +69,7 @@ public class ValuesFunction extends AbstractFunction implements Function {
                     return ctx.newNode(values);
                 }
             } else {
-                ONode n1 = currentNodes.get(0);
+                ONode n1 = arg0.get(0);
 
                 if (n1.isObject() && n1.getObject().size() > 0) {
                     return ctx.newNode(n1.getObject().values());

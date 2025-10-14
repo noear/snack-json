@@ -29,15 +29,19 @@ import java.util.List;
  * @author noear 2025/10/12 created
  * @since 4.0
  */
-public class ConcatFunction extends AbstractFunction implements Function {
+public class ConcatFunction implements Function {
     @Override
-    public ONode apply(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
-        currentNodes = getNodeList(ctx, currentNodes, argNodes); //arg0
-        ONode arg1 = getArgAt(ctx, argNodes, 1);
+    public ONode apply(QueryContext ctx, List<ONode> argNodes) {
+        if (argNodes.size() != 2) {
+            throw new JsonPathException("Requires 2 parameters");
+        }
+
+        ONode arg0 = argNodes.get(0);
+        ONode arg1 = argNodes.get(1);
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            if (currentNodes.size() > 0) {
-                for (ONode n1 : currentNodes) {
+            if (arg0.size() > 0) {
+                for (ONode n1 : arg0.getArray()) {
                     if (n1.isString()) {
                         n1.setValue(n1.toString().concat(arg1.toString()));
                     } else {
@@ -47,16 +51,16 @@ public class ConcatFunction extends AbstractFunction implements Function {
             }
 
             if (ctx.isMultiple()) {
-                return ctx.newNode(currentNodes);
+                return arg0;
             } else {
-                return currentNodes.get(0);
+                return arg0.get(0);
             }
         } else {
-            if (currentNodes.size() > 1) {
-                currentNodes.add(arg1);
-                return ctx.newNode(currentNodes);
+            if (arg0.size() > 1) {
+                arg0.add(arg1);
+                return arg0;
             } else {
-                ONode n1 = currentNodes.get(0);
+                ONode n1 = arg0.get(0);
                 if (n1.isArray()) {
                     return n1.add(arg1);
                 } else if (n1.isString()) {

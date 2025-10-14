@@ -25,9 +25,9 @@ public class EmptyOperator implements Operator {
         }
 
         if (rightNode.getBoolean()) {
-            return leftNode.isNullOrEmpty();
+            return leftNode.isEmpty();
         } else {
-            return !leftNode.isNullOrEmpty();
+            return !leftNode.isEmpty();
         }
     }
 }

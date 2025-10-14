@@ -31,7 +31,7 @@ import java.time.ZoneId;
 public class LocalDateTimeDecoder implements ObjectDecoder<LocalDateTime> {
     @Override
     public LocalDateTime decode(DecodeContext ctx, ONode node) {
-        if(node.isNullOrEmpty()){
+        if(node.isEmpty()){
             return null;
         }
 
