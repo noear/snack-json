@@ -41,22 +41,20 @@ public class StddevFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-        if (arg0.isEmpty()) {
-            return ctx.newNode();
-        }
+        if (arg0.getArray().size() > 0) {
+            List<Double> doubleList = MathUtil.getDoubleList(ctx, arg0);
 
-        List<Double> doubleList = MathUtil.getDoubleList(ctx, arg0);
+            if(doubleList.size() > 0){
+                Double ref = MathUtil.calculateStdDev(doubleList);
 
-        if (Asserts.isEmpty(doubleList)) {
-            if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
-                return ctx.newNode();
-            } else {
-                throw new JsonPathException("The function is using an invalid array");
+                return ctx.newNode(ref);
             }
         }
 
-        Double ref = MathUtil.calculateStdDev(doubleList);
-
-        return ctx.newNode(ref);
+        if (ctx.hasFeature(Feature.JsonPath_SuppressExceptions)) {
+            return ctx.newNode();
+        } else {
+            throw new JsonPathException("The function is using an invalid array");
+        }
     }
 }
