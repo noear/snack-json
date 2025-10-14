@@ -167,11 +167,7 @@ public class BeanEncoder {
                 Object propertyValue = property.getValue(bean);
 
                 if (propertyValue == null) {
-                    if (opts.hasFeature(Feature.Write_Nulls) == false
-                            && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
-                        continue;
-                    }
-
+                    //分类控制
                     if (property.getTypeWrap().isList()) {
                         if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullListAsEmpty))) {
                             propertyValue = new ArrayList<>();
@@ -195,6 +191,14 @@ public class BeanEncoder {
                             } else {
                                 propertyValue = 0;
                             }
+                        }
+                    }
+
+                    //托底控制
+                    if (propertyValue == null) {
+                        if (opts.hasFeature(Feature.Write_Nulls) == false
+                                && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
+                            continue;
                         }
                     }
                 }
