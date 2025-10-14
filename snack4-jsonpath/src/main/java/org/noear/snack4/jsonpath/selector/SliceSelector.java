@@ -39,8 +39,11 @@ public class SliceSelector implements Selector {
     private Integer endRef;
     private int step;
 
+    private boolean multiple;
+
     public SliceSelector(String expr) {
         this.expr = expr;
+        this.multiple = true;
 
         String[] parts = expr.split(":", 3); //[start:end:step]
         if (parts.length == 1) {
@@ -57,6 +60,12 @@ public class SliceSelector implements Selector {
             endRef = Integer.parseInt(parts[1]);
         }
 
+        if (startRef != null && endRef != null && startRef > 0 && endRef > 0) {
+            if (Math.abs(startRef - endRef) == 1) {
+                multiple = false;
+            }
+        }
+
         this.step = step;
     }
 
@@ -67,7 +76,7 @@ public class SliceSelector implements Selector {
 
     @Override
     public boolean isMultiple() {
-        return true;
+        return multiple;
     }
 
     @Override
