@@ -65,11 +65,11 @@ Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml do
 * 优先使用 无参构造函数 + 字段 编解码（可减少注入而触发动作的风险）
 
 
-| 依赖包                           | 描述                       |  
-|-------------------------------|--------------------------| 
-| `org.noear:snack4`            | 提供 json `dom` 构建与编解码基础支持 |   
-| `org.noear:snack4-jsonpath`   | 提供 `json path` 查询支持      |   
-| `org.noear:snack4-jsonschema` | 提供 `json schema` 校验支持    |  
+| 依赖包                           | 描述                     |  
+|-------------------------------|------------------------| 
+| `org.noear:snack4`            | 提供 `json dom` 构建和编解码支持 |   
+| `org.noear:snack4-jsonpath`   | 提供 `json path` 查询支持    |   
+| `org.noear:snack4-jsonschema` | 提供 `json schema` 校验支持  |  
 
 
 ### JSONPath 语法参考（[IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html))）

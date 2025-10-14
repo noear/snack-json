@@ -65,11 +65,11 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 * Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
 
 
-| dependencies                        | description                                                  |  
-|-------------------------------------|--------------------------------------------------------------| 
-| `org.noear:snack4`                  | Provides basic support for json `dom` construction and codec |   
-| `org.noear:snack4-jsonpath`         | Provides `json path` query support                           |   
-| `org.noear:snack4-jsonschema`       | Provides `json schema` validation support                    |  
+| dependencies                        | description                                |  
+|-------------------------------------|--------------------------------------------| 
+| `org.noear:snack4`                  | Provides `json dom` building and codec support |   
+| `org.noear:snack4-jsonpath`         | Provides `json path` query support         |   
+| `org.noear:snack4-jsonschema`       | Provides `json schema` validation support  |  
 
 
 ### JSONPath syntax reference([IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html)))
