@@ -39,7 +39,6 @@ public class FirstFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-
         if (arg0.getArray().size() > 0) {
             if (ctx.isMultiple()) {
                 if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
