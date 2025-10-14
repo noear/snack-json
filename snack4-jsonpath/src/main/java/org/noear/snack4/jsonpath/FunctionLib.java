@@ -56,9 +56,6 @@ public class FunctionLib {
         register("match", new MatchFunction());
         register("search", new SearchFunction());
         register("value", new ValueFunction());
-
-        // for snack4
-        register("values", new ValuesFunction());
     }
 
     /**
