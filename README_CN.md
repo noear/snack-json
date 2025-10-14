@@ -164,15 +164,17 @@ User user = ONode.deserialize(json, User.class);
 ### 路径树接口
 
 ```java
-ONode o = ONode.ofJson(json).usePaths(); //会为每个子节点，生成 path 属性
-
-ONode rst = o.select("$.data.list[*].mobile");
+//case1
+ONode o = ONode.ofJson(json);
+ONode rst = o.select("$.data.list[*].mobile"); //自动为查询到的节点，生成 path 属性
 List<String> rstPaths = rst.pathList(); //获取结果节点的路径列表
 for(ONode n1 : rst.getArray()) {
-   n1.path(); //当前路径
-   n1.parent(); //父级节点
+    n1.path(); //当前路径
+    n1.parent(); //父级节点
 }
 
+//case2
+ONode o = ONode.ofJson(json).usePaths(); //手动为每个子节点，生成 path 属性
 ONode rst = o.get("data").get("list").get(2);
 rst.path();
 rst.parent();
