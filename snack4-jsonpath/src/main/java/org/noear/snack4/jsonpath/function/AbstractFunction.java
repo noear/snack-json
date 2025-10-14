@@ -28,6 +28,9 @@ import java.util.List;
  * @since 4.0
  */
 public abstract class AbstractFunction implements Function {
+    /**
+     * 获取查询的节点列表（方便同时支持：聚合函数 和 过滤函数 场景）
+     */
     protected List<ONode> getNodeList(QueryContext ctx, List<ONode> currentNodes, List<ONode> argNodes) {
         if (ctx.isInFilter()) {
             if (argNodes.size() < 1) {
@@ -40,6 +43,9 @@ public abstract class AbstractFunction implements Function {
         }
     }
 
+    /**
+     * 获取参数（方便同时支持：聚合函数 和 过滤函数 场景）
+     */
     protected ONode getArgAt(QueryContext ctx, List<ONode> argNodes, int index) {
         if (ctx.isInFilter()) {
             if (argNodes.size() < (index + 1)) {
