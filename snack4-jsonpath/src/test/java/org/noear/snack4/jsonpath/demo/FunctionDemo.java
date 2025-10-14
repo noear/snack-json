@@ -2,7 +2,6 @@ package org.noear.snack4.jsonpath.demo;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.FunctionLib;
-import org.noear.snack4.jsonpath.JsonPathException;
 
 /**
  *
@@ -10,29 +9,37 @@ import org.noear.snack4.jsonpath.JsonPathException;
  */
 public class FunctionDemo {
     public static void main(String[] args) {
-        //定制聚合函数
-        FunctionLib.register("parent", (ctx, argNodes) -> {
-            ONode arg = argNodes.get(0);
-            if (arg.size() == 1) {
-                ONode node = arg.get(0);
-                if (node.parent() == null) {
-                    return node;
-                } else {
-                    return node.parent();
+        //定制 floor 函数
+        FunctionLib.register("floor", (ctx, argNodes) -> {
+            ONode arg0 = argNodes.get(0);
+
+            if (ctx.isDescendant()) {
+                for (ONode n1 : arg0.getArray()) {
+                    if (n1.isNumber()) {
+                        n1.setValue(Math.floor(n1.getDouble()));
+                    }
                 }
+
+                return arg0;
             } else {
-                throw new JsonPathException("Invalid currentNodes");
+                ONode n1 = arg0.get(0);
+
+                if (n1.isNumber()) {
+                    return ctx.newNode(Math.floor(n1.getDouble()));
+                } else {
+                    return ctx.newNode();
+                }
             }
         });
 
-        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2） //out: [1,2]
+        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2） //out: 1.0
         System.out.println(ONode.ofJson("{'a':1,'b':2}")
-                .select("$[?@.parent().a == 1]")
+                .select("$.a.floor()")
                 .toJson());
 
-        //参考 //out: [1]
+        //参考 //out: 2.0
         System.out.println(ONode.ofJson("{'a':1,'b':2}")
-                .select("$[?@ == 1]")
+                .select("$[?floor(@) > 1].first()")
                 .toJson());
     }
 }
