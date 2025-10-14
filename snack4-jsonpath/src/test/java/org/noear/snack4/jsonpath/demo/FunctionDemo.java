@@ -11,7 +11,7 @@ public class FunctionDemo {
     public static void main(String[] args) {
         //定制 floor 函数
         FunctionLib.register("floor", (ctx, argNodes) -> {
-            ONode arg0 = argNodes.get(0);
+            ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
             if (ctx.isDescendant()) {
                 for (ONode n1 : arg0.getArray()) {

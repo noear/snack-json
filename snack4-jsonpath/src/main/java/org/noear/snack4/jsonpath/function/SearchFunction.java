@@ -37,7 +37,7 @@ public class SearchFunction implements Function {
             throw new JsonPathException("Requires 2 parameters");
         }
 
-        ONode arg0 = argNodes.get(0);
+        ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
         ONode arg1 = argNodes.get(1);
 
         if (arg1.isNull()) {

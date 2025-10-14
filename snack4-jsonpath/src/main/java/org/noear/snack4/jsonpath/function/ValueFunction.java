@@ -35,7 +35,7 @@ public class ValueFunction implements Function {
             throw new JsonPathException("Requires 1 parameters");
         }
 
-        ONode arg0 = argNodes.get(0);
+        ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
         if (arg0.size() != 1) {
             throw new JsonPathException("Not a single-value array");

@@ -37,7 +37,7 @@ public class LengthFunction implements Function {
             throw new JsonPathException("Requires 1 parameters");
         }
 
-        ONode arg0 = argNodes.get(0);
+        ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
         if (arg0.isEmpty()) {
             return ctx.newNode();
