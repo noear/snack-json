@@ -21,9 +21,9 @@ import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.JsonProvider;
 import org.noear.snack4.json.JsonProviderWarn;
-import org.noear.snack4.json.JsonType;
+import org.noear.snack4.core.DataType;
 import org.noear.snack4.jsonpath.JsonPathProviderWarn;
-import org.noear.snack4.jsonpath.PathSource;
+import org.noear.snack4.core.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
 
@@ -55,7 +55,7 @@ public final class ONode {
     }
 
     private Object value;
-    private transient JsonType type;
+    private transient DataType type;
     private transient Options options;
 
     public transient PathSource source;
@@ -69,13 +69,13 @@ public final class ONode {
     }
 
     public ONode(Options opts) {
-        this.type = JsonType.Undefined;
+        this.type = DataType.Undefined;
         this.options = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
     public ONode(Options opts, Object value) {
         this.value = value;
-        this.type = JsonType.resolveType(value);
+        this.type = DataType.resolveType(value);
         this.options = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
@@ -88,17 +88,17 @@ public final class ONode {
         return this;
     }
 
-    public JsonType nodeType() {
+    public DataType nodeType() {
         return type;
     }
 
     // Getters and Setters
     public boolean isUndefined() {
-        return type == JsonType.Undefined;
+        return type == DataType.Undefined;
     }
 
     public boolean isNull() {
-        return type == JsonType.Null || isUndefined();
+        return type == DataType.Null || isUndefined();
     }
 
     public boolean isEmpty() {
@@ -109,31 +109,31 @@ public final class ONode {
     }
 
     public boolean isBoolean() {
-        return type == JsonType.Boolean;
+        return type == DataType.Boolean;
     }
 
     public boolean isNumber() {
-        return type == JsonType.Number;
+        return type == DataType.Number;
     }
 
     public boolean isString() {
-        return type == JsonType.String;
+        return type == DataType.String;
     }
 
     public boolean isDate() {
-        return type == JsonType.Date;
+        return type == DataType.Date;
     }
 
     public boolean isArray() {
-        return type == JsonType.Array;
+        return type == DataType.Array;
     }
 
     public boolean isObject() {
-        return type == JsonType.Object;
+        return type == DataType.Object;
     }
 
     public boolean isValue() {
-        return JsonType.isValue(type);
+        return DataType.isValue(type);
     }
 
     public Object getValue() {
@@ -215,7 +215,7 @@ public final class ONode {
     public ONode asObject() {
         if (value == null) {
             value = new LinkedHashMap<String, ONode>();
-            type = JsonType.Object;
+            type = DataType.Object;
         }
 
         return this;
@@ -224,7 +224,7 @@ public final class ONode {
     public ONode asArray() {
         if (value == null) {
             value = new ArrayList<ONode>();
-            type = JsonType.Array;
+            type = DataType.Array;
         }
 
         return this;
@@ -333,7 +333,7 @@ public final class ONode {
 
     public ONode setValue(Object value) {
         this.value = value;
-        this.type = JsonType.resolveValueType(value);
+        this.type = DataType.resolveValueType(value);
         return this;
     }
 
@@ -512,11 +512,11 @@ public final class ONode {
             ((List<?>) value).clear();
         } else {
             this.value = null;
-            this.type = JsonType.Null;
+            this.type = DataType.Null;
         }
     }
 
-    public JsonType getType() {
+    public DataType getType() {
         return type;
     }
 

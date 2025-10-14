@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonschema;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.json.JsonType;
+import org.noear.snack4.core.DataType;
 import org.noear.snack4.jsonschema.rule.EnumRule;
 import org.noear.snack4.jsonschema.rule.TypeRule;
 import org.noear.snack4.jsonschema.rule.ValidationRule;
@@ -335,7 +335,7 @@ public class JsonSchema {
     // 异常处理
     private JsonSchemaException typeMismatch(String expected, ONode actual, PathTracker path) {
         return new JsonSchemaException("Expected type " + expected + " but got " +
-                JsonType.getTypeName(actual.getType()) + " at " + path.currentPath());
+                DataType.getTypeName(actual.getType()) + " at " + path.currentPath());
     }
 
     // 预编译相关实现

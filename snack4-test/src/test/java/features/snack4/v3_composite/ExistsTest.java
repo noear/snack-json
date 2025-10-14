@@ -4,7 +4,7 @@ import demo.snack4._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Feature;
-import org.noear.snack4.json.JsonType;
+import org.noear.snack4.core.DataType;
 
 /**
  * @author noear 2022/9/7 created
@@ -14,15 +14,15 @@ public class ExistsTest {
     public void test1() {
         ONode oNode = new ONode();
         assert oNode.select("$.user").isNull();
-        assert oNode.select("$.user").nodeType() == JsonType.Undefined;
+        assert oNode.select("$.user").nodeType() == DataType.Undefined;
 
         ONode oNode2 = ONode.ofJson("{user:1}");
         assert oNode2.select("$.user").isNull() == false;
-        assert oNode2.select("$.user").nodeType() != JsonType.Null;
+        assert oNode2.select("$.user").nodeType() != DataType.Null;
 
         ONode oNode3 = ONode.ofJson("{user:null}");
         assert oNode3.select("$.user").isNull();
-        assert oNode3.select("$.user").nodeType() == JsonType.Null;
+        assert oNode3.select("$.user").nodeType() == DataType.Null;
     }
 
     @Test

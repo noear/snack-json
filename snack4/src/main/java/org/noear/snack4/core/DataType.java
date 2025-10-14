@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.json;
+package org.noear.snack4.core;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 数据类型
+ *
  * @author noear 2025/3/16 created
  * @since 4.0
  */
-public enum JsonType {
+public enum DataType {
     Undefined,
     Null,
 
@@ -41,7 +43,7 @@ public enum JsonType {
         return getTypeName(this);
     }
 
-    public static String getTypeName(JsonType type) {
+    public static String getTypeName(DataType type) {
         switch (type) {
             case Undefined:
                 return "undefined";
@@ -64,28 +66,28 @@ public enum JsonType {
         }
     }
 
-    public static boolean isValue(JsonType type) {
+    public static boolean isValue(DataType type) {
         return type.ordinal() > Null.ordinal() && type.ordinal() < Array.ordinal();
     }
 
-    public static JsonType resolveType(Object value) {
-        if (value == null) return JsonType.Null;
-        if (value instanceof Boolean) return JsonType.Boolean;
-        if (value instanceof Number) return JsonType.Number;
-        if (value instanceof String) return JsonType.String;
-        if (value instanceof Date) return JsonType.Date;
-        if (value instanceof List) return JsonType.Array;
-        if (value instanceof Map) return JsonType.Object;
+    public static DataType resolveType(Object value) {
+        if (value == null) return DataType.Null;
+        if (value instanceof Boolean) return DataType.Boolean;
+        if (value instanceof Number) return DataType.Number;
+        if (value instanceof String) return DataType.String;
+        if (value instanceof Date) return DataType.Date;
+        if (value instanceof List) return DataType.Array;
+        if (value instanceof Map) return DataType.Object;
 
         throw new IllegalArgumentException("Unsupported type");
     }
 
-    public static JsonType resolveValueType(Object value) {
-        if (value == null) return JsonType.Null;
-        if (value instanceof Boolean) return JsonType.Boolean;
-        if (value instanceof Number) return JsonType.Number;
-        if (value instanceof String) return JsonType.String;
-        if (value instanceof Date) return JsonType.Date;
+    public static DataType resolveValueType(Object value) {
+        if (value == null) return DataType.Null;
+        if (value instanceof Boolean) return DataType.Boolean;
+        if (value instanceof Number) return DataType.Number;
+        if (value instanceof String) return DataType.String;
+        if (value instanceof Date) return DataType.Date;
 
         throw new IllegalArgumentException("Unsupported value type");
     }
