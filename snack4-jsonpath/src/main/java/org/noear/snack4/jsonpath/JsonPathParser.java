@@ -138,7 +138,7 @@ public class JsonPathParser {
         } else if (segment.equals("*")) {
             addSegment(new SelectSegment(segment));
         } else {
-            addSegment(new SelectSegment(segment));
+            addSegment(new SelectSegment("'" + segment + "'"));
         }
     }
 

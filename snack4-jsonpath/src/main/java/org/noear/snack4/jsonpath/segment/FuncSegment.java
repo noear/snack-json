@@ -44,7 +44,7 @@ public class FuncSegment extends AbstractSegment {
 
     @Override
     public String toString() {
-        return description;
+        return "." + description;
     }
 
     @Override
