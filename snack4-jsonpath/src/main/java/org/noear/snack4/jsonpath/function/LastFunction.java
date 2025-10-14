@@ -65,7 +65,7 @@ public class LastFunction implements Function {
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+            throw new JsonPathException("Function attempted to calculate value using empty array");
         } else {
             return ctx.newNode();
         }

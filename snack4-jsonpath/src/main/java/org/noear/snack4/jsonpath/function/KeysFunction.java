@@ -62,7 +62,7 @@ public class KeysFunction implements Function {
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
+            throw new JsonPathException("Function attempted to calculate value using empty object");
         } else {
             return ctx.newNode();
         }

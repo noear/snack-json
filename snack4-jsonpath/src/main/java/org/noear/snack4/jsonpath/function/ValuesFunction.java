@@ -53,7 +53,7 @@ public class ValuesFunction implements Function {
             if(values.size() > 0){
                 return ctx.newNode(values);
             }  else{
-                throw new JsonPathException("Aggregation function attempted to calculate value using empty object");
+                throw new JsonPathException("Function attempted to calculate value using empty object");
             }
         } else {
             if (arg0.size() > 1) {

@@ -54,7 +54,7 @@ public class MinFunction implements Function {
             }
 
             if (Asserts.isEmpty(doubleList)) {
-                throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+                throw new JsonPathException("Function attempted to calculate value using empty array");
             }
         } else {
             doubleList = MathUtil.getDoubleList(arg0.getArray());
@@ -63,7 +63,6 @@ public class MinFunction implements Function {
                 return ctx.newNode();
             }
         }
-
 
         double ref = doubleList.get(0);
         for (double d : doubleList) {

@@ -37,16 +37,14 @@ public class ValueFunction implements Function {
 
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-        if (arg0.size() != 1) {
-            throw new JsonPathException("Not a single-value array");
-        }
+        if (arg0.size() == 1) {
+            ONode n1 = arg0.get(0);
 
-        ONode n1 = arg0.get(0);
-
-        if (n1.isValue()) {
-            return n1;
-        } else if (n1.isArray()) {
-            return n1.get(0);
+            if (n1.isValue()) {
+                return n1;
+            } else if(n1.isArray()) {
+                return n1.get(0);
+            }
         }
 
         return ctx.newNode();

@@ -22,7 +22,6 @@ import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,7 +62,7 @@ public class IndexFunction implements Function {
         }
 
         if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
-            throw new JsonPathException("Aggregation function attempted to calculate value using empty array");
+            throw new JsonPathException("Function attempted to calculate value using empty array");
         } else {
             return ctx.newNode();
         }
