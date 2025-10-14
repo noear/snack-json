@@ -20,6 +20,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
+import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -198,7 +199,18 @@ public class BeanEncoder {
                     }
                 }
 
-                ONode propertyNode = encodeValueToNode(propertyValue, property.getAttr());
+                ONode propertyNode = null;
+
+                if (propertyValue instanceof Date) {
+                    if (Asserts.isNotEmpty(property.getAttr().getFormat())) {
+                        String dateStr = property.getAttr().formatDate((Date) propertyValue);
+                        propertyNode = new ONode(opts, dateStr);
+                    }
+                }
+
+                if (propertyNode == null) {
+                    propertyNode = encodeValueToNode(propertyValue, property.getAttr());
+                }
 
                 if (propertyNode != null) {
                     if (property.getAttr().isFlat()) {

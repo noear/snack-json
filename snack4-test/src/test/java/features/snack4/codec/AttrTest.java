@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.EncodeContext;
-import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
 
@@ -22,11 +20,11 @@ public class AttrTest {
     @Test
     public void case1() {
         Options options = Options.of().addEncoder(Date.class, (ctx, value, target) -> {
-            if (ctx.getAttr() != null) {
-                if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                    return target.setValue(DateUtil.format(value, ctx.getAttr().getFormat()));
-                }
-            }
+//            if (ctx.getAttr() != null) {
+//                if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
+//                    return target.setValue(ctx.getAttr().formatDate(value));
+//                }
+//            }
 
             return target.setValue(value.getTime());
         });
