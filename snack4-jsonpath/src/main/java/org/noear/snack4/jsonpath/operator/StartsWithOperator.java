@@ -38,6 +38,7 @@ public class StartsWithOperator implements Operator {
 
             return leftNode.getString().startsWith(rightNode.getString());
         }
+
         return false;
     }
 }
