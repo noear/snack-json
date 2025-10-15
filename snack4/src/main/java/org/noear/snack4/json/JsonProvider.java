@@ -15,7 +15,10 @@
  */
 package org.noear.snack4.json;
 
-import org.noear.snack4.TextProvider;
+import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
+
+import java.io.*;
 
 /**
  * Json 能力提供者
@@ -24,6 +27,26 @@ import org.noear.snack4.TextProvider;
  * @since 4.0
  */
 @FunctionalInterface
-public interface JsonProvider extends TextProvider {
+public interface JsonProvider {
+    default ONode read(String text, Options opts) throws IOException {
+        return read(new StringReader(text), opts);
+    }
 
+    default String write(ONode node, Options opts) throws IOException {
+        StringWriter writer = new StringWriter();
+        write(node, opts, writer);
+        return writer.toString();
+    }
+
+    ///
+
+    default ONode read(Reader reader, Options opts) throws IOException {
+        throw new UnsupportedOperationException(warnHint());
+    }
+
+    default void write(ONode node, Options opts, Writer writer) throws IOException {
+        throw new UnsupportedOperationException(warnHint());
+    }
+
+    String warnHint();
 }
