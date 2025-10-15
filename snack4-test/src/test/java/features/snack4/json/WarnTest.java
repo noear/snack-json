@@ -1,8 +1,11 @@
-package features.snack4.jsonpath;
+package features.snack4.json;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.json.JsonProvider;
 import org.noear.snack4.jsonpath.JsonPathProvider;
+
+import java.io.StringReader;
 
 /**
  *
@@ -12,18 +15,22 @@ import org.noear.snack4.jsonpath.JsonPathProvider;
 public class WarnTest {
     @Test
     public void case1() {
-        JsonPathProvider jsonPathProvider = () -> "";
+        JsonProvider jsonProvider = () -> "";
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            jsonPathProvider.select(null, null);
+            jsonProvider.read("", null);
         });
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            jsonPathProvider.create(null, null);
+            jsonProvider.read(new StringReader(""), null);
         });
 
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            jsonPathProvider.delete(null, null);
+            jsonProvider.write(null, null);
+        });
+
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            jsonProvider.write(null, null, null);
         });
     }
 }

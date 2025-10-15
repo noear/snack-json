@@ -22,4 +22,9 @@ public class JsonProviderImpl implements JsonProvider {
     public void write(ONode node, Options opts, Writer writer) throws IOException {
         JsonWriter.write(node, opts, writer);
     }
+
+    @Override
+    public String warnHint() {
+        return null;
+    }
 }

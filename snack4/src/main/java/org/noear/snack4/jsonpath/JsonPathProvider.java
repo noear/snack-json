@@ -23,10 +23,19 @@ import org.noear.snack4.ONode;
  * @author noear 2025/10/3 created
  * @since 4.0
  */
+@FunctionalInterface
 public interface JsonPathProvider {
-    ONode select(ONode root, String path);
+    default ONode select(ONode root, String path) {
+        throw new UnsupportedOperationException(warnHint());
+    }
 
-    ONode create(ONode root, String path);
+    default ONode create(ONode root, String path) {
+        throw new UnsupportedOperationException(warnHint());
+    }
 
-    void delete(ONode root, String path);
+    default void delete(ONode root, String path) {
+        throw new UnsupportedOperationException(warnHint());
+    }
+
+    String warnHint();
 }

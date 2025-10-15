@@ -20,9 +20,7 @@ import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.JsonProvider;
-import org.noear.snack4.json.JsonProviderWarn;
 import org.noear.snack4.core.DataType;
-import org.noear.snack4.jsonpath.JsonPathProviderWarn;
 import org.noear.snack4.core.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
@@ -39,8 +37,8 @@ import java.util.function.Consumer;
  * @since 4.0
  */
 public final class ONode {
-    private static JsonProvider jsonProvider = new JsonProviderWarn();
-    private static JsonPathProvider jsonPathProvider = new JsonPathProviderWarn();
+    private static JsonProvider jsonProvider = () -> "Requires 'snack4-json' dependency";
+    private static JsonPathProvider jsonPathProvider = () -> "Requires 'snack4-jsonpath' dependency";
 
     static {
         ServiceLoader<JsonProvider> serviceLoader1 = ServiceLoader.load(JsonProvider.class);

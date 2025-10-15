@@ -27,6 +27,7 @@ public class JsonPathProviderImpl implements JsonPathProvider {
     /**
      * 根据 jsonpath 查询
      */
+    @Override
     public ONode select(ONode root, String path) {
         return JsonPath.select(root, path);
     }
@@ -34,6 +35,7 @@ public class JsonPathProviderImpl implements JsonPathProvider {
     /**
      * 根据 jsonpath 生成
      */
+    @Override
     public ONode create(ONode root, String path) {
         return JsonPath.create(root, path);
     }
@@ -41,7 +43,13 @@ public class JsonPathProviderImpl implements JsonPathProvider {
     /**
      * 根据 jsonpath 删除
      */
+    @Override
     public void delete(ONode root, String path) {
         JsonPath.delete(root, path);
+    }
+
+    @Override
+    public String warnHint() {
+        return null;
     }
 }
