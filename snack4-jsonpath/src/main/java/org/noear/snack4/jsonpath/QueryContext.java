@@ -34,17 +34,17 @@ public interface QueryContext {
     boolean hasFeature(Feature feature);
 
     /**
-     * 是否为多输出
+     * 是否多输出（前面执行过 `..x` 或 `*` 或 `[?]`）
      */
     boolean isMultiple();
 
     /**
-     * 是否为已展开（前面执行过 `..*` 或 `*`）
+     * 是否已展开（前面执行过 `..x` 或 `*`）
      */
     boolean isExpanded();
 
     /**
-     * 是否有后代选择
+     * 是否有后代选择（前面执行过 `..x`）
      */
     boolean isDescendant();
 

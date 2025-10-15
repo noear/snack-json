@@ -18,7 +18,7 @@ public interface Selector {
     boolean isMultiple();
 
     /**
-     * 是否为展开
+     * 是否已展开（前面执行过 `..*` 或 `*`）
      */
     boolean isExpanded();
 

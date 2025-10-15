@@ -51,7 +51,7 @@ public class ConstrWrap {
             paramAry.add(paramWrap);
         }
 
-        security = (constr.getParameterCount() == 0 || constrAnno != null);
+        security = (constr.getParameterCount() == 0 || constrAnno != null || ClassUtil.isRecordClass(owner.getType()));
     }
 
     /**
