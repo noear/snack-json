@@ -16,8 +16,8 @@
 package org.noear.snack4.yaml;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
-import org.noear.snack4.node.SnackException;
+import org.noear.snack4.Options;
+import org.noear.snack4.SnackException;
 
 import java.io.IOException;
 import java.io.Reader;

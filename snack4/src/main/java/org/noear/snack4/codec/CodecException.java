@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.snack4.node.SnackException;
+import org.noear.snack4.SnackException;
 
 /**
  * 编解码异常

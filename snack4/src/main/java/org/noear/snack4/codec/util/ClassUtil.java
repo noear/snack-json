@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.codec.util;
 
-import org.noear.snack4.node.SnackException;
+import org.noear.snack4.SnackException;
 
 import java.lang.reflect.Constructor;
 

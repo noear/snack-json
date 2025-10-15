@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.node;
-
-import org.noear.snack4.ONode;
+package org.noear.snack4;
 
 import java.io.*;
 

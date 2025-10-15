@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.node;
+package org.noear.snack4;
 
 import java.util.Date;
 import java.util.List;

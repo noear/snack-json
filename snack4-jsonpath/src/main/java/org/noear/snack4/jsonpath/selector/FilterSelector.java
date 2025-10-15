@@ -15,9 +15,9 @@
  */
 package org.noear.snack4.jsonpath.selector;
 
-import org.noear.snack4.node.Feature;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.PathSource;
+import org.noear.snack4.PathSource;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 import org.noear.snack4.jsonpath.filter.Expression;

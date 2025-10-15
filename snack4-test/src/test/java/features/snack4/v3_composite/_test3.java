@@ -4,7 +4,7 @@ import demo.snack4._models.PanOcrModel;
 import demo.snack4._models.ShanYunResModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.node.Feature;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.TypeRef;
 

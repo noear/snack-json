@@ -1,7 +1,7 @@
 package demo.snack4._models;
 
 
-import org.noear.snack4.node.DataType;
+import org.noear.snack4.DataType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

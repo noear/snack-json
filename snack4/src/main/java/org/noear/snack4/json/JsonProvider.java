@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.json;
 
-import org.noear.snack4.node.TextProvider;
+import org.noear.snack4.TextProvider;
 
 /**
  * Json 能力提供者

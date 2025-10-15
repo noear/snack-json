@@ -4,8 +4,8 @@ import demo.snack4._models.UserModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
-import org.noear.snack4.node.SnackException;
+import org.noear.snack4.Options;
+import org.noear.snack4.SnackException;
 import org.noear.snack4.codec.ObjectPatternCreator;
 
 import java.util.*;

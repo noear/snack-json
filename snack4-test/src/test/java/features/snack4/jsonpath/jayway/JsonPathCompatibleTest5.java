@@ -6,9 +6,9 @@ import features.snack4.jsonpath.manual.JsonPathTest3;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.node.Feature;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
+import org.noear.snack4.Options;
 
 /**
  * @author noear 2023/11/3 created

@@ -15,9 +15,9 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.snack4.node.Feature;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
+import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.util.Asserts;

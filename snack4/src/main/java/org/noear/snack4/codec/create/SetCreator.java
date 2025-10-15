@@ -16,7 +16,7 @@
 package org.noear.snack4.codec.create;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
+import org.noear.snack4.Options;
 import org.noear.snack4.codec.ObjectCreator;
 
 import java.util.HashSet;

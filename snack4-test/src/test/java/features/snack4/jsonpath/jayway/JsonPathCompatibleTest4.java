@@ -3,9 +3,9 @@ package features.snack4.jsonpath.jayway;
 import com.jayway.jsonpath.JsonPath;
 import features.snack4.v3_composite.JsonPathTest3;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.node.Feature;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.node.Options;
+import org.noear.snack4.Options;
 
 import java.util.ArrayList;
 import java.util.List;
