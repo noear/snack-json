@@ -19,7 +19,8 @@ import org.noear.snack4.codec.BeanDecoder;
 import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.json.JsonProvider;
+import org.noear.snack4.json.JsonReader;
+import org.noear.snack4.json.JsonWriter;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.util.Asserts;
@@ -38,15 +39,9 @@ import java.util.function.Consumer;
  * @since 4.0
  */
 public final class ONode {
-    private static JsonProvider jsonProvider = () -> "Requires 'snack4-json' dependency";
     private static JsonPathProvider jsonPathProvider = () -> "Requires 'snack4-jsonpath' dependency";
 
     static {
-        ServiceLoader<JsonProvider> jsonSL = ServiceLoader.load(JsonProvider.class);
-        for (JsonProvider provider : jsonSL) {
-            jsonProvider = provider;
-        }
-
         ServiceLoader<JsonPathProvider> jsonPathSL = ServiceLoader.load(JsonPathProvider.class);
         for (JsonPathProvider provider : jsonPathSL) {
             jsonPathProvider = provider;
@@ -598,7 +593,7 @@ public final class ONode {
 
     public static ONode ofJson(String json, Options opts) {
         try {
-            return jsonProvider.read(json, opts);
+            return JsonReader.read(json, opts);
         } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -608,7 +603,7 @@ public final class ONode {
 
     public static ONode ofJson(Reader reader, Options opts) {
         try {
-            return jsonProvider.read(reader, opts);
+            return JsonReader.read(reader, opts);
         } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -638,7 +633,7 @@ public final class ONode {
 
     public String toJson() {
         try {
-            return jsonProvider.write(this, options);
+            return JsonWriter.write(this, options);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -648,7 +643,7 @@ public final class ONode {
 
     public void toJson(Writer writer) {
         try {
-            jsonProvider.write(this, options, writer);
+            JsonWriter.write(this, options, writer);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {
