@@ -187,7 +187,7 @@ public class FunctionTest extends AbsRFC9535 {
         JsonPath jsonPath = JsonPath.parse(expr);
 
         List<ONode> actual = jsonPath.select(ofJson(json)).getNodeList();
-        System.out.println(ONode.serialize(actual));
+        System.out.println(ONode.ofBean(actual).toJson());
 
         if (expected != actual.size()) {
             System.out.println(json);

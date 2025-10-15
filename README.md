@@ -157,7 +157,7 @@ ONode.ofJson("{}").toBean(User.class);
 ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 
 //快捷方式
-String json = ONode.serialize(user);
+String json = ONode.ofBean(user).toJson();
 User user = ONode.ofJson(json).toBean(User.class);
 ```
 

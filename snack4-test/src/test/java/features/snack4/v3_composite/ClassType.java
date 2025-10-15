@@ -17,7 +17,7 @@ public class ClassType {
         c.typeA = new TypeAImpl();
         c.typeB = new TypeBImpl();
 
-        String rst = ONode.serialize(c, Feature.Write_ClassName);
+        String rst = ONode.ofBean(c, Feature.Write_ClassName).toJson();
         System.out.println(rst);
 
         assert "{\"@type\":\"demo.snack4._model5.TypeC\",\"typeA\":{\"@type\":\"demo.snack4._model5.TypeAImpl\"},\"typeB\":{\"@type\":\"demo.snack4._model5.TypeBImpl\"}}".equals(rst);

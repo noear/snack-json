@@ -22,7 +22,7 @@ public class NameTest {
         user.bookname = "noear";
         user.note = "test";
 
-        String json = ONode.serialize(user);
+        String json = ONode.ofBean(user).toJson();
         System.out.println(json);
 
         assert json.contains("name");
@@ -55,7 +55,7 @@ public class NameTest {
 
         vm.list.add(user);
 
-        String json = ONode.serialize(vm);
+        String json = ONode.ofBean(vm).toJson();
         System.out.println(json);
 
         assert json.contains("name");
@@ -73,7 +73,7 @@ public class NameTest {
         Map<String, Object> data = new HashMap<>();
         data.put("c:\\", "c:\\");
 
-        String json = ONode.serialize(data, options);
+        String json = ONode.ofBean(data, options).toJson();
         System.out.println(json);
 
         String json2 = ONode.ofJson(json).toJson();

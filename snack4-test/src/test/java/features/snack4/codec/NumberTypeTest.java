@@ -26,7 +26,7 @@ public class NumberTypeTest {
         data.put("d", 4D);
 
         //序列化
-        String json = ONode.serialize(data, options);
+        String json = ONode.ofBean(data, options).toJson();
         System.out.println(json); //{"a":1,"b":"2","c":3.0,"d":"4.0"} //b 和 d 变成字符串了
         assert json.equals("{\"a\":1,\"b\":\"2\",\"c\":3.0,\"d\":\"4.0\"}");
 
@@ -50,7 +50,7 @@ public class NumberTypeTest {
         data.put("d", 4D);
 
         //序列化
-        String json = ONode.serialize(data, options);
+        String json = ONode.ofBean(data, options).toJson();
         System.out.println(json); //{"a":1,"b":"2","c":3.0,"d":4.0} //b  变成字符串了
         assert json.equals("{\"a\":1,\"b\":\"2\",\"c\":3.0,\"d\":4.0}");
     }

@@ -166,8 +166,8 @@ public class JsonPathCompatibleTest5 {
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
-        System.out.println(ONode.serialize(tmp2));
+        System.out.println(ONode.ofBean(tmp2).toJson());
 
-        assert tmp.toJson().equals(ONode.serialize(tmp2));
+        assert tmp.toJson().equals(ONode.ofBean(tmp2).toJson());
     }
 }

@@ -30,7 +30,7 @@ public class ComplicatedTest {
         list2.add(map2);
 
         //开始序列化
-        String json = ONode.serialize(list2, Feature.Write_ClassName);
+        String json = ONode.ofBean(list2, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         //开始反序列化
@@ -56,7 +56,7 @@ public class ComplicatedTest {
 
 
         //开始序列化
-        String json = ONode.serialize(map2, Feature.Write_ClassName);
+        String json = ONode.ofBean(map2, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         //开始反序列化
@@ -80,7 +80,7 @@ public class ComplicatedTest {
 
 
         //开始序列化
-        String json = ONode.serialize(map2, Feature.Write_ClassName);
+        String json = ONode.ofBean(map2, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         //开始反序列化

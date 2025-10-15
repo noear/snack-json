@@ -19,7 +19,7 @@ public class TimeTest {
         timeModel.date = LocalDate.now();
         timeModel.date2 = new Date();
 
-        String json = ONode.serialize(timeModel);
+        String json = ONode.ofBean(timeModel).toJson();
         System.out.println(json);
     }
 }

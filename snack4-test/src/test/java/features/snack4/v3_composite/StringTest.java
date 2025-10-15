@@ -41,7 +41,7 @@ public class StringTest {
 
     @Test
     public void test2() {
-        String tmp = ONode.serialize(UUID.randomUUID());
+        String tmp = ONode.ofBean(UUID.randomUUID()).toJson();
         assert tmp.contains("-");
         System.out.println(tmp);
     }

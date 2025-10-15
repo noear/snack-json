@@ -22,7 +22,7 @@ public class AttrTest3 {
         // 测试 @ONodeAttr.format 仍有有效
         LocalDateTime dateTime = LocalDateTime.parse("2025-08-08T12:34:01");
         AnnoTimeObject t = new AnnoTimeObject(dateTime);
-        String json = ONode.serialize(t, Feature.Write_ClassName);
+        String json = ONode.ofBean(t, Feature.Write_ClassName).toJson();
 
         Assertions.assertTrue(json.contains("\"2025-08-08 12:34:01\""));
         Assertions.assertTrue(json.contains("\"2025/08/08\""));

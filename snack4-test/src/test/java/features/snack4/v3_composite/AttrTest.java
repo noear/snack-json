@@ -19,7 +19,7 @@ public class AttrTest {
         user.name = "noear";
         user.note  ="test";
 
-        String json= ONode.serialize(user);
+        String json= ONode.ofBean(user).toJson();
 
         System.out.println(json);
 
@@ -53,7 +53,7 @@ public class AttrTest {
         UserModel2 user =  new UserModel2();
         user.date = new Date();
 
-        String json = ONode.serialize(user);
+        String json = ONode.ofBean(user).toJson();
         System.out.println(json);
 
         assert json.contains("date");

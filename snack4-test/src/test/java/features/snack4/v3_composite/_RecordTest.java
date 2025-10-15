@@ -13,14 +13,14 @@ public class _RecordTest {
     public void test1() {
         MyRecord tmp = new MyRecord("noear", 12);
 
-        String json = ONode.serialize(tmp);
+        String json = ONode.ofBean(tmp).toJson();
         System.out.println(json);
 
         MyRecord tmp2 = ONode.ofJson(json).toBean(MyRecord.class);
 
         assert tmp.username().equals(tmp2.username());
 
-        System.out.println(ONode.serialize(tmp2));
+        System.out.println(ONode.ofBean(tmp2).toJson());
     }
 
     //for jdk14+

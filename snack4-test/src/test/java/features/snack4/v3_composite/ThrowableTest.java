@@ -18,7 +18,7 @@ public class ThrowableTest {
         Throwable err = (Throwable)test01_exc();
         err.printStackTrace();
 
-        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
         System.out.println(tmp_json);
 
         Throwable err2 = ONode.ofJson(tmp_json).toBean( Throwable.class);
@@ -31,7 +31,7 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp);
         err.printStackTrace();
 
-        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
         System.out.println(tmp_json);
 
         Throwable err2 = ONode.ofJson(tmp_json).toBean(Throwable.class);
@@ -45,7 +45,7 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp2);
         err.printStackTrace();
 
-        String tmp_json = ONode.serialize(err, Feature.Write_ClassName);
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
         System.out.println(tmp_json);
 
         Throwable err2 = ONode.ofJson(tmp_json).toBean(Throwable.class);

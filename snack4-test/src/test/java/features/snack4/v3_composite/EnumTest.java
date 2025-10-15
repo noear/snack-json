@@ -111,10 +111,10 @@ public class EnumTest {
         String s3 = "\"select\"";
         String s4 = "\"switcher\"";
 
-        String type1 = ONode.serialize(ConfigControlType.input, Feature.Write_EnumUsingName);
-        String type2 = ONode.serialize(ConfigControlType.number, Feature.Write_EnumUsingName);
-        String type3 = ONode.serialize(ConfigControlType.select, Feature.Write_EnumUsingName);
-        String type4 = ONode.serialize(ConfigControlType.switcher, Feature.Write_EnumUsingName);
+        String type1 = ONode.ofBean(ConfigControlType.input, Feature.Write_EnumUsingName).toJson();
+        String type2 = ONode.ofBean(ConfigControlType.number, Feature.Write_EnumUsingName).toJson();
+        String type3 = ONode.ofBean(ConfigControlType.select, Feature.Write_EnumUsingName).toJson();
+        String type4 = ONode.ofBean(ConfigControlType.switcher, Feature.Write_EnumUsingName).toJson();
 
         System.out.println(type1);
         System.out.println(type2);

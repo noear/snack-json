@@ -85,7 +85,7 @@ public class DataTest {
 //
 //        new ObjectFromer().handle(context);
 
-        String json = ONode.serialize(group, Feature.Write_ClassName);
+        String json = ONode.ofBean(group, Feature.Write_ClassName).toJson();
 
         System.out.println(json);//context.node.toJson());
 

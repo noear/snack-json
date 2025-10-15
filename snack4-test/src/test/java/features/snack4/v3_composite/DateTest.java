@@ -45,7 +45,7 @@ public class DateTest {
         DateModel dateModel0 = ONode.ofJson(json).toBean(DateModel.class);
         DateModel2 dateModel = ONode.ofJson(json).toBean(DateModel2.class);
 
-        String json2 = ONode.serialize(dateModel);
+        String json2 = ONode.ofBean(dateModel).toJson();
         System.out.println(json2);
 
         DateModel2 dateModel2 = ONode.ofJson(json2).toBean(DateModel2.class);
@@ -72,7 +72,7 @@ public class DateTest {
         DateModel dateModel0 = ONode.ofJson(json).toBean(DateModel.class);
         DateModel2 dateModel = ONode.ofJson(json).toBean(DateModel2.class);
 
-        String json2 = ONode.serialize(dateModel);
+        String json2 = ONode.ofBean(dateModel).toJson();
         System.out.println(json2);
 
         DateModel2 dateModel2 = ONode.ofJson(json2).toBean(DateModel2.class);
@@ -89,7 +89,7 @@ public class DateTest {
         dateModel3.date3 = dateModel3.date1;
 
 
-        String json = ONode.serialize(dateModel3);
+        String json = ONode.ofBean(dateModel3).toJson();
 
         System.out.println(json);
 
@@ -133,7 +133,7 @@ public class DateTest {
         options.addEncoder(Date.class, (ctx, value, target) -> target.setValue((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
         options.addEncoder(LocalDateTime.class, (ctx, value, target) -> target.setValue((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
         DemoEntity rxPacsOrder = ONode.ofJson(json, options).toBean(DemoEntity.class);
-        String jsonText = ONode.serialize(rxPacsOrder);
+        String jsonText = ONode.ofBean(rxPacsOrder).toJson();
         System.out.println("1 snack添加编码器" + jsonText);
 
         assert "{\"patientName\":\"乔宪同\",\"studyDatetime\":1753229553000,\"sqDatetime\":1753229454093,\"reportDatetime\":1753229731000,\"shDatetime\":1753229740000}".equals(jsonText);

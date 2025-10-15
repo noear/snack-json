@@ -31,7 +31,7 @@ public class AttrTest {
 
         CustomDateDo dateDo = new CustomDateDo();
 
-        String json = ONode.serialize(dateDo, options);
+        String json = ONode.ofBean(dateDo, options).toJson();
         System.out.println(json);
         assert "{\"date\":1760453997855,\"date2\":\"2025-10-14\"}".equals(json);
     }

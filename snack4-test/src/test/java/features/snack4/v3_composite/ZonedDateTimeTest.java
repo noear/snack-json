@@ -37,6 +37,6 @@ public class ZonedDateTimeTest {
         ZonedDateTimeModel data = new ZonedDateTimeModel();
         data.date = ZonedDateTime.now();
 
-        ONode.serialize(data, Feature.Write_ClassName); //无异常就好
+        ONode.ofBean(data, Feature.Write_ClassName).toJson(); //无异常就好
     }
 }

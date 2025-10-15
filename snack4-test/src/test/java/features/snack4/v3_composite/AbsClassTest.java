@@ -19,7 +19,7 @@ public class AbsClassTest {
             this.note  ="test";
         }};
 
-        String json= ONode.serialize(data);
+        String json= ONode.ofBean(data).toJson();
 
         System.out.println(json);
 
@@ -35,7 +35,7 @@ public class AbsClassTest {
             setLabel("test");
         }};
 
-        String json= ONode.serialize(data);
+        String json= ONode.ofBean(data).toJson();
 
         System.out.println(json);
 
@@ -58,7 +58,7 @@ public class AbsClassTest {
             setChildren(Arrays.asList(node1));
         }};
 
-        String json= ONode.serialize(data);
+        String json= ONode.ofBean(data).toJson();
 
         System.out.println(json);
 

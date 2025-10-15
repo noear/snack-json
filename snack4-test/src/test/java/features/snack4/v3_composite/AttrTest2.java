@@ -18,7 +18,7 @@ public class AttrTest2 {
         user.name = "noear";
         user.note = "test";
 
-        String json = ONode.serialize(user);
+        String json = ONode.ofBean(user).toJson();
 
         System.out.println(json);
 
@@ -46,7 +46,7 @@ public class AttrTest2 {
         //配置 Options 实例，添加可序列化null
         Options options = Options.of();
 
-        String json = ONode.serialize(user, options);
+        String json = ONode.ofBean(user, options).toJson();
 
         System.out.println(json);
 
@@ -76,7 +76,7 @@ public class AttrTest2 {
         attrModel.traceId=2;
         attrModel.name = "noear";
 
-        String json = ONode.serialize(attrModel);
+        String json = ONode.ofBean(attrModel).toJson();
 
         System.out.println(json);
 

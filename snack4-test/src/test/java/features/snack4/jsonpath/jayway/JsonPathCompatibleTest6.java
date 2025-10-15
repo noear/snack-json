@@ -18,7 +18,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -32,7 +32,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -46,7 +46,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -60,7 +60,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -74,7 +74,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -88,7 +88,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -102,7 +102,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -116,7 +116,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -130,7 +130,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -144,7 +144,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -158,7 +158,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -172,7 +172,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -187,7 +187,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();
@@ -203,7 +203,7 @@ public class JsonPathCompatibleTest6 {
         System.out.println("org.noear.snack: " + json1);
 
         Object documentContext = JsonPath.read(test, jsonPath);
-        String json2 = ONode.serialize(documentContext);
+        String json2 = ONode.ofBean(documentContext).toJson();
         System.out.println("com.jayway.jsonpath: " + json2);
 
         assert json1.length() == json2.length();

@@ -30,7 +30,7 @@ public class TemporaryClassTest {
             userServices.add(tmp);
         });
 
-        String json = ONode.serialize(userServices, Feature.Write_ClassName);
+        String json = ONode.ofBean(userServices, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         //临时类会自动转换为父类，并处理成功
@@ -56,7 +56,7 @@ public class TemporaryClassTest {
             userServices.add(tmp);
         });
 
-        String json = ONode.serialize(userServices, Feature.Write_ClassName);
+        String json = ONode.ofBean(userServices, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         Object obj = ONode.ofJson(json);

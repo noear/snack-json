@@ -15,19 +15,19 @@ public class SerializationTest {
 
     @Test
     public void test0() throws Exception {
-        String temp = ONode.serialize("aaa");
+        String temp = ONode.ofBean("aaa").toJson();
         assert "\"aaa\"".equals(temp);
 
-        temp = ONode.serialize(12);
+        temp = ONode.ofBean(12).toJson();
         assert "12".equals(temp);
 
-        temp = ONode.serialize(true);
+        temp = ONode.ofBean(true).toJson();
         assert "true".equals(temp);
 
-        temp = ONode.serialize(null);
+        temp = ONode.ofBean(null).toJson();
         assert "null".equals(temp);
 
-        temp = ONode.serialize(new Date());
+        temp = ONode.ofBean(new Date()).toJson();
         assert "null".equals(temp) == false;
 
 
@@ -46,7 +46,7 @@ public class SerializationTest {
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            String json = ONode.serialize(ex, Feature.Write_ClassName);
+            String json = ONode.ofBean(ex, Feature.Write_ClassName).toJson();
 
             System.out.println(json);
 
@@ -91,7 +91,7 @@ public class SerializationTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.serialize(group, Feature.Write_ClassName);
+        String json = ONode.ofBean(group, Feature.Write_ClassName).toJson();
         System.out.println(json);
         UserGroupModel group2 = ONode.ofJson(json, Feature.Read_AutoType).toBean(UserGroupModel.class);
 
@@ -131,7 +131,7 @@ public class SerializationTest {
             group.ids[i] = i;
         }
 
-        String json = ONode.serialize(group);//产生的json，没有@type
+        String json = ONode.ofBean(group).toJson();//产生的json，没有@type
         System.out.println(json);
         UserGroupModel group2 = ONode.ofJson(json).toBean(UserGroupModel.class);
 
@@ -167,7 +167,7 @@ public class SerializationTest {
         obj.put("list", list);
 
 
-        String json = ONode.serialize(obj, Feature.Write_ClassName);
+        String json = ONode.ofBean(obj, Feature.Write_ClassName).toJson();
         System.out.println(json);
         Map<String, Object> obj2 = ONode.ofJson(json, Feature.Read_AutoType).toBean(LinkedHashMap.class);
         assert obj2 instanceof LinkedHashMap;
@@ -195,7 +195,7 @@ public class SerializationTest {
         order.order_num = "ddddd";
 
 
-        String json = ONode.serialize(order, Feature.Write_ClassName);
+        String json = ONode.ofBean(order, Feature.Write_ClassName).toJson();
         System.out.println(json);
         OrderModel order2 = ONode.ofJson(json).toBean(OrderModel.class);
         Object order22 = ONode.ofJson(json).toBean();
@@ -209,7 +209,7 @@ public class SerializationTest {
     public void test5() throws Exception {
         CModel obj = new CModel();
 
-        String json = ONode.serialize(obj, Feature.Write_ClassName);
+        String json = ONode.ofBean(obj, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         CModel obj2 = ONode.ofJson(json).toBean(CModel.class);
@@ -222,7 +222,7 @@ public class SerializationTest {
         CModel obj = new CModel();
         obj.init();
 
-        String json = ONode.serialize(obj,  Feature.Write_ClassName);
+        String json = ONode.ofBean(obj,  Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         CModel obj2 = ONode.ofJson(json).toBean(CModel.class);
@@ -235,7 +235,7 @@ public class SerializationTest {
         CModel obj = new CModel();
         obj.build();
 
-        String json = ONode.serialize(obj, Feature.Write_ClassName);
+        String json = ONode.ofBean(obj, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         CModel obj2 = ONode.ofJson(json).toBean(CModel.class);
@@ -261,13 +261,13 @@ public class SerializationTest {
         System.out.println(rst);
         assert rst != null;
 
-        String json2 = ONode.serialize(rst);
+        String json2 = ONode.ofBean(rst).toJson();
         assert json2 != null;
     }
 
     @Test
     public void test8() {
-        String json = ONode.serialize("好人");
+        String json = ONode.ofBean("好人").toJson();
         System.out.println(json);
         String str = ONode.ofJson(json).toBean(String.class);
         System.out.println(str);
@@ -287,7 +287,7 @@ public class SerializationTest {
 
     @Test
     public void test9() {
-        String json = ONode.serialize(new BigDecimal("0.1"),  Feature.Write_ClassName);
+        String json = ONode.ofBean(new BigDecimal("0.1"),  Feature.Write_ClassName).toJson();
         System.out.println(json);
     }
 }

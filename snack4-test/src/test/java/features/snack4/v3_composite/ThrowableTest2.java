@@ -21,7 +21,7 @@ public class ThrowableTest2 {
 
         System.out.println("---------------------------");
 
-        String json2 = ONode.serialize(tmp, Feature.Write_ClassName);
+        String json2 = ONode.ofBean(tmp, Feature.Write_ClassName).toJson();
 
         System.out.println(json2);
 
@@ -36,7 +36,7 @@ public class ThrowableTest2 {
         System.out.println("---------------------------");
 
 
-        json2 = ONode.serialize(tmp, Feature.Write_ClassName);
+        json2 = ONode.ofBean(tmp, Feature.Write_ClassName).toJson();
 
         System.out.println(json2);
     }

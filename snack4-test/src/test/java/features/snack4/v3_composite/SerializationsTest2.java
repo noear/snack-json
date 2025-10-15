@@ -49,13 +49,13 @@ public class SerializationsTest2 {
 
     @Test
     public void test01() {
-        String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
+        String tmp = ONode.ofBean(buildObj(), Feature.Write_ClassName).toJson();
         System.out.println(tmp);
     }
 
     @Test
     public void test02() {
-        String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
+        String tmp = ONode.ofBean(buildObj(), Feature.Write_ClassName).toJson();
         tmp = tmp.replaceAll("UserGroupModel", "UserGroupModel2");
         UserGroupModel2 tmp2 = ONode.ofJson(tmp, Feature.Read_AutoType).toBean(UserGroupModel2.class);
 
@@ -199,11 +199,11 @@ public class SerializationsTest2 {
         sets.add("2");
         sets.add("3");
 
-        String json = ONode.serialize(sets, Feature.Write_ClassName);
+        String json = ONode.ofBean(sets, Feature.Write_ClassName).toJson();
         System.out.println(json);
 
         Set<String> sets2 = ONode.ofJson(json).toBean(Set.class);
-        System.out.println(ONode.serialize(sets2, Feature.Write_ClassName));
+        System.out.println(ONode.ofBean(sets2, Feature.Write_ClassName).toJson());
 
         assert sets2.size() == sets.size();
     }

@@ -143,8 +143,8 @@ public class JsonPathCompatibleTest2 {
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
-        System.out.println(ONode.serialize(tmp2));
+        System.out.println(ONode.ofBean(tmp2).toJson());
 
-        assert tmp.toJson().length() == ONode.serialize(tmp2).length();
+        assert tmp.toJson().length() == ONode.ofBean(tmp2).toJson().length();
     }
 }

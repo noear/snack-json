@@ -109,9 +109,9 @@ public class Func_concat_append_index_Test_no {
         try {
             DocumentContext context = JsonPath.parse(JSON_DATA);
             Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
 
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+            if (tmp.toJson().equals(ONode.ofBean(tmp2).toJson()) == false) {
                 assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
             }
         } catch (Exception e) {
@@ -131,11 +131,11 @@ public class Func_concat_append_index_Test_no {
         try {
             DocumentContext context = JsonPath.parse(JSON_DATA);
             Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
 
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+            if (tmp.toJson().equals(ONode.ofBean(tmp2).toJson()) == false) {
                 isOk = ref.length() == tmp.toJson().length() ||
-                        tmp.toJson().length() == ONode.serialize(tmp2).length();
+                        tmp.toJson().length() == ONode.ofBean(tmp2).toJson().length();
             } else {
                 isOk = true;
             }

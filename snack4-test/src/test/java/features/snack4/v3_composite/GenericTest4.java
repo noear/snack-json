@@ -19,7 +19,7 @@ public class GenericTest4 {
 
         System.out.println(page.getClass());
 
-        String temp = ONode.serialize(page);
+        String temp = ONode.ofBean(page).toJson();
 
         assert temp != null;
     }
@@ -52,7 +52,7 @@ public class GenericTest4 {
     public void case2() {
         PageResult2<Map<String, Object>> page = new PageResult2<>();
 
-        String temp = ONode.serialize(page);
+        String temp = ONode.ofBean(page).toJson();
 
         assert temp != null;
     }

@@ -87,9 +87,9 @@ public class Func_min_max_avg_sum_Test {
 
         try {
             Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
 
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+            if (tmp.toJson().equals(ONode.ofBean(tmp2).toJson()) == false) {
                 assert Math.abs(tmp.getDouble() - Double.parseDouble(ref)) < 0.001;
             }
         } catch (Exception e) {
@@ -106,9 +106,9 @@ public class Func_min_max_avg_sum_Test {
 
         try {
             Object tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
 
-            if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+            if (tmp.toJson().equals(ONode.ofBean(tmp2).toJson()) == false) {
                 assert ref.length() == tmp.toJson().length();
             }
         } catch (Exception e) {

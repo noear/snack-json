@@ -95,10 +95,10 @@ public class NumberTest {
         mod.setNum21(new BigInteger("12345678911234567891123456789112345678911244444444444444"));
         mod.setNum22(new BigDecimal("123456789112345678911234567891123456789112.1234567891"));
 
-        String json = ONode.serialize(mod);
+        String json = ONode.ofBean(mod).toJson();
         System.out.println(json);
 
-        String json2 = ONode.serialize(mod, Feature.Write_ClassName);
+        String json2 = ONode.ofBean(mod, Feature.Write_ClassName).toJson();
         System.out.println(json2);
 
 

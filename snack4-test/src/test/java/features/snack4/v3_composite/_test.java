@@ -183,7 +183,7 @@ public class _test {
         um.id = 1;
         um.note = "你好世界!";
 
-        String json = ONode.serialize(um);
+        String json = ONode.ofBean(um).toJson();
         System.out.println(json);
 
         String json2 = ONode.ofJson(json).toJson();

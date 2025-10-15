@@ -34,7 +34,7 @@ public abstract class FuncTestAbs {
         try {
             DocumentContext context = JsonPath.parse(JSON_DATA());
             tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
         } catch (Exception e) {
             err2 = e;
             System.err.println(e.getMessage());
@@ -77,7 +77,7 @@ public abstract class FuncTestAbs {
         try {
             DocumentContext context = JsonPath.parse(JSON_DATA());
             tmp2 = context.read(jsonpathStr);
-            System.out.println(ONode.serialize(tmp2));
+            System.out.println(ONode.ofBean(tmp2).toJson());
         } catch (Exception e) {
             err2 = e;
             System.err.println(e.getMessage());
@@ -87,7 +87,7 @@ public abstract class FuncTestAbs {
             return;
         }
 
-        if (tmp.toJson().equals(ONode.serialize(tmp2)) == false) {
+        if (tmp.toJson().equals(ONode.ofBean(tmp2).toJson()) == false) {
             if (tmp.toJson().equals(ref) == false) {
                 System.out.println(JSON_DATA());
                 assert false;
