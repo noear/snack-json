@@ -157,8 +157,8 @@ ONode.ofJson("{}").toBean(User.class);
 ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 
 //快捷方式
-String json = ONode.ofBean(user).toJson();
-User user = ONode.ofJson(json).toBean(User.class);
+String json = ONode.serialize(user);
+User user = ONode.deserialize(json, User.class);
 ```
 
 ### 路径树接口
