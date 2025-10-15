@@ -13,7 +13,11 @@ public class ThrowableTest2 {
 
     @Test
     public void test() {
-        Object tmp = ONode.ofJson(json, Feature.Read_AutoType).toBean();
+        Object tmp = ONode.ofJson(json, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean();
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -21,12 +25,20 @@ public class ThrowableTest2 {
 
         System.out.println("---------------------------");
 
-        String json2 = ONode.ofBean(tmp, Feature.Write_ClassName).toJson();
+        String json2 = ONode.ofBean(tmp, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toJson();
 
         System.out.println(json2);
 
 
-        tmp = ONode.ofJson(json2, Feature.Read_AutoType).toBean();
+        tmp = ONode.ofJson(json2, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean();
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -36,14 +48,22 @@ public class ThrowableTest2 {
         System.out.println("---------------------------");
 
 
-        json2 = ONode.ofBean(tmp, Feature.Write_ClassName).toJson();
+        json2 = ONode.ofBean(tmp, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toJson();
 
         System.out.println(json2);
     }
 
     @Test
     public void test1() {
-        ONode oNode = ONode.ofJson(json, Feature.Read_AutoType);
+        ONode oNode = ONode.ofJson(json, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType);
         System.out.println(oNode.toJson());
 
         Object tmp = oNode.toBean();
@@ -55,7 +75,11 @@ public class ThrowableTest2 {
 
     @Test
     public void test2() {
-        Object tmp = ONode.ofJson(json,  Feature.Read_AutoType).toBean(Point.class);
+        Object tmp = ONode.ofJson(json,  Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean(Point.class);
 
         assert tmp instanceof Throwable;
 

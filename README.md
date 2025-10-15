@@ -53,7 +53,7 @@ jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, Jso
 <dependency>
   <groupId>org.noear</groupId>
   <artifactId>snack4-jsonpath</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 

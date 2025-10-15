@@ -18,10 +18,18 @@ public class ThrowableTest {
         Throwable err = (Throwable)test01_exc();
         err.printStackTrace();
 
-        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toJson();
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.ofJson(tmp_json).toBean( Throwable.class);
+        Throwable err2 = ONode.ofJson(tmp_json, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean( Throwable.class);
         err2.printStackTrace();
     }
 
@@ -31,10 +39,18 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp);
         err.printStackTrace();
 
-        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toJson();
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.ofJson(tmp_json).toBean(Throwable.class);
+        Throwable err2 = ONode.ofJson(tmp_json, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean(Throwable.class);
         err2.printStackTrace();
     }
 
@@ -45,10 +61,18 @@ public class ThrowableTest {
         Throwable err = new RuntimeException(tmp2);
         err.printStackTrace();
 
-        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName).toJson();
+        String tmp_json = ONode.ofBean(err, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toJson();
         System.out.println(tmp_json);
 
-        Throwable err2 = ONode.ofJson(tmp_json).toBean(Throwable.class);
+        Throwable err2 = ONode.ofJson(tmp_json, Feature.Write_ClassName,
+                Feature.Write_OnlyUseSetter,
+                Feature.Write_AllowParameterizedConstructor,
+                Feature.Read_OnlyUseGetter,
+                Feature.Read_AutoType).toBean(Throwable.class);
         err2.printStackTrace();
     }
 }

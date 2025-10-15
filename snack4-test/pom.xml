@@ -6,12 +6,16 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>snack4-parent</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0</version>
         <relativePath>../snack4-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>snack4-test</artifactId>
     <packaging>jar</packaging>
+
+<!--    <properties>-->
+<!--        <java.version>21</java.version>-->
+<!--    </properties>-->
 
     <dependencies>
         <dependency>
@@ -27,11 +31,6 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>snack4-jsonschema</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>snack4-yaml</artifactId>
         </dependency>
 
         <dependency>

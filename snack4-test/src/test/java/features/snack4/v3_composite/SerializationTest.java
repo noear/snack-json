@@ -46,13 +46,29 @@ public class SerializationTest {
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            String json = ONode.ofBean(ex, Feature.Write_ClassName).toJson();
+            String json = ONode.ofBean(ex,
+                    Feature.Write_ClassName,
+                    Feature.Write_OnlyUseSetter,
+                    Feature.Write_AllowParameterizedConstructor,
+                    Feature.Read_OnlyUseGetter).toJson();
 
             System.out.println(json);
 
-            NullPointerException ex2 = ONode.ofJson(json).toBean(NullPointerException.class);
+            NullPointerException ex2 = ONode.ofJson(json,
+                    Feature.Write_ClassName,
+                    Feature.Write_OnlyUseSetter,
+                    Feature.Write_AllowParameterizedConstructor,
+                    Feature.Read_OnlyUseGetter,
+                    Feature.Read_AutoType
+                    ).toBean(NullPointerException.class);
 
-            Object ex22 = ONode.ofJson(json, Feature.Read_AutoType).toBean();
+            Object ex22 = ONode.ofJson(json,
+                    Feature.Write_ClassName,
+                    Feature.Write_OnlyUseSetter,
+                    Feature.Write_AllowParameterizedConstructor,
+                    Feature.Read_OnlyUseGetter,
+                    Feature.Read_AutoType).toBean();
+
             assert ex22 instanceof NullPointerException;
 
 
