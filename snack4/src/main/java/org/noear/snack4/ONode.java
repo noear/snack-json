@@ -499,9 +499,9 @@ public final class ONode {
     }
 
     public int size() {
+        //内部集合大小
         if (isArray()) return getArray().size();
         if (isObject()) return getObject().size();
-        if (isValue()) return 1;
         return 0;
     }
 

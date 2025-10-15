@@ -45,7 +45,7 @@ public class MathUtil {
                 }
             }
         } else {
-            if (arg0.size() == 1) {
+            if (arg0.getArray().size() == 1) {
                 ONode node = arg0.get(0);
 
                 if (node.isArray()) {

@@ -39,12 +39,12 @@ public class LengthFunction implements Function {
         ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
         if (ctx.isMultiple()) {
-            return ctx.newNode(arg0.size());
+            return ctx.newNode(arg0.getArray().size());
         } else {
             if (arg0.getArray().size() > 0) {
                 ONode n1 = arg0.get(0);
 
-                if (n1.isArray()) return ctx.newNode(n1.size());
+                if (n1.isArray()) return ctx.newNode(n1.getArray().size());
                 if (n1.isObject()) return ctx.newNode(n1.getObject().size());
 
                 if (ctx.hasFeature(Feature.JsonPath_JaywayMode) == false) {

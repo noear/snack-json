@@ -67,7 +67,7 @@ public class IndexUtil {
 
     public static void forIndexUnsafe(QueryContext ctx, ONode node, int idx, List<ONode> result) {
         if (idx < 0) {
-            idx += node.size();
+            idx += node.getArray().size();
         }
 
         ONode n1 = ctx.getChildNodeAt(node, idx);

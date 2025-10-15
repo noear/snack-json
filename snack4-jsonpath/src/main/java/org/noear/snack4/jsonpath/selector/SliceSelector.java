@@ -106,7 +106,7 @@ public class SliceSelector implements Selector {
 
     private void doResolve(QueryContext ctx, ONode node, List<ONode> results) {
         if (node.isArray()) {
-            int size = node.size();
+            int size = node.getArray().size();
             int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
             int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
 

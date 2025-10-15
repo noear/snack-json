@@ -54,7 +54,7 @@ public class IndexFunction implements Function {
         }
 
         if (ctx.isMultiple()) {
-            if (arg0.size() > 0) {
+            if (arg0.getArray().size() > 0) {
                 return arg0.get(index);
             }
         } else {

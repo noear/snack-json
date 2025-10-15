@@ -159,7 +159,7 @@ public class Expression {
         }
 
         if (leftNode.isArray()) {
-            return leftNode.size() > 0;
+            return leftNode.getArray().size() > 0;
         }
 
         return !leftNode.isNull();
