@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4;
+package org.noear.snack4.jsonpath;
+
+import org.noear.snack4.ONode;
 
 import java.util.List;
 import java.util.Map;

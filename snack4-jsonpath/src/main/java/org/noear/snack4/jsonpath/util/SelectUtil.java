@@ -1,7 +1,7 @@
 package org.noear.snack4.jsonpath.util;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.PathSource;
+import org.noear.snack4.jsonpath.PathSource;
 
 import java.util.ArrayList;
 import java.util.List;

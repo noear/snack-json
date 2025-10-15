@@ -21,6 +21,7 @@ import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.JsonProvider;
 import org.noear.snack4.jsonpath.JsonPathProvider;
+import org.noear.snack4.jsonpath.PathSource;
 import org.noear.snack4.util.Asserts;
 
 import java.io.Reader;
