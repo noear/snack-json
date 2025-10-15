@@ -74,23 +74,23 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 
 ### JSONPath syntax reference([IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html)))
 
-| Syntax Element    | Description                                                             |
-|-------------------|-------------------------------------------------------------------------|
-| `$`               | root node identifier                                                    |
-| `@`               | current node identifier (valid only within filter selectors)            |
-| `[<selectors>]`   | 	child segment: selects zero or more children of a node                 |
-| `.name`           | shorthand for `['name']`                                                |
-| `.*`              | shorthand for `[*]`                                                     |
-| `..[<selectors>]` | descendant segment: selects zero or more descendants of a node          |
-| `..name`          | shorthand for `..['name']`                                              |
-| `..*`             | shorthand for `..[*]`                                                   |
-| `'name'`          | name selector: selects a named child of an object                       |
-| `*`               | wildcard selector: selects all children of a node                       |
-| `3`               | index selector: selects an indexed child of an array (from 0)           |
-| `0:100:5`         | array slice selector: `start:end:step` for arrays                       |
-| `?<logical-expr>` | filter selector: selects particular children using a logical expression |
-| `fun(@.foo)`      | filter function extension: invokes a function in a filter expression    |
-| `.fun()`          | aggregate function                                                      |
+| Syntax Element    | Description                                                                |
+|-------------------|----------------------------------------------------------------------------|
+| `$`               | root node identifier                                                       |
+| `@`               | current node identifier (valid only within filter selectors)               |
+| `[<selectors>]`   | 	child segment: selects zero or more children of a node                    |
+| `.name`           | shorthand for `['name']`                                                   |
+| `.*`              | shorthand for `[*]`                                                        |
+| `..[<selectors>]` | descendant segment: selects zero or more descendants of a node             |
+| `..name`          | shorthand for `..['name']`                                                 |
+| `..*`             | shorthand for `..[*]`                                                      |
+| `'name'`          | name selector: selects a named child of an object                          |
+| `*`               | wildcard selector: selects all children of a node                          |
+| `3`               | index selector: selects an indexed child of an array (from 0)              |
+| `0:100:5`         | array slice selector: `start:end:step` for arrays                          |
+| `?<logical-expr>` | filter selector: selects particular children using a logical expression    |
+| `fun(@.foo)`      | filter function: invokes a function in a filter expression (IETF standard) |
+| `.fun()`          | aggregate function: Used as a fragment (jayway style)                      |
 
 Filter selector syntax reference:
 
@@ -105,7 +105,128 @@ Filter selector syntax reference:
 
 
 
-### examples
+IETF JSONPath (RFC 9535) Standard definition operators (supported)
+
+| Operator  | Description                                              | Examples        |   
+|-----------|----------------------------------------------------------|-----------------|
+| `==`      | left is equal to right (note that 1 is not equal to '1') | `$[?(@a == 1)]` |  
+| `!=`      | left is not equal to right                               | `$[?(@a != 1)]` |  
+| `<`       | left is less than right                                  | `$[?(@a < 1)]`  |  
+| `<=`      | left is less or equal to right                           | `$[?(@a <= 1)]` |  
+| `>`       | left is greater than right                               | `$[?(@a > 1)]`  |  
+| `>=`      | left is greater than or equal to right                   | `$[?(@a >= 1)]` |  
+
+jayway.jsonpath Increment operator (supported)
+
+| Operator        | Description                                       | Examples                            |   
+|------------|---------------------------------------------------|-------------------------------------|
+| `=~`       | left matches regular expression                   | `[?(@.s =~ /foo.*?/i)]`             |  
+| `in`       | left exists in right                              | `[?(@.s in ['S', 'M'])]`            |  
+| `nin`      | left does not exists in right                     |                                     |  
+| `subsetof` | left is a subset of right                         | `[?(@.s subsetof ['S', 'M', 'L'])]` |  
+| `anyof`    | left has an intersection with right               | `[?(@.s anyof ['M', 'L'])]`         |  
+| `noneof`   | left has no intersection with right               | `[?(@.s noneof ['M', 'L'])]`        |  
+| `size`     | size of left (array or string) should match right | `$[?(@.s size @.expected_size)]`    |  
+| `empty`    | left (array or string) should be empty            | `$[?(@.s empty false)]`             |  
+
+
+snack-jsonpath Increment operator (supported)
+
+
+| Operator              | Description                                       | Examples                  |   
+|------------------|---------------------------------------------------|---------------------------|
+| `startsWith`     | left (string) start matches a right               | `[?(@.s startsWith 'a')]` |  
+| `endsWith`       | left (string) end matches the right               | `[?(@.s endsWith 'b')]`   |  
+| `contains`       | left (array or string) contains matches the right | `[?(@.s contains 'c')]`   |  
+
+
+IETF JSONPath (RFC 9535) Standard definition functions (supported)
+
+
+| Function      | Description                               | Parameter types | Result types      |
+|---------------|-------------------------------------------|-----------------|-------------------|
+| `length(x)`   | The length of a string, array, or object  | Value           | Numerical value   |
+| `count(x)`    | Size of the node list                     | Node list       | Numerical value   |
+| `match(x,y)`  | The regular expression matches exactly    | Value,Value     | Logical value     |
+| `search(x,y)` | Regular expression substring matching     | Value,Value     | Logical value     |
+| `value(x)`    | The value of a single node in a node list | Node list       | Value             |
+
+
+jayway.jsonpath Functions (supported)
+
+| Function    | Description                                                                          | Output type          |
+|:------------|:-------------------------------------------------------------------------------------|:---------------------|
+| `min()`     | Provides the min value of an array of numbers                                        | Double               |
+| `max()`     | Provides the max value of an array of numbers                                        | Double               |
+| `avg()`     | Provides the average value of an array of numbers                                    | Double               | 
+| `stddev()`  | Provides the standard deviation value of an array of numbers                         | Double               | 
+| `length()`  | Provides the length of an array                                                      | Integer              |
+| `sum()`     | Provides the sum value of an array of numbers                                        | Double               |
+| `keys()`    | Provides the property keys (An alternative for terminal tilde `~`)                   | `Set<E>`             |
+| `concat(X)` | Provides a concatinated version of the path output with a new item                   | like input           |
+| `append(X)` | add an item to the json path output array                                            | like input           |
+| `first()`   | Provides the first item of an array                                                  | Depends on the array |
+| `last()`    | Provides the last item of an array                                                   | Depends on the array |
+| `index(X)`  | Provides the item of an array of index: X, if the X is negative, take from backwards | Depends on the array |
+
+
+### JSONPath syntax examples
+
+Example JSON Value
+
+```json
+{ "store": {
+    "book": [
+      { "category": "reference",
+        "author": "Nigel Rees",
+        "title": "Sayings of the Century",
+        "price": 8.95
+      },
+      { "category": "fiction",
+        "author": "Evelyn Waugh",
+        "title": "Sword of Honour",
+        "price": 12.99
+      },
+      { "category": "fiction",
+        "author": "Herman Melville",
+        "title": "Moby Dick",
+        "isbn": "0-553-21311-3",
+        "price": 8.99
+      },
+      { "category": "fiction",
+        "author": "J. R. R. Tolkien",
+        "title": "The Lord of the Rings",
+        "isbn": "0-395-19395-8",
+        "price": 22.99
+      }
+    ],
+    "bicycle": {
+      "color": "red",
+      "price": 399
+    }
+  }
+}
+```
+
+Example JSONPath Expressions and Their Intended Results When Applied to the Example JSON Value
+
+| JSONPath | Intended Result | 
+| -------- | -------- |
+| `$.store.book[*].author`     |  the authors of all books in the store     | 
+| `$..autho`     |  all authors     | 
+| `$.store.*`     |  all things in the store, which are some books and a red bicycle     | 
+| `$.store..price`     |  the prices of everything in the store     | 
+| `$..book[2]`     |  the third book     | 
+| `$..book[2].author`     |  the third book's author     | 
+| `$..book[2].publisher`     |  empty result: the third book does not have a "publisher" member     | 
+| `$..book[-1]`     |  the last book in order     | 
+| `$..book[0,1]`<br/>`$..book[:2]`     |  the first two books     | 
+| `$..book[?@.isbn]`     |  all books with an ISBN number     | 
+| `$..book[?@.price<10]`     |  all books cheaper than 10     | 
+| `$..*`     |  all member values and array elements contained in the input value     | 
+
+
+### Let's look at some application examples
 
 Support `dom` manipulation
 
