@@ -501,7 +501,8 @@ public final class ONode {
     public int size() {
         if (isArray()) return getArray().size();
         if (isObject()) return getObject().size();
-        return 1;
+        if (isValue()) return 1;
+        return 0;
     }
 
     public void clear() {
