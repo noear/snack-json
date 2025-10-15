@@ -68,6 +68,10 @@ public class FieldWrap implements Property {
         return field;
     }
 
+    public boolean isFinal(){
+        return isFinal;
+    }
+
     @Override
     public Object getValue(Object target) throws Exception {
         if (field.isAccessible() == false) {

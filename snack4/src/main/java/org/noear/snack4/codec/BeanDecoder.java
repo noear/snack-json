@@ -146,7 +146,8 @@ public class BeanDecoder {
                     target = constrWrap.newInstance();
                 } else {
                     if (constrWrap.isSecurity() == false //有参数
-                            && opts.hasFeature(Feature.Write_AllowParameterizedConstructor) == false)  //不支持参数
+                            && opts.hasFeature(Feature.Write_AllowParameterizedConstructor) == false //不支持参数
+                            && ClassWrap.from(typeWrap).isLikeRecordClass() == false)  //不像记录类
                     {
                         throw new CodecException("Parameterized constructor are not allowed: " + typeWrap.getType());
                     }

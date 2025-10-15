@@ -40,14 +40,22 @@ public class ClassWrap {
     private final Map<String, PropertyWrap> propertyWraps = new LinkedHashMap<>();
     private final Map<String, PropertyWrap> propertyNodeWraps = new LinkedHashMap<>();
 
+    private boolean likeRecordClass = true;
+
     private ClassWrap(TypeWrap typeWrap) {
         this.typeWrap = typeWrap;
         loadDeclaredFields();
         loadDeclaredPropertys();
 
+        this.likeRecordClass = likeRecordClass && fieldWraps.size() > 0;
+
         for (Map.Entry<String, PropertyWrap> entry : propertyWraps.entrySet()) {
             propertyNodeWraps.put(entry.getValue().getNodeName(), entry.getValue());
         }
+    }
+
+    public boolean isLikeRecordClass() {
+        return likeRecordClass;
     }
 
     public TypeWrap getTypeWrap() {
@@ -71,21 +79,24 @@ public class ClassWrap {
     }
 
     private void loadDeclaredFields() {
-        Class<?> current = typeWrap.getType();
+        Class<?> c = typeWrap.getType();
 
-        while (current != null) {
-            for (Field f : current.getDeclaredFields()) {
+        while (c != null) {
+            for (Field f : c.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())) {
                     continue;
                 }
 
                 FieldWrap fieldWrap = new FieldWrap(typeWrap, f);
 
+                //如果全是只读，则
+                likeRecordClass = likeRecordClass && fieldWrap.isFinal();
+
                 fieldWraps.put(fieldWrap.getOrigName(), fieldWrap);
                 propertyWraps.computeIfAbsent(fieldWrap.getOrigName(), k -> new PropertyWrap(k))
                         .setFieldWrap(fieldWrap);
             }
-            current = current.getSuperclass();
+            c = c.getSuperclass();
         }
     }
 
