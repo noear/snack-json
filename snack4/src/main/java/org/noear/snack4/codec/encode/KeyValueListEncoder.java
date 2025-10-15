@@ -17,6 +17,7 @@ package org.noear.snack4.codec.encode;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
+import org.noear.snack4.codec.KeyValueList;
 import org.noear.snack4.codec.ObjectEncoder;
 
 import java.util.Map;

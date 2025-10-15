@@ -4,7 +4,7 @@ import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.codec.encode.KeyValueList;
+import org.noear.snack4.codec.KeyValueList;
 
 import java.io.Serializable;
 import java.util.*;
