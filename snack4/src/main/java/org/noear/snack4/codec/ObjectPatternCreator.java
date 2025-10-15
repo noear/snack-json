@@ -16,7 +16,7 @@
 package org.noear.snack4.codec;
 
 /**
- * 对象模式创造器
+ * 对象模式创建器
  *
  * @author noear 2025/10/8 created
  * @since 4.0

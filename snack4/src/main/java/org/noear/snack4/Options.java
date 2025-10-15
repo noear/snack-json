@@ -129,7 +129,7 @@ public final class Options {
     }
 
     /**
-     * 获取创造器
+     * 获取创建器
      */
     public ObjectCreator<?> getCreator(Class<?> clazz) {
         return codecLib.getCreator(clazz);
@@ -287,7 +287,7 @@ public final class Options {
     }
 
     /**
-     * 注册自定义创造器
+     * 注册自定义创建器
      */
     public <T> Options addCreator(Class<T> type, ObjectCreator<T> creator) {
         if (readonly) {
@@ -299,7 +299,7 @@ public final class Options {
     }
 
     /**
-     * 注册自定义创造器
+     * 注册自定义创建器
      */
     public <T> Options addCreator(ObjectPatternCreator<T> creator) {
         if (readonly) {

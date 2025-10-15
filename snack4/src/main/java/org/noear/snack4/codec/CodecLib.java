@@ -61,14 +61,14 @@ public class CodecLib {
     }
 
     /**
-     * 添加创造器
+     * 添加创建器
      */
     public <T> void addCreator(Class<T> type, ObjectCreator<T> creator) {
         creators.put(type, creator);
     }
 
     /**
-     * 添加创造器
+     * 添加创建器
      */
     public void addCreator(ObjectPatternCreator creator) {
         patternCreators.add(creator);

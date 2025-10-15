@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 
 /**
- * 对象创造器
+ * 对象创建器
  *
  * @author noear 2025/10/3 created
  * @since 4.0
