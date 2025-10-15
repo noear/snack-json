@@ -56,17 +56,6 @@ public class YamlReader {
     private final ParserState state;
     private final YamlContext context;
 
-    private StringBuilder stringBuilder;
-
-    private StringBuilder getStringBuilder() {
-        if (stringBuilder == null) {
-            stringBuilder = new StringBuilder(32);
-        } else {
-            stringBuilder.setLength(0);
-        }
-        return stringBuilder;
-    }
-
     public YamlReader(Reader reader) {
         this(reader, null);
     }
@@ -85,8 +74,12 @@ public class YamlReader {
             ONode node = parseDocument();
             state.skipWhitespace();
 
-            if (state.bufferPosition < state.bufferLimit) {
-                throw state.error("Unexpected data after YAML document");
+            // 允许文档末尾有注释
+            if (state.bufferPosition < state.bufferLimit && !state.isEof()) {
+                char c = state.peekChar();
+                if (c != '#' && !state.isEol()) {
+                    throw state.error("Unexpected data after YAML document: '" + c + "'");
+                }
             }
             return node;
         } finally {
@@ -108,6 +101,7 @@ public class YamlReader {
         ONode node = parseNode();
 
         // 处理文档结束标记
+        state.skipWhitespace();
         if (state.consume("...")) {
             state.skipWhitespace();
         }
@@ -118,9 +112,16 @@ public class YamlReader {
     private ONode parseNode() throws IOException {
         state.skipWhitespace();
 
+        // 跳过注释
+        skipComments();
+
         if (state.isEol()) {
             state.skipToNextLine();
             return parseNode();
+        }
+
+        if (state.isEof()) {
+            return new ONode(opts); // 返回 undefined 节点
         }
 
         char c = state.peekChar();
@@ -146,9 +147,23 @@ public class YamlReader {
             return parseBlockScalar();
         } else if (c == '?') {
             return parseComplexKey();
+        } else if (c == '-') {
+            // 可能是数组项或普通字符串
+            if (state.lookAhead(1) == ' ' && state.getCurrentIndent() == context.indentLevel) {
+                return parseBlockSequence();
+            } else {
+                return parseScalar();
+            }
         } else {
             // 普通标量或映射
             return parseScalarOrMapping();
+        }
+    }
+
+    private void skipComments() throws IOException {
+        while (state.peekChar() == '#') {
+            state.skipToNextLine();
+            state.skipWhitespace();
         }
     }
 
@@ -174,7 +189,7 @@ public class YamlReader {
     }
 
     private String parseAnchorName() throws IOException {
-        StringBuilder sb = getStringBuilder();
+        StringBuilder sb = new StringBuilder();
         while (true) {
             char c = state.peekChar();
             if (Character.isWhitespace(c) || c == ',' || c == '}' || c == ']' ||
@@ -192,7 +207,6 @@ public class YamlReader {
         state.skipWhitespace();
 
         ONode value = parseNode();
-        // 这里可以根据标签进行特殊处理
         return applyTag(value, tag);
     }
 
@@ -200,19 +214,22 @@ public class YamlReader {
         if (state.peekChar() == '<') {
             // 具名标签: !<tag:example.com,2000:app/tag>
             state.expect('<');
-            StringBuilder sb = getStringBuilder();
+            StringBuilder sb = new StringBuilder();
             while (state.peekChar() != '>') {
+                if (state.isEof()) {
+                    throw state.error("Unclosed tag");
+                }
                 sb.append(state.nextChar());
             }
             state.expect('>');
             return sb.toString();
         } else {
             // 简单标签: !tag
-            StringBuilder sb = getStringBuilder();
+            StringBuilder sb = new StringBuilder();
             while (!Character.isWhitespace(state.peekChar()) &&
                     state.peekChar() != ',' && state.peekChar() != '}' &&
                     state.peekChar() != ']' && state.peekChar() != ':' &&
-                    !state.isEol()) {
+                    !state.isEol() && !state.isEof()) {
                 sb.append(state.nextChar());
             }
             return sb.toString();
@@ -220,49 +237,38 @@ public class YamlReader {
     }
 
     private ONode applyTag(ONode node, String tag) {
-        // 处理标准 YAML 标签
-        switch (tag) {
-            case "!!str":
-                if (!node.isString()) {
-                    node.setValue(node.getString());
-                }
-                break;
-            case "!!int":
-                if (node.isString()) {
+        if (node.isString()) {
+            String value = node.getString();
+            switch (tag) {
+                case "!!str":
+                    return new ONode(opts, value);
+                case "!!int":
                     try {
-                        node.setValue(new BigInteger(node.getString()));
+                        return new ONode(opts, new BigInteger(value));
                     } catch (NumberFormatException e) {
-                        throw new SnackException("Invalid integer: " + node.getString());
+                        throw new SnackException("Invalid integer: " + value);
                     }
-                }
-                break;
-            case "!!float":
-                if (node.isString()) {
+                case "!!float":
                     try {
-                        node.setValue(new BigDecimal(node.getString()));
+                        return new ONode(opts, new BigDecimal(value));
                     } catch (NumberFormatException e) {
-                        throw new SnackException("Invalid float: " + node.getString());
+                        throw new SnackException("Invalid float: " + value);
                     }
-                }
-                break;
-            case "!!bool":
-                if (node.isString()) {
-                    String val = node.getString().toLowerCase();
+                case "!!bool":
+                    String val = value.toLowerCase();
                     if ("true".equals(val) || "yes".equals(val) || "on".equals(val)) {
-                        node.setValue(true);
+                        return new ONode(opts, true);
                     } else if ("false".equals(val) || "no".equals(val) || "off".equals(val)) {
-                        node.setValue(false);
+                        return new ONode(opts, false);
                     } else {
-                        throw new SnackException("Invalid boolean: " + node.getString());
+                        throw new SnackException("Invalid boolean: " + value);
                     }
-                }
-                break;
-            case "!!null":
-                if (node.isString() && ("null".equals(node.getString()) || "~".equals(node.getString()) || "".equals(node.getString()))) {
-                    node.setValue(null);
-                }
-                break;
-            // 可以添加更多标签处理...
+                case "!!null":
+                    if ("null".equals(value) || "~".equals(value) || "".equals(value)) {
+                        return new ONode(opts, null);
+                    }
+                    break;
+            }
         }
         return node;
     }
@@ -274,7 +280,7 @@ public class YamlReader {
 
         while (true) {
             if (state.peekChar() == ']') {
-                state.bufferPosition++;
+                state.nextChar();
                 break;
             }
 
@@ -282,7 +288,7 @@ public class YamlReader {
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
-                state.bufferPosition++;
+                state.nextChar();
                 state.skipWhitespace();
             } else if (state.peekChar() != ']') {
                 throw state.error("Expected ',' or ']' in flow sequence");
@@ -298,7 +304,7 @@ public class YamlReader {
 
         while (true) {
             if (state.peekChar() == '}') {
-                state.bufferPosition++;
+                state.nextChar();
                 break;
             }
 
@@ -311,7 +317,7 @@ public class YamlReader {
 
             state.skipWhitespace();
             if (state.peekChar() == ',') {
-                state.bufferPosition++;
+                state.nextChar();
                 state.skipWhitespace();
             } else if (state.peekChar() != '}') {
                 throw state.error("Expected ',' or '}' in flow mapping");
@@ -337,8 +343,7 @@ public class YamlReader {
         state.expect('?');
         state.skipWhitespace();
 
-        // 复杂键处理
-        if (state.peekChar() == '\n' || state.peekChar() == '\r') {
+        if (state.isEol()) {
             // 块风格的复杂键
             state.skipToNextLine();
             context.indentLevel++;
@@ -368,23 +373,63 @@ public class YamlReader {
         }
     }
 
+    private ONode parseBlockSequence() throws IOException {
+        List<ONode> list = new ArrayList<>();
+        int baseIndent = state.getCurrentIndent();
+
+        while (true) {
+            state.skipWhitespace();
+            if (state.getCurrentIndent() != baseIndent) {
+                break;
+            }
+
+            if (state.peekChar() == '-') {
+                state.nextChar(); // 消耗 '-'
+                state.skipWhitespace();
+
+                if (state.isEol()) {
+                    // 空数组项
+                    list.add(new ONode(opts, null));
+                    state.skipToNextLine();
+                } else {
+                    // 有值的数组项
+                    context.indentLevel = baseIndent + 1;
+                    ONode item = parseNode();
+                    context.indentLevel = baseIndent;
+                    list.add(item);
+                }
+            } else {
+                break;
+            }
+        }
+
+        return new ONode(opts, list);
+    }
+
     private ONode parseScalarOrMapping() throws IOException {
+        int currentIndent = state.getCurrentIndent();
+
+        // 检查是否在正确的缩进级别
+        if (currentIndent < context.indentLevel) {
+            return new ONode(opts); // 返回 undefined
+        }
+
         String scalar = parsePlainScalar();
 
         state.skipWhitespace();
 
-        if (state.peekChar() == ':' && !state.isEol()) {
+        if (state.peekChar() == ':') {
             // 这是一个映射键
             Map<String, ONode> map = new LinkedHashMap<>();
             state.expect(':');
             state.skipWhitespace();
 
-            if (state.isEol()) {
+            if (state.isEol() || state.isEof()) {
                 // 块风格映射值
                 state.skipToNextLine();
-                context.indentLevel++;
+                context.indentLevel = currentIndent + 1;
                 ONode value = parseNode();
-                context.indentLevel--;
+                context.indentLevel = currentIndent;
                 map.put(scalar, value);
             } else {
                 // 流风格映射值
@@ -395,7 +440,8 @@ public class YamlReader {
             // 检查同一层级的其他键值对
             while (true) {
                 state.skipWhitespace();
-                if (state.isEol() || state.getCurrentIndent() < context.indentLevel) {
+                int indent = state.getCurrentIndent();
+                if (indent != currentIndent || state.isEof()) {
                     break;
                 }
 
@@ -405,11 +451,11 @@ public class YamlReader {
                     state.expect(':');
                     state.skipWhitespace();
 
-                    if (state.isEol()) {
+                    if (state.isEol() || state.isEof()) {
                         state.skipToNextLine();
-                        context.indentLevel++;
+                        context.indentLevel = currentIndent + 1;
                         ONode nextValue = parseNode();
-                        context.indentLevel--;
+                        context.indentLevel = currentIndent;
                         map.put(nextKey, nextValue);
                     } else {
                         ONode nextValue = parseNode();
@@ -428,7 +474,16 @@ public class YamlReader {
         }
     }
 
+    private ONode parseScalar() throws IOException {
+        String scalar = parsePlainScalar();
+        return parseScalarValue(scalar);
+    }
+
     private ONode parseScalarValue(String scalar) {
+        if (scalar == null || scalar.isEmpty()) {
+            return new ONode(opts, "");
+        }
+
         // 根据内容推断类型
         if (scalar.equals("null") || scalar.equals("Null") || scalar.equals("NULL") || scalar.equals("~")) {
             return new ONode(opts, null);
@@ -483,25 +538,24 @@ public class YamlReader {
 
         // 解析块标量头部的修饰符
         boolean folded = (style == '>');
-        boolean strip = true;
+        boolean strip = false; // 默认不strip
         int indent = -1;
 
-        while (true) {
-            char c = state.peekChar();
-            if (c == '+' || c == '-') {
-                strip = (c == '-');
-                state.nextChar();
-            } else if (c >= '1' && c <= '9') {
-                indent = c - '0';
-                state.nextChar();
-            } else {
-                break;
-            }
+        char c = state.peekChar();
+        if (c == '+' || c == '-') {
+            strip = (c == '-');
+            state.nextChar();
+            c = state.peekChar();
+        }
+
+        if (c >= '1' && c <= '9') {
+            indent = c - '0';
+            state.nextChar();
         }
 
         state.skipToNextLine();
 
-        StringBuilder sb = getStringBuilder();
+        StringBuilder sb = new StringBuilder();
         int currentIndent = state.getCurrentIndent();
 
         if (indent == -1) {
@@ -509,7 +563,6 @@ public class YamlReader {
         }
 
         boolean firstLine = true;
-        boolean inIndent = false;
 
         while (true) {
             state.skipWhitespace();
@@ -519,10 +572,6 @@ public class YamlReader {
             if (lineIndent < currentIndent) break;
 
             if (lineIndent >= indent) {
-                if (inIndent && folded) {
-                    sb.append(' ');
-                }
-
                 String line = state.readLine();
                 if (lineIndent > indent) {
                     line = line.substring(indent);
@@ -542,16 +591,12 @@ public class YamlReader {
                         sb.append('\n').append(line);
                     }
                 }
-                inIndent = false;
             } else {
-                // 空行或注释
+                // 空行
                 state.skipToNextLine();
-                if (folded) {
-                    sb.append('\n');
-                } else {
+                if (!folded) {
                     sb.append('\n');
                 }
-                inIndent = true;
             }
         }
 
@@ -564,28 +609,17 @@ public class YamlReader {
     }
 
     private String parsePlainScalar() throws IOException {
-        StringBuilder sb = getStringBuilder();
-        boolean inQuotes = false;
+        StringBuilder sb = new StringBuilder();
 
         while (true) {
-            if (state.bufferPosition >= state.bufferLimit && !state.fillBuffer()) {
-                break;
-            }
+            if (state.isEof()) break;
 
-            char c = state.buffer[state.bufferPosition];
+            char c = state.peekChar();
 
             if (Character.isWhitespace(c) || c == ':' || c == ',' || c == ']' || c == '}' ||
                     c == '[' || c == '{' || c == '?' || c == '&' || c == '*' || c == '!' ||
                     c == '#' || state.isEol()) {
                 break;
-            }
-
-            if (c == '"' || c == '\'') {
-                if (inQuotes) {
-                    break;
-                } else {
-                    inQuotes = true;
-                }
             }
 
             sb.append(state.nextChar());
@@ -596,9 +630,13 @@ public class YamlReader {
 
     private String parseDoubleQuotedString() throws IOException {
         state.expect('"');
-        StringBuilder sb = getStringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (true) {
+            if (state.isEof()) {
+                throw state.error("Unclosed double quoted string");
+            }
+
             char c = state.nextChar();
             if (c == '"') {
                 break;
@@ -643,9 +681,13 @@ public class YamlReader {
 
     private String parseSingleQuotedString() throws IOException {
         state.expect('\'');
-        StringBuilder sb = getStringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         while (true) {
+            if (state.isEof()) {
+                throw state.error("Unclosed single quoted string");
+            }
+
             char c = state.nextChar();
             if (c == '\'') {
                 if (state.peekChar() == '\'') {
@@ -715,6 +757,10 @@ public class YamlReader {
             return (bufferPosition + offset < bufferLimit) ? buffer[bufferPosition + offset] : 0;
         }
 
+        char lookAhead(int offset) throws IOException {
+            return peekChar(offset);
+        }
+
         boolean fillBuffer() throws IOException {
             if (bufferPosition < bufferLimit) return true;
             bufferLimit = reader.read(buffer);
@@ -770,7 +816,7 @@ public class YamlReader {
 
         boolean isEol() throws IOException {
             char c = peekChar();
-            return c == '\n' || c == '\r';
+            return c == '\n' || c == '\r' || c == 0;
         }
 
         boolean isEof() throws IOException {
@@ -824,6 +870,16 @@ public class YamlReader {
 
         ONode getAnchor(String name) {
             return anchors.get(name);
+        }
+    }
+
+    static class YamlParseException extends SnackException {
+        public YamlParseException(String message) {
+            super(message);
+        }
+
+        public YamlParseException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 

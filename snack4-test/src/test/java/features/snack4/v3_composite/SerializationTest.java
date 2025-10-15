@@ -52,11 +52,11 @@ public class SerializationTest {
 
             NullPointerException ex2 = ONode.deserialize(json, NullPointerException.class);
 
-            Object ex22 = ONode.deserialize(json, Feature.Read_AutoType);
+            Object ex22 = ONode.ofJson(json, Feature.Read_AutoType).toBean();
             assert ex22 instanceof NullPointerException;
 
 
-            Object ex23 = ONode.deserialize(json);
+            Object ex23 = ONode.ofJson(json).toBean();
             assert ex23 instanceof Map;
 
             ex2.printStackTrace();
@@ -95,10 +95,10 @@ public class SerializationTest {
         System.out.println(json);
         UserGroupModel group2 = ONode.deserialize(json, UserGroupModel.class, Feature.Read_AutoType);
 
-        Object group22 = ONode.deserialize(json, Feature.Read_AutoType);
+        Object group22 = ONode.ofJson(json, Feature.Read_AutoType).toBean();
         assert group22 instanceof UserGroupModel;
 
-        Object group23 = ONode.deserialize(json);
+        Object group23 = ONode.ofJson(json).toBean();
         assert group23 instanceof Map;
 
         assert group2.id == 9999;
@@ -197,9 +197,9 @@ public class SerializationTest {
 
         String json = ONode.serialize(order, Feature.Write_ClassName);
         System.out.println(json);
-        OrderModel order2 = ONode.deserialize(json, OrderModel.class);
-        Object order22 = ONode.deserialize(json);
-        Map order23 = ONode.deserialize(json);
+        OrderModel order2 = ONode.ofJson(json).toBean(OrderModel.class);
+        Object order22 = ONode.ofJson(json).toBean();
+        Map order23 = ONode.ofJson(json).toBean();
 
 
         assert 1111 == order2.user.id;
@@ -247,7 +247,7 @@ public class SerializationTest {
     public void test6() throws Exception {
         String tmp = "{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}";
         //1.加载json
-        Object n = ONode.deserialize(tmp);
+        Object n = ONode.ofJson(tmp).toBean();
 
         assert n instanceof Map;
         assert ((Map) n).size() == 3;

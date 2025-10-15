@@ -10,7 +10,9 @@ import java.util.*;
 
 public class SpeedSnack4Test {
 
-    /** 测试性能（大json） */
+    /**
+     * 测试性能（大json）
+     */
     @Test
     public void test00() throws Exception {
         //10000=>2377,2190,2285 //2203,2205,2140
@@ -33,14 +35,16 @@ public class SpeedSnack4Test {
 
     }
 
-    /** 测试性能（小json） */
+    /**
+     * 测试性能（小json）
+     */
     @Test
     public void test0() throws Exception {
         //100000=>950,931,939    //100=>.95 //1462,1456,1459
         //
         //1kb
         //
-        String json =  "{\"code\":1,\"msg\":\"Succeed\",\"data\":{\"list\":[{\"name\":\"北京'\\ud83d\\udc4c\\t\\n\",\"id\":1},{\"name\":\"新疆\",\"id\":31},{\"name\":\"重庆\",\"id\":4},{\"name\":\"广东\",\"id\":19},{\"name\":\"浙江\",\"id\":15},{\"name\":\"天津\",\"id\":3},{\"name\":\"港澳\",\"id\":52993},{\"name\":\"广西\",\"id\":20},{\"name\":\"内蒙古\",\"id\":11},{\"name\":\"宁夏\",\"id\":30},{\"name\":\"江西\",\"id\":21},{\"name\":\"台湾\",\"id\":32},{\"name\":\"安徽\",\"id\":14},{\"name\":\"贵州\",\"id\":24},{\"name\":\"陕西\",\"id\":27},{\"name\":\"辽宁\",\"id\":8},{\"name\":\"山西\",\"id\":6},{\"name\":\"青海\",\"id\":29},{\"name\":\"四川\",\"id\":22},{\"name\":\"江苏\",\"id\":12},{\"name\":\"河北\",\"id\":5},{\"name\":\"西藏\",\"id\":26},{\"name\":\"钓鱼岛\",\"id\":84},{\"name\":\"福建\",\"id\":16},{\"name\":\"吉林\",\"id\":9},{\"name\":\"湖北\",\"id\":17},{\"name\":\"云南\",\"id\":25},{\"name\":\"海南\",\"id\":23},{\"name\":\"上海\",\"id\":2},{\"name\":\"甘肃\",\"id\":28},{\"name\":\"湖南\",\"id\":18},{\"name\":\"山东\",\"id\":13},{\"name\":\"河南\",\"id\":7},{\"name\":\"黑龙江\",\"id\":10}]}}";
+        String json = "{\"code\":1,\"msg\":\"Succeed\",\"data\":{\"list\":[{\"name\":\"北京'\\ud83d\\udc4c\\t\\n\",\"id\":1},{\"name\":\"新疆\",\"id\":31},{\"name\":\"重庆\",\"id\":4},{\"name\":\"广东\",\"id\":19},{\"name\":\"浙江\",\"id\":15},{\"name\":\"天津\",\"id\":3},{\"name\":\"港澳\",\"id\":52993},{\"name\":\"广西\",\"id\":20},{\"name\":\"内蒙古\",\"id\":11},{\"name\":\"宁夏\",\"id\":30},{\"name\":\"江西\",\"id\":21},{\"name\":\"台湾\",\"id\":32},{\"name\":\"安徽\",\"id\":14},{\"name\":\"贵州\",\"id\":24},{\"name\":\"陕西\",\"id\":27},{\"name\":\"辽宁\",\"id\":8},{\"name\":\"山西\",\"id\":6},{\"name\":\"青海\",\"id\":29},{\"name\":\"四川\",\"id\":22},{\"name\":\"江苏\",\"id\":12},{\"name\":\"河北\",\"id\":5},{\"name\":\"西藏\",\"id\":26},{\"name\":\"钓鱼岛\",\"id\":84},{\"name\":\"福建\",\"id\":16},{\"name\":\"吉林\",\"id\":9},{\"name\":\"湖北\",\"id\":17},{\"name\":\"云南\",\"id\":25},{\"name\":\"海南\",\"id\":23},{\"name\":\"上海\",\"id\":2},{\"name\":\"甘肃\",\"id\":28},{\"name\":\"湖南\",\"id\":18},{\"name\":\"山东\",\"id\":13},{\"name\":\"河南\",\"id\":7},{\"name\":\"黑龙江\",\"id\":10}]}}";
         ONode.ofJson(json);
 
         long start = System.currentTimeMillis();
@@ -73,19 +77,19 @@ public class SpeedSnack4Test {
 
         obj.put("list", list);
 
-        String tmp = ONode.serialize(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+        String tmp = ONode.ofBean(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=1000000; i<len; i++) {
-            ONode.serialize(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+        for (int i = 0, len = 1000000; i < len; i++) {
+            ONode.ofBean(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
             //String json = context.node.toJson();
         }
         long times = System.currentTimeMillis() - start;
 
         System.out.println(times);
 
-        assert times>0;
+        assert times > 0;
 
     }
 
@@ -103,23 +107,23 @@ public class SpeedSnack4Test {
         group.ids = new short[5];
         group.iids = new Integer[5];
 
-        for (short i = 0; i < 5 ; i++) {
+        for (short i = 0; i < 5; i++) {
             UserModel user = new UserModel();
             user.id = i;
             user.name = "张三" + i;
             user.note = null;
             group.users.add(user);
-            group.users2.put(Integer.valueOf(i),user);
+            group.users2.put(Integer.valueOf(i), user);
             group.names[i] = "李四" + i;
             group.ids[i] = i;
         }
 
-        String tmp = ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+        String tmp = ONode.ofBean(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
-            ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+        for (int i = 0, len = 100000; i < len; i++) {
+            ONode.ofBean(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
         }
         long times = System.currentTimeMillis() - start;
 
@@ -145,25 +149,25 @@ public class SpeedSnack4Test {
         group.ids = new short[5];
         group.iids = new Integer[5];
 
-        for (short i = 0; i < 5 ; i++) {
+        for (short i = 0; i < 5; i++) {
             UserModel user = new UserModel();
             user.id = i;
             user.name = "张三" + i;
             user.note = null;
             group.users.add(user);
-            group.users2.put(Integer.valueOf(i),user);
+            group.users2.put(Integer.valueOf(i), user);
             group.names[i] = "李四" + i;
             group.ids[i] = i;
         }
 
-        String json = ONode.serialize(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+        String json = ONode.ofBean(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
         System.out.println(json);
 
-        ONode.deserialize(json, UserGroupModel.class);
+        ONode.ofJson(json).toBean(UserGroupModel.class);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
-            ONode.deserialize(json, UserGroupModel.class);
+        for (int i = 0, len = 100000; i < len; i++) {
+            ONode.ofJson(json).toBean(UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
 
@@ -188,13 +192,13 @@ public class SpeedSnack4Test {
         group.ids = new short[5];
         group.iids = new Integer[5];
 
-        for (short i = 0; i < 5 ; i++) {
+        for (short i = 0; i < 5; i++) {
             UserModel user = new UserModel();
             user.id = i;
             user.name = "张三" + i;
             user.note = null;
             group.users.add(user);
-            group.users2.put(Integer.valueOf(i),user);
+            group.users2.put(Integer.valueOf(i), user);
             group.names[i] = "李四" + i;
             group.ids[i] = i;
         }
@@ -205,7 +209,7 @@ public class SpeedSnack4Test {
         ONode.ofJson(json).toBean(Object.class);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             ONode.ofJson(json).toBean(Object.class);
         }
         long times = System.currentTimeMillis() - start;
@@ -232,13 +236,13 @@ public class SpeedSnack4Test {
         group.ids = new short[5];
         group.iids = new Integer[5];
 
-        for (short i = 0; i < 5 ; i++) {
+        for (short i = 0; i < 5; i++) {
             UserModel user = new UserModel();
             user.id = i;
             user.name = "张三" + i;
             user.note = null;
             group.users.add(user);
-            group.users2.put(Integer.valueOf(i),user);
+            group.users2.put(Integer.valueOf(i), user);
             group.names[i] = "李四" + i;
             group.ids[i] = i;
         }
@@ -251,7 +255,7 @@ public class SpeedSnack4Test {
         tmp.toBean(UserGroupModel.class);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             tmp.toBean(UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
@@ -277,13 +281,13 @@ public class SpeedSnack4Test {
         group.ids = new short[5];
         group.iids = new Integer[5];
 
-        for (short i = 0; i < 5 ; i++) {
+        for (short i = 0; i < 5; i++) {
             UserModel user = new UserModel();
             user.id = i;
             user.name = "张三" + i;
             user.note = null;
             group.users.add(user);
-            group.users2.put(Integer.valueOf(i),user);
+            group.users2.put(Integer.valueOf(i), user);
             group.names[i] = "李四" + i;
             group.ids[i] = i;
         }
@@ -296,7 +300,7 @@ public class SpeedSnack4Test {
         tmp.toBean(Object.class);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             tmp.toBean(Object.class);
         }
         long times = System.currentTimeMillis() - start;
@@ -334,7 +338,7 @@ public class SpeedSnack4Test {
 
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             ONode.ofJson(json).toBean(obj.getClass());
         }
         long times = System.currentTimeMillis() - start;
@@ -369,7 +373,7 @@ public class SpeedSnack4Test {
 
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             ONode.ofJson(json);
         }
         long times = System.currentTimeMillis() - start;
@@ -404,7 +408,7 @@ public class SpeedSnack4Test {
         ONode n = ONode.ofJson(json);
 
         long start = System.currentTimeMillis();
-        for(int i=0,len=100000; i<len; i++) {
+        for (int i = 0, len = 100000; i < len; i++) {
             n.toBean(obj.getClass());
         }
         long times = System.currentTimeMillis() - start;
@@ -414,5 +418,4 @@ public class SpeedSnack4Test {
         assert times > 0;
 
     }
-
 }

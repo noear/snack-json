@@ -49,24 +49,15 @@ public class YamlWriter {
 
     private final Options opts;
     private final Writer writer;
-    private int depth = 0;
-    private boolean inFlow = false;
-    private StringBuilder stringBuilder;
-
-    private StringBuilder getStringBuilder() {
-        if (stringBuilder == null) {
-            stringBuilder = new StringBuilder(32);
-        } else {
-            stringBuilder.setLength(0);
-        }
-        return stringBuilder;
-    }
+    private int indentLevel = 0;
+    private final String indent;
 
     public YamlWriter(Options opts, Writer writer) {
         Objects.requireNonNull(writer, "writer");
 
         this.writer = writer;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+        this.indent = opts.getWriteIndent();
     }
 
     public void write(ONode node) throws IOException {
@@ -77,60 +68,63 @@ public class YamlWriter {
         // 写入文档开始标记
         writer.write("---\n");
 
-        writeNode(node, false);
+        writeNode(node, false, false);
 
         // 写入文档结束标记（可选）
-        if (depth == 0) {
-            writer.write("\n...");
-        }
+        // writer.write("\n...");
     }
 
-    private void writeNode(ONode node, boolean isMapValue) throws IOException {
-        switch (node.getType()) {
+    private void writeNode(ONode node, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (node == null || node.isUndefined()) {
+            writeNull(isSequenceItem, isMapValue);
+            return;
+        }
+
+        switch (node.nodeType()) {
             case Object:
-                writeObject(node.getObject(), isMapValue);
+                writeObject(node.getObject(), isSequenceItem, isMapValue);
                 break;
             case Array:
-                writeArray(node.getArray(), isMapValue);
+                writeArray(node.getArray(), isSequenceItem, isMapValue);
                 break;
             case String:
-                writeString(node.getString(), isMapValue);
+                writeString(node.getString(), isSequenceItem, isMapValue);
                 break;
             case Number:
-                writeNumber(node.getNumber(), isMapValue);
+                writeNumber(node.getNumber(), isSequenceItem, isMapValue);
                 break;
             case Date:
-                writeDate(node.getDate(), isMapValue);
+                writeDate(node.getDate(), isSequenceItem, isMapValue);
                 break;
             case Boolean:
-                writeBoolean(node.getBoolean(), isMapValue);
+                writeBoolean(node.getBoolean(), isSequenceItem, isMapValue);
                 break;
             case Null:
+                writeNull(isSequenceItem, isMapValue);
+                break;
             case Undefined:
-                writeNull(isMapValue);
+                writeNull(isSequenceItem, isMapValue);
                 break;
         }
     }
 
-    private void writeObject(Map<String, ONode> map, boolean isMapValue) throws IOException {
+    private void writeObject(Map<String, ONode> map, boolean isSequenceItem, boolean isMapValue) throws IOException {
         if (map.isEmpty()) {
             writer.write("{}");
             return;
         }
 
-        boolean useFlowStyle = shouldUseFlowStyle(map.size());
-        boolean wasInFlow = inFlow;
+        boolean useFlowStyle = shouldUseFlowStyle();
 
         if (useFlowStyle) {
-            inFlow = true;
-            writer.write('{');
+            writeFlowObject(map);
         } else {
-            if (!isMapValue && depth > 0) {
-                writer.write('\n');
-            }
+            writeBlockObject(map, isSequenceItem, isMapValue);
         }
+    }
 
-        depth++;
+    private void writeFlowObject(Map<String, ONode> map) throws IOException {
+        writer.write('{');
         boolean first = true;
 
         for (Map.Entry<String, ONode> entry : map.entrySet()) {
@@ -139,105 +133,150 @@ public class YamlWriter {
             }
 
             if (!first) {
-                if (useFlowStyle) {
-                    writer.write(',');
-                    if (opts.hasFeature(Feature.Write_PrettyFormat)) {
-                        writer.write(' ');
-                    }
-                }
-            }
-
-            if (useFlowStyle) {
-                writeKey(entry.getKey());
-                writer.write(':');
+                writer.write(',');
                 if (opts.hasFeature(Feature.Write_PrettyFormat)) {
                     writer.write(' ');
                 }
-                writeNode(entry.getValue(), true);
+            }
+
+            writeKey(entry.getKey(), true);
+            writer.write(':');
+            if (opts.hasFeature(Feature.Write_PrettyFormat)) {
+                writer.write(' ');
+            }
+            writeNode(entry.getValue(), false, true);
+
+            first = false;
+        }
+
+        writer.write('}');
+    }
+
+    private void writeBlockObject(Map<String, ONode> map, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (!isMapValue && !isSequenceItem && indentLevel > 0) {
+            writer.write("\n");
+        }
+
+        indentLevel++;
+        boolean first = true;
+
+        for (Map.Entry<String, ONode> entry : map.entrySet()) {
+            if (entry.getValue().isNull() && !opts.hasFeature(Feature.Write_Nulls)) {
+                continue;
+            }
+
+            if (!first) {
+                writer.write("\n");
+            }
+
+            writeIndentation();
+            writeKey(entry.getKey(), false);
+            writer.write(':');
+
+            ONode value = entry.getValue();
+            if (value.isObject() || value.isArray()) {
+                writer.write("\n");
+                writeNode(value, false, true);
             } else {
-                writeIndentation();
-                writeKey(entry.getKey());
-                writer.write(':');
-                if (!entry.getValue().isObject() && !entry.getValue().isArray()) {
-                    writer.write(' ');
-                }
-                writeNode(entry.getValue(), true);
+                writer.write(' ');
+                writeNode(value, false, true);
             }
 
             first = false;
         }
 
-        depth--;
-
-        if (useFlowStyle) {
-            writer.write('}');
-            inFlow = wasInFlow;
-        }
+        indentLevel--;
     }
 
-    private void writeArray(List<ONode> list, boolean isMapValue) throws IOException {
+    private void writeArray(List<ONode> list, boolean isSequenceItem, boolean isMapValue) throws IOException {
         if (list.isEmpty()) {
             writer.write("[]");
             return;
         }
 
-        boolean useFlowStyle = shouldUseFlowStyle(list.size());
-        boolean wasInFlow = inFlow;
+        boolean useFlowStyle = shouldUseFlowStyle();
 
         if (useFlowStyle) {
-            inFlow = true;
-            writer.write('[');
+            writeFlowArray(list);
         } else {
-            if (!isMapValue && depth > 0) {
-                writer.write('\n');
-            }
+            writeBlockArray(list, isSequenceItem, isMapValue);
         }
+    }
 
-        depth++;
+    private void writeFlowArray(List<ONode> list) throws IOException {
+        writer.write('[');
         boolean first = true;
 
         for (ONode item : list) {
             if (!first) {
-                if (useFlowStyle) {
-                    writer.write(',');
-                    if (opts.hasFeature(Feature.Write_PrettyFormat)) {
-                        writer.write(' ');
-                    }
+                writer.write(',');
+                if (opts.hasFeature(Feature.Write_PrettyFormat)) {
+                    writer.write(' ');
                 }
             }
 
-            if (useFlowStyle) {
-                writeNode(item, true);
-            } else {
-                writeIndentation();
-                writer.write("- ");
-                writeNode(item, false);
-            }
-
+            writeNode(item, true, false);
             first = false;
         }
 
-        depth--;
-
-        if (useFlowStyle) {
-            writer.write(']');
-            inFlow = wasInFlow;
-        }
+        writer.write(']');
     }
 
-    private void writeString(String s, boolean isMapValue) throws IOException {
-        if (needsQuotes(s)) {
-            writeQuotedString(s, '"');
-        } else if (containsSpecialCharacters(s)) {
-            writeQuotedString(s, '\'');
-        } else if (isMultiLineString(s)) {
+    private void writeBlockArray(List<ONode> list, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (!isMapValue && !isSequenceItem && indentLevel > 0) {
+            writer.write("\n");
+        }
+
+        indentLevel++;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) {
+                writer.write("\n");
+            }
+
+            writeIndentation();
+            writer.write("- ");
+
+            ONode item = list.get(i);
+            if (item.isObject() || item.isArray()) {
+                if (!item.isArray() || !item.getArray().isEmpty()) {
+                    writer.write("\n");
+                }
+                writeNode(item, true, false);
+            } else {
+                writeNode(item, true, false);
+            }
+        }
+
+        indentLevel--;
+    }
+
+    private void writeString(String s, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (s == null) {
+            writeNull(isSequenceItem, isMapValue);
+            return;
+        }
+
+        if (s.isEmpty()) {
+            writer.write("\"\"");
+            return;
+        }
+
+        if (isMultiLineString(s)) {
             writeBlockString(s);
+        } else if (needsQuotes(s)) {
+            writeQuotedString(s, '"');
         } else {
-            writer.write(escapeString(s));
+            writer.write(s);
         }
     }
 
-    private void writeNumber(Number num, boolean isMapValue) throws IOException {
+    private void writeNumber(Number num, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (num == null) {
+            writeNull(isSequenceItem, isMapValue);
+            return;
+        }
+
         if (opts.hasFeature(Feature.Write_NumbersAsString)) {
             writeQuotedString(num.toString(), '"');
         } else if (opts.hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(num)) {
@@ -246,41 +285,45 @@ public class YamlWriter {
             writeQuotedString(num.toString(), '"');
         } else {
             writer.write(num.toString());
-
-            if (opts.hasFeature(Feature.Write_NumberTypeSuffix)) {
-                if (num instanceof Double) {
-                    writer.write('D');
-                } else if (num instanceof Float) {
-                    writer.write('F');
-                } else if (num instanceof Long) {
-                    writer.write('L');
-                }
-            }
         }
     }
 
-    private void writeDate(java.util.Date date, boolean isMapValue) throws IOException {
+    private void writeDate(java.util.Date date, boolean isSequenceItem, boolean isMapValue) throws IOException {
+        if (date == null) {
+            writeNull(isSequenceItem, isMapValue);
+            return;
+        }
+
         if (opts.hasFeature(Feature.Write_UseDateFormat)) {
             String dateStr = DateUtil.format(date, opts.getDateFormat());
-            writeString(dateStr, isMapValue);
+            writeString(dateStr, isSequenceItem, isMapValue);
         } else {
-            writeNumber(date.getTime(), isMapValue);
+            writeNumber(date.getTime(), isSequenceItem, isMapValue);
         }
     }
 
-    private void writeBoolean(boolean value, boolean isMapValue) throws IOException {
+    private void writeBoolean(boolean value, boolean isSequenceItem, boolean isMapValue) throws IOException {
         writer.write(value ? "true" : "false");
     }
 
-    private void writeNull(boolean isMapValue) throws IOException {
+    private void writeNull(boolean isSequenceItem, boolean isMapValue) throws IOException {
         writer.write("null");
     }
 
-    private void writeKey(String key) throws IOException {
-        if (needsQuotes(key) || containsSpecialCharacters(key)) {
+    private void writeKey(String key, boolean inFlow) throws IOException {
+        if (key == null || key.isEmpty()) {
+            writer.write("\"\"");
+            return;
+        }
+
+        if (inFlow || needsQuotes(key)) {
             writeQuotedString(key, '"');
         } else {
-            writer.write(escapeString(key));
+            // 转换蛇形命名
+            if (opts.hasFeature(Feature.Write_UseSnakeStyle)) {
+                key = toSnakeStyle(key);
+            }
+            writer.write(key);
         }
     }
 
@@ -293,9 +336,9 @@ public class YamlWriter {
     private void writeBlockString(String s) throws IOException {
         String[] lines = s.split("\n", -1);
 
-        if (lines.length == 1) {
+        if (lines.length <= 1) {
             // 单行字符串，使用普通格式
-            writer.write(escapeString(s));
+            writeString(s, false, false);
             return;
         }
 
@@ -310,13 +353,13 @@ public class YamlWriter {
 
         writer.write("\n");
 
-        depth++;
+        indentLevel++;
         for (String line : lines) {
             writeIndentation();
-            writer.write(escapeString(line));
+            writer.write(line);
             writer.write("\n");
         }
-        depth--;
+        indentLevel--;
     }
 
     private void writeEscapedContent(String s, char quoteChar) throws IOException {
@@ -357,77 +400,49 @@ public class YamlWriter {
         }
     }
 
-    private String escapeString(String s) {
-        // 对于普通字符串，只需要转义特殊字符
-        StringBuilder sb = getStringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (c == '\\') {
-                sb.append("\\\\");
-            } else if (c == '\"') {
-                sb.append("\\\"");
-            } else if (c == '\n') {
-                sb.append("\\n");
-            } else if (c == '\r') {
-                sb.append("\\r");
-            } else if (c == '\t') {
-                sb.append("\\t");
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-
     private void writeIndentation() throws IOException {
-        if (!inFlow && depth > 0) {
-            for (int i = 0; i < depth; i++) {
-                writer.write(opts.getWriteIndent());
-            }
+        for (int i = 0; i < indentLevel; i++) {
+            writer.write(indent);
         }
     }
 
-    private boolean shouldUseFlowStyle(int size) {
-        // 对于小型的对象或数组，使用流式风格
-        // 对于大型的或嵌套深的，使用块式风格
-        return size <= 3 && depth < 3;
+    private boolean shouldUseFlowStyle() {
+        // 简化逻辑：只在顶层且小规模时使用流式风格
+        return indentLevel == 0;
     }
 
     private boolean needsQuotes(String s) {
-        if (s.isEmpty()) {
+        if (s == null || s.isEmpty()) {
             return true;
         }
 
-        // 检查是否包含需要引号的字符
+        // 检查首字符
+        char firstChar = s.charAt(0);
+        if ("-?:[]{}#&*!|>\"'%@`".indexOf(firstChar) >= 0 || Character.isWhitespace(firstChar)) {
+            return true;
+        }
+
+        // 检查尾字符
+        char lastChar = s.charAt(s.length() - 1);
+        if (Character.isWhitespace(lastChar)) {
+            return true;
+        }
+
+        // 检查是否包含特殊字符
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (i == 0) {
-                // 首字符限制更严格
-                if ("-?:[]{}#&*!|>\"'%@`".indexOf(c) >= 0 || Character.isWhitespace(c)) {
-                    return true;
-                }
-            } else {
-                // 其他位置
-                if (":[]{}#,".indexOf(c) >= 0 || Character.isWhitespace(c)) {
-                    return true;
-                }
-            }
-
-            // 检查控制字符
-            if (c < 0x20) {
+            if (":[]{}#,".indexOf(c) >= 0 || Character.isWhitespace(c) || c < 0x20) {
                 return true;
             }
         }
 
         // 检查是否为可能被误解的值
-        if (isAmbiguousValue(s)) {
-            return true;
-        }
-
-        return false;
+        return isAmbiguousValue(s);
     }
 
     private boolean isAmbiguousValue(String s) {
+        if (s == null) return false;
+
         // 这些值在 YAML 中可能有特殊含义，需要引号
         switch (s) {
             case "null":
@@ -479,37 +494,27 @@ public class YamlWriter {
         return false;
     }
 
-    private boolean containsSpecialCharacters(String s) {
-        // 检查是否包含需要引号的特殊字符
-        return s.chars().anyMatch(c ->
-                c == ':' || c == '{' || c == '}' || c == '[' || c == ']' ||
-                        c == ',' || c == '&' || c == '*' || c == '#' || c == '?' ||
-                        c == '|' || c == '-' || c == '<' || c == '>' || c == '=' ||
-                        c == '!' || c == '%' || c == '@' || c == '`' ||
-                        Character.isWhitespace(c)
-        );
-    }
-
     private boolean isMultiLineString(String s) {
-        return s.contains("\n") && s.length() > 40; // 长度阈值，避免短的多行字符串使用块标量
+        return s != null && s.contains("\n") && s.length() > 20;
     }
 
-    /**
-     * 去除字符串末尾的空白字符（Java 8 兼容的 stripTrailing 替代）
-     */
-    private static String stripTrailing(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
+    private String toSnakeStyle(String camelName) {
+        if (camelName == null || camelName.isEmpty()) {
+            return camelName;
         }
 
-        int length = str.length();
-        int end = length;
-
-        // 从字符串末尾向前查找第一个非空白字符的位置
-        while (end > 0 && Character.isWhitespace(str.charAt(end - 1))) {
-            end--;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < camelName.length(); i++) {
+            char c = camelName.charAt(i);
+            if (Character.isUpperCase(c)) {
+                if (i > 0) {
+                    sb.append('_');
+                }
+                sb.append(Character.toLowerCase(c));
+            } else {
+                sb.append(c);
+            }
         }
-
-        return end == length ? str : str.substring(0, end);
+        return sb.toString();
     }
 }

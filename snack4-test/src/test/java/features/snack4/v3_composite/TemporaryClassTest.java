@@ -34,7 +34,7 @@ public class TemporaryClassTest {
         System.out.println(json);
 
         //临时类会自动转换为父类，并处理成功
-        ONode.deserialize(json);
+        ONode.ofJson(json).toBean();
     }
 
 

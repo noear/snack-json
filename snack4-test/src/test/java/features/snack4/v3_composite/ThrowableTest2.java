@@ -13,7 +13,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test() {
-        Object tmp = ONode.deserialize(json, Feature.Read_AutoType);
+        Object tmp = ONode.ofJson(json, Feature.Read_AutoType).toBean();
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -26,7 +26,7 @@ public class ThrowableTest2 {
         System.out.println(json2);
 
 
-        tmp = ONode.deserialize(json2, Feature.Read_AutoType);
+        tmp = ONode.ofJson(json2, Feature.Read_AutoType).toBean();
 
         assert tmp instanceof IllegalArgumentException;
 
@@ -43,7 +43,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test1() {
-        Object tmp = ONode.deserialize(json, Feature.Read_AutoType);
+        Object tmp = ONode.ofBean(json, Feature.Read_AutoType).toBean();
 
         assert tmp instanceof Throwable;
 

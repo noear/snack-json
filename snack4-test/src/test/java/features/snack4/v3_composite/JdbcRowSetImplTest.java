@@ -18,7 +18,7 @@ public class JdbcRowSetImplTest {
         //
 
         Assertions.assertThrows(SnackException.class, () -> {
-            ONode.deserialize(json, Feature.Read_AutoType);
+            ONode.ofJson(json, Feature.Read_AutoType).toBean();
         });
 
 //        Object tmp = ONode.deserialize(json);
