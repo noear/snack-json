@@ -324,7 +324,7 @@ options.addEncoder(Date.class, (ctx, value, target) -> {
 });
 //添加解码器
 options.addDecoder(Date.class, ...);
-//添加创造器（接管类实例化）
+//添加创建器（接管类实例化）
 options.addCreator(...);
 
 //添加特性
