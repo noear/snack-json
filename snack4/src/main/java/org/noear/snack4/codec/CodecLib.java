@@ -260,6 +260,7 @@ public class CodecLib {
         addEncoder(TimeZone.class, new _TimeZonePatternEncoder());
         addEncoder(Currency.class, new _CurrencyPatternEncoder());
 
+        addEncoder(KeyValueList.class , new KeyValueListEncoder());
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());

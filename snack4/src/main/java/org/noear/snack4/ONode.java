@@ -265,7 +265,7 @@ public final class ONode {
         } else if (isEmpty()) {
             return def;
         } else if (isString()) {
-            return Long.getLong(getString());
+            return Long.parseLong(getString());
         } else {
             throw new SnackException("Not supported for automatic conversion");
         }

@@ -1,0 +1,56 @@
+/*
+ * Copyright 2005-2025 noear.org and authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.noear.snack4.codec.encode;
+
+import org.noear.snack4.ONode;
+import org.noear.snack4.codec.EncodeContext;
+import org.noear.snack4.codec.ObjectEncoder;
+
+import java.util.Map;
+
+/**
+ * 键值对列表编码器
+ *
+ * @author noear 2025/10/15 created
+ * @since 4.0
+ */
+public class KeyValueListEncoder implements ObjectEncoder<KeyValueList> {
+    @Override
+    public ONode encode(EncodeContext ctx, KeyValueList props, ONode target) {
+        if (props.size() == 0) {
+            return target;
+        }
+
+        //对key排序，确保数组有序
+        props.sort();
+
+        //确定类型
+        if (props.get(0).getKey().startsWith("[")) {
+            target.asArray();
+        } else {
+            target.asObject();
+        }
+
+        for (Map.Entry<String, String> kv : props) {
+            String key = kv.getKey();
+            String val = kv.getValue();
+
+            _PropertiesPatternEncoder.setNestedValue(target, key, val);
+        }
+
+        return target;
+    }
+}

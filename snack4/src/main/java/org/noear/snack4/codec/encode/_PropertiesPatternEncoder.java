@@ -38,19 +38,18 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
     }
 
     @Override
-    public ONode encode(EncodeContext ctx, Properties properties, ONode target) {
+    public ONode encode(EncodeContext ctx, Properties props, ONode target) {
+        if (props.size() == 0) {
+            return target;
+        }
+
         //对key排序，确保数组有序
         List<String> keyVector = new ArrayList<>();
-        properties.keySet().forEach(k -> {
+        props.keySet().forEach(k -> {
             if (k instanceof String) {
                 keyVector.add((String) k);
             }
         });
-
-        if(keyVector.isEmpty()){
-            return target;
-        }
-
         Collections.sort(keyVector);
 
         //确定类型
@@ -61,7 +60,7 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
         }
 
         for (String key : keyVector) {
-            String val = properties.getProperty(key);
+            String val = props.getProperty(key);
 
             try {
                 setNestedValue(target, key, val);
@@ -73,8 +72,8 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
         return target;
     }
 
-    // 设置嵌套值
-    private static void setNestedValue(ONode node, String key, String value) {
+
+    public static void setNestedValue(ONode target, String key, String val) {
         /**
          *  ("title", "test");
          *  ("debug", "true");
@@ -87,7 +86,7 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
          *  ("type[]", "b");
          * */
         String[] keySegments = key.split("\\.");
-        ONode n1 = node;
+        ONode n1 = target;
 
         for (int i = 0; i < keySegments.length; i++) {
             String p1 = keySegments[i];
@@ -126,12 +125,11 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
                         n1 = n1.addNew();
                     }
                 }
-
             } else {
                 n1 = n1.getOrNew(p1);
             }
         }
 
-        n1.setValue(value);
+        n1.setValue(val);
     }
 }
