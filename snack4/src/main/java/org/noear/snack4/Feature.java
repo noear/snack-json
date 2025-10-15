@@ -259,31 +259,31 @@ public enum Feature {
     JsonPath_RequireProperties;;
 
 
-    private final int _mask;
+    private final long _mask;
 
     Feature() {
-        _mask = (1 << ordinal());
+        _mask = (1L << ordinal());
     }
 
-    public int mask() {
+    public long mask() {
         return _mask;
     }
 
-    public static int addFeatures(int ref, Feature... features) {
+    public static long addFeatures(long ref, Feature... features) {
         for (Feature feature : features) {
             ref |= feature.mask();
         }
         return ref;
     }
 
-    public static int removeFeatures(int ref, Feature... features) {
+    public static long removeFeatures(long ref, Feature... features) {
         for (Feature feature : features) {
             ref &= ~feature.mask();
         }
         return ref;
     }
 
-    public static boolean hasFeature(int ref, Feature feature) {
+    public static boolean hasFeature(long ref, Feature feature) {
         return (ref & feature.mask()) != 0;
     }
 }

@@ -48,7 +48,7 @@ public final class Options {
     //编码仓库
     private final CodecLib codecLib = CodecLib.newInstance();
     //特性开关（使用位掩码存储）
-    private int featuresValue = DEF_FEATURES;
+    private long featuresValue = DEF_FEATURES;
     //时间格式
     private String dateFormat = DEF_DATETIME_FORMAT;
     //书写缩进
@@ -91,7 +91,7 @@ public final class Options {
         return Feature.hasFeature(this.featuresValue, feature);
     }
 
-    public int getFeatures() {
+    public long getFeatures() {
         return featuresValue;
     }
 
@@ -222,7 +222,7 @@ public final class Options {
             throw new UnsupportedOperationException(DEF_UNSUPPORTED_HINT);
         }
 
-        this.featuresValue = Feature.addFeatures(0, features);
+        this.featuresValue = Feature.addFeatures(0L, features);
         return this;
     }
 

@@ -44,7 +44,7 @@ public class ONodeAttrHolder {
     private boolean decode = true;
     private ObjectEncoder encoder;
     private ObjectDecoder decoder;
-    private int featuresValue;
+    private long featuresValue;
 
     public ONodeAttrHolder(ONodeAttr attrAnno, boolean isTransient) {
         if (attrAnno != null) {
@@ -68,7 +68,7 @@ public class ONodeAttrHolder {
                 decoder = ClassUtil.newInstance(attrAnno.decoder());
             }
 
-            featuresValue = Feature.addFeatures(0, attrAnno.features());
+            featuresValue = Feature.addFeatures(0L, attrAnno.features());
         }
 
         if (isTransient) {
