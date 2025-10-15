@@ -19,6 +19,8 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
 import org.noear.snack4.core.util.Asserts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -28,6 +30,8 @@ import java.util.*;
  * @since 4.0
  */
 public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Properties> {
+    static final Logger log = LoggerFactory.getLogger(_PropertiesPatternEncoder.class);
+
     @Override
     public boolean canEncode(Object value) {
         return value instanceof Properties;
@@ -56,9 +60,12 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
         for (String key : keyVector) {
             String val = properties.getProperty(key);
 
-            setNestedValue(rootNode, key, val);
+            try {
+                setNestedValue(rootNode, key, val);
+            } catch (Exception e) {
+                log.debug("Failed to encode property '{}'. The value: '{}'", key, val, e);
+            }
         }
-
 
         return rootNode;
     }
