@@ -130,16 +130,6 @@ jayway.jsonpath Increment operator (supported)
 | `empty`    | left (array or string) should be empty            | `$[?(@.s empty false)]`             |  
 
 
-snack-jsonpath Increment operator (supported)
-
-
-| Operator              | Description                                       | Examples                  |   
-|------------------|---------------------------------------------------|---------------------------|
-| `startsWith`     | left (string) start matches a right               | `[?(@.s startsWith 'a')]` |  
-| `endsWith`       | left (string) end matches the right               | `[?(@.s endsWith 'b')]`   |  
-| `contains`       | left (array or string) contains matches the right | `[?(@.s contains 'c')]`   |  
-
-
 IETF JSONPath (RFC 9535) Standard definition functions (supported)
 
 
@@ -305,6 +295,7 @@ rst.parent();
 
 ### Advanced customization
 
+Json codec customization
 
 ```java
 Options options = Options.of();
@@ -314,7 +305,8 @@ options.addEncoder(Date.class, (ctx, value, target) -> {
 });
 //添加解码器
 options.addDecoder(Date.class, ...);
-options.addFactory(...);
+//添加创造器（接管类实例化）
+options.addCreator(...);
 
 //添加特性
 options.addFeature(Feature.Write_PrettyFormat);
@@ -331,3 +323,75 @@ options.dateFormat("yyyy-MM");
 String json = ONode.ofBean(orderModel, options).toJson();
 ```
 
+JsonPath Function and operator customization
+
+```java
+import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.FunctionLib;
+
+public class FunctionDemo {
+    public static void main(String[] args) {
+        //定制 floor 函数
+        FunctionLib.register("floor", (ctx, argNodes) -> {
+            ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
+
+            if (ctx.isDescendant()) {
+                for (ONode n1 : arg0.getArray()) {
+                    if (n1.isNumber()) {
+                        n1.setValue(Math.floor(n1.getDouble()));
+                    }
+                }
+
+                return arg0;
+            } else {
+                ONode n1 = arg0.get(0);
+
+                if (n1.isNumber()) {
+                    return ctx.newNode(Math.floor(n1.getDouble()));
+                } else {
+                    return ctx.newNode();
+                }
+            }
+        });
+
+        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2） //out: 1.0
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$.a.floor()")
+                .toJson());
+
+        //参考 //out: 2.0
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$[?floor(@) > 1].first()")
+                .toJson());
+    }
+}
+```
+
+```java
+import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.OperatorLib;
+
+public class OperationDemo {
+    public static void main(String[] args) {
+        //定制操作符
+        OperatorLib.register("startsWith", (ctx, node, term) -> {
+            ONode leftNode = term.getLeftNode(ctx, node);
+
+            if (leftNode.isString()) {
+                ONode rightNode = term.getRightNode(ctx, node);
+                if (rightNode.isNull()) {
+                    return false;
+                }
+
+                return leftNode.getString().startsWith(rightNode.getString());
+            }
+            return false;
+        });
+
+        //检验效果
+        assert ONode.ofJson("{'list':['a','b','c']}")
+                .select("$.list[?@ startsWith 'a']")
+                .size() == 1;
+    }
+}
+```

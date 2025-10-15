@@ -132,16 +132,6 @@ jayway.jsonpath 增量操作符（支持）
 | `empty`    | Left（数组或字符串）应该为空   | `$[?(@.s empty false)]`                 |  
 
 
-snack-jsonpath 增量操作符（支持）
-
-
-| 操作符              | 描述                  | 示例                             |   
-|------------------|---------------------|--------------------------------|
-| `startsWith`     | 左（字符串）开头匹配右         | `[?(@.s startsWith 'a')]`      |  
-| `endsWith`       | 左（字符串）结尾匹配右         | `[?(@.s endsWith 'b')]`        |  
-| `contains`       | 左（数组或字符串）包含匹配右      | `[?(@.s contains 'c')]`        |  
-
-
 IETF JSONPath (RFC 9535) 标准定义函数（支持）
 
 
@@ -310,6 +300,7 @@ rst.parent();
 
 ### 高级定制
 
+Json 编解码定制
 
 ```java
 Options options = Options.of();
@@ -319,7 +310,8 @@ options.addEncoder(Date.class, (ctx, value, target) -> {
 });
 //添加解码器
 options.addDecoder(Date.class, ...);
-options.addFactory(...);
+//添加创造器（接管类实例化）
+options.addCreator(...);
 
 //添加特性
 options.addFeature(Feature.Write_PrettyFormat);
@@ -334,5 +326,78 @@ options.dateFormat("yyyy-MM");
 //..
 
 String json = ONode.ofBean(orderModel, options).toJson();
+```
+
+JsonPath 函数与操作符定制
+
+```java
+import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.FunctionLib;
+
+public class FunctionDemo {
+    public static void main(String[] args) {
+        //定制 floor 函数
+        FunctionLib.register("floor", (ctx, argNodes) -> {
+            ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
+
+            if (ctx.isDescendant()) {
+                for (ONode n1 : arg0.getArray()) {
+                    if (n1.isNumber()) {
+                        n1.setValue(Math.floor(n1.getDouble()));
+                    }
+                }
+
+                return arg0;
+            } else {
+                ONode n1 = arg0.get(0);
+
+                if (n1.isNumber()) {
+                    return ctx.newNode(Math.floor(n1.getDouble()));
+                } else {
+                    return ctx.newNode();
+                }
+            }
+        });
+
+        //检验效果（在 IETF 规范里以子项进行过滤，即 1,2） //out: 1.0
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$.a.floor()")
+                .toJson());
+
+        //参考 //out: 2.0
+        System.out.println(ONode.ofJson("{'a':1,'b':2}")
+                .select("$[?floor(@) > 1].first()")
+                .toJson());
+    }
+}
+```
+
+```java
+import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.OperatorLib;
+
+public class OperationDemo {
+    public static void main(String[] args) {
+        //定制操作符
+        OperatorLib.register("startsWith", (ctx, node, term) -> {
+            ONode leftNode = term.getLeftNode(ctx, node);
+
+            if (leftNode.isString()) {
+                ONode rightNode = term.getRightNode(ctx, node);
+                if (rightNode.isNull()) {
+                    return false;
+                }
+
+                return leftNode.getString().startsWith(rightNode.getString());
+            }
+            return false;
+        });
+
+        //检验效果
+        assert ONode.ofJson("{'list':['a','b','c']}")
+                .select("$.list[?@ startsWith 'a']")
+                .size() == 1;
+    }
+}
 ```
 
