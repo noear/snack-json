@@ -80,11 +80,11 @@ public class _test3 {
         String json = "['1','2']";
 
         //用静态函数反序列化（基础类型，不需要指明类型）
-        List<String> list = ONode.ofJson(json).toBean();
+        List<String> list = ONode.deserialize(json);
         assert list.size() == 2;
 
         //用静态函数反序列化（也可以指下类型）
-        List<String> list2 = ONode.ofJson(json).toBean(new ArrayList<String>().getClass());
+        List<String> list2 = ONode.deserialize(json, new ArrayList<String>().getClass());
         assert list2.size() == 2;
     }
 

@@ -19,7 +19,7 @@ public class AttrTest {
         user.name = "noear";
         user.note  ="test";
 
-        String json= ONode.ofBean(user).toJson();
+        String json= ONode.serialize(user);
 
         System.out.println(json);
 
@@ -30,7 +30,7 @@ public class AttrTest {
     @Test
     public void test2(){
         String json = "{id:1,name:'noear',note:'test',nodeEncoder:{}}";
-        UserModel2 user =  ONode.ofJson(json).toBean(UserModel2.class );
+        UserModel2 user =  ONode.deserialize(json, UserModel2.class );
 
         System.out.println(user);
         assert "noear".equals(user.name);

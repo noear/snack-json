@@ -41,7 +41,7 @@ public class _test2 {
         Map<String,Object> data = new LinkedHashMap<>();
         data.put("model",model);
 
-        String json = ONode.ofBean(data).toJson();
+        String json = ONode.serialize(data);
         String json2 = JSON.toJSONString(data,
                 SerializerFeature.BrowserCompatible,
                 SerializerFeature.DisableCircularReferenceDetect);
