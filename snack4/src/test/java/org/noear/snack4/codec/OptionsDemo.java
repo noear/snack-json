@@ -26,6 +26,8 @@ public class OptionsDemo {
             return ctx.getOptions().loadClass(node.getString());
         });
 
+        //options.addCreator()
+
         //测试：序列化
         Map<String,Class<?>> data = new HashMap<>();
         data.put("list", ArrayList.class);
