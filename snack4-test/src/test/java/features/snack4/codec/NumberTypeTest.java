@@ -35,7 +35,7 @@ public class NumberTypeTest {
         assert json.equals("{\"a\":1,\"b\":2L,\"c\":3.0F,\"d\":4.0D}");
 
         //带数字类型符号的，可以还原数字类型
-        Map map = ONode.deserialize(json, Map.class);
+        Map map = ONode.ofJson(json).toBean(Map.class);
         assert map.get("b") instanceof Long;
     }
 

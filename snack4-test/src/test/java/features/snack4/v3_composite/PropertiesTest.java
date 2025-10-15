@@ -136,7 +136,7 @@ public class PropertiesTest {
     @Test
     public void test7() {
         String json = "{'userName':'a'}";
-        UserModel userModel = ONode.deserialize(json, UserModel.class);
+        UserModel userModel = ONode.ofJson(json).toBean(UserModel.class);
         assert userModel.getUserName() == null;
 
 

@@ -16,7 +16,7 @@ public class _RecordTest {
         String json = ONode.serialize(tmp);
         System.out.println(json);
 
-        MyRecord tmp2 = ONode.deserialize(json, MyRecord.class);
+        MyRecord tmp2 = ONode.ofJson(json).toBean(MyRecord.class);
 
         assert tmp.username().equals(tmp2.username());
 

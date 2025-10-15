@@ -13,7 +13,7 @@ public class EmptyTest {
     @Test
     public void demo() {
         String json = "{data:{a:1,b:2}}";
-        EmptyDo emptyDo = ONode.deserialize(json, EmptyDo.class);
+        EmptyDo emptyDo = ONode.ofJson(json).toBean(EmptyDo.class);
 
         assert emptyDo.data.size() == 2;
     }

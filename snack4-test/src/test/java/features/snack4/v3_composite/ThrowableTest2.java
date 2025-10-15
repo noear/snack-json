@@ -52,7 +52,7 @@ public class ThrowableTest2 {
 
     @Test
     public void test2() {
-        Object tmp = ONode.deserialize(json, Point.class, Feature.Read_AutoType);
+        Object tmp = ONode.ofJson(json,  Feature.Read_AutoType).toBean(Point.class);
 
         assert tmp instanceof Throwable;
 

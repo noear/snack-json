@@ -61,7 +61,7 @@ public class _demo {
     public void demo4() throws Exception {
         String tmp = "{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}";
         //1.加载json
-        Object n = ONode.deserialize(tmp, Object.class);
+        Object n = ONode.ofJson(tmp).toBean();
 
         assert n instanceof Map;
 

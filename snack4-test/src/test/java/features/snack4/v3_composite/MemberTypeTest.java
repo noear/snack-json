@@ -12,7 +12,7 @@ public class MemberTypeTest {
     @Test
     public void test1(){
         String json = "{\"id\":1, \"name\":\"n\"}";
-        Server.One one = ONode.deserialize(json, Server.One.class);
+        Server.One one = ONode.ofJson(json).toBean( Server.One.class);
 
         assert one != null;
     }
@@ -21,7 +21,7 @@ public class MemberTypeTest {
     public void date1(){
         String json = "{date1:''}";
 
-        DateModel2 model2 = ONode.deserialize(json, DateModel2.class);
+        DateModel2 model2 = ONode.ofJson(json).toBean(DateModel2.class);
 
         assert model2.date1 == null;
     }

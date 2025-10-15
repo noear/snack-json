@@ -35,7 +35,7 @@ public class OptionsDemo {
         assert "{\"list\":\"java.util.ArrayList\"}".equals(json);
 
         //测试：反序列化
-        data = ONode.deserialize(json, new TypeRef<Map<String,Class<?>>>() {}, options);
+        data = ONode.ofJson(json, options).toBean(new TypeRef<Map<String,Class<?>>>() {});
         System.out.println(data.get("list")); // class java.util.ArrayList
         assert ArrayList.class.equals(data.get("list"));
     }

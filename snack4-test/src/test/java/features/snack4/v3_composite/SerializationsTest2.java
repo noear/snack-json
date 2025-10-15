@@ -57,7 +57,7 @@ public class SerializationsTest2 {
     public void test02() {
         String tmp = ONode.serialize(buildObj(), Feature.Write_ClassName);
         tmp = tmp.replaceAll("UserGroupModel", "UserGroupModel2");
-        UserGroupModel2 tmp2 = ONode.deserialize(tmp, UserGroupModel2.class, Feature.Read_AutoType);
+        UserGroupModel2 tmp2 = ONode.ofJson(tmp, Feature.Read_AutoType).toBean(UserGroupModel2.class);
 
         assert tmp2.users != null;
         assert tmp2.users.length > 2;
@@ -153,7 +153,7 @@ public class SerializationsTest2 {
     @Test
     public void test5() {
         String json = "{data:{a:1,b:2}}";
-        MapModel mapModel = ONode.deserialize(json, MapModel.class);
+        MapModel mapModel = ONode.ofJson(json).toBean(MapModel.class);
 
         assert mapModel != null;
         assert mapModel.data != null;
@@ -163,7 +163,7 @@ public class SerializationsTest2 {
     @Test
     public void test6() {
         String json = "{user-name:'noear',userName:'noear'}";
-        NameModel nameModel = ONode.deserialize(json, NameModel.class);
+        NameModel nameModel = ONode.ofJson(json).toBean(NameModel.class);
         System.out.println(nameModel);
         assert "noear".equals(nameModel.getUserName());
     }
@@ -202,7 +202,7 @@ public class SerializationsTest2 {
         String json = ONode.serialize(sets, Feature.Write_ClassName);
         System.out.println(json);
 
-        Set<String> sets2 = ONode.deserialize(json, Set.class);
+        Set<String> sets2 = ONode.ofJson(json).toBean(Set.class);
         System.out.println(ONode.serialize(sets2, Feature.Write_ClassName));
 
         assert sets2.size() == sets.size();

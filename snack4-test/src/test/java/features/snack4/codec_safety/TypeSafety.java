@@ -39,10 +39,10 @@ public class TypeSafety {
         });
 
         Assertions.assertThrows(SnackException.class, () -> {
-            ONode.deserialize("{id:1}", UserModel.class, options);
+            ONode.ofJson("{id:1}", options).toBean(UserModel.class);
         });
 
-        ONode.deserialize("{id:1}", Map.class, options);
+        ONode.ofJson("{id:1}", options).toBean(Map.class);
     }
 
     @Test
@@ -66,9 +66,9 @@ public class TypeSafety {
         });
 
         Assertions.assertThrows(SnackException.class, () -> {
-            ONode.deserialize("{id:1}", UserModel.class, options);
+            ONode.ofJson("{id:1}", options).toBean(UserModel.class);
         });
 
-        ONode.deserialize("{id:1}", Map.class, options);
+        ONode.ofJson("{id:1}", options).toBean(Map.class);
     }
 }

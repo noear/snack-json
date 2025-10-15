@@ -34,8 +34,8 @@ public class ComplicatedTest {
         System.out.println(json);
 
         //开始反序列化
-        Object obj2 = ONode.deserialize(json, Object.class, Feature.Read_AutoType);
-        String json2 = ONode.serialize(obj2, Feature.Write_ClassName);
+        Object obj2 = ONode.ofJson(json,Feature.Read_AutoType).toBean();
+        String json2 = ONode.ofBean(obj2, Feature.Write_ClassName).toJson();
         System.out.println(json2);
 
         assert obj2 instanceof List;

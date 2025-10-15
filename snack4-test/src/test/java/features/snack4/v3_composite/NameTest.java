@@ -28,7 +28,7 @@ public class NameTest {
         assert json.contains("name");
 
 
-        BookModel user2 = ONode.deserialize(json, BookModel.class);
+        BookModel user2 = ONode.ofJson(json).toBean(BookModel.class);
         System.out.println(user2.bookname);
 
         assert "noear".equals(user2.bookname);
@@ -61,7 +61,7 @@ public class NameTest {
         assert json.contains("name");
 
 
-        BookViewModel vm2 = ONode.deserialize(json, BookViewModel.class);
+        BookViewModel vm2 = ONode.ofJson(json).toBean(BookViewModel.class);
         System.out.println(vm2.list.get(0).bookname);
 
         assert "noear".equals(vm2.list.get(0).bookname);

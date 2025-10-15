@@ -102,8 +102,8 @@ public class NumberTest {
         System.out.println(json2);
 
 
-        NumberModel obj1 = ONode.deserialize(json, NumberModel.class);
-        NumberModel obj2 = ONode.deserialize(json2, NumberModel.class);
+        NumberModel obj1 = ONode.ofJson(json).toBean(NumberModel.class);
+        NumberModel obj2 = ONode.ofJson(json2).toBean(NumberModel.class);
 
         System.out.println(obj1);
         System.out.println(obj2);
@@ -121,7 +121,7 @@ public class NumberTest {
     @Test
     public void test7() {
         String json = "{a:1}";
-        Map map = ONode.deserialize(json, Map.class);
+        Map map = ONode.ofJson(json).toBean(Map.class);
 
         assert map.get("a") instanceof Integer;
     }
@@ -146,12 +146,12 @@ public class NumberTest {
     @Test
     public void test10() {
         String json = "{num15_2:''}";
-        NumberModel tmp1 = ONode.deserialize(json, NumberModel.class);
+        NumberModel tmp1 = ONode.ofJson(json).toBean(NumberModel.class);
         Assertions.assertNull(tmp1.getNum15_2());
 
 
         json = "{num15_2:'1'}";
-        tmp1 = ONode.deserialize(json, NumberModel.class);
+        tmp1 = ONode.ofJson(json).toBean(NumberModel.class);
         Assertions.assertEquals(1D, tmp1.getNum15_2());
     }
 }

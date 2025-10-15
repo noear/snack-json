@@ -84,7 +84,7 @@ public class _test3 {
         assert list.size() == 2;
 
         //用静态函数反序列化（也可以指下类型）
-        List<String> list2 = ONode.deserialize(json, (new ArrayList<String>()).getClass());
+        List<String> list2 = ONode.ofJson(json).toBean(new ArrayList<String>().getClass());
         assert list2.size() == 2;
     }
 

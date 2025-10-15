@@ -55,7 +55,7 @@ public class EnumTest {
         String json = "{name:'demo',dict:'9'}";
 
         try {
-            ONode.deserialize(json, Book.class);
+            ONode.ofJson(json).toBean(Book.class);
             assert false;
         } catch (SnackException e) {
             assert true;
@@ -68,10 +68,10 @@ public class EnumTest {
         String s2 = "'number'";
         String s3 = "'select'";
         String s4 = "'switcher'";
-        ConfigControlType type1 = ONode.deserialize(s1, ConfigControlType.class);
-        ConfigControlType type2 = ONode.deserialize(s2, ConfigControlType.class);
-        ConfigControlType type3 = ONode.deserialize(s3, ConfigControlType.class);
-        ConfigControlType type4 = ONode.deserialize(s4, ConfigControlType.class);
+        ConfigControlType type1 = ONode.ofJson(s1).toBean( ConfigControlType.class);
+        ConfigControlType type2 = ONode.ofJson(s2).toBean( ConfigControlType.class);
+        ConfigControlType type3 = ONode.ofJson(s3).toBean( ConfigControlType.class);
+        ConfigControlType type4 = ONode.ofJson(s4).toBean( ConfigControlType.class);
         System.out.println(type1);
         System.out.println(type2);
         System.out.println(type3);
@@ -140,7 +140,7 @@ public class EnumTest {
         String json = ONode.ofBean(rec, Feature.Write_PrettyFormat).toJson();
 
         System.out.println(json);
-        Rec rec2 = ONode.deserialize(json, Rec.class);
+        Rec rec2 = ONode.ofJson(json).toBean( Rec.class);
 
         System.out.println(rec2.toString());
 

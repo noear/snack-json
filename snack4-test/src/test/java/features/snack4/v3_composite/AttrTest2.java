@@ -60,7 +60,7 @@ public class AttrTest2 {
         String json = "{id:1, name:'noear', note:'test'}";
 
 
-        UserModel3 user = ONode.deserialize(json, UserModel3.class);
+        UserModel3 user = ONode.ofJson(json).toBean(UserModel3.class);
 
         System.out.println(json);
 

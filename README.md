@@ -158,7 +158,7 @@ ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass());
 
 //快捷方式
 String json = ONode.serialize(user);
-User user = ONode.deserialize(json, User.class);
+User user = ONode.ofJson(json).toBean(User.class);
 ```
 
 ### Path tree interface

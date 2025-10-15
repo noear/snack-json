@@ -46,7 +46,7 @@ public class GenericTest {
 
         System.out.println(json);
 
-        ComplexModel<Point> model1 = ONode.deserialize(json, new TypeRef<ComplexModel<Point>>() {});
+        ComplexModel<Point> model1 = ONode.ofJson(json).toBean( new TypeRef<ComplexModel<Point>>() {});
 
         List<Point> points1 = model1.getPoints();
         for (Point p1 : points1) {
@@ -84,13 +84,13 @@ public class GenericTest {
         assert result.getData().getContent().get(0).getClass() == House.class;
 
 
-        Result<House> result1 = ONode.deserialize(json, new Result<House>() {
+        Result<House> result1 = ONode.ofJson(json).toBean( new Result<House>() {
         }.getClass());
         assert result1.getData().getContent().size() == 1;
         assert result1.getData().getContent().get(0).getClass() == House.class;
 
 
-        Result<House> result2 = ONode.deserialize(json, new TypeRef<Result<House>>() {
+        Result<House> result2 = ONode.ofJson(json).toBean( new TypeRef<Result<House>>() {
         }.getType());
         assert result2.getData().getContent().size() == 1;
         assert result2.getData().getContent().get(0).getClass() == House.class;
@@ -117,7 +117,7 @@ public class GenericTest {
                 "}";
 
 
-        Map<String, Data> map = ONode.deserialize(json, new HashMap<String, Data>() {
+        Map<String, Data> map = ONode.ofJson(json).toBean( new HashMap<String, Data>() {
         }.getClass());
 
         assert map.get("data").getClass() == Data.class;
@@ -136,7 +136,7 @@ public class GenericTest {
                 "\t\t}]";
 
 
-        List<House> ary = ONode.deserialize(json, new ArrayList<House>() {
+        List<House> ary = ONode.ofJson(json).toBean( new ArrayList<House>() {
         }.getClass());
 
         assert ary.size() > 0;
@@ -147,7 +147,7 @@ public class GenericTest {
     public void test5() {
         String json = "{\"code\":\"2000\",\"data\":{\"content\":[{\"sn\":\"P0008\",\"dver_type\":\"1\",\"data_status\":\"0\",\"created_by\":\"xieb\",\"created_date\":\"2021-12-16 13:25:16\",\"updated_by\":\"xieb\",\"updated_date\":\"2021-12-16 13:25:16\"},{\"sn\":\"P0009\",\"dver_type\":\"1\",\"data_status\":\"0\",\"created_by\":\"xieb\",\"created_date\":\"2021-12-16 13:41:36\",\"updated_by\":\"xieb\",\"updated_date\":\"2021-12-16 17:09:02\"}],\"obj\":{\"sn\":\"P0008\",\"dver_type\":\"1\",\"data_status\":\"0\",\"created_by\":\"xieb\",\"created_date\":\"2021-12-16 13:25:16\",\"updated_by\":\"xieb\",\"updated_date\":\"2021-12-16 13:25:16\"},\"pageNum\":1,\"pageSize\":20,\"totalElements\":4,\"pages\":1}}";
 
-        Result<House> result1 = ONode.deserialize(json, new Result<House>() {
+        Result<House> result1 = ONode.ofJson(json).toBean( new Result<House>() {
         }.getClass());
         assert result1.getData().getContent().size() > 0;
         assert result1.getData().getContent().get(0).getClass() == House.class;
@@ -172,7 +172,7 @@ public class GenericTest {
     public void test7() {
         String s = "[[1,2,4],[6,9,1001]]";
 
-        List<List<Integer>> list = ONode.deserialize(s, new TypeRef<List<List<Integer>>>() {
+        List<List<Integer>> list = ONode.ofJson(s).toBean( new TypeRef<List<List<Integer>>>() {
         }.getType());
 
         assert list != null;
@@ -184,7 +184,7 @@ public class GenericTest {
     public void test8() {
         String s = "{\"list\":[[1,2,4],[6,9,1001]],\"book\":{id:1,\"name\":\"test\"}}";
 
-        GModel model = ONode.deserialize(s, GModel.class);
+        GModel model = ONode.ofJson(s).toBean( GModel.class);
 
         assert model.list != null;
         assert model.list.size() == 2;
@@ -198,7 +198,7 @@ public class GenericTest {
     @Test
     public void test9() {
         String json = "{page:1,pageSize:3,data:{id:5,name:'noear'}}";
-        PageRequest<UserModel> request = ONode.deserialize(json, new TypeRef<PageRequest<UserModel>>() {
+        PageRequest<UserModel> request = ONode.ofJson(json).toBean( new TypeRef<PageRequest<UserModel>>() {
         });
 
         assert request.getPage() == 1;
@@ -210,7 +210,7 @@ public class GenericTest {
     @Test
     public void test10(){
         String json = "[[1],[3,5],[6,3,1]]";
-       List<List<Long>> list = ONode.deserialize(json,new TypeRef<List<List<Long>>>(){});
+       List<List<Long>> list = ONode.ofJson(json).toBean(new TypeRef<List<List<Long>>>(){});
 
        assert list != null;
        assert list.get(0).get(0) instanceof Long;
@@ -228,7 +228,7 @@ public class GenericTest {
     @Test
     public void test11(){
         String json = "{a:[1],b:[2,4]}";
-        Map<String,List<Long>> map  = ONode.deserialize(json,new TypeRef<Map<String,List<Long>>>(){});
+        Map<String,List<Long>> map  = ONode.ofJson(json).toBean(new TypeRef<Map<String,List<Long>>>(){});
 
         assert map != null;
         assert map.get("a").get(0) instanceof Long;

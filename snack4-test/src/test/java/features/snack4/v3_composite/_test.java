@@ -189,7 +189,7 @@ public class _test {
         String json2 = ONode.ofJson(json).toJson();
         System.out.println(json2);
 
-        UserModel um2 = ONode.deserialize(json, UserModel.class);
+        UserModel um2 = ONode.ofJson(json).toBean(UserModel.class);
 
         assert um2.name.equals(um.name);
     }

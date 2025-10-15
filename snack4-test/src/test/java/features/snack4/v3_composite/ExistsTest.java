@@ -83,7 +83,7 @@ public class ExistsTest {
     @Test
     public void test6() {
         String str = "{'note':null,name:'1'}";
-        UserModel userModel = ONode.deserialize(str, UserModel.class);
+        UserModel userModel = ONode.ofJson(str).toBean( UserModel.class);
 
         ONode load = ONode.ofJson(str);
         ONode load1 = ONode.ofBean(userModel, Feature.Write_Nulls);

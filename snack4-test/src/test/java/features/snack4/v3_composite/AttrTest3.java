@@ -29,7 +29,7 @@ public class AttrTest3 {
         Assertions.assertTrue(json.contains("\"12:34:01\""));
 
         // 下面这行代码会报错，因为 Snack3 在反序列化时还没有 @JSONField.format 优先
-        AnnoTimeObject obj = ONode.deserialize(json, AnnoTimeObject.class);
+        AnnoTimeObject obj = ONode.ofJson(json).toBean(AnnoTimeObject.class);
         Assertions.assertEquals(obj, t);
     }
 

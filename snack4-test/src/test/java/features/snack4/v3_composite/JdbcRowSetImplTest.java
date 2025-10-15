@@ -21,7 +21,7 @@ public class JdbcRowSetImplTest {
             ONode.ofJson(json, Feature.Read_AutoType).toBean();
         });
 
-//        Object tmp = ONode.deserialize(json);
+//        Object tmp = ONode.ofJson(json).toBean();
 //
 //        assert tmp != null;
 //        assert tmp.getClass().getName().equals("com.sun.rowset.JdbcRowSetImpl");

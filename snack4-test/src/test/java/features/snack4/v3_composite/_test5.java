@@ -13,7 +13,7 @@ public class _test5 {
         String poc = "{\"@type\":\"features.snack4.v3_composite.test5.A\"," +
                 "\"b\":{\"@type\":\"features.snack4.v3_composite.test5.B\",\"bList\":\"str1\"}}";
         System.out.println(poc);
-        A o = ONode.deserialize(poc, A.class);
+        A o = ONode.ofJson(poc).toBean(A.class);
 
         System.out.println(o);
 

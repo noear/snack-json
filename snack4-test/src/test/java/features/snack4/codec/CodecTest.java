@@ -49,7 +49,7 @@ public class CodecTest {
         String json = ONode.serialize(bean);
         System.out.println(json);
 
-        DemoBean bean2 = ONode.deserialize(json, DemoBean.class);
+        DemoBean bean2 = ONode.ofJson(json).toBean(DemoBean.class);
         System.out.println(bean2);
 
         String json2 = ONode.serialize(bean2);
@@ -61,15 +61,15 @@ public class CodecTest {
     @Test
     public void case2() {
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'file':111}",  DemoBean.class);
+            ONode.ofJson("{'file':111}").toBean(DemoBean.class);
         });
 
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'dateFormat':111}",  DemoBean.class);
+            ONode.ofJson("{'dateFormat':111}").toBean(DemoBean.class);
         });
 
         Assertions.assertThrows(CodecException.class, () -> {
-            ONode.deserialize("{'url':111}",  DemoBean.class);
+            ONode.ofJson("{'url':111}").toBean(DemoBean.class);
         });
     }
 

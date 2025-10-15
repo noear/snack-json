@@ -166,11 +166,11 @@ public class FeatureTest {
 
         String json = ONode.ofBean(data, Feature.Write_ClassName).toJson();
 
-        data = ONode.deserialize(json, Map.class);
+        data = ONode.ofJson(json).toBean(Map.class);
         System.out.println(data);
         Assertions.assertEquals("{@type=java.util.HashMap, user={@type=features.snack4.codec.FeatureTest$NumberBean, a=1, b=2, c=3.0, d=4.0}}", data.toString());
 
-        data = ONode.deserialize(json, Map.class, Feature.Read_AutoType);
+        data = ONode.ofJson(json, Feature.Read_AutoType).toBean(Map.class);
         System.out.println(data);
         Assertions.assertEquals("{user=NumberBean{a=1, b=2, c=3.0, d=4.0}}", data.toString());
     }
@@ -179,10 +179,10 @@ public class FeatureTest {
     public void Write_FailOnUnknownProperties() {
         String json = "{name:'aaa'}";
 
-        ONode.deserialize(json, NumberBean.class);
+        ONode.ofJson(json).toBean(NumberBean.class);
 
         Assertions.assertThrows(Throwable.class, () -> {
-            ONode.deserialize(json, NumberBean.class, Feature.Write_OnlyUseSetter, Feature.Write_FailOnUnknownProperties);
+            ONode.ofJson(json, Feature.Write_OnlyUseSetter, Feature.Write_FailOnUnknownProperties).toBean(NumberBean.class);
         });
     }
 
