@@ -230,9 +230,10 @@ public enum Feature {
     Write_LongAsString,
 
     /**
-     * IETF_RFC_9535 兼容模式
+     * IETF_RFC_9535 兼容模式（默认）
      */
     JsonPath_IETF_RFC_9535,
+
     /**
      * Jayway 兼容模式
      */
