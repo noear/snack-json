@@ -8,6 +8,9 @@
 	Compatible with `jayway.jsonpath` and <a href="https://www.rfc-editor.org/rfc/rfc9535.html" target="_blank">IETF JSONPath (RFC 9535)</a> standards (Open customization support)
 </p>
 <p align="center">
+    <a href="https://solon.noear.org/article/snack" target="_blank">https://solon.noear.org/article/snack</a>
+</p>
+<p align="center">
     <a target="_blank" href="https://deepwiki.com/noear/snack-jsonpath">
         <img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" />
     </a>
