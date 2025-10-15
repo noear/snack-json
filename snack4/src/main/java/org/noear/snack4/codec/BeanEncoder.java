@@ -188,7 +188,9 @@ public class BeanEncoder {
         ONode propNode = null;
 
         if (property.getAttr().getEncoder() != null) {
-            propNode = property.getAttr().getEncoder().encode(new EncodeContext(opts, property.getAttr()), propValue, new ONode(opts));
+            propNode = property.getAttr()
+                    .getEncoder()
+                    .encode(new EncodeContext(opts, property.getAttr()), propValue, new ONode(opts));
         } else {
             if (propValue == null) {
                 //分类控制
