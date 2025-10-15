@@ -21,6 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 节点创造方法
  *
  * @author noear 2025/10/15 created
  * @since 4.0

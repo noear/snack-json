@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
+ * 节点属性元
  *
  * @author noear 2025/10/8 created
  * @since 4.0
