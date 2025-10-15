@@ -1,0 +1,63 @@
+package features.snack4.codec;
+
+
+import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
+import org.noear.snack4.ONode;
+
+/**
+ * for jdk14+ record test
+ *
+ * @author noear 2022/1/12 created
+ */
+public class _RecordTest {
+    @Test
+    public void test1() {
+        MyRecord tmp = new MyRecord("noear", 12);
+
+        String json = ONode.ofBean(tmp).toJson();
+        System.out.println(json);
+
+        MyRecord tmp2 = ONode.ofJson(json, Feature.Write_AllowParameterizedConstructor).toBean(MyRecord.class);
+
+        assert tmp.username().equals(tmp2.username());
+
+        System.out.println(ONode.ofBean(tmp2).toJson());
+    }
+
+    @Test
+    public void test2() {
+        MyRecord2 tmp = new MyRecord2("noear", 12);
+
+        String json = ONode.ofBean(tmp).toJson();
+        System.out.println(json);
+
+        MyRecord2 tmp2 = ONode.ofJson(json, Feature.Write_AllowParameterizedConstructor).toBean(MyRecord2.class);
+
+        assert tmp.username().equals(tmp2.username());
+
+        System.out.println(ONode.ofBean(tmp2).toJson());
+    }
+
+    //for jdk14+
+    public record MyRecord(String username,Integer age) {
+    }
+
+    public static final class MyRecord2 {
+        final String username;
+        final Integer age;
+
+        public MyRecord2(String username, Integer age) {
+            this.username = username;
+            this.age = age;
+        }
+
+        public String username() {
+            return username;
+        }
+
+        public Integer age() {
+            return age;
+        }
+    }
+}

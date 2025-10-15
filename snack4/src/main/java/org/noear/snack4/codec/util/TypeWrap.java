@@ -37,6 +37,8 @@ public class TypeWrap {
     private final Map<String, Type> genericInfo;
 
     private Class<?> type = Object.class;
+    private Constructor constr;
+    private ONodeCreator constrAnno;
     private ConstrWrap constrWrap;
 
     public TypeWrap(Type genericType) {
@@ -72,33 +74,33 @@ public class TypeWrap {
         }
 
         if (type != Object.class) {
-            Constructor c0 = null;
-            ONodeCreator c0a = null;
 
             for (Constructor c1 : type.getDeclaredConstructors()) {
-                if (c0 == null) {
+                if (constr == null) {
                     //初始化
-                    c0 = c1;
-                } else if (c0.getParameterCount() > c1.getParameterCount()) {
+                    constr = c1;
+                } else if (constr.getParameterCount() > c1.getParameterCount()) {
                     //谁参数少，用谁
-                    c0 = c1;
+                    constr = c1;
                 }
 
-                c0a = (ONodeCreator) c1.getAnnotation(ONodeCreator.class);
-                if (c0a != null) {
+                constrAnno = (ONodeCreator) c1.getAnnotation(ONodeCreator.class);
+                if (constrAnno != null) {
                     //用注解，优先用
-                    c0 = c1;
+                    constr = c1;
                     break;
                 }
-            }
-
-            if (c0 != null) {
-                constrWrap = new ConstrWrap(this, c0, c0a);
             }
         }
     }
 
     public ConstrWrap getConstrWrap() {
+        if (constrWrap == null) {
+            if (constr != null) {
+                constrWrap = new ConstrWrap(this, constr, constrAnno);
+            }
+        }
+
         return constrWrap;
     }
 
