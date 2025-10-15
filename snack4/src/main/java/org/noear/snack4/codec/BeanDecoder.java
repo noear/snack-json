@@ -18,7 +18,6 @@ package org.noear.snack4.codec;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.util.Asserts;
@@ -138,20 +137,22 @@ public class BeanDecoder {
                     throw new CodecException("can not convert bean to type: " + typeWrap.getType());
                 }
 
-                Constructor constructor = typeWrap.getConstructor();
-                if (constructor == null) {
+                ConstrWrap constrWrap = typeWrap.getConstrWrap();
+                if (constrWrap == null) {
                     throw new CodecException("Create instance failed: " + typeWrap.getType().getName());
                 }
 
-                if (constructor.isAccessible() == false) {
-                    constructor.setAccessible(true);
-                }
-
-                if (constructor.getParameterCount() == 0) {
-                    target = constructor.newInstance();
+                if (constrWrap.getParamCount() == 0) {
+                    target = constrWrap.newInstance();
                 } else {
-                    Object[] args = getConstructorArguments(typeWrap, node);
-                    target = constructor.newInstance(args);
+                    if (constrWrap.isSecurity() == false //有参数
+                            && opts.hasFeature(Feature.Write_AllowParameterizedConstructor) == false)  //不支持参数
+                    {
+                        throw new CodecException("Parameterized constructor are not allowed: " + typeWrap.getType());
+                    }
+
+                    Object[] args = getConstrArgs(constrWrap, node);
+                    target = constrWrap.newInstance(args);
                 }
             }
         }
@@ -180,8 +181,8 @@ public class BeanDecoder {
                     continue;
                 }
 
-                if (typeWrap.getConstructor() != null) {
-                    if (typeWrap.getParamNodeWraps().containsKey(kv.getKey())) {
+                if (typeWrap.getConstrWrap() != null) {
+                    if (typeWrap.getConstrWrap().hasParam(kv.getKey())) {
                         continue;
                     }
                 }
@@ -200,8 +201,8 @@ public class BeanDecoder {
         } else {
             //允许用 setter （以类为主，支持 flat）
             for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWraps().entrySet()) {
-                if (typeWrap.getConstructor() != null) {
-                    if (typeWrap.getParamNodeWraps().containsKey(kv.getKey())) {
+                if (typeWrap.getConstrWrap() != null) {
+                    if (typeWrap.getConstrWrap().hasParam(kv.getKey())) {
                         continue;
                     }
                 }
@@ -352,12 +353,12 @@ public class BeanDecoder {
         throw new CodecException("Unsupported map key type: " + keyType.getType());
     }
 
-    private Object[] getConstructorArguments(TypeWrap typeWrap, ONode node) throws Exception {
+    private Object[] getConstrArgs(ConstrWrap constrWrap, ONode node) throws Exception {
         //只有带参数的构造函（像 java record, kotlin data）
-        Object[] argsV = new Object[typeWrap.getParamAry().size()];
+        Object[] argsV = new Object[constrWrap.getParamCount()];
 
         for (int j = 0; j < argsV.length; j++) {
-            ParamWrap p = typeWrap.getParamAry().get(j);
+            ParamWrap p = constrWrap.getParamAry().get(j);
             if (node.hasKey(p.getNodeName())) {
                 ONodeAttrHolder attr = p.getAttr();
                 Object val = decodeValueFromNode(node.get(p.getNodeName()), p.getTypeWrap(), null, attr);

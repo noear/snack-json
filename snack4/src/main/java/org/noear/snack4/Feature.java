@@ -143,11 +143,16 @@ public enum Feature {
      * 写入允许使用设置器（默认为字段模式）
      */
     Write_AllowUseSetter,
+
     /**
      * 写入只能使用设置器
-     *
      */
     Write_OnlyUseSetter,
+
+    /**
+     * 写入允许使用有参数的构造器（默认为无参模式）
+     */
+    Write_AllowParameterizedConstructor,
 
     /**
      * 写入时使用漂亮格式（带缩进和换行）

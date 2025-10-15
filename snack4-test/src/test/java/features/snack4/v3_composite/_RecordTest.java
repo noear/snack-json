@@ -1,6 +1,7 @@
 package features.snack4.v3_composite;
 
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 /**
@@ -16,7 +17,7 @@ public class _RecordTest {
         String json = ONode.ofBean(tmp).toJson();
         System.out.println(json);
 
-        MyRecord tmp2 = ONode.ofJson(json).toBean(MyRecord.class);
+        MyRecord tmp2 = ONode.ofJson(json, Feature.Write_AllowParameterizedConstructor).toBean(MyRecord.class);
 
         assert tmp.username().equals(tmp2.username());
 

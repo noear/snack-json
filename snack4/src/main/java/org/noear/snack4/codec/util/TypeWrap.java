@@ -37,9 +37,7 @@ public class TypeWrap {
     private final Map<String, Type> genericInfo;
 
     private Class<?> type = Object.class;
-    private Constructor<?> constructor;
-    private Map<String, ParamWrap> paramNodeWraps;
-    private List<ParamWrap> paramAry;
+    private ConstrWrap constrWrap;
 
     public TypeWrap(Type genericType) {
         if (genericType instanceof Class<?>) {
@@ -74,50 +72,34 @@ public class TypeWrap {
         }
 
         if (type != Object.class) {
+            Constructor c0 = null;
+            ONodeCreator c0a = null;
+
             for (Constructor c1 : type.getDeclaredConstructors()) {
-                if (constructor == null) {
+                if (c0 == null) {
                     //初始化
-                    constructor = c1;
-                } else if (constructor.getParameterCount() > c1.getParameterCount()) {
+                    c0 = c1;
+                } else if (c0.getParameterCount() > c1.getParameterCount()) {
                     //谁参数少，用谁
-                    constructor = c1;
+                    c0 = c1;
                 }
 
-                if (c1.isAnnotationPresent(ONodeCreator.class)) {
+                c0a = (ONodeCreator) c1.getAnnotation(ONodeCreator.class);
+                if (c0a != null) {
                     //用注解，优先用
-                    constructor = c1;
+                    c0 = c1;
                     break;
                 }
             }
 
-            if (constructor != null) {
-                paramNodeWraps = new HashMap<>();
-                paramAry = new ArrayList<>();
-
-                for (Parameter p1 : constructor.getParameters()) {
-                    ParamWrap paramWrap = new ParamWrap(this, p1);
-
-                    paramNodeWraps.put(paramWrap.getNodeName(), paramWrap);
-                    paramAry.add(paramWrap);
-                }
+            if (c0 != null) {
+                constrWrap = new ConstrWrap(this, c0, c0a);
             }
         }
     }
 
-    public Constructor<?> getConstructor() {
-        return constructor;
-    }
-
-    public Map<String, ParamWrap> getParamNodeWraps() {
-        return paramNodeWraps;
-    }
-
-    public ParamWrap getParamWrap(String nodeName) {
-        return paramNodeWraps.get(nodeName);
-    }
-
-    public List<ParamWrap> getParamAry() {
-        return paramAry;
+    public ConstrWrap getConstrWrap() {
+        return constrWrap;
     }
 
     public Class<?> getType() {

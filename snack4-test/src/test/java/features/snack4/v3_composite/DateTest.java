@@ -5,6 +5,7 @@ import demo.snack4._models.DateModel2;
 import demo.snack4._models.DateModel3;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
@@ -128,7 +129,7 @@ public class DateTest {
                 "\"sqDatetime\":\"2025-07-23 08:10:54.093\",\n" +
                 "\"reportDatetime\":\"2025-07-23 08:15:31.0\",\n" +
                 "\"shDatetime\":\"2025-07-23 08:15:40\"\n" + "}";
-        Options options = Options.of();
+        Options options = Options.of(Feature.Write_AllowParameterizedConstructor);
         //添加编码器
         options.addEncoder(Date.class, (ctx, value, target) -> target.setValue((DateUtil.format(value, "yyyy-MM-dd HH:mm:ss"))));
         options.addEncoder(LocalDateTime.class, (ctx, value, target) -> target.setValue((value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))));
