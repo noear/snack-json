@@ -46,13 +46,13 @@ public class CodecTest {
         bean.collection = Arrays.asList("a", "b", "c");
 
 
-        String json = ONode.serialize(bean);
+        String json = ONode.ofBean(bean).toJson();
         System.out.println(json);
 
         DemoBean bean2 = ONode.ofJson(json).toBean(DemoBean.class);
         System.out.println(bean2);
 
-        String json2 = ONode.serialize(bean2);
+        String json2 = ONode.ofBean(bean2).toJson();
         System.out.println(json2);
 
         assert json.equals(json2);

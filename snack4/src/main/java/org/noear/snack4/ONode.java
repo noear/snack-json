@@ -646,42 +646,6 @@ public final class ONode {
         return ONode.ofBean(object, opts).toJson();
     }
 
-    public static <T> T deserialize(String json, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return deserialize(json, Object.class, Options.DEF_OPTIONS);
-        } else {
-            return deserialize(json, Object.class, Options.of(features));
-        }
-    }
-
-    public static <T> T deserialize(String json, Options opts) {
-        return deserialize(json, Object.class, opts);
-    }
-
-    public static <T> T deserialize(String json, Type type, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return deserialize(json, type, Options.DEF_OPTIONS);
-        } else {
-            return deserialize(json, type, Options.of(features));
-        }
-    }
-
-    public static <T> T deserialize(String json, Type type, Options opts) {
-        return ONode.ofJson(json, opts).toBean(type);
-    }
-
-    public static <T> T deserialize(String json, TypeRef<T> type, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return deserialize(json, type, Options.DEF_OPTIONS);
-        } else {
-            return deserialize(json, type, Options.of(features));
-        }
-    }
-
-    public static <T> T deserialize(String json, TypeRef<T> type, Options opts) {
-        return ONode.ofJson(json, opts).toBean(type);
-    }
-
     /// ///////////
 
     public <T> T bindTo(T target) {

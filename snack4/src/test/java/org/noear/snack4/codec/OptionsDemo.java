@@ -30,7 +30,7 @@ public class OptionsDemo {
         Map<String,Class<?>> data = new HashMap<>();
         data.put("list", ArrayList.class);
 
-        String json = ONode.serialize(data, options);
+        String json = ONode.ofBean(data, options).toJson();
         System.out.println(json);  // {"list":"java.util.ArrayList"}
         assert "{\"list\":\"java.util.ArrayList\"}".equals(json);
 

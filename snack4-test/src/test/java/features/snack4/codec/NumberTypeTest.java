@@ -30,7 +30,7 @@ public class NumberTypeTest {
         System.out.println(json); //{"a":1,"b":"2","c":3.0,"d":"4.0"} //b 和 d 变成字符串了
         assert json.equals("{\"a\":1,\"b\":\"2\",\"c\":3.0,\"d\":\"4.0\"}");
 
-        json = ONode.serialize(data, Feature.Write_NumberTypeSuffix);
+        json = ONode.ofBean(data, Feature.Write_NumberTypeSuffix).toJson();
         System.out.println(json); //{"a":1,"b":2L,"c":3.0F,"d":4.0D} //带了数字类型（有些框架不支持）
         assert json.equals("{\"a\":1,\"b\":2L,\"c\":3.0F,\"d\":4.0D}");
 

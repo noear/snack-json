@@ -43,7 +43,10 @@ public class ThrowableTest2 {
 
     @Test
     public void test1() {
-        Object tmp = ONode.ofBean(json, Feature.Read_AutoType).toBean();
+        ONode oNode = ONode.ofJson(json, Feature.Read_AutoType);
+        System.out.println(oNode.toJson());
+
+        Object tmp = oNode.toBean();
 
         assert tmp instanceof Throwable;
 
