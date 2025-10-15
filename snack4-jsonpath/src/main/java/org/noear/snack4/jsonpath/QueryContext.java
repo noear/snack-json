@@ -39,7 +39,7 @@ public interface QueryContext {
     boolean isMultiple();
 
     /**
-     * 是否为展开的
+     * 是否为已展开（前面执行过 `..*` 或 `*`）
      */
     boolean isExpanded();
 

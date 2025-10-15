@@ -13,7 +13,7 @@ public class FunctionDemo {
         FunctionLib.register("floor", (ctx, argNodes) -> {
             ONode arg0 = argNodes.get(0); //节点列表（选择器的结果）
 
-            if (ctx.isDescendant()) {
+            if (ctx.isMultiple()) {
                 for (ONode n1 : arg0.getArray()) {
                     if (n1.isNumber()) {
                         n1.setValue(Math.floor(n1.getDouble()));
