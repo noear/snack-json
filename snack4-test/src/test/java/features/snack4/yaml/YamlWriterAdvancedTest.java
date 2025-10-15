@@ -1,8 +1,8 @@
 package features.snack4.yaml;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Options;
+import org.noear.snack4.core.Feature;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.yaml.YamlWriter;
 
@@ -11,8 +11,6 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

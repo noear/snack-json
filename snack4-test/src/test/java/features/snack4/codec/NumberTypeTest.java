@@ -1,9 +1,9 @@
 package features.snack4.codec;
 
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 
 import java.util.HashMap;
 import java.util.Map;

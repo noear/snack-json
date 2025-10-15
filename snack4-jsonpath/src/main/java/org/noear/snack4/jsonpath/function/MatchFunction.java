@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.jsonpath.function;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.Function;
 import org.noear.snack4.jsonpath.JsonPathException;

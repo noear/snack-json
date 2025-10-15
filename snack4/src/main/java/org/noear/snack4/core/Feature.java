@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4;
+package org.noear.snack4.core;
 
 /**
  * JSON 特性枚举（按读写方向分类）

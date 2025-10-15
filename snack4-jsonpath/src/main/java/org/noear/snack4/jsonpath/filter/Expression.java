@@ -21,7 +21,7 @@ import org.noear.snack4.jsonpath.Operator;
 import org.noear.snack4.jsonpath.OperatorLib;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.TokenizeUtil;
-import org.noear.snack4.util.Asserts;
+import org.noear.snack4.core.util.Asserts;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

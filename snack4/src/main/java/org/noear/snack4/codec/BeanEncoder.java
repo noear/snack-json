@@ -15,12 +15,12 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.*;
-import org.noear.snack4.util.Asserts;
+import org.noear.snack4.core.util.Asserts;
 
 import java.lang.reflect.Array;
 import java.util.*;

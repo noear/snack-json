@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.toml;
 
-import org.noear.snack4.text.TextProvider;
+import org.noear.snack4.core.TextProvider;
 
 /**
  * Toml 能力提供者

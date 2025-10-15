@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.annotation;
 
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 

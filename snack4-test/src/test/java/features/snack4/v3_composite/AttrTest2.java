@@ -4,7 +4,7 @@ import demo.snack4._models.AttrModel;
 import demo.snack4._models.UserModel3;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 
 /**
  * @author noear 2021/12/10 created

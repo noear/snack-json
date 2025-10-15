@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.jsonpath.selector;
 
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;

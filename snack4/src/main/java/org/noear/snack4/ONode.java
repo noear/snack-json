@@ -19,13 +19,17 @@ import org.noear.snack4.codec.BeanDecoder;
 import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.codec.TypeRef;
 import org.noear.snack4.codec.util.DateUtil;
+import org.noear.snack4.core.Feature;
+import org.noear.snack4.core.Options;
 import org.noear.snack4.json.JsonProvider;
 import org.noear.snack4.core.DataType;
 import org.noear.snack4.core.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
-import org.noear.snack4.util.Asserts;
+import org.noear.snack4.core.util.Asserts;
 import org.noear.snack4.yaml.YamlProvider;
 
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.*;
@@ -585,17 +589,16 @@ public final class ONode {
 
     /// /////////////
 
-
-    public static ONode ofBean(Object bean, Options opts) {
-        return BeanEncoder.encode(bean, opts);
-    }
-
     public static ONode ofBean(Object bean, Feature... features) {
         if (Asserts.isEmpty(features)) {
             return BeanEncoder.encode(bean, Options.DEF_OPTIONS);
         } else {
             return BeanEncoder.encode(bean, Options.of(features));
         }
+    }
+
+    public static ONode ofBean(Object bean, Options opts) {
+        return BeanEncoder.encode(bean, opts);
     }
 
     public static ONode ofJson(String json, Feature... features) {
@@ -609,6 +612,16 @@ public final class ONode {
     public static ONode ofJson(String json, Options opts) {
         try {
             return jsonProvider.read(json, opts);
+        } catch (SnackException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new SnackException(ex);
+        }
+    }
+
+    public static ONode ofJson(Reader reader, Options opts) {
+        try {
+            return jsonProvider.read(reader, opts);
         } catch (SnackException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -634,16 +647,14 @@ public final class ONode {
         }
     }
 
-    public static String serialize(Object object, Feature... features) {
-        if (Asserts.isEmpty(features)) {
-            return serialize(object, Options.DEF_OPTIONS);
-        } else {
-            return serialize(object, Options.of(features));
+    public static ONode ofYaml(Reader reader, Options opts) {
+        try {
+            return yamlProvider.read(reader, opts);
+        } catch (SnackException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new SnackException(ex);
         }
-    }
-
-    public static String serialize(Object object, Options opts) {
-        return ONode.ofBean(object, opts).toJson();
     }
 
     /// ///////////
@@ -676,9 +687,29 @@ public final class ONode {
         }
     }
 
+    public void toJson(Writer writer) {
+        try {
+            jsonProvider.write(this, options, writer);
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public String toYaml() {
         try {
             return yamlProvider.write(this, options);
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void toYaml(Writer writer) {
+        try {
+            yamlProvider.write(this, options, writer);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {

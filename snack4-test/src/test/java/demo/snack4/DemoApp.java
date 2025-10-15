@@ -1,8 +1,8 @@
 package demo.snack4;
 
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 import org.noear.snack4.codec.util.DateUtil;
 
 import java.util.Date;
@@ -21,6 +21,6 @@ public class DemoApp {
                 .addFeatures(Feature.Write_PrettyFormat)
                 .dateFormat("yyyy-MM");
 
-        String json = ONode.ofJson(null, options).toJson();
+        String json = ONode.ofBean(null, options).toJson();
     }
 }

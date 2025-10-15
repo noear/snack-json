@@ -1,11 +1,11 @@
 package features.snack4.json.writer;
 
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.Feature;
+import org.noear.snack4.core.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.BeanEncoder;
 import org.noear.snack4.json.JsonWriter;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 
 import java.io.IOException;
 import java.io.StringWriter;

@@ -17,7 +17,7 @@ package org.noear.snack4.codec.util;
 
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeAttrHolder;
-import org.noear.snack4.util.Asserts;
+import org.noear.snack4.core.util.Asserts;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

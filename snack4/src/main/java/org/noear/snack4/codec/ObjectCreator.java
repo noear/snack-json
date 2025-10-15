@@ -16,7 +16,7 @@
 package org.noear.snack4.codec;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.Options;
+import org.noear.snack4.core.Options;
 
 /**
  * 对象创造器
