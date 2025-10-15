@@ -63,7 +63,7 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
             try {
                 setNestedValue(rootNode, key, val);
             } catch (Exception e) {
-                log.debug("Failed to encode property '{}'. The value: '{}'", key, val, e);
+                log.warn("Failed to encode property '{}'. The value: '{}'", key, val, e);
             }
         }
 
