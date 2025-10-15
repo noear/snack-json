@@ -24,6 +24,7 @@ import org.noear.snack4.core.DataType;
 import org.noear.snack4.core.PathSource;
 import org.noear.snack4.jsonpath.JsonPathProvider;
 import org.noear.snack4.util.Asserts;
+import org.noear.snack4.yaml.YamlProvider;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -38,16 +39,22 @@ import java.util.function.Consumer;
  */
 public final class ONode {
     private static JsonProvider jsonProvider = () -> "Requires 'snack4-json' dependency";
+    private static YamlProvider yamlProvider = () -> "Requires 'snack4-yaml' dependency";
     private static JsonPathProvider jsonPathProvider = () -> "Requires 'snack4-jsonpath' dependency";
 
     static {
-        ServiceLoader<JsonProvider> serviceLoader1 = ServiceLoader.load(JsonProvider.class);
-        for (JsonProvider provider : serviceLoader1) {
+        ServiceLoader<JsonProvider> jsonSL = ServiceLoader.load(JsonProvider.class);
+        for (JsonProvider provider : jsonSL) {
             jsonProvider = provider;
         }
 
-        ServiceLoader<JsonPathProvider> serviceLoader2 = ServiceLoader.load(JsonPathProvider.class);
-        for (JsonPathProvider provider : serviceLoader2) {
+        ServiceLoader<YamlProvider> yamlSL = ServiceLoader.load(YamlProvider.class);
+        for (YamlProvider provider : yamlSL) {
+            yamlProvider = provider;
+        }
+
+        ServiceLoader<JsonPathProvider> jsonPathSL = ServiceLoader.load(JsonPathProvider.class);
+        for (JsonPathProvider provider : jsonPathSL) {
             jsonPathProvider = provider;
         }
     }
@@ -347,6 +354,10 @@ public final class ONode {
         return this.fill(ONode.ofJson(json, options));
     }
 
+    public ONode fillYaml(String yaml) {
+        return this.fill(ONode.ofYaml(yaml, options));
+    }
+
     public ONode setAll(Map<?, ?> map) {
         Objects.requireNonNull(map, "map");
 
@@ -605,6 +616,24 @@ public final class ONode {
         }
     }
 
+    public static ONode ofYaml(String yaml, Feature... features) {
+        if (Asserts.isEmpty(features)) {
+            return ofYaml(yaml, Options.DEF_OPTIONS);
+        } else {
+            return ofYaml(yaml, Options.of(features));
+        }
+    }
+
+    public static ONode ofYaml(String yaml, Options opts) {
+        try {
+            return yamlProvider.read(yaml, opts);
+        } catch (SnackException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new SnackException(ex);
+        }
+    }
+
     public static String serialize(Object object, Feature... features) {
         if (Asserts.isEmpty(features)) {
             return serialize(object, Options.DEF_OPTIONS);
@@ -676,6 +705,16 @@ public final class ONode {
     public String toJson() {
         try {
             return jsonProvider.write(this, options);
+        } catch (RuntimeException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public String toYaml() {
+        try {
+            return yamlProvider.write(this, options);
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Throwable ex) {

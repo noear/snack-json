@@ -51,6 +51,7 @@
         <module>../snack4-json</module>
         <module>../snack4-jsonpath</module>
         <module>../snack4-jsonschema</module>
+        <module>../snack4-yaml</module>
     </modules>
 
     <dependencyManagement>
@@ -73,6 +74,11 @@
             <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>snack4-jsonschema</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>snack4-yaml</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

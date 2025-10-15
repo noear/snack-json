@@ -38,6 +38,11 @@
 
         <dependency>
             <groupId>org.noear</groupId>
+            <artifactId>snack4-yaml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
             <artifactId>solon-lib</artifactId>
             <version>3.6.0</version>
             <scope>test</scope>

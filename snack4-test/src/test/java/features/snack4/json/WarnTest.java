@@ -3,7 +3,6 @@ package features.snack4.json;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.json.JsonProvider;
-import org.noear.snack4.jsonpath.JsonPathProvider;
 
 import java.io.StringReader;
 

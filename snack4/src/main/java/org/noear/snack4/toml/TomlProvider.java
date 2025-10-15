@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.json;
+package org.noear.snack4.toml;
 
 import org.noear.snack4.text.TextProvider;
 
 /**
- * Json 能力提供者
+ * Toml 能力提供者
  *
  * @author noear 2025/10/15 created
  * @since 4.0
  */
 @FunctionalInterface
-public interface JsonProvider extends TextProvider {
+public interface TomlProvider extends TextProvider {
 
 }
