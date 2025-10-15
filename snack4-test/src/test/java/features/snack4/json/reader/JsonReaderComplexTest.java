@@ -1,6 +1,7 @@
 package features.snack4.json.reader;
 
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.ONode;
 import org.noear.snack4.core.Feature;
 import org.noear.snack4.json.JsonReader;
 import org.noear.snack4.core.Options;
@@ -184,5 +185,14 @@ class JsonReaderComplexTest {
     void testParseInvalidJsonInvalidDeeplyNestedArray() {
         String json = "[[[[[[[42]]]]]]";
         assertThrows(JsonParseException.class, () -> JsonReader.read(json));
+    }
+
+    @Test
+    void testParseColonNesting() {
+        String json = "{\"SocketChannel\":\"SOCKET::test1=12\",\"HttpChannel\":\"POST::test1=12\"}";
+        assertDoesNotThrow(() -> {
+           ONode node =  JsonReader.read(json);
+           System.out.println(node.toJson());
+        });
     }
 }
