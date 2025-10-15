@@ -7,7 +7,9 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttr;
+import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.EncodeContext;
+import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.util.DateUtil;
 
@@ -101,6 +103,11 @@ public class AttrTest {
         String json = ONode.ofBean(dateDo, options).toJson();
         System.out.println(json);
         assert "{\"date\":1760453997855,\"date2\":1760453997855}".equals(json);
+
+        DemoDo3 demoDo3 = ONode.ofJson(json, Feature.Write_AllowUseSetter).toBean(DemoDo3.class);
+
+        System.out.println(demoDo3.getDate2().getTime());
+        assert demoDo3.getDate2().getTime() == 1L;
     }
 
 
@@ -131,6 +138,11 @@ public class AttrTest {
         public Date getDate2() {
             return date2;
         }
+
+        @ONodeAttr(decoder = DateDecoder.class)
+        public void setDate2(Date date2) {
+            this.date2 = date2;
+        }
     }
 
     public static class DateEncoder implements ObjectEncoder<Date> {
@@ -138,6 +150,13 @@ public class AttrTest {
         @Override
         public ONode encode(EncodeContext ctx, Date value, ONode target) {
             return target.setValue(DateUtil.format(value, "yyyy-MM-dd"));
+        }
+    }
+
+    public static class DateDecoder implements ObjectDecoder<Date> {
+        @Override
+        public Date decode(DecodeContext<Date> ctx, ONode node) {
+            return new Date(1L);
         }
     }
 }
