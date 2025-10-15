@@ -1,7 +1,7 @@
 package demo.snack4._models;
 
 
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.annotation.ONodeAttr;
 
 public class AttrModel {

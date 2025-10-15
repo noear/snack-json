@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.FunctionHolder;
-import org.noear.snack4.core.util.Asserts;
+import org.noear.snack4.util.Asserts;
 
 /**
  * 操作元

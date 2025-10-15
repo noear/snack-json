@@ -16,7 +16,7 @@
 package org.noear.snack4.codec.create;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 import org.noear.snack4.codec.ObjectPatternCreator;
 
 /**

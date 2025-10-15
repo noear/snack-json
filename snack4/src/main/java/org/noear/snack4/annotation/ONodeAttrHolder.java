@@ -15,12 +15,12 @@
  */
 package org.noear.snack4.annotation;
 
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
 import org.noear.snack4.codec.util.ClassUtil;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.core.util.Asserts;
+import org.noear.snack4.util.Asserts;
 
 import java.time.ZoneId;
 import java.util.Date;

@@ -15,11 +15,11 @@
  */
 package org.noear.snack4.yaml;
 
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 import org.noear.snack4.codec.util.DateUtil;
-import org.noear.snack4.core.util.Asserts;
+import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
 import java.io.StringWriter;

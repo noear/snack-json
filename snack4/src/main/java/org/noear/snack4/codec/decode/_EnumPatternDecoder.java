@@ -20,7 +20,7 @@ import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.ObjectPatternDecoder;
 import org.noear.snack4.codec.util.EnumWrap;
 import org.noear.snack4.codec.util.TypeUtil;
-import org.noear.snack4.SnackException;
+import org.noear.snack4.node.SnackException;
 
 /**
  *

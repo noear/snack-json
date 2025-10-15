@@ -3,7 +3,7 @@ package features.snack4.v3_composite;
 import demo.snack4._model3.BSProps;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 
 /**
  * @author noear 2022/5/22 created

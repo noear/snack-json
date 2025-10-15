@@ -16,7 +16,7 @@
 package org.noear.snack4.jsonschema;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.DataType;
+import org.noear.snack4.node.DataType;
 import org.noear.snack4.jsonschema.rule.EnumRule;
 import org.noear.snack4.jsonschema.rule.TypeRule;
 import org.noear.snack4.jsonschema.rule.ValidationRule;

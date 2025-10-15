@@ -5,7 +5,7 @@ import demo.snack4._model5.TypeBImpl;
 import demo.snack4._model5.TypeC;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 
 /**
  * @author noear 2025/5/9 created

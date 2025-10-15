@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.yaml;
 
-import org.noear.snack4.SnackException;
+import org.noear.snack4.node.SnackException;
 
 /**
  *

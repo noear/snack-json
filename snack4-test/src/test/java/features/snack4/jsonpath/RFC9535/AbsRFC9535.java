@@ -1,8 +1,8 @@
 package features.snack4.jsonpath.RFC9535;
 
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 
 /**
  *

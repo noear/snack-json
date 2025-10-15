@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.core;
+package org.noear.snack4.node;
 
-import org.noear.snack4.SnackException;
 import org.noear.snack4.codec.*;
 
 import java.time.OffsetDateTime;

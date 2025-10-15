@@ -18,7 +18,7 @@ package org.noear.snack4.codec.encode;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
-import org.noear.snack4.SnackException;
+import org.noear.snack4.node.SnackException;
 
 import java.io.Reader;
 import java.sql.Clob;

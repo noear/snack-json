@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.SnackException;
+import org.noear.snack4.node.SnackException;
 
 /**
  * JsonPath 异常

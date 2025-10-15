@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.jsonschema;
 
-import org.noear.snack4.SnackException;
+import org.noear.snack4.node.SnackException;
 
 /**
  * 模式验证异常

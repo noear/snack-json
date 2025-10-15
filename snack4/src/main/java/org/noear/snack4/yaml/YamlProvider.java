@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.yaml;
 
-import org.noear.snack4.core.TextProvider;
+import org.noear.snack4.node.TextProvider;
 
 /**
  * Yaml 能力提供者

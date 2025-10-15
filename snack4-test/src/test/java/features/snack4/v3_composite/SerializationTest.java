@@ -3,7 +3,7 @@ package features.snack4.v3_composite;
 import com.alibaba.fastjson.JSON;
 import demo.snack4._models.*;
 import org.junit.jupiter.api.Test;
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.ONode;
 import org.noear.solon.core.util.ResourceUtil;
 

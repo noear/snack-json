@@ -19,7 +19,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.*;
 import org.noear.snack4.jsonpath.selector.*;
 import org.noear.snack4.jsonpath.util.SelectUtil;
-import org.noear.snack4.core.util.Asserts;
+import org.noear.snack4.util.Asserts;
 
 import java.util.ArrayList;
 import java.util.List;

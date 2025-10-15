@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.TypeWrap;
 

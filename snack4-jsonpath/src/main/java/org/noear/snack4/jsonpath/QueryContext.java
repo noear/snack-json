@@ -15,9 +15,9 @@
  */
 package org.noear.snack4.jsonpath;
 
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 
 import java.util.function.Function;
 

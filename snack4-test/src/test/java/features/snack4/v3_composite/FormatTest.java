@@ -4,7 +4,7 @@ import demo.snack4._models.OrderModel;
 import demo.snack4._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 
 import java.util.ArrayList;
 import java.util.List;

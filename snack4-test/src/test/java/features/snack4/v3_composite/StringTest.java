@@ -3,7 +3,7 @@ package features.snack4.v3_composite;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Feature;
+import org.noear.snack4.node.Feature;
 
 import java.util.Date;
 import java.util.HashMap;

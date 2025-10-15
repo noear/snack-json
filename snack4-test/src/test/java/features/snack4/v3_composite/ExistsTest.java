@@ -3,8 +3,8 @@ package features.snack4.v3_composite;
 import demo.snack4._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Feature;
-import org.noear.snack4.core.DataType;
+import org.noear.snack4.node.Feature;
+import org.noear.snack4.node.DataType;
 
 /**
  * @author noear 2022/9/7 created

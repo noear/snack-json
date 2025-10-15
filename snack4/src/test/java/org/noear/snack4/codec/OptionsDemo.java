@@ -1,7 +1,7 @@
 package org.noear.snack4.codec;
 
 import org.noear.snack4.ONode;
-import org.noear.snack4.core.Options;
+import org.noear.snack4.node.Options;
 
 import java.util.ArrayList;
 import java.util.HashMap;

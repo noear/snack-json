@@ -20,7 +20,7 @@ import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.util.ClassWrap;
 import org.noear.snack4.codec.util.FieldWrap;
 import org.noear.snack4.codec.util.TypeWrap;
-import org.noear.snack4.core.util.Asserts;
+import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.*;
 import java.math.BigDecimal;
