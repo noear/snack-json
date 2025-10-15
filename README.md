@@ -144,6 +144,7 @@ IETF JSONPath (RFC 9535) Standard definition functions (supported)
 
 jayway.jsonpath Functions (supported)
 
+
 | Function    | Description                                                                          | Output type          |
 |:------------|:-------------------------------------------------------------------------------------|:---------------------|
 | `min()`     | Provides the min value of an array of numbers                                        | Double               |
@@ -158,6 +159,17 @@ jayway.jsonpath Functions (supported)
 | `first()`   | Provides the first item of an array                                                  | Depends on the array |
 | `last()`    | Provides the last item of an array                                                   | Depends on the array |
 | `index(X)`  | Provides the item of an array of index: X, if the X is negative, take from backwards | Depends on the array |
+
+
+snack-jsonpath Increment operator (supported)
+
+
+| Operator              | Description                                       | Examples                  |   
+|------------------|---------------------------------------------------|---------------------------|
+| `startsWith`     | left (string) start matches a right               | `[?(@.s startsWith 'a')]` |  
+| `endsWith`       | left (string) end matches the right               | `[?(@.s endsWith 'b')]`   |  
+| `contains`       | left (array or string) contains matches the right | `[?(@.s contains 'c')]`   |  
+
 
 
 ### JSONPath syntax examples
