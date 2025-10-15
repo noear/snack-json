@@ -164,57 +164,7 @@ public class BeanEncoder {
                     continue;
                 }
 
-                Object propertyValue = property.getValue(bean);
-
-                if (propertyValue == null) {
-                    //分类控制
-                    if (property.getTypeWrap().isList()) {
-                        if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullListAsEmpty))) {
-                            propertyValue = new ArrayList<>();
-                        }
-                    } else if (property.getTypeWrap().isString()) {
-                        if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullStringAsEmpty))) {
-                            propertyValue = "";
-                        }
-                    } else if (property.getTypeWrap().isBoolean()) {
-                        if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || property.getAttr().hasFeature(Feature.Write_NullBooleanAsFalse))) {
-                            propertyValue = false;
-                        }
-                    } else if (property.getTypeWrap().isNumber()) {
-                        if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || property.getAttr().hasFeature(Feature.Write_NullNumberAsZero))) {
-                            if (property.getTypeWrap().getType() == Long.class) {
-                                propertyValue = 0L;
-                            } else if (property.getTypeWrap().getType() == Double.class) {
-                                propertyValue = 0D;
-                            } else if (property.getTypeWrap().getType() == Float.class) {
-                                propertyValue = 0F;
-                            } else {
-                                propertyValue = 0;
-                            }
-                        }
-                    }
-
-                    //托底控制
-                    if (propertyValue == null) {
-                        if (opts.hasFeature(Feature.Write_Nulls) == false
-                                && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
-                            continue;
-                        }
-                    }
-                }
-
-                ONode propertyNode = null;
-
-                if (propertyValue instanceof Date) {
-                    if (Asserts.isNotEmpty(property.getAttr().getFormat())) {
-                        String dateStr = property.getAttr().formatDate((Date) propertyValue);
-                        propertyNode = new ONode(opts, dateStr);
-                    }
-                }
-
-                if (propertyNode == null) {
-                    propertyNode = encodeValueToNode(propertyValue, property.getAttr());
-                }
+                ONode propertyNode = encodeBeanPropertyToNode(bean, property);
 
                 if (propertyNode != null) {
                     if (property.getAttr().isFlat()) {
@@ -231,6 +181,65 @@ public class BeanEncoder {
         }
 
         return tmp;
+    }
+
+    private ONode encodeBeanPropertyToNode(Object bean, Property property) throws Exception {
+        Object propValue = property.getValue(bean);
+        ONode propNode = null;
+
+        if (property.getAttr().getEncoder() != null) {
+            propNode = property.getAttr().getEncoder().encode(new EncodeContext(opts, property.getAttr()), propValue, new ONode(opts));
+        } else {
+            if (propValue == null) {
+                //分类控制
+                if (property.getTypeWrap().isList()) {
+                    if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullListAsEmpty))) {
+                        propValue = new ArrayList<>();
+                    }
+                } else if (property.getTypeWrap().isString()) {
+                    if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || property.getAttr().hasFeature(Feature.Write_NullStringAsEmpty))) {
+                        propValue = "";
+                    }
+                } else if (property.getTypeWrap().isBoolean()) {
+                    if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || property.getAttr().hasFeature(Feature.Write_NullBooleanAsFalse))) {
+                        propValue = false;
+                    }
+                } else if (property.getTypeWrap().isNumber()) {
+                    if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || property.getAttr().hasFeature(Feature.Write_NullNumberAsZero))) {
+                        if (property.getTypeWrap().getType() == Long.class) {
+                            propValue = 0L;
+                        } else if (property.getTypeWrap().getType() == Double.class) {
+                            propValue = 0D;
+                        } else if (property.getTypeWrap().getType() == Float.class) {
+                            propValue = 0F;
+                        } else {
+                            propValue = 0;
+                        }
+                    }
+                }
+
+                //托底控制
+                if (propValue == null) {
+                    if (opts.hasFeature(Feature.Write_Nulls) == false
+                            && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
+                        return null;
+                    }
+                }
+            }
+
+            if (propValue instanceof Date) {
+                if (Asserts.isNotEmpty(property.getAttr().getFormat())) {
+                    String dateStr = property.getAttr().formatDate((Date) propValue);
+                    propNode = new ONode(opts, dateStr);
+                }
+            }
+
+            if (propNode == null) {
+                propNode = encodeValueToNode(propValue, property.getAttr());
+            }
+        }
+
+        return propNode;
     }
 
     // 处理数组类型

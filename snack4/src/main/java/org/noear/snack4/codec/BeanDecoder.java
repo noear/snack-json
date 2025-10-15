@@ -227,14 +227,22 @@ public class BeanDecoder {
     }
 
     private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Exception {
-        ONode fieldNode = (property.getAttr().isFlat() ? node : node.get(property.getNodeName()));
+        ONode oNode = (property.getAttr().isFlat() ? node : node.get(property.getNodeName()));
 
-        if (fieldNode != null && !fieldNode.isNull()) {
+        if (oNode != null && !oNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
-            Object existingFieldValue = property.getValue(target);
-            Object value = decodeValueFromNode(fieldNode, property.getTypeWrap(), existingFieldValue, property.getAttr());
+            Object exisValue = property.getValue(target);
+            Object propValue = null;
 
-            property.setValue(target, value);
+            if (property.getAttr().getDecoder() != null) {
+                propValue = property.getAttr()
+                        .getDecoder()
+                        .decode(new DecodeContext(opts, property.getAttr(), exisValue, property.getTypeWrap()), oNode);
+            } else {
+                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getAttr());
+            }
+
+            property.setValue(target, propValue);
         }
     }
 
