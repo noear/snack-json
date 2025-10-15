@@ -40,10 +40,6 @@ public class PropertyMethodWrap implements Property {
     private boolean isReadMode;
 
     public PropertyMethodWrap(TypeWrap owner, Method property) {
-        if (property.isAccessible() == false) {
-            property.setAccessible(true);
-        }
-
         this.property = property;
 
         if (property.getReturnType() != void.class) {
@@ -90,6 +86,10 @@ public class PropertyMethodWrap implements Property {
     @Override
     public Object getValue(Object target) throws Exception {
         if (isReadMode) {
+            if (property.isAccessible() == false) {
+                property.setAccessible(true);
+            }
+
             return property.invoke(target);
         } else {
             return null;
@@ -99,6 +99,10 @@ public class PropertyMethodWrap implements Property {
     @Override
     public void setValue(Object target, Object value) throws Exception {
         if (isReadMode == false) {
+            if (property.isAccessible() == false) {
+                property.setAccessible(true);
+            }
+
             property.invoke(target, value);
         }
     }

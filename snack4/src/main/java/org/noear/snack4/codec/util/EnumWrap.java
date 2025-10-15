@@ -65,9 +65,12 @@ public class EnumWrap {
                 if (!field.isAnnotationPresent(ONodeAttr.class)) {
                     continue;
                 }
-                field.setAccessible(true);
 
                 try {
+                    if(field.isAccessible() == false) {
+                        field.setAccessible(true);
+                    }
+
                     Object custom = field.get(e);
                     enumCustomFiled = field;
                     enumCustomMap.put(enumClass.getName() + "#" + custom, e);

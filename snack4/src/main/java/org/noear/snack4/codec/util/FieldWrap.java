@@ -40,10 +40,6 @@ public class FieldWrap implements Property {
     private boolean isTransient;
 
     public FieldWrap(TypeWrap owner, Field field) {
-        if (field.isAccessible() == false) {
-            field.setAccessible(true);
-        }
-
         this.field = field;
         this.fieldTypeWrap = TypeWrap.from(GenericUtil.reviewType(field.getGenericType(), getGenericInfo(owner, field)));
 
@@ -74,12 +70,20 @@ public class FieldWrap implements Property {
 
     @Override
     public Object getValue(Object target) throws Exception {
+        if (field.isAccessible() == false) {
+            field.setAccessible(true);
+        }
+
         return field.get(target);
     }
 
     @Override
     public void setValue(Object target, Object value) throws Exception {
         if (isFinal == false) {
+            if (field.isAccessible() == false) {
+                field.setAccessible(true);
+            }
+
             field.set(target, value);
         }
     }

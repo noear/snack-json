@@ -235,7 +235,6 @@ public class SchemaUtil {
         ONode props = schemaNode.getOrNew("properties");
 
         for (Field field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
             Type fieldType = field.getGenericType();
 
             // 如果字段类型是泛型变量 T，替换为实际类型
