@@ -252,11 +252,7 @@ public enum Feature {
      * 抑制异常。如果启用了 ALWAYS_RETURN_LIST，返回空列表 []；否则返回 null。
      */
     JsonPath_SuppressExceptions,
-
-    /**
-     * 要求路径中定义的所有属性都必须存在
-     */
-    JsonPath_RequireProperties;;
+    ;
 
 
     private final long _mask;
