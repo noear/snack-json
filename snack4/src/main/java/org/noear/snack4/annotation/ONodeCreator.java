@@ -13,31 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.util;
+package org.noear.snack4.annotation;
 
-import org.noear.snack4.annotation.ONodeAttrHolder;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
- * @author noear 2025/10/8 created
+ * @author noear 2025/10/15 created
  * @since 4.0
  */
-public interface Property {
-    Object getValue(Object target) throws Exception;
-
-    void setValue(Object target, Object value) throws Exception;
-
-    TypeWrap getTypeWrap();
-
-    ONodeAttrHolder getAttr();
-
-    /**
-     * 属性名
-     */
-    String getOrigName();
-
-    /**
-     * 节点名
-     */
-    String getNodeName();
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.CONSTRUCTOR})
+public @interface ONodeCreator {
 }

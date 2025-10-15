@@ -39,8 +39,6 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
 
     @Override
     public ONode encode(EncodeContext ctx, Properties properties, ONode target) {
-        ONode rootNode = target;
-
         //对key排序，确保数组有序
         List<String> keyVector = new ArrayList<>();
         properties.keySet().forEach(k -> {
@@ -48,26 +46,31 @@ public class _PropertiesPatternEncoder implements ObjectPatternEncoder<Propertie
                 keyVector.add((String) k);
             }
         });
+
+        if(keyVector.isEmpty()){
+            return target;
+        }
+
         Collections.sort(keyVector);
 
         //确定类型
         if (keyVector.get(0).startsWith("[")) {
-            rootNode.asArray();
+            target.asArray();
         } else {
-            rootNode.asObject();
+            target.asObject();
         }
 
         for (String key : keyVector) {
             String val = properties.getProperty(key);
 
             try {
-                setNestedValue(rootNode, key, val);
+                setNestedValue(target, key, val);
             } catch (Exception e) {
                 log.warn("Failed to encode property '{}'. The value: '{}'", key, val, e);
             }
         }
 
-        return rootNode;
+        return target;
     }
 
     // 设置嵌套值

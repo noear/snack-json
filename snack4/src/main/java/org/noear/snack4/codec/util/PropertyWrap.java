@@ -23,6 +23,7 @@ package org.noear.snack4.codec.util;
  */
 public class PropertyWrap {
     private final String name;
+    private String nodeName;
 
     private FieldWrap fieldWrap;
     private PropertyMethodWrap getterWrap;
@@ -32,8 +33,12 @@ public class PropertyWrap {
         this.name = name;
     }
 
-    public String getName() {
+    public String getOrigName() {
         return name;
+    }
+
+    public String getNodeName() {
+        return nodeName;
     }
 
     public FieldWrap getFieldWrap() {
@@ -50,15 +55,18 @@ public class PropertyWrap {
 
     /// //////////
 
-    protected void setFieldWrap(FieldWrap fieldWrap) {
-        this.fieldWrap = fieldWrap;
+    protected void setFieldWrap(FieldWrap f) {
+        this.fieldWrap = f;
+        this.nodeName = f.getNodeName();
     }
 
-    protected void setGetterWrap(PropertyMethodWrap getterWrap) {
-        this.getterWrap = getterWrap;
+    protected void setGetterWrap(PropertyMethodWrap g) {
+        this.getterWrap = g;
+        this.nodeName = g.getNodeName();
     }
 
-    protected void setSetterWrap(PropertyMethodWrap setterWrap) {
-        this.setterWrap = setterWrap;
+    protected void setSetterWrap(PropertyMethodWrap s) {
+        this.setterWrap = s;
+        this.nodeName = s.getNodeName();
     }
 }

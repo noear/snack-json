@@ -181,7 +181,7 @@ public class BeanDecoder {
                 }
 
                 if (typeWrap.getConstructor() != null) {
-                    if (typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                    if (typeWrap.getParamNodeWraps().containsKey(kv.getKey())) {
                         continue;
                     }
                 }
@@ -201,7 +201,7 @@ public class BeanDecoder {
             //允许用 setter （以类为主，支持 flat）
             for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWraps().entrySet()) {
                 if (typeWrap.getConstructor() != null) {
-                    if (typeWrap.getParameterMap().containsKey(kv.getKey())) {
+                    if (typeWrap.getParamNodeWraps().containsKey(kv.getKey())) {
                         continue;
                     }
                 }
@@ -227,7 +227,7 @@ public class BeanDecoder {
     }
 
     private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Exception {
-        ONode fieldNode = (property.getAttr().isFlat() ? node : node.get(property.getName()));
+        ONode fieldNode = (property.getAttr().isFlat() ? node : node.get(property.getNodeName()));
 
         if (fieldNode != null && !fieldNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
@@ -346,13 +346,13 @@ public class BeanDecoder {
 
     private Object[] getConstructorArguments(TypeWrap typeWrap, ONode node) throws Exception {
         //只有带参数的构造函（像 java record, kotlin data）
-        Object[] argsV = new Object[typeWrap.getParameterAry().size()];
+        Object[] argsV = new Object[typeWrap.getParamAry().size()];
 
         for (int j = 0; j < argsV.length; j++) {
-            Parameter p = typeWrap.getParameterAry().get(j);
-            if (node.hasKey(p.getName())) {
-                ONodeAttrHolder attr = new ONodeAttrHolder(p.getAnnotation(ONodeAttr.class), false);
-                Object val = decodeValueFromNode(node.get(p.getName()), TypeWrap.from(p.getParameterizedType()), null, attr);
+            ParamWrap p = typeWrap.getParamAry().get(j);
+            if (node.hasKey(p.getNodeName())) {
+                ONodeAttrHolder attr = p.getAttr();
+                Object val = decodeValueFromNode(node.get(p.getNodeName()), p.getTypeWrap(), null, attr);
                 argsV[j] = val;
             } else {
                 argsV[j] = null;

@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 public @interface ONodeAttr {
     /**
-     * 别名
+     * 键名
      */
     String name() default "";
 

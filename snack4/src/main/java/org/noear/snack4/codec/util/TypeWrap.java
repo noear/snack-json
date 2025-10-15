@@ -15,6 +15,8 @@
  */
 package org.noear.snack4.codec.util;
 
+import org.noear.snack4.annotation.ONodeCreator;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,8 +38,8 @@ public class TypeWrap {
 
     private Class<?> type = Object.class;
     private Constructor<?> constructor;
-    private Map<String,Parameter> parameterMap;
-    private List<Parameter> parameterAry;
+    private Map<String, ParamWrap> paramNodeWraps;
+    private List<ParamWrap> paramAry;
 
     public TypeWrap(Type genericType) {
         if (genericType instanceof Class<?>) {
@@ -74,34 +76,48 @@ public class TypeWrap {
         if (type != Object.class) {
             for (Constructor c1 : type.getDeclaredConstructors()) {
                 if (constructor == null) {
+                    //初始化
                     constructor = c1;
                 } else if (constructor.getParameterCount() > c1.getParameterCount()) {
+                    //谁参数少，用谁
                     constructor = c1;
+                }
+
+                if (c1.isAnnotationPresent(ONodeCreator.class)) {
+                    //用注解，优先用
+                    constructor = c1;
+                    break;
                 }
             }
 
             if (constructor != null) {
-                parameterMap = new HashMap<>();
-                parameterAry = new ArrayList<>();
+                paramNodeWraps = new HashMap<>();
+                paramAry = new ArrayList<>();
 
                 for (Parameter p1 : constructor.getParameters()) {
-                    parameterMap.put(p1.getName(), p1);
-                    parameterAry.add(p1);
+                    ParamWrap paramWrap = new ParamWrap(this, p1);
+
+                    paramNodeWraps.put(paramWrap.getNodeName(), paramWrap);
+                    paramAry.add(paramWrap);
                 }
             }
         }
     }
 
     public Constructor<?> getConstructor() {
-       return constructor;
+        return constructor;
     }
 
-    public Map<String, Parameter> getParameterMap() {
-        return parameterMap;
+    public Map<String, ParamWrap> getParamNodeWraps() {
+        return paramNodeWraps;
     }
 
-    public List<Parameter> getParameterAry() {
-        return parameterAry;
+    public ParamWrap getParamWrap(String nodeName) {
+        return paramNodeWraps.get(nodeName);
+    }
+
+    public List<ParamWrap> getParamAry() {
+        return paramAry;
     }
 
     public Class<?> getType() {
@@ -116,31 +132,31 @@ public class TypeWrap {
         return genericInfo;
     }
 
-    public boolean isInterface(){
+    public boolean isInterface() {
         return type.isInterface();
     }
 
-    public boolean isArray(){
+    public boolean isArray() {
         return type.isArray();
     }
 
-    public boolean isEnum(){
+    public boolean isEnum() {
         return type.isEnum();
     }
 
-    public boolean isList(){
+    public boolean isList() {
         return type == List.class;
     }
 
-    public boolean isString(){
+    public boolean isString() {
         return String.class.isAssignableFrom(type);
     }
 
-    public boolean isBoolean(){
+    public boolean isBoolean() {
         return Boolean.class.isAssignableFrom(type);
     }
 
-    public boolean isNumber(){
+    public boolean isNumber() {
         return Number.class.isAssignableFrom(type);
     }
 

@@ -17,6 +17,7 @@ package org.noear.snack4.codec.util;
 
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeAttrHolder;
+import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -31,8 +32,10 @@ public class PropertyMethodWrap implements Property {
     private final Method property;
     private final TypeWrap propertyTypeWrap;
 
-    private final ONodeAttrHolder attr;
     private final String name;
+
+    private ONodeAttrHolder attr;
+    private String nodeName;
 
     private boolean isReadMode;
 
@@ -52,15 +55,35 @@ public class PropertyMethodWrap implements Property {
             this.propertyTypeWrap = TypeWrap.from(GenericUtil.reviewType(property.getGenericParameterTypes()[0], getGenericInfo(owner, property)));
         }
 
+        String nameTmp = property.getName().substring(3);
+        this.name = nameTmp.substring(0, 1).toLowerCase() + nameTmp.substring(1);
+    }
+
+    /**
+     * 初始化属性
+     *
+     */
+    protected void initAttr(FieldWrap fieldWrap) {
         ONodeAttr attrAnno = property.getAnnotation(ONodeAttr.class);
 
-        if (attrAnno != null) {
-            this.name = attrAnno.name();
-            this.attr = new ONodeAttrHolder(attrAnno, false);
-        } else {
-            String nameTmp = property.getName().substring(3);
-            this.name = nameTmp.substring(0, 1).toLowerCase() + nameTmp.substring(1);
-            this.attr = new ONodeAttrHolder(null, false);
+        if (attrAnno == null) {
+            if (fieldWrap != null) {
+                this.attr = fieldWrap.getAttr();
+            }
+        }
+
+        if (this.attr == null) {
+            if (attrAnno != null) {
+                this.attr = new ONodeAttrHolder(attrAnno, false);
+            } else {
+                this.attr = new ONodeAttrHolder(null, false);
+            }
+        }
+
+        this.nodeName = this.attr.getName();
+
+        if (Asserts.isEmpty(nodeName)) {
+            this.nodeName = this.name;
         }
     }
 
@@ -91,8 +114,12 @@ public class PropertyMethodWrap implements Property {
     }
 
     @Override
-    public String getName() {
+    public String getOrigName() {
         return name;
+    }
+
+    public String getNodeName() {
+        return nodeName;
     }
 
     @Override

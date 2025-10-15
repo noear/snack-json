@@ -222,7 +222,7 @@ public class BeanEncoder {
                             tmp.setAll(propertyNode.getObject());
                         }
                     } else {
-                        tmp.set(property.getName(), propertyNode);
+                        tmp.set(property.getNodeName(), propertyNode);
                     }
                 }
             }

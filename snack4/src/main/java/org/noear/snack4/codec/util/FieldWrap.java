@@ -32,8 +32,9 @@ public class FieldWrap implements Property {
     private final Field field;
     private final TypeWrap fieldTypeWrap;
 
-    private ONodeAttrHolder attr;
-    private String name;
+    private final ONodeAttrHolder attr;
+    private final String name;
+    private final String nodeName;
 
     private boolean isFinal;
     private boolean isTransient;
@@ -49,25 +50,21 @@ public class FieldWrap implements Property {
         this.isFinal = Modifier.isFinal(field.getModifiers());
         this.isTransient = Modifier.isTransient(field.getModifiers());
 
+        this.name = field.getName();
+
+        String nodeNameTmp = null;
         ONodeAttr attrAnno = field.getAnnotation(ONodeAttr.class);
         if (attrAnno != null) {
-            this.name = attrAnno.name();
+            nodeNameTmp = attrAnno.name();
             this.attr = new ONodeAttrHolder(attrAnno, isTransient);
         } else {
             this.attr = new ONodeAttrHolder(null, isTransient);
         }
 
-        if (Asserts.isEmpty(name)) {
-            name = field.getName();
-        }
-    }
-
-    private static Map<String, Type> getGenericInfo(TypeWrap owner, Field field) {
-        if (field.getDeclaringClass() == owner.getType()) {
-            return owner.getGenericInfo();
+        if (Asserts.isEmpty(nodeNameTmp)) {
+            nodeName = this.name;
         } else {
-            Type superType = GenericUtil.reviewType(owner.getType().getGenericSuperclass(), owner.getGenericInfo());
-            return getGenericInfo(TypeWrap.from(superType), field);
+            nodeName = nodeNameTmp;
         }
     }
 
@@ -98,12 +95,25 @@ public class FieldWrap implements Property {
     }
 
     @Override
-    public String getName() {
+    public String getOrigName() {
         return name;
+    }
+
+    public String getNodeName() {
+        return nodeName;
     }
 
     @Override
     public String toString() {
         return field.toString();
+    }
+
+    private static Map<String, Type> getGenericInfo(TypeWrap owner, Field field) {
+        if (field.getDeclaringClass() == owner.getType()) {
+            return owner.getGenericInfo();
+        } else {
+            Type superType = GenericUtil.reviewType(owner.getType().getGenericSuperclass(), owner.getGenericInfo());
+            return getGenericInfo(TypeWrap.from(superType), field);
+        }
     }
 }
