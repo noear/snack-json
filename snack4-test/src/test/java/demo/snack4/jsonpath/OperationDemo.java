@@ -9,7 +9,7 @@ import org.noear.snack4.jsonpath.OperatorLib;
  */
 public class OperationDemo {
     public static void main(String[] args) {
-        //定制操作符
+        //定制操作符（已预置）
         OperatorLib.register("startsWith", (ctx, node, term) -> {
             ONode leftNode = term.getLeftNode(ctx, node);
 
