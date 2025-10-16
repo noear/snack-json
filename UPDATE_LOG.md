@@ -2,7 +2,7 @@
 
 ### 4.0.1
 
-* 添加 ONodeCreator 静态方法的支持???
+* 添加 ONodeCreator 静态方法的支持（普通类）
 * 添加 ONodeAttr:ignore 注解属性支持
 
 ### 4.0.0

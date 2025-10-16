@@ -17,9 +17,7 @@ package org.noear.snack4.codec.util;
 
 import org.noear.snack4.annotation.ONodeCreator;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,14 +29,14 @@ import java.util.Map;
  * @since 4.0
  */
 public class ConstrWrap {
-    private final Constructor<?> constr;
+    private final Executable constr;
 
     private final Map<String, ParamWrap> paramNodeWraps;
     private final List<ParamWrap> paramAry;
 
     private final boolean security;
 
-    public ConstrWrap(TypeWrap owner, Constructor<?> constr, ONodeCreator constrAnno) {
+    public ConstrWrap(TypeWrap owner, Executable constr, ONodeCreator constrAnno) {
         this.constr = constr;
 
         paramNodeWraps = new HashMap<>();
@@ -79,6 +77,10 @@ public class ConstrWrap {
             constr.setAccessible(true);
         }
 
-        return (T) constr.newInstance(args);
+        if (constr instanceof Constructor) {
+            return (T) ((Constructor) constr).newInstance(args);
+        } else {
+            return (T) ((Method) constr).invoke(args);
+        }
     }
 }

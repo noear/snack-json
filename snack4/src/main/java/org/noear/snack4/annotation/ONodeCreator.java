@@ -27,6 +27,6 @@ import java.lang.annotation.Target;
  * @since 4.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.CONSTRUCTOR})
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
 public @interface ONodeCreator {
 }

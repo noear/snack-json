@@ -37,7 +37,7 @@ public class TypeWrap {
     private final Map<String, Type> genericInfo;
 
     private Class<?> type = Object.class;
-    private Constructor constr;
+    private Executable constr;
     private ONodeCreator constrAnno;
     private ConstrWrap constrWrap;
 
@@ -74,21 +74,34 @@ public class TypeWrap {
         }
 
         if (type != Object.class) {
-
-            for (Constructor c1 : type.getDeclaredConstructors()) {
-                if (constr == null) {
-                    //初始化
-                    constr = c1;
-                } else if (constr.getParameterCount() > c1.getParameterCount()) {
-                    //谁参数少，用谁
-                    constr = c1;
+            //先从静态方法找
+            for (Method m1 : type.getDeclaredMethods()) {
+                if (Modifier.isStatic(m1.getModifiers())) {
+                    constrAnno = m1.getAnnotation(ONodeCreator.class);
+                    if (constrAnno != null) {
+                        constr = m1;
+                        break;
+                    }
                 }
+            }
 
-                constrAnno = (ONodeCreator) c1.getAnnotation(ONodeCreator.class);
-                if (constrAnno != null) {
-                    //用注解，优先用
-                    constr = c1;
-                    break;
+            //再从构造方法找
+            if (constr == null) {
+                for (Constructor c1 : type.getDeclaredConstructors()) {
+                    if (constr == null) {
+                        //初始化
+                        constr = c1;
+                    } else if (constr.getParameterCount() > c1.getParameterCount()) {
+                        //谁参数少，用谁
+                        constr = c1;
+                    }
+
+                    constrAnno = (ONodeCreator) c1.getAnnotation(ONodeCreator.class);
+                    if (constrAnno != null) {
+                        //用注解，优先用
+                        constr = c1;
+                        break;
+                    }
                 }
             }
         }
