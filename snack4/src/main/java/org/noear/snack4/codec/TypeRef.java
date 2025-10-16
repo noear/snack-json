@@ -28,8 +28,8 @@ public abstract class TypeRef<T> {
     protected final Type type;
 
     protected TypeRef() {
-        Type superClass = this.getClass().getGenericSuperclass();
-        this.type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+        Type sc = this.getClass().getGenericSuperclass();
+        this.type = ((ParameterizedType) sc).getActualTypeArguments()[0];
     }
 
     public Type getType() {
