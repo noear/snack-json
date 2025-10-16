@@ -54,9 +54,9 @@
 
 ```xml
 <dependency>
-  <groupId>org.noear</groupId>
-  <artifactId>snack4-jsonpath</artifactId>
-  <version>4.0.0</version>
+    <groupId>org.noear</groupId>
+    <artifactId>snack4-jsonpath</artifactId>
+    <version>...</version>
 </dependency>
 ```
 
