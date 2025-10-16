@@ -27,6 +27,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class ShortDecoder implements ObjectDecoder<Short> {
     @Override
     public Short decode(DecodeContext ctx, ONode node) {
-        return node.getNumber().shortValue();
+        return node.getShort(ctx.getType().isPrimitive() ? (short) 0 : null);
     }
 }

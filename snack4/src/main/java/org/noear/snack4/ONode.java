@@ -234,6 +234,22 @@ public final class ONode {
         return this;
     }
 
+    public Short getShort() {
+        return getShort((short)0);
+    }
+
+    public Short getShort(Short def) {
+        if (isNumber()) {
+            return getNumber().shortValue();
+        } else if (isEmpty()) {
+            return def;
+        } else if (isString()) {
+            return Short.parseShort(getString());
+        } else {
+            throw new SnackException("Not supported for automatic conversion");
+        }
+    }
+
     public Integer getInt() {
         return getInt(0);
     }
