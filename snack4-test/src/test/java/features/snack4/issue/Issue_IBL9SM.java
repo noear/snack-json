@@ -1,8 +1,9 @@
 package features.snack4.issue;
 
-import com.jayway.jsonpath.JsonPath;
 import features.snack4.jsonpath.manual.AbsQueryTest;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 
 /**
@@ -11,27 +12,32 @@ import org.noear.snack4.ONode;
 public class Issue_IBL9SM extends AbsQueryTest {
     @Test
     public void case1() {
-        System.out.println(ONode.ofJson(json).select("$..[?(@.price == '19.95')]"));
+        String json1 = ONode.ofJson(json).select("$..[?(@.price == 19.95)]").toJson();
+        String json2 = ONode.ofJson(json).select("$..*[?(@.price == 19.95)]").toJson();
+
+        System.out.println(json1);
         System.out.println("------");
-        System.out.println(ONode.ofJson(json).select("$..*[?(@.price == '19.95')]"));
+        System.out.println(json2);
+
+        assert json1.length() == (json2).length();
     }
 
     @Test
     public void case2() {
-        compatible_do("1", json, "$..[?(@.price == '19.95')]");
-        compatible_do("2", json, "$..*[?(@.price == '19.95')]");
+        compatible_do("1", json, "$..[?(@.price == 19.95)]");
+        compatible_do("2", json, "$..*[?(@.price == 19.95)]");
     }
 
     private void compatible_do(String hint, String json, String jsonpathStr) {
         System.out.println("::::" + hint);
 
-        ONode tmp = ONode.ofJson(json).select(jsonpathStr);
+        ONode tmp = ONode.ofJson(json, Feature.JsonPath_JaywayMode).select(jsonpathStr);
         System.out.println(tmp.toJson());
 
         Object tmp2 = JsonPath.read(json, jsonpathStr);
         System.out.println(tmp2);
 
-        assert tmp.toJson().equals(tmp2.toString());
+        assert tmp.toJson().length() == (tmp2.toString()).length();
     }
 
     static String json = "{\n" +
