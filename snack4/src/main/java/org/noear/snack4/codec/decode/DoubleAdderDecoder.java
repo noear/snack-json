@@ -29,6 +29,10 @@ import java.util.concurrent.atomic.DoubleAdder;
 public class DoubleAdderDecoder implements ObjectDecoder<DoubleAdder> {
     @Override
     public DoubleAdder decode(DecodeContext<DoubleAdder> ctx, ONode node) {
+        if(node.isEmpty()){
+            return null;
+        }
+
         DoubleAdder tmp = new DoubleAdder();
         tmp.add(node.getDouble());
         return tmp;

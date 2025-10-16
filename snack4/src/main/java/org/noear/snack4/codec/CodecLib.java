@@ -201,7 +201,6 @@ public class CodecLib {
         addDecoder(URI.class, new URIDecoder());
         addDecoder(URL.class, new URLDecoder());
 
-        addDecoder(String.class, new StringDecoder());
 
         addDecoder(Date.class, new DateDecoder());
 
@@ -221,29 +220,31 @@ public class CodecLib {
         addDecoder(java.sql.Time.class, new SqlTimeDecoder());
         addDecoder(java.sql.Timestamp.class, new SqlTimestampDecoder());
 
-        addDecoder(Boolean.class, new BooleanDecoder());
-        addDecoder(Boolean.TYPE, new BooleanDecoder());
-
         addDecoder(BigDecimal.class, new BigDecimalDecoder());
         addDecoder(BigInteger.class, new BigIntegerDecoder());
 
-        addDecoder(Double.class, new DoubleDecoder());
-        addDecoder(Double.TYPE, new DoubleDecoder());
+        addDecoder(String.class, (c,o)->o.getString());
 
-        addDecoder(Float.class, new FloatDecoder());
-        addDecoder(Float.TYPE, new FloatDecoder());
+        addDecoder(Boolean.class, (c,o)->o.getBoolean(null));
+        addDecoder(Boolean.TYPE, (c,o)->o.getBoolean(false));
 
-        addDecoder(Long.class, new LongDecoder());
-        addDecoder(Long.TYPE, new LongDecoder());
+        addDecoder(Double.class, (c, o) -> o.getDouble(null));
+        addDecoder(Double.TYPE, (c, o) -> o.getDouble(0D));
 
-        addDecoder(Integer.class, new IntegerDecoder());
-        addDecoder(Integer.TYPE, new IntegerDecoder());
+        addDecoder(Float.class, (c, o) -> o.getFloat(null));
+        addDecoder(Float.TYPE, (c, o) -> o.getFloat(0F));
 
-        addDecoder(Short.class, new ShortDecoder());
-        addDecoder(Short.TYPE, new ShortDecoder());
+        addDecoder(Long.class, (c, o) -> o.getLong(null));
+        addDecoder(Long.TYPE, (c, o) -> o.getLong(0L));
 
-        addDecoder(Byte.class, new ByteDecoder());
-        addDecoder(Byte.TYPE, new ByteDecoder());
+        addDecoder(Integer.class, (c, o) -> o.getInt(null));
+        addDecoder(Integer.TYPE, (c, o) -> o.getInt(0));
+
+        addDecoder(Short.class, (c, o) -> o.getShort(null));
+        addDecoder(Short.TYPE, (c, o) -> o.getShort((short) 0));
+
+        addDecoder(Byte.class, (c, o) -> o.getNumber().byteValue());
+        addDecoder(Byte.TYPE, (c, o) -> o.getNumber().byteValue());
     }
 
 
