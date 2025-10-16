@@ -27,5 +27,11 @@ import java.util.List;
  */
 @FunctionalInterface
 public interface Function {
+    /**
+     * 应用
+     *
+     * @param ctx      查询上下文
+     * @param argNodes 参数节点列表
+     */
     ONode apply(QueryContext ctx, List<ONode> argNodes);
 }
