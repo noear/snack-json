@@ -81,7 +81,6 @@ public class SpeedFastjsonTest {
                     SerializerFeature.BrowserCompatible,
                     SerializerFeature.WriteClassName,
                     SerializerFeature.DisableCircularReferenceDetect);
-            //String json = context.node.toJson();
         }
         long times = System.currentTimeMillis() - start;
 

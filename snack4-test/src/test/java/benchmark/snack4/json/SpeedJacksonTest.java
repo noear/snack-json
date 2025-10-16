@@ -96,7 +96,6 @@ public class SpeedJacksonTest {
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
             mapper.writeValueAsString(obj);
-            //String json = context.node.toJson();
         }
         long times = System.currentTimeMillis() - start;
 

@@ -5,6 +5,7 @@ import benchmark.snack4.json._models.UserModel;
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
+import org.noear.snack4.Options;
 
 import java.util.*;
 
@@ -61,7 +62,7 @@ public class SpeedSnack4Test {
 
     @Test
     public void test1() throws Exception {
-        //1000000=>1695,1713,1738 //2994,2960,2801
+        //1000,000=>1695,1713,1738 //2994,2960,2801
         //
         //
         Map<String, Object> obj = new LinkedHashMap<>();
@@ -77,20 +78,20 @@ public class SpeedSnack4Test {
 
         obj.put("list", list);
 
-        String tmp = ONode.ofBean(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
+        Options options = Options.of(Feature.Write_ClassName, Feature.Write_BrowserCompatible);
+
+        String tmp = ONode.ofBean(obj, options).toJson();
         System.out.println(tmp);
 
         long start = System.currentTimeMillis();
         for (int i = 0, len = 1000000; i < len; i++) {
-            ONode.ofBean(obj, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
-            //String json = context.node.toJson();
+            ONode.ofBean(obj, options).toJson();
         }
         long times = System.currentTimeMillis() - start;
 
         System.out.println(times);
 
         assert times > 0;
-
     }
 
     @Test
