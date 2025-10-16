@@ -1,4 +1,4 @@
-package org.noear.snack4.jsonpath.demo;
+package demo.snack4.jsonpath;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.OperatorLib;
