@@ -139,8 +139,14 @@ public final class ONode {
     }
 
     public Boolean getBoolean() {
+        return getBoolean(false);
+    }
+
+    public Boolean getBoolean(Boolean def) {
         if (isBoolean()) {
             return (Boolean) value;
+        } else if (isEmpty()) {
+            return def;
         } else if (isString()) {
             return Boolean.parseBoolean((String) value);
         } else if (isNumber()) {
