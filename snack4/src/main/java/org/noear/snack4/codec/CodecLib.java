@@ -216,12 +216,14 @@ public class CodecLib {
 
         addDecoder(ZonedDateTime.class, new ZonedDateTimeDecoder());
 
-        addDecoder(java.sql.Date.class, new SqlDateDecoder());
-        addDecoder(java.sql.Time.class, new SqlTimeDecoder());
-        addDecoder(java.sql.Timestamp.class, new SqlTimestampDecoder());
-
         addDecoder(BigDecimal.class, new BigDecimalDecoder());
         addDecoder(BigInteger.class, new BigIntegerDecoder());
+
+
+        addDecoder(java.sql.Date.class, (c,o)->new java.sql.Date(o.getLong()));
+        addDecoder(java.sql.Time.class,  (c,o)->new java.sql.Time(o.getLong()));
+        addDecoder(java.sql.Timestamp.class,  (c,o)->new java.sql.Timestamp(o.getLong()));
+
 
         addDecoder(String.class, (c,o)->o.getString());
 
