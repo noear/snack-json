@@ -48,19 +48,19 @@ public class FieldWrap implements Property {
 
         this.name = field.getName();
 
-        String nodeNameTmp = null;
-        ONodeAttr attrAnno = field.getAnnotation(ONodeAttr.class);
-        if (attrAnno != null) {
-            nodeNameTmp = attrAnno.name();
-            this.attr = new ONodeAttrHolder(attrAnno, isTransient);
+        String nt = null;
+        ONodeAttr aa = field.getAnnotation(ONodeAttr.class);
+        if (aa != null) {
+            nt = aa.name();
+            this.attr = new ONodeAttrHolder(aa, isTransient);
         } else {
             this.attr = new ONodeAttrHolder(null, isTransient);
         }
 
-        if (Asserts.isEmpty(nodeNameTmp)) {
+        if (Asserts.isEmpty(nt)) {
             nodeName = this.name;
         } else {
-            nodeName = nodeNameTmp;
+            nodeName = nt;
         }
     }
 

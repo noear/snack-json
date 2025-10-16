@@ -196,12 +196,9 @@ public class CodecLib {
         addDecoder(SimpleDateFormat.class, new SimpleDateFormatDecoder());
         addDecoder(File.class, new FileDecoder());
         addDecoder(Class.class, new ClassDecoder());
-        addDecoder(UUID.class, new UUIDDecoder());
         addDecoder(Duration.class, new DurationDecoder());
 
-        addDecoder(URI.class, new URIDecoder());
         addDecoder(URL.class, new URLDecoder());
-
 
         addDecoder(Date.class, new DateDecoder());
 
@@ -220,11 +217,12 @@ public class CodecLib {
         addDecoder(BigDecimal.class, new BigDecimalDecoder());
         addDecoder(BigInteger.class, new BigIntegerDecoder());
 
+        addDecoder(URI.class, (c, o) -> URI.create(o.getString()));
+        addDecoder(UUID.class, (c, o) -> UUID.fromString(o.getString()));
 
         addDecoder(java.sql.Date.class, (c, o) -> new java.sql.Date(o.getLong()));
         addDecoder(java.sql.Time.class, (c, o) -> new java.sql.Time(o.getLong()));
         addDecoder(java.sql.Timestamp.class, (c, o) -> new java.sql.Timestamp(o.getLong()));
-
 
         addDecoder(String.class, (c, o) -> o.getString());
 

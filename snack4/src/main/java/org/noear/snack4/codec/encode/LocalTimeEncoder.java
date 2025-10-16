@@ -37,15 +37,15 @@ public class LocalTimeEncoder implements ObjectEncoder<LocalTime> {
     public ONode encode(EncodeContext ctx, LocalTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
-                return target.setValue(formatter.format(value));
+                DateTimeFormatter f = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
+                return target.setValue(f.format(value));
             }
         }
 
-        Instant instant = value.atDate(LocalDate.of(1970, 1, 1))
+        Instant it = value.atDate(LocalDate.of(1970, 1, 1))
                 .atZone(Options.DEF_TIME_ZONE.toZoneId())
                 .toInstant();
 
-        return target.setValue(new Date(instant.getEpochSecond() * 1000));
+        return target.setValue(new Date(it.getEpochSecond() * 1000));
     }
 }

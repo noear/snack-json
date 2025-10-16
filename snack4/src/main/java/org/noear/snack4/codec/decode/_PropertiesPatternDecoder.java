@@ -37,13 +37,13 @@ public class _PropertiesPatternDecoder implements ObjectPatternDecoder<Propertie
 
     @Override
     public Properties decode(DecodeContext<Properties> ctx, ONode node) {
-        Properties properties = ctx.getTarget();
-        if (properties == null) {
-            properties = (Properties) ClassUtil.newInstance(ctx.getType());
+        Properties p = ctx.getTarget();
+        if (p == null) {
+            p = (Properties) ClassUtil.newInstance(ctx.getType());
         }
 
-        flattenNodeToProperties(node, properties, "");
-        return properties;
+        flattenNodeToProperties(node, p, "");
+        return p;
     }
 
 

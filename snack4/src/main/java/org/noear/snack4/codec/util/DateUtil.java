@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -194,6 +195,12 @@ public class DateUtil {
         }
 
         return zoneId;
+    }
+
+    public static ZonedDateTime decodeAndZone(DecodeContext ctx, ONode node) {
+        ZoneId zoneId = zoneIdOf(ctx);
+
+        return decode(ctx, node).atZone(zoneId);
     }
 
     public static Instant decode(DecodeContext ctx, ONode node) {

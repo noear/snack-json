@@ -37,12 +37,12 @@ public class LocalDateEncoder implements ObjectEncoder<LocalDate> {
     public ONode encode(EncodeContext ctx, LocalDate value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
+                DateTimeFormatter fr = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
                 if(ctx.getAttr().getTimezone() != null){
-                    formatter.withZone(ctx.getAttr().getTimezone().toZoneId());
+                    fr.withZone(ctx.getAttr().getTimezone().toZoneId());
                 }
 
-                return target.setValue(formatter.format(value));
+                return target.setValue(fr.format(value));
             }
         }
 

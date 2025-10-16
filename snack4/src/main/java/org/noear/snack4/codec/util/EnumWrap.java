@@ -61,19 +61,19 @@ public class EnumWrap {
             enumMap.put(e.name().toLowerCase(), e);
 
             //添另自定义 code
-            for (Field field : e.getClass().getDeclaredFields()) {
-                if (!field.isAnnotationPresent(ONodeAttr.class)) {
+            for (Field f1 : e.getClass().getDeclaredFields()) {
+                if (!f1.isAnnotationPresent(ONodeAttr.class)) {
                     continue;
                 }
 
                 try {
-                    if(field.isAccessible() == false) {
-                        field.setAccessible(true);
+                    if(f1.isAccessible() == false) {
+                        f1.setAccessible(true);
                     }
 
-                    Object custom = field.get(e);
-                    enumCustomFiled = field;
-                    enumCustomMap.put(enumClass.getName() + "#" + custom, e);
+                    Object cm = f1.get(e);
+                    enumCustomFiled = f1;
+                    enumCustomMap.put(enumClass.getName() + "#" + cm, e);
                 } catch (IllegalAccessException ex) {
                     throw new SnackException(ex);
                 }

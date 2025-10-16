@@ -60,17 +60,17 @@ public class PropertyMethodWrap implements Property {
      *
      */
     protected void initAttr(FieldWrap fieldWrap) {
-        ONodeAttr attrAnno = property.getAnnotation(ONodeAttr.class);
+        ONodeAttr aa = property.getAnnotation(ONodeAttr.class);
 
-        if (attrAnno == null) {
+        if (aa == null) {
             if (fieldWrap != null) {
                 this.attr = fieldWrap.getAttr();
             }
         }
 
         if (this.attr == null) {
-            if (attrAnno != null) {
-                this.attr = new ONodeAttrHolder(attrAnno, false);
+            if (aa != null) {
+                this.attr = new ONodeAttrHolder(aa, false);
             } else {
                 this.attr = new ONodeAttrHolder(null, false);
             }

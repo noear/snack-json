@@ -44,11 +44,11 @@ public class JavaUtil {
     static {
         int majorVersion;
         try {
-            String version = System.getProperty("java.specification.version");
-            if (version.startsWith("1.")) {
-                version = version.substring(2);
+            String vs = System.getProperty("java.specification.version");
+            if (vs.startsWith("1.")) {
+                vs = vs.substring(2);
             }
-            majorVersion = Integer.parseInt(version);
+            majorVersion = Integer.parseInt(vs);
         } catch (Throwable ignored) {
             majorVersion = 8;
         }

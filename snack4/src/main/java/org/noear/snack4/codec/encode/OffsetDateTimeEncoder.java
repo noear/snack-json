@@ -34,8 +34,8 @@ public class OffsetDateTimeEncoder implements ObjectEncoder<OffsetDateTime> {
     public ONode encode(EncodeContext ctx, OffsetDateTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
-                return target.setValue(formatter.format(value));
+                DateTimeFormatter f = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
+                return target.setValue(f.format(value));
             }
         }
 

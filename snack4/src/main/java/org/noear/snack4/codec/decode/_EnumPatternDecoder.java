@@ -39,21 +39,21 @@ public class _EnumPatternDecoder implements ObjectPatternDecoder<Object> {
         EnumWrap ew = TypeUtil.createEnum(ctx.getType());
 
         //尝试自定义获取
-        String valString = node.getString();
+        String vs = node.getString();
 
         Enum eItem;
 
         if (ew.hasCustom()) {
             //按自定义获取
-            eItem = ew.getCustom(valString);
+            eItem = ew.getCustom(vs);
             // 获取不到则按名字获取
             if (eItem == null) {
-                eItem = ew.get(valString);
+                eItem = ew.get(vs);
             }
         } else {
             if (node.isString()) {
                 //按名字获取
-                eItem = ew.get(valString);
+                eItem = ew.get(vs);
             } else {
                 //按顺序位获取
                 eItem = ew.get(node.getInt());
@@ -62,7 +62,7 @@ public class _EnumPatternDecoder implements ObjectPatternDecoder<Object> {
 
         if (eItem == null) {
             throw new SnackException(
-                    "Deserialize failure for '" + ew.enumClass().getName() + "' from value: " + valString);
+                    "Deserialize failure for '" + ew.enumClass().getName() + "' from value: " + vs);
         }
 
         return eItem;

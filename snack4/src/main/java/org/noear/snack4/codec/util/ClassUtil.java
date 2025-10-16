@@ -34,12 +34,12 @@ public class ClassUtil {
             if (clz.isInterface()) {
                 return null;
             } else {
-                Constructor<T> constructor = clz.getDeclaredConstructor();
-                if (constructor.isAccessible() == false) {
-                    constructor.setAccessible(true);
+                Constructor<T> c = clz.getDeclaredConstructor();
+                if (c.isAccessible() == false) {
+                    c.setAccessible(true);
                 }
 
-                return constructor.newInstance();
+                return c.newInstance();
             }
         } catch (Throwable e) {
             throw new SnackException("Instantiation failed: " + clz.getName(), e);

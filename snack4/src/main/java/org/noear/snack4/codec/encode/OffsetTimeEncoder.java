@@ -36,12 +36,12 @@ public class OffsetTimeEncoder implements ObjectEncoder<OffsetTime> {
     public ONode encode(EncodeContext ctx, OffsetTime value, ONode target) {
         if (ctx.getAttr() != null) {
             if (Asserts.isNotEmpty(ctx.getAttr().getFormat())) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
-                return target.setValue(formatter.format(value));
+                DateTimeFormatter f = DateTimeFormatter.ofPattern(ctx.getAttr().getFormat());
+                return target.setValue(f.format(value));
             }
         }
 
-        Instant instant = value.atDate(LocalDate.of(1970, 1, 1)).toInstant();
-        return target.setValue(Date.from(instant));
+        Instant it = value.atDate(LocalDate.of(1970, 1, 1)).toInstant();
+        return target.setValue(Date.from(it));
     }
 }

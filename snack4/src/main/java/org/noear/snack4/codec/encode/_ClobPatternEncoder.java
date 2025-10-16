@@ -40,19 +40,19 @@ public class _ClobPatternEncoder implements ObjectPatternEncoder<Clob> {
     }
 
     static String clobToString(Clob clob) {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         try (Reader reader = clob.getCharacterStream()) {
             char[] chars = new char[1024];
             int size = 0;
 
             while ((size = reader.read(chars, 0, chars.length)) != -1) {
-                buf.append(chars, 0, size);
+                sb.append(chars, 0, size);
             }
         } catch (Throwable e) {
             throw new SnackException("Clob read fail!", e);
         }
 
-        return buf.toString();
+        return sb.toString();
     }
 }

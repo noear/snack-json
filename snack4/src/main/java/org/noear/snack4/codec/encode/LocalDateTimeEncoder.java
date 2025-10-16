@@ -41,7 +41,7 @@ public class LocalDateTimeEncoder implements ObjectEncoder<LocalDateTime> {
             }
         }
 
-        Instant instant = value.atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
-        return target.setValue(new Date((instant.getEpochSecond() * 1000) + (instant.getNano() / 1000_000)));
+        Instant it = value.atZone(Options.DEF_TIME_ZONE.toZoneId()).toInstant();
+        return target.setValue(new Date((it.getEpochSecond() * 1000) + (it.getNano() / 1000_000)));
     }
 }

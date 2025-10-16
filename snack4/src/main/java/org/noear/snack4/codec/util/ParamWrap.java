@@ -40,19 +40,19 @@ public class ParamWrap {
 
         this.name = param.getName();
 
-        String nodeNameTmp = null;
-        ONodeAttr attrAnno = param.getAnnotation(ONodeAttr.class);
-        if (attrAnno != null) {
-            nodeNameTmp = attrAnno.name();
-            this.attr = new ONodeAttrHolder(attrAnno, false);
+        String nt = null;
+        ONodeAttr aa = param.getAnnotation(ONodeAttr.class);
+        if (aa != null) {
+            nt = aa.name();
+            this.attr = new ONodeAttrHolder(aa, false);
         } else {
             this.attr = new ONodeAttrHolder(null, false);
         }
 
-        if (Asserts.isEmpty(nodeNameTmp)) {
+        if (Asserts.isEmpty(nt)) {
             nodeName = this.name;
         } else {
-            nodeName = nodeNameTmp;
+            nodeName = nt;
         }
     }
 

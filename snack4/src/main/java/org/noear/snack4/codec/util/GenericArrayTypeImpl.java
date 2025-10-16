@@ -37,16 +37,16 @@ public class GenericArrayTypeImpl implements GenericArrayType {
 
     @Override
     public String toString() {
-        Type typeTmp = this.getGenericComponentType();
-        StringBuilder buf = new StringBuilder();
-        if (typeTmp instanceof Class) {
-            buf.append(((Class) typeTmp).getName());
+        Type tt = this.getGenericComponentType();
+        StringBuilder sb = new StringBuilder();
+        if (tt instanceof Class) {
+            sb.append(((Class) tt).getName());
         } else {
-            buf.append(typeTmp);
+            sb.append(tt);
         }
 
-        buf.append("[]");
-        return buf.toString();
+        sb.append("[]");
+        return sb.toString();
     }
 
     @Override

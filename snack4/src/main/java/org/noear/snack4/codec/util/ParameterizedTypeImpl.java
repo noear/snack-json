@@ -62,11 +62,11 @@ public class ParameterizedTypeImpl implements ParameterizedType {
             if (this == that)
                 return true;
 
-            Type thatOwner = that.getOwnerType();
-            Type thatRawType = that.getRawType();
+            Type to = that.getOwnerType();
+            Type rt = that.getRawType();
 
-            return Objects.equals(ownerType, thatOwner) &&
-                    Objects.equals(rawType, thatRawType) &&
+            return Objects.equals(ownerType, to) &&
+                    Objects.equals(rawType, rt) &&
                     Arrays.equals(actualTypeArguments, // avoid clone
                             that.getActualTypeArguments());
         } else

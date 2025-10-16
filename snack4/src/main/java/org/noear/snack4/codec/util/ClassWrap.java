@@ -110,22 +110,22 @@ public class ClassWrap {
                 if (m.getReturnType() == void.class && m.getParameterCount() == 1) {
                     //setter
                     if (m.getName().startsWith("set")) {
-                        PropertyMethodWrap setterWrap = new PropertyMethodWrap(typeWrap, m);
-                        FieldWrap fieldWrap = fieldWraps.get(setterWrap.getOrigName());
-                        setterWrap.initAttr(fieldWrap);
+                        PropertyMethodWrap sw = new PropertyMethodWrap(typeWrap, m);
+                        FieldWrap fieldWrap = fieldWraps.get(sw.getOrigName());
+                        sw.initAttr(fieldWrap);
 
-                        propertyWraps.computeIfAbsent(setterWrap.getOrigName(), k -> new PropertyWrap(k))
-                                .setSetterWrap(setterWrap);
+                        propertyWraps.computeIfAbsent(sw.getOrigName(), k -> new PropertyWrap(k))
+                                .setSetterWrap(sw);
                     }
                 } else if (m.getReturnType() != void.class && m.getParameterCount() == 0) {
                     //getter
                     if (m.getName().startsWith("get")) {
-                        PropertyMethodWrap getterWrap = new PropertyMethodWrap(typeWrap, m);
-                        FieldWrap fieldWrap = fieldWraps.get(getterWrap.getOrigName());
-                        getterWrap.initAttr(fieldWrap);
+                        PropertyMethodWrap gw = new PropertyMethodWrap(typeWrap, m);
+                        FieldWrap fieldWrap = fieldWraps.get(gw.getOrigName());
+                        gw.initAttr(fieldWrap);
 
-                        propertyWraps.computeIfAbsent(getterWrap.getOrigName(), k -> new PropertyWrap(k))
-                                .setGetterWrap(getterWrap);
+                        propertyWraps.computeIfAbsent(gw.getOrigName(), k -> new PropertyWrap(k))
+                                .setGetterWrap(gw);
                     }
                 }
             }

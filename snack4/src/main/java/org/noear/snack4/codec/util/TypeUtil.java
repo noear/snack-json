@@ -22,11 +22,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * 类型工具类
@@ -35,27 +32,6 @@ import java.util.concurrent.ConcurrentMap;
  * @since 4.0
  * */
 public class TypeUtil {
-    public final static BigInteger INT_LOW = BigInteger.valueOf(-9007199254740991L);
-    public final static BigInteger INT_HIGH = BigInteger.valueOf(9007199254740991L);
-    public final static BigDecimal DEC_LOW = BigDecimal.valueOf(-9007199254740991L);
-    public final static BigDecimal DEC_HIGH = BigDecimal.valueOf(9007199254740991L);
-
-    /**
-     * 将字符串转为类型
-     */
-    public static Object strTo(String str, Class<?> clz) {
-        if (Integer.class.isAssignableFrom(clz) || Integer.TYPE == clz) {
-            return Integer.parseInt(str);
-        } else if (Long.class.isAssignableFrom(clz) || Long.TYPE == clz) {
-            return Long.parseLong(str);
-        } else if (Enum.class.isAssignableFrom(clz)) {
-            return Enum.valueOf((Class<? extends Enum>) clz, str);
-        } else {
-            throw new SnackException("Unsupport type '" + str + "', to: " + clz.getName());
-        }
-    }
-
-
     private static Map<String, EnumWrap> enumCached = new ConcurrentHashMap<>();
 
     public static EnumWrap createEnum(Class<?> clz) {
@@ -68,7 +44,6 @@ public class TypeUtil {
 
         return val;
     }
-
 
     public static Type getCollectionItemType(Type fieldType) {
         if (fieldType instanceof ParameterizedType) {
@@ -87,188 +62,73 @@ public class TypeUtil {
     }
 
     private static Type getCollectionSuperType(Class<?> clazz) {
-        Type assignable = null;
+        Type ct = null;
         for (Type type : clazz.getGenericInterfaces()) {
             Class<?> rawClass = getRawClass(type);
             if (rawClass == Collection.class) {
                 return type;
             }
             if (Collection.class.isAssignableFrom(rawClass)) {
-                assignable = type;
+                ct = type;
             }
         }
-        return assignable == null ? clazz.getGenericSuperclass() : assignable;
+        return ct == null ? clazz.getGenericSuperclass() : ct;
     }
 
     private static Type getCollectionItemType(ParameterizedType parameterizedType) {
         Type rawType = parameterizedType.getRawType();
-        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        Type[] ata = parameterizedType.getActualTypeArguments();
         if (rawType == Collection.class) {
-            return getWildcardTypeUpperBounds(actualTypeArguments[0]);
+            return getWildcardTypeUpperBounds(ata[0]);
         }
-        Class<?> rawClass = (Class<?>) rawType;
-        Map<TypeVariable, Type> typeParameterMap = createTypeParameterMap(rawClass.getTypeParameters(), actualTypeArguments);
-        Type superType = getCollectionSuperType(rawClass);
+
+        Class<?> rc = (Class<?>) rawType;
+        Map<TypeVariable, Type> tp = createTypeParameterMap(rc.getTypeParameters(), ata);
+        Type superType = getCollectionSuperType(rc);
+
         if (superType instanceof ParameterizedType) {
             Class<?> superClass = getRawClass(superType);
-            Type[] superClassTypeParameters = ((ParameterizedType) superType).getActualTypeArguments();
-            return superClassTypeParameters.length > 0
-                    ? getCollectionItemType(makeParameterizedType(superClass, superClassTypeParameters, typeParameterMap))
+            Type[] at = ((ParameterizedType) superType).getActualTypeArguments();
+            return at.length > 0
+                    ? getCollectionItemType(makeParameterizedType(superClass, at, tp))
                     : getCollectionItemType(superClass);
         }
+
         return getCollectionItemType((Class<?>) superType);
     }
 
     private static Map<TypeVariable, Type> createTypeParameterMap(TypeVariable[] typeParameters, Type[] actualTypeArguments) {
         int length = typeParameters.length;
-        Map<TypeVariable, Type> typeParameterMap = new HashMap<TypeVariable, Type>(length);
+        Map<TypeVariable, Type> tp = new HashMap<TypeVariable, Type>(length);
         for (int i = 0; i < length; i++) {
-            typeParameterMap.put(typeParameters[i], actualTypeArguments[i]);
+            tp.put(typeParameters[i], actualTypeArguments[i]);
         }
-        return typeParameterMap;
+        return tp;
     }
 
     private static ParameterizedType makeParameterizedType(Class<?> rawClass, Type[] typeParameters, Map<TypeVariable, Type> typeParameterMap) {
         int length = typeParameters.length;
-        Type[] actualTypeArguments = new Type[length];
-        System.arraycopy(typeParameters, 0, actualTypeArguments, 0, length);
-        for (int i = 0; i < actualTypeArguments.length; i++) {
-            Type actualTypeArgument = actualTypeArguments[i];
-            if (actualTypeArgument instanceof TypeVariable) {
-                actualTypeArguments[i] = typeParameterMap.get(actualTypeArgument);
+        Type[] at = new Type[length];
+        System.arraycopy(typeParameters, 0, at, 0, length);
+
+        for (int i = 0; i < at.length; i++) {
+            Type at1 = at[i];
+            if (at1 instanceof TypeVariable) {
+                at[i] = typeParameterMap.get(at1);
             }
         }
-        return new ParameterizedTypeImpl(rawClass, actualTypeArguments, null);
+
+        return new ParameterizedTypeImpl(rawClass, at, null);
     }
 
     private static Type getWildcardTypeUpperBounds(Type type) {
         if (type instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) type;
-            Type[] upperBounds = wildcardType.getUpperBounds();
-            return upperBounds.length > 0 ? upperBounds[0] : Object.class;
+            WildcardType wt = (WildcardType) type;
+            Type[] ub = wt.getUpperBounds();
+            return ub.length > 0 ? ub[0] : Object.class;
         }
-
-//        if (type instanceof ParameterizedType) {
-//            return ((ParameterizedType) type).getRawType();
-//        }
 
         return type;
-    }
-
-    public static boolean isEmptyCollection(Object obj) {
-        if (obj == null || obj == Collections.EMPTY_MAP || obj == Collections.EMPTY_LIST || obj == Collections.EMPTY_SET) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static Collection createCollection(Type type, boolean isThrow) {
-        if (type == null) {
-            return new ArrayList();
-        }
-
-        //最常用的放前面
-        if (type == ArrayList.class) {
-            return new ArrayList();
-        }
-
-        Class<?> rawClass = getRawClass(type);
-        Collection list;
-        if (rawClass == AbstractCollection.class //
-                || rawClass == Collection.class) {
-            list = new ArrayList();
-        } else if (rawClass.isAssignableFrom(HashSet.class)) {
-            list = new HashSet();
-        } else if (rawClass.isAssignableFrom(LinkedHashSet.class)) {
-            list = new LinkedHashSet();
-        } else if (rawClass.isAssignableFrom(TreeSet.class)) {
-            list = new TreeSet();
-        } else if (rawClass.isAssignableFrom(ArrayList.class)) {
-            list = new ArrayList();
-        } else if (rawClass.isAssignableFrom(EnumSet.class)) {
-            Type itemType;
-            if (type instanceof ParameterizedType) {
-                itemType = ((ParameterizedType) type).getActualTypeArguments()[0];
-            } else {
-                itemType = Object.class;
-            }
-            list = EnumSet.noneOf((Class<Enum>) itemType);
-        } else {
-            try {
-                list = (Collection) rawClass.getDeclaredConstructor().newInstance();
-            } catch (Throwable e) {
-                if (isThrow) {
-                    throw new SnackException("The instantiation failed, class: " + rawClass.getName(), e);
-                } else {
-                    return null;
-                }
-            }
-        }
-        return list;
-    }
-
-
-    public static Map createMap(Type type) {
-        if (type == null) {
-            return new HashMap();
-        }
-
-        //最常用的放前面
-        if (type == HashMap.class) {
-            return new HashMap();
-        }
-
-        if (type == Properties.class) {
-            return new Properties();
-        }
-
-        if (type == Hashtable.class) {
-            return new Hashtable();
-        }
-
-        if (type == IdentityHashMap.class) {
-            return new IdentityHashMap();
-        }
-
-        if (type == SortedMap.class || type == TreeMap.class) {
-            return new TreeMap();
-        }
-
-        if (type == ConcurrentMap.class || type == ConcurrentHashMap.class) {
-            return new ConcurrentHashMap();
-        }
-
-        if (type == LinkedHashMap.class) {
-            return new LinkedHashMap();
-        }
-
-        if (type == Map.class) {
-            return new HashMap();
-        }
-
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-
-            Type rawType = parameterizedType.getRawType();
-            if (EnumMap.class.equals(rawType)) {
-                Type[] actualArgs = parameterizedType.getActualTypeArguments();
-                return new EnumMap((Class) actualArgs[0]);
-            }
-
-            return createMap(rawType);
-        }
-
-        Class<?> clazz = (Class<?>) type;
-        if (clazz.isInterface()) {
-            throw new SnackException("Unsupport type, class: " + type);
-        }
-
-        try {
-            return (Map) clazz.getDeclaredConstructor().newInstance();
-        } catch (Throwable e) {
-            throw new SnackException("Unsupport type, class: " + type, e);
-        }
     }
 
     public static Class<?> getRawClass(Type type) {

@@ -31,12 +31,10 @@ import java.time.ZonedDateTime;
 public class ZonedDateTimeDecoder implements ObjectDecoder<ZonedDateTime> {
     @Override
     public ZonedDateTime decode(DecodeContext ctx, ONode node) {
-        if(node.isEmpty()){
+        if (node.isEmpty()) {
             return null;
         }
 
-        ZoneId zoneId = DateUtil.zoneIdOf(ctx);
-
-        return DateUtil.decode(ctx, node).atZone(zoneId);
+        return DateUtil.decodeAndZone(ctx, node);
     }
 }

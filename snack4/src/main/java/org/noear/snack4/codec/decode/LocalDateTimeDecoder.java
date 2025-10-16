@@ -35,8 +35,6 @@ public class LocalDateTimeDecoder implements ObjectDecoder<LocalDateTime> {
             return null;
         }
 
-        ZoneId zoneId = DateUtil.zoneIdOf(ctx);
-
-        return DateUtil.decode(ctx, node).atZone(zoneId).toLocalDateTime();
+        return DateUtil.decodeAndZone(ctx, node).toLocalDateTime();
     }
 }

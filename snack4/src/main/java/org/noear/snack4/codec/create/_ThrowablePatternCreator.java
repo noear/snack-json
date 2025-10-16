@@ -32,13 +32,13 @@ public class _ThrowablePatternCreator implements ObjectPatternCreator<Throwable>
 
     @Override
     public Throwable create(Options opts, ONode node, Class<?> clazz) {
-        String message = node.get("message").getString();
+        String m = node.get("message").getString();
 
         try {
-            if (message == null) {
+            if (m == null) {
                 return (Throwable) clazz.getDeclaredConstructor().newInstance();
             } else {
-                return (Throwable) clazz.getDeclaredConstructor(String.class).newInstance(message);
+                return (Throwable) clazz.getDeclaredConstructor(String.class).newInstance(m);
             }
         } catch (Exception ex) {
             return null;
