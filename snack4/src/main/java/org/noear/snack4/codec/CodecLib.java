@@ -267,7 +267,6 @@ public class CodecLib {
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
-        addEncoder(Duration.class, new DurationEncoder());
 
         addEncoder(String.class, new StringEncoder());
 
@@ -280,6 +279,7 @@ public class CodecLib {
 
         addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
 
+        addEncoder(Duration.class, (c,v,t)->t.setValue(v.toString()));
         addEncoder(File.class, (c, v, t) -> t.setValue(v.getPath()));
 
         addEncoder(LongAdder.class, (c, v, t) -> t.setValue(v.longValue()));

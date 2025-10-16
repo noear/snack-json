@@ -29,6 +29,10 @@ import java.util.concurrent.atomic.LongAdder;
 public class LongAdderDecoder implements ObjectDecoder<LongAdder> {
     @Override
     public LongAdder decode(DecodeContext<LongAdder> ctx, ONode node) {
+        if(node.isEmpty()){
+            return null;
+        }
+
         LongAdder tmp = new LongAdder();
         tmp.add(node.getLong());
         return tmp;
