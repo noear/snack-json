@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.codec;
 
+import org.noear.snack4.ONode;
 import org.noear.snack4.codec.decode.*;
 import org.noear.snack4.codec.encode.*;
 import org.noear.snack4.codec.create.*;
@@ -132,8 +133,8 @@ public class CodecLib {
         ObjectCreator creator = creators.get(clazz);
 
         if (creator == null) {
-            for(ObjectPatternCreator<?> creator1 : patternCreators) {
-                if(creator1.calCreate(clazz)) {
+            for (ObjectPatternCreator<?> creator1 : patternCreators) {
+                if (creator1.calCreate(clazz)) {
                     return creator1;
                 }
             }
@@ -220,15 +221,15 @@ public class CodecLib {
         addDecoder(BigInteger.class, new BigIntegerDecoder());
 
 
-        addDecoder(java.sql.Date.class, (c,o)->new java.sql.Date(o.getLong()));
-        addDecoder(java.sql.Time.class,  (c,o)->new java.sql.Time(o.getLong()));
-        addDecoder(java.sql.Timestamp.class,  (c,o)->new java.sql.Timestamp(o.getLong()));
+        addDecoder(java.sql.Date.class, (c, o) -> new java.sql.Date(o.getLong()));
+        addDecoder(java.sql.Time.class, (c, o) -> new java.sql.Time(o.getLong()));
+        addDecoder(java.sql.Timestamp.class, (c, o) -> new java.sql.Timestamp(o.getLong()));
 
 
-        addDecoder(String.class, (c,o)->o.getString());
+        addDecoder(String.class, (c, o) -> o.getString());
 
-        addDecoder(Boolean.class, (c,o)->o.getBoolean(null));
-        addDecoder(Boolean.TYPE, (c,o)->o.getBoolean(false));
+        addDecoder(Boolean.class, (c, o) -> o.getBoolean(null));
+        addDecoder(Boolean.TYPE, (c, o) -> o.getBoolean(false));
 
         addDecoder(Double.class, (c, o) -> o.getDouble(null));
         addDecoder(Double.TYPE, (c, o) -> o.getDouble(0D));
@@ -262,22 +263,13 @@ public class CodecLib {
         addEncoder(TimeZone.class, new _TimeZonePatternEncoder());
         addEncoder(Currency.class, new _CurrencyPatternEncoder());
 
-        addEncoder(KeyValueList.class , new KeyValueListEncoder());
+        addEncoder(KeyValueList.class, new KeyValueListEncoder());
         addEncoder(StackTraceElement.class, new StackTraceElementEncoder());
         addEncoder(InetSocketAddress.class, new InetSocketAddressEncoder());
         addEncoder(SimpleDateFormat.class, new SimpleDateFormatEncoder());
-        addEncoder(File.class, new FileEncoder());
-        addEncoder(Class.class, new ClassEncoder());
-        addEncoder(UUID.class, new UUIDEncoder());
         addEncoder(Duration.class, new DurationEncoder());
 
-        addEncoder(URI.class, new URIEncoder());
-        addEncoder(URL.class, new URLEncoder());
-
         addEncoder(String.class, new StringEncoder());
-
-        addEncoder(LongAdder.class, new LongAdderEncoder());
-        addEncoder(DoubleAdder.class, new DoubleAdderEncoder());
 
         addEncoder(LocalDateTime.class, new LocalDateTimeEncoder());
         addEncoder(LocalDate.class, new LocalDateEncoder());
@@ -288,8 +280,20 @@ public class CodecLib {
 
         addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
 
-        addEncoder(Boolean.class, new BooleanEncoder());
-        addEncoder(Boolean.TYPE, new BooleanEncoder());
+        addEncoder(File.class, (c, v, t) -> t.setValue(v.getPath()));
+
+        addEncoder(LongAdder.class, (c, v, t) -> t.setValue(v.longValue()));
+        addEncoder(DoubleAdder.class, (c, v, t) -> t.setValue(v.doubleValue()));
+
+        addEncoder(URL.class, (c, v, t) -> t.setValue(v.toString()));
+        addEncoder(URI.class, (c, v, t) -> t.setValue(v.toString()));
+        addEncoder(Class.class, (c, v, t) -> t.setValue(v.getName()));
+
+        ObjectEncoder<Boolean> be = (c, v, t) -> t.setValue(v);
+        addEncoder(Boolean.class, be);
+        addEncoder(Boolean.TYPE, be);
+
+        addEncoder(UUID.class, (ctx, value, target) -> target.setValue(value.toString()));
     }
 
     private CodecLib loadDefault() {
