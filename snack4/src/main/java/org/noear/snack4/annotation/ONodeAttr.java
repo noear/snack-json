@@ -69,6 +69,11 @@ public @interface ONodeAttr {
     Feature[] features() default {};
 
     /**
+     * 乎略
+     */
+    boolean ignore() default false;
+
+    /**
      * 是否编码（序列化）
      */
     boolean encode() default true;

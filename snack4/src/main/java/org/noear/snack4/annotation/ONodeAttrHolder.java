@@ -58,8 +58,15 @@ public class ONodeAttrHolder {
             }
 
             flat = attrAnno.flat();
-            encode = attrAnno.encode();
-            decode = attrAnno.decode();
+
+
+            if (attrAnno.ignore()) {
+                encode = false;
+                decode = false;
+            } else {
+                encode = attrAnno.encode();
+                decode = attrAnno.decode();
+            }
 
             if (attrAnno.encoder().isInterface() == false) {
                 encoder = ClassUtil.newInstance(attrAnno.encoder());
