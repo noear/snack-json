@@ -65,6 +65,7 @@ Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml do
 * 强调文档树的构建和操控能力
 * 高性能`Json path`查询（比 jayway.jsonpath 快很多），同时兼容 `jayway.jsonpath` 和 [IETF JSONPath (RFC 9535) 标准](https://www.rfc-editor.org/rfc/rfc9535.html) (用 `options` 切换)
 * 支持 `Json schema` 架构校验
+* 支持 `json5` 部分特性（无键字段，注释，等...）
 * 优先使用 无参构造函数 + 字段 编解码（可减少注入而触发动作的风险）
 
 

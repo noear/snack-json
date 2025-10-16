@@ -65,6 +65,7 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 * It emphasizes the ability to build and manipulate the document tree
 * High performance `Json path` queries (much faster than `jayway.jsonpath`), Compatible with `jayway.jsonpath` and [IETF JSONPath (RFC 9535)](https://www.rfc-editor.org/rfc/rfc9535.html) standards (Switch with `optoins`)
 * Supports `Json Schema` validation
+* Support some 'json5' features (keyless fields, comments, etc...)
 * Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
 
 
