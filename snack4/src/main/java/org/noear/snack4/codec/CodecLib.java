@@ -167,19 +167,18 @@ public class CodecLib {
     /// //////////////////////
 
     private void loadDefaultCreators() {
-        addCreator( new _ThrowablePatternCreator());
+        addCreator(new _ThrowablePatternCreator());
 
-        addCreator(Map.class, new MapCreator());
-        addCreator(HashMap.class, ((opts, node, clazz) ->  new HashMap()));
-        addCreator(LinkedHashMap.class, ((opts, node, clazz) ->  new LinkedHashMap()));
+        addCreator(HashMap.class, ((opts, node, clazz) -> new HashMap()));
+        addCreator(LinkedHashMap.class, ((opts, node, clazz) -> new LinkedHashMap()));
+        addCreator(Map.class, ((opts, node, clazz) -> new LinkedHashMap()));
 
-        addCreator(List.class, new ListCreator());
-        addCreator(ArrayList.class, ((opts, node, clazz) ->  new ArrayList()));
+        addCreator(ArrayList.class, ((opts, node, clazz) -> new ArrayList()));
+        addCreator(Collection.class, ((opts, node, clazz) -> new ArrayList()));
+        addCreator(List.class, ((opts, node, clazz) -> new ArrayList()));
 
-        addCreator(Set.class, new SetCreator());
-        addCreator(HashSet.class, ((opts, node, clazz) ->  new HashSet()));
-
-        addCreator(Collection.class, new CollectionCreator());
+        addCreator(Set.class, ((opts, node, clazz) -> new HashSet()));
+        addCreator(HashSet.class, ((opts, node, clazz) -> new HashSet()));
     }
 
     private void loadDefaultDecoders() {
