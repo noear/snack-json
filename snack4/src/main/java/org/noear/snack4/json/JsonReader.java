@@ -326,7 +326,7 @@ public class JsonReader {
             // 3. 控制字符 (c < 0x20)
             while (end < state.bufferLimit) {
                 char c = state.buffer[end];
-                if (c == quoteChar || c == '\\' || c < 0x20) {
+                if (c == quoteChar || c == '\\' || c < 32) { //0x20
                     break;
                 }
                 end++;
@@ -415,7 +415,7 @@ public class JsonReader {
                         }
                     }
                 }
-            } else if (c < 0x20) {
+            } else if (c < 32) { //0x20
                 // 处理未转义的控制字符
                 if (opts.hasFeature(Feature.Read_AllowUnescapedControlCharacters) == false) {
                     // 严格模式
