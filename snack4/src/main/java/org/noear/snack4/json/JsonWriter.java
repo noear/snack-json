@@ -209,7 +209,8 @@ public class JsonWriter {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            if (c >= '\0' && c <= '\7') {
+            //不可见控制符
+            if (c<7) { //c >= '\0' && c <= '\7'
                 writer.write("\\u000");
                 writer.write(IoUtil.CHARS_MARK[(int) c]);
                 continue;
@@ -230,8 +231,24 @@ public class JsonWriter {
                 continue;
             }
 
-            if (c < 0x20 || (opts.hasFeature(Feature.Write_BrowserCompatible) && c > 0x7F)) {
-                writer.write(String.format("\\u%04x", (int) c));
+            //对不可见ASC码，进行编码处理
+            if (c < 32) { //0x20
+                writer.append('\\');
+                writer.append('u');
+                writer.append('0');
+                writer.append('0');
+                writer.append(IoUtil.DIGITS[(c >>> 4) & 15]);
+                writer.append(IoUtil.DIGITS[c & 15]);
+                continue;
+            }
+
+            if (opts.hasFeature(Feature.Write_BrowserCompatible) && c >= 127) { //0x7F
+                writer.append('\\');
+                writer.append('u');
+                writer.append(IoUtil.DIGITS[(c >>> 12) & 15]);
+                writer.append(IoUtil.DIGITS[(c >>> 8) & 15]);
+                writer.append(IoUtil.DIGITS[(c >>> 4) & 15]);
+                writer.append(IoUtil.DIGITS[c & 15]);
             } else {
                 writer.write(c);
             }

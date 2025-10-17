@@ -387,7 +387,7 @@ public class FeatureTest {
     public void Write_BrowserCompatible() {
         String json = ONode.ofJson("{a:'中国'}", Feature.Write_BrowserCompatible).toJson();
         System.out.println(json);
-        Assertions.assertEquals("{\"a\":\"\\u4e2d\\u56fd\"}", json);
+        Assertions.assertEquals("{\"a\":\"\\u4E2D\\u56FD\"}", json);
     }
 
     @Test

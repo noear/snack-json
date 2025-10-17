@@ -91,6 +91,6 @@ public class EscapeTest {
 
         assert "'👌\t\n".equals(c.get("a").getString());
 
-        Assertions.assertEquals("{\"a\":\"'\\ud83d\\udc4c\\t\\n\"}", c.toJson());
+        Assertions.assertEquals("{\"a\":\"'\\uD83D\\uDC4C\\t\\n\"}", c.toJson());
     }
 }

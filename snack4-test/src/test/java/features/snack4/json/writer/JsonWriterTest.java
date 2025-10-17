@@ -180,7 +180,7 @@ public class JsonWriterTest {
         Options opts = Options.of(Feature.Write_BrowserCompatible);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
-        assertEquals("\"\\u3053\\u3093\\u306b\\u3061\\u306f\"", writer.toString());
+        assertEquals("\"\\u3053\\u3093\\u306B\\u3061\\u306F\"", writer.toString());
     }
 
     @Test
