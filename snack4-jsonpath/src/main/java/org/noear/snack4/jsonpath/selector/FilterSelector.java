@@ -25,6 +25,7 @@ import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 过滤选择器：使用逻辑表达式选择特定的子项（如 $[?(@.price > 10)], $..[?(@.price > 10)] ）
@@ -77,16 +78,16 @@ public class FilterSelector implements Selector {
 
             for (ONode n1 : currentNodes) {
                 if (forJayway) {
-                    flattenResolveJayway(ctx, n1, results);
+                    flattenResolveJayway(ctx, n1, results::add);
                 } else {
-                    flattenResolveIetf(ctx, n1, results);
+                    flattenResolveIetf(ctx, n1, results::add);
                 }
             }
         }
     }
 
     // 新增递归展开方法
-    private void flattenResolveJayway(QueryContext ctx, ONode node, List<ONode> result) {
+    private void flattenResolveJayway(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
         }
@@ -99,16 +100,16 @@ public class FilterSelector implements Selector {
                 }
 
                 idx++;
-                flattenResolveJayway(ctx, n1, result);
+                flattenResolveJayway(ctx, n1, acceptor);
             }
         } else {
             if (expression.test(node, ctx)) {
-                result.add(node);
+                acceptor.accept(node);
             }
         }
     }
 
-    private void flattenResolveIetf(QueryContext ctx, ONode node, List<ONode> result) {
+    private void flattenResolveIetf(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
         //IETF JSONPath (RFC 9535) 只过滤子项（不包括自己）
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
@@ -123,7 +124,7 @@ public class FilterSelector implements Selector {
 
                 idx++;
                 if (expression.test(n1, ctx)) {
-                    result.add(n1);
+                    acceptor.accept(n1);
                 }
             }
         } else if (node.isObject()) {
@@ -135,12 +136,12 @@ public class FilterSelector implements Selector {
                 }
 
                 if (expression.test(n1, ctx)) {
-                    result.add(n1);
+                    acceptor.accept(n1);
                 }
             }
         } else {
             if (expression.test(node, ctx)) {
-                result.add(node);
+                acceptor.accept(node);
             }
         }
     }

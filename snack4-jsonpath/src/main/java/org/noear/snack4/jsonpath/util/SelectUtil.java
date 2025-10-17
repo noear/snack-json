@@ -15,17 +15,17 @@ import java.util.function.Consumer;
  */
 public class SelectUtil {
 
-    public static void descendantSelect(List<ONode> currentNodes, boolean andSelf, Consumer<ONode> consumer) {
+    public static void descendantSelect(List<ONode> currentNodes, boolean andSelf, Consumer<ONode> acceptor) {
         for (ONode node : currentNodes) {
             if (andSelf) {
-                consumer.accept(node);
+                acceptor.accept(node);
             }
 
-            collectRecursive(node, consumer);
+            collectRecursive(node, acceptor);
         }
     }
 
-    private static void collectRecursive(ONode node, Consumer<ONode> consumer) {
+    private static void collectRecursive(ONode node, Consumer<ONode> acceptor) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArrayUnsafe()) {
@@ -35,8 +35,8 @@ public class SelectUtil {
 
                 idx++;
 
-                consumer.accept(n1);
-                collectRecursive(n1, consumer);
+                acceptor.accept(n1);
+                collectRecursive(n1, acceptor);
             }
         } else if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObjectUnsafe().entrySet()) {
@@ -45,8 +45,8 @@ public class SelectUtil {
                     n1.source = new PathSource(node, entry.getKey(), 0);
                 }
 
-                consumer.accept(n1);
-                collectRecursive(n1, consumer);
+                acceptor.accept(n1);
+                collectRecursive(n1, acceptor);
             }
         }
     }

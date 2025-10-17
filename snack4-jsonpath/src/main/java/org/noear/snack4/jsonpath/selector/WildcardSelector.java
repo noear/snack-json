@@ -22,6 +22,7 @@ import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 通配符选择器：选择节点的所有子项（如 $.*, $[*], $..*, $..[*]）
@@ -52,12 +53,12 @@ public class WildcardSelector implements Selector {
             SelectUtil.descendantSelect(currentNodes, false, results::add);
         } else {
             for (ONode n1 : currentNodes) {
-                doWildcard(n1, results);
+                doWildcard(n1, results::add);
             }
         }
     }
 
-    private void doWildcard(ONode node, List<ONode> results) {
+    private void doWildcard(ONode node, Consumer<ONode> acceptor) {
         if (node.isArray()) {
             int idx = 0;
             for (ONode n1 : node.getArray()) {
@@ -66,7 +67,7 @@ public class WildcardSelector implements Selector {
                 }
 
                 idx++;
-                results.add(n1);
+                acceptor.accept(n1);
             }
         } else if (node.isObject()) {
             for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
@@ -75,7 +76,7 @@ public class WildcardSelector implements Selector {
                     n1.source = new PathSource(node, entry.getKey(), 0);
                 }
 
-                results.add(n1);
+                acceptor.accept(n1);
             }
         }
     }

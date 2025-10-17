@@ -68,11 +68,11 @@ public class NameSelector implements Selector {
 
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
-                IndexUtil.forKey(ctx, n1, name, results);
+                IndexUtil.forKey(ctx, n1, name, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                IndexUtil.forKey(ctx, n1, name, results);
+                IndexUtil.forKey(ctx, n1, name, results::add);
             }
         }
     }

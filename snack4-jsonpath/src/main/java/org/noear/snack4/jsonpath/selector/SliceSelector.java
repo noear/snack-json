@@ -24,6 +24,7 @@ import org.noear.snack4.jsonpath.util.RangeUtil;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * (数组)切片选择器（如 $[1:4]，$[1:5:1], $[::1]）
@@ -95,16 +96,16 @@ public class SliceSelector implements Selector {
 
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
-                doSlice(ctx, n1, results);
+                doSlice(ctx, n1, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                doSlice(ctx, n1, results);
+                doSlice(ctx, n1, results::add);
             }
         }
     }
 
-    private void doSlice(QueryContext ctx, ONode node, List<ONode> results) {
+    private void doSlice(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
         if (node.isArray()) {
             int size = node.getArrayUnsafe().size();
             int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
@@ -116,14 +117,14 @@ public class SliceSelector implements Selector {
             if (step > 0) {
                 int i = bounds.getLower();
                 while (i < bounds.getUpper()) {
-                    IndexUtil.forIndexUnsafe(ctx, node, i, results);
+                    IndexUtil.forIndexUnsafe(ctx, node, i, acceptor);
 
                     i += step;
                 }
             } else {
                 int i = bounds.getUpper();
                 while (bounds.getLower() < i) {
-                    IndexUtil.forIndexUnsafe(ctx, node, i, results);
+                    IndexUtil.forIndexUnsafe(ctx, node, i, acceptor);
 
                     i += step;
                 }

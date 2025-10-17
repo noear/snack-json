@@ -21,6 +21,7 @@ import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.QueryMode;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 索引器工具
@@ -29,7 +30,7 @@ import java.util.List;
  * @since 4.0
  */
 public class IndexUtil {
-    public static void forKey(QueryContext ctx, ONode node, String key, List<ONode> result) {
+    public static void forKey(QueryContext ctx, ONode node, String key, Consumer<ONode> acceptor) {
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asObject();
         }
@@ -38,10 +39,10 @@ public class IndexUtil {
             return;
         }
 
-        forKeyUnsafe(ctx, node, key, result);
+        forKeyUnsafe(ctx, node, key, acceptor);
     }
 
-    public static void forKeyUnsafe(QueryContext ctx, ONode node, String key, List<ONode> result) {
+    public static void forKeyUnsafe(QueryContext ctx, ONode node, String key, Consumer<ONode> acceptor) {
         ONode n1 = getChildNodeBy(ctx, node, key);
 
         if (n1 != null) {
@@ -49,11 +50,11 @@ public class IndexUtil {
                 n1.source = new PathSource(node, key, 0);
             }
 
-            result.add(n1);
+            acceptor.accept(n1);
         }
     }
 
-    public static void forIndex(QueryContext ctx, ONode node, int idx, List<ONode> result) {
+    public static void forIndex(QueryContext ctx, ONode node, int idx, Consumer<ONode> acceptor) {
         if (ctx.getMode() == QueryMode.CREATE) {
             node.asArray();
         }
@@ -62,10 +63,10 @@ public class IndexUtil {
             return;
         }
 
-        forIndexUnsafe(ctx, node, idx, result);
+        forIndexUnsafe(ctx, node, idx, acceptor);
     }
 
-    public static void forIndexUnsafe(QueryContext ctx, ONode node, int idx, List<ONode> result) {
+    public static void forIndexUnsafe(QueryContext ctx, ONode node, int idx, Consumer<ONode> acceptor) {
         if (idx < 0) {
             idx += node.getArrayUnsafe().size();
         }
@@ -77,7 +78,7 @@ public class IndexUtil {
                 n1.source = new PathSource(node, null, idx);
             }
 
-            result.add(n1);
+            acceptor.accept(n1);
         }
     }
 

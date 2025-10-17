@@ -23,6 +23,7 @@ import org.noear.snack4.jsonpath.util.IndexUtil;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 查询选择器
@@ -61,22 +62,22 @@ public class QuerySelector implements Selector {
 
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
-                doQuery(ctx, n1, results);
+                doQuery(ctx, n1, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                doQuery(ctx, n1, results);
+                doQuery(ctx, n1, results::add);
             }
         }
     }
 
-    private void doQuery(QueryContext ctx, ONode n1, List<ONode> results) {
+    private void doQuery(QueryContext ctx, ONode n1, Consumer<ONode> acceptor) {
         ONode dynamicIdx = ctx.nestedQuery(n1, jsonPath).reduce();
 
         if (dynamicIdx.isNumber()) {
-            IndexUtil.forIndex(ctx, n1, dynamicIdx.getInt(), results);
+            IndexUtil.forIndex(ctx, n1, dynamicIdx.getInt(), acceptor);
         } else if (dynamicIdx.isString()) {
-            IndexUtil.forKey(ctx, n1, dynamicIdx.getString(), results);
+            IndexUtil.forKey(ctx, n1, dynamicIdx.getString(), acceptor);
         }
     }
 }
