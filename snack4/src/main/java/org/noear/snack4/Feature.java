@@ -78,9 +78,14 @@ public enum Feature {
     Read_AllowUnescapedControlCharacters,
 
     /**
-     * 读取大数字时使用字符串模式（避免精度丢失），用 BigDecimal 替代 Double, 用 BigInteger 替代 Long
+     * 读取使用大数字模式（避免精度丢失），用 BigDecimal 替代 Double,
      */
-    Read_UseBigNumberMode,
+    Read_UseBigDecimalMode,
+
+    /**
+     * 读取使用大整型模式，用 BigInteger 替代 Long
+     * */
+    Read_UseBigIntegerMode,
 
     /**
      * 读取时允许使用获取器

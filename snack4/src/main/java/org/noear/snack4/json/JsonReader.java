@@ -501,13 +501,13 @@ public class JsonReader {
                 return Long.parseLong(numStr);
             } else {
                 if (numStr.indexOf('.') >= 0 || numStr.indexOf('e') >= 0 || numStr.indexOf('E') >= 0) {
-                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigNumberMode)) {
+                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigDecimalMode)) {
                         return new BigDecimal(numStr);
                     } else {
                         return Double.parseDouble(numStr);
                     }
                 } else {
-                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigNumberMode)) {
+                    if (numStr.length() > 19 || opts.hasFeature(Feature.Read_UseBigIntegerMode)) {
                         return new BigInteger(numStr);
                     } else {
                         long longVal = Long.parseLong(numStr);

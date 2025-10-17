@@ -137,7 +137,7 @@ public class NumberTest {
     @Test
     public void test9() {
         String json = "{\"a\":0.0000}";
-        String json2 = ONode.ofJson(json, Feature.Read_UseBigNumberMode).toJson();
+        String json2 = ONode.ofJson(json, Feature.Read_UseBigDecimalMode).toJson();
 
         Assertions.assertEquals(json, json2);
     }

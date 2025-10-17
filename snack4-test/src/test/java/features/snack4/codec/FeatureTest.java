@@ -129,7 +129,7 @@ public class FeatureTest {
         System.out.println(data.get("a").getClass());
         Assertions.assertEquals(Integer.class, data.get("a").getClass());
 
-        data = ONode.ofJson(json, Feature.Read_UseBigNumberMode).toBean();
+        data = ONode.ofJson(json, Feature.Read_UseBigIntegerMode).toBean();
         System.out.println(data.get("a").getClass());
         Assertions.assertEquals(BigInteger.class, data.get("a").getClass());
     }
