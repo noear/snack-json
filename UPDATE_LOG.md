@@ -8,9 +8,9 @@
 * 添加 Read_UseBigDecimalMode 新特性
 * 添加 Read_UseBigIntegerMode 新特性
 * 添加 DecodeContext:hasFeature, EncodeContext:hasFeature 新特性
-* 完善 Write_Nulls 对 Map 输出的控制
+* 优化 Write_Nulls 完善对 Map 输出的控制
 * 优化 Write_BrowserCompatible 写入性能
-* 
+
 
 ### 4.0.0
 
