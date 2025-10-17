@@ -29,7 +29,7 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class NameSelector implements Selector {
+public class NameSelector extends AbstractSelector {
     private final String expr;
 
     private String name;

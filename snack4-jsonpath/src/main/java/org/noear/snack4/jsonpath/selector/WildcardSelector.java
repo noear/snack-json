@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class WildcardSelector implements Selector {
+public class WildcardSelector extends AbstractSelector {
     @Override
     public String toString() {
         return "*";

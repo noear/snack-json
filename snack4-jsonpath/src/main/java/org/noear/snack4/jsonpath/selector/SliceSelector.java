@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class SliceSelector implements Selector {
+public class SliceSelector extends AbstractSelector {
     //start:end:step
     private final String expr;
 

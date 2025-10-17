@@ -31,7 +31,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class QuerySelector implements Selector {
+public class QuerySelector extends AbstractSelector {
     private final String expr;
     private JsonPath jsonPath;
 

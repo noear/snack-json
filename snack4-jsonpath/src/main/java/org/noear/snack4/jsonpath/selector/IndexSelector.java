@@ -29,7 +29,7 @@ import java.util.List;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class IndexSelector implements Selector {
+public class IndexSelector extends AbstractSelector {
     private final String expr;
 
     private int index;

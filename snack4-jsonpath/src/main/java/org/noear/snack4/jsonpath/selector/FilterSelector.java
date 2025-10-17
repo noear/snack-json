@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class FilterSelector implements Selector {
+public class FilterSelector extends AbstractSelector {
     private final String expr;
     private final Expression expression;
 
