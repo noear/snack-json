@@ -51,27 +51,31 @@ public class WildcardSelector implements Selector {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, false, results::add);
         } else {
-            for (ONode n : currentNodes) {
-                if (n.isArray()) {
-                    int idx = 0;
-                    for (ONode n1 : n.getArray()) {
-                        if (n1.source == null) {
-                            n1.source = new PathSource(n, null, idx);
-                        }
+            for (ONode n1 : currentNodes) {
+                doWildcard(n1, results);
+            }
+        }
+    }
 
-                        idx++;
-                        results.add(n1);
-                    }
-                } else if (n.isObject()) {
-                    for (Map.Entry<String, ONode> entry : n.getObject().entrySet()) {
-                        ONode n1 = entry.getValue();
-                        if (n1.source == null) {
-                            n1.source = new PathSource(n, entry.getKey(), 0);
-                        }
-
-                        results.add(n1);
-                    }
+    private void doWildcard(ONode node, List<ONode> results) {
+        if (node.isArray()) {
+            int idx = 0;
+            for (ONode n1 : node.getArray()) {
+                if (n1.source == null) {
+                    n1.source = new PathSource(node, null, idx);
                 }
+
+                idx++;
+                results.add(n1);
+            }
+        } else if (node.isObject()) {
+            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+                ONode n1 = entry.getValue();
+                if (n1.source == null) {
+                    n1.source = new PathSource(node, entry.getKey(), 0);
+                }
+
+                results.add(n1);
             }
         }
     }

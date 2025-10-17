@@ -71,8 +71,8 @@ public class NameSelector implements Selector {
                 IndexUtil.forKey(ctx, n1, name, results);
             });
         } else {
-            for (ONode n : currentNodes) {
-                IndexUtil.forKey(ctx, n, name, results);
+            for (ONode n1 : currentNodes) {
+                IndexUtil.forKey(ctx, n1, name, results);
             }
         }
     }

@@ -68,18 +68,18 @@ public class FilterSelector implements Selector {
             });
         } else {
             if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
-                ONode n = currentNodes.get(0);
+                ONode n1 = currentNodes.get(0);
 
-                if (n.isNull()) {
-                    n.asArray().addNew();
+                if (n1.isNull()) {
+                    n1.asArray().addNew();
                 }
             }
 
-            for (ONode n : currentNodes) {
+            for (ONode n1 : currentNodes) {
                 if (forJayway) {
-                    flattenResolveJayway(ctx, n, results);
+                    flattenResolveJayway(ctx, n1, results);
                 } else {
-                    flattenResolveIetf(ctx, n, results);
+                    flattenResolveIetf(ctx, n1, results);
                 }
             }
         }
