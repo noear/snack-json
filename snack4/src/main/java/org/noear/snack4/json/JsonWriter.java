@@ -209,19 +209,14 @@ public class JsonWriter {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            //不可见控制符
-            if (c<7) { //c >= '\0' && c <= '\7'
-                writer.write("\\u000");
-                writer.write(IoUtil.CHARS_MARK[(int) c]);
-                continue;
-            }
-
+            //1.对特殊符号转码处理
             if (c == quoteChar || c == '\n' || c == '\r' || c == '\t' || c == '\f' || c == '\b') {
                 writer.write('\\');
                 writer.write(IoUtil.CHARS_MARK[(int) c]);
                 continue;
             }
 
+            //2.对转义符处理
             if (c == '\\') {
                 if (opts.hasFeature(Feature.Write_UseRawBackslash)) {
                     writer.write('\\');
@@ -231,7 +226,7 @@ public class JsonWriter {
                 continue;
             }
 
-            //对不可见ASC码，进行编码处理
+            //3.对不可见ASC码，进行编码处理
             if (c < 32) { //0x20
                 writer.append('\\');
                 writer.append('u');
@@ -242,17 +237,27 @@ public class JsonWriter {
                 continue;
             }
 
-            if (opts.hasFeature(Feature.Write_BrowserCompatible) && c >= 127) { //0x7F
-                writer.append('\\');
-                writer.append('u');
-                writer.append(IoUtil.DIGITS[(c >>> 12) & 15]);
-                writer.append(IoUtil.DIGITS[(c >>> 8) & 15]);
-                writer.append(IoUtil.DIGITS[(c >>> 4) & 15]);
-                writer.append(IoUtil.DIGITS[c & 15]);
+            if (c == 127) { //0x7F
+                writeEscapeChar(c);
+                continue;
+            }
+
+            //4.对非 asc 码处理
+            if (c > 127 && opts.hasFeature(Feature.Write_BrowserCompatible)) {
+                writeEscapeChar(c);
             } else {
                 writer.write(c);
             }
         }
+    }
+
+    private void writeEscapeChar(int c) throws IOException { //UnicodeEscape
+        writer.append('\\');
+        writer.append('u');
+        writer.append(IoUtil.DIGITS[(c >>> 12) & 15]);
+        writer.append(IoUtil.DIGITS[(c >>> 8) & 15]);
+        writer.append(IoUtil.DIGITS[(c >>> 4) & 15]);
+        writer.append(IoUtil.DIGITS[c & 15]);
     }
 
     private String toSnakeStyle(String camelName) {
