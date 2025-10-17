@@ -68,7 +68,7 @@ public class BeanEncoder {
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
         this.visited = new IdentityHashMap<>();
 
-        Write_Nulls = opts.hasFeature(Feature.Write_Nulls);
+        this.Write_Nulls = this.opts.hasFeature(Feature.Write_Nulls);
     }
 
     /**

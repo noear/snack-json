@@ -71,8 +71,8 @@ public class JsonWriter {
         this.writer = writer;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
 
-        Write_BrowserCompatible = opts.hasFeature(Feature.Write_BrowserCompatible);
-        Write_UseRawBackslash = opts.hasFeature(Feature.Write_UseRawBackslash);
+        this.Write_BrowserCompatible = this.opts.hasFeature(Feature.Write_BrowserCompatible);
+        this.Write_UseRawBackslash = this.opts.hasFeature(Feature.Write_UseRawBackslash);
     }
 
     public void write(ONode node) throws IOException {
