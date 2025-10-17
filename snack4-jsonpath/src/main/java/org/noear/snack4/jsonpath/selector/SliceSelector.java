@@ -95,18 +95,18 @@ public class SliceSelector implements Selector {
 
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
-                doResolve(ctx, n1, results);
+                doSlice(ctx, n1, results);
             });
         } else {
-            for (ONode arr : currentNodes) {
-                doResolve(ctx, arr, results);
+            for (ONode n1 : currentNodes) {
+                doSlice(ctx, n1, results);
             }
         }
     }
 
-    private void doResolve(QueryContext ctx, ONode node, List<ONode> results) {
+    private void doSlice(QueryContext ctx, ONode node, List<ONode> results) {
         if (node.isArray()) {
-            int size = node.getArray().size();
+            int size = node.getArrayUnsafe().size();
             int start = parseRangeBound(startRef, (step > 0 ? 0 : size - 1), size);
             int end = parseRangeBound(endRef, (step > 0 ? size : -1), size);
 

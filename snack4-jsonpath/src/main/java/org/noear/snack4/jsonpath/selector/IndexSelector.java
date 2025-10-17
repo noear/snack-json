@@ -65,8 +65,8 @@ public class IndexSelector implements Selector {
                 IndexUtil.forIndex(ctx, n1, index, results);
             });
         } else {
-            for (ONode node : currentNodes) {
-                IndexUtil.forIndex(ctx, node, index, results);
+            for (ONode n1 : currentNodes) {
+                IndexUtil.forIndex(ctx, n1, index, results);
             }
         }
     }

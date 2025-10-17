@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONPath;
 import org.junit.jupiter.api.Test;
+import org.noear.snack4.ONode;
 
 
 public class SpeedFastjson2JsonPathTest {
@@ -15,7 +16,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>872,764,715
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$..a");
@@ -37,10 +38,10 @@ public class SpeedFastjson2JsonPathTest {
 
     @Test
     public void test2(){
-        //不支持
+        //1000000=>1269,1272,1257
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$..*");
@@ -65,7 +66,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>577,524,419
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$.data.list[1,4]");
@@ -90,7 +91,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>332,367,391
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$.data.list[1:4]");
@@ -116,7 +117,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>315,339,329
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$.data.ary2[0].a");
@@ -141,7 +142,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>735,728,736
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$..ary2[0].a");
@@ -166,7 +167,7 @@ public class SpeedFastjson2JsonPathTest {
         //出错
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         JSONPath.eval(obj,"$.data.list[?(@ in $..ary2[0].a)]");
@@ -188,7 +189,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>422,424,415
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$.data.ary2[1].b.c");
@@ -212,7 +213,7 @@ public class SpeedFastjson2JsonPathTest {
         //1000000=>642,645,660
         //
         //1.加载json
-        String text = ("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
+        String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
         JSONObject obj = JSON.parseObject(text);
 
         Object tmp = JSONPath.eval(obj,"$.data.ary2[*].b.c");
@@ -237,7 +238,7 @@ public class SpeedFastjson2JsonPathTest {
         //不支持
         //
         //1.加载json
-        String text = ("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]"); //解析会出错
+        String text = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]").toJson(); //解析会出错
         JSONArray obj = JSON.parseArray(text);
 
         JSONPath.eval(obj,"$..b[?(@.c == 12)]");//不支持
@@ -259,7 +260,7 @@ public class SpeedFastjson2JsonPathTest {
         //不支持
         //
         //1.加载json
-        String text = ("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");//解析会出错
+        String text = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]").toJson();//解析会出错
         JSONArray obj = JSON.parseArray(text);
 
         JSONPath.eval(obj,"$..c.min()");
@@ -279,7 +280,7 @@ public class SpeedFastjson2JsonPathTest {
     @Test
     public void test9(){
         //1.加载json
-        String text = ("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
+        String text = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]").toJson();
         JSONArray obj = JSON.parseArray(text);
 
         JSONPath.eval(obj,"$[?(@.c =~ /a+/)]");//不支持
