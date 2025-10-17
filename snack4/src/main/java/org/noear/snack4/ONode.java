@@ -198,17 +198,23 @@ public final class ONode {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public List<ONode> getArray() {
         asArray();
 
         return (List<ONode>) value;
     }
 
-    @SuppressWarnings("unchecked")
+    public List<ONode> getArrayUnsafe() {
+        return (List<ONode>) value;
+    }
+
     public Map<String, ONode> getObject() {
         asObject();
 
+        return (Map<String, ONode>) value;
+    }
+
+    public Map<String, ONode> getObjectUnsafe() {
         return (Map<String, ONode>) value;
     }
 
@@ -311,8 +317,6 @@ public final class ONode {
     }
 
     public ONode get(String key) {
-        asObject();
-
         ONode tmp = getObject().get(key);
         if (tmp == null) {
             return new ONode(options);
@@ -327,20 +331,24 @@ public final class ONode {
 
     public ONode getOrNull(String key) {
         if (isObject()) {
-            return getObject().get(key);
+            return getObjectUnsafe().get(key);
         } else {
             return null;
         }
     }
 
     public ONode remove(String key) {
-        return getObject().remove(key);
+        if (isObject()) {
+            return getObjectUnsafe().remove(key);
+        } else {
+            return null;
+        }
     }
 
     public ONode rename(String oldName, String newName) {
         ONode tmp = remove(oldName);
         if (tmp != null) {
-            getObject().put(newName, tmp);
+            getObjectUnsafe().put(newName, tmp);
         }
 
         return this;
@@ -392,23 +400,20 @@ public final class ONode {
             }
         }
 
-        return set0(key, oNode);
-    }
-
-    private ONode set0(String key, ONode value) {
-        getObject().put(key, value);
+        getObject().put(key, oNode);
         return this;
     }
 
     public ONode get(int index) {
-        int size = getArray().size();
+        List<ONode> self = getArray();
+        int size = self.size();
 
         if (index < 0) {
             index += size;
         }
 
         if (index >= 0 && size > index) {
-            return getArray().get(index);
+            return self.get(index);
         }
 
         return new ONode(options);
@@ -420,7 +425,6 @@ public final class ONode {
 
     public ONode getOrNew(int index, Consumer<ONode> thenApply) {
         List<ONode> self = getArray();
-
         int size = self.size();
 
         if (index < 0) {
@@ -447,14 +451,14 @@ public final class ONode {
 
     public ONode getOrNull(int index) {
         if (isArray()) {
-            int size = getArray().size();
+            int size = getArrayUnsafe().size();
 
             if (index < 0) {
                 index += size;
             }
 
             if (index >= 0 && size > index) {
-                return getArray().get(index);
+                return getArrayUnsafe().get(index);
             }
         }
 
@@ -462,13 +466,14 @@ public final class ONode {
     }
 
     public ONode remove(int index) {
-        int size = getArray().size();
+        List<ONode> self = getArray();
+        int size = self.size();
 
         if (index < 0) {
             index += size;
         }
 
-        return getArray().remove(index);
+        return self.remove(index);
     }
 
     public ONode add(Object value) {
@@ -483,7 +488,7 @@ public final class ONode {
             oNode = new ONode(options, value);
         }
 
-        add0(oNode);
+        getArray().add(oNode);
         return this;
     }
 
@@ -500,13 +505,8 @@ public final class ONode {
         asArray();
 
         ONode oNode = new ONode(options, null);
-        getArray().add(oNode);
+        getArrayUnsafe().add(oNode);
         return oNode;
-    }
-
-    private ONode add0(ONode value) {
-        getArray().add(value);
-        return this;
     }
 
     public ONode then(Consumer<ONode> builder) {

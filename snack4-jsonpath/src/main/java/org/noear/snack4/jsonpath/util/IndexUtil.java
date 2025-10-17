@@ -42,7 +42,7 @@ public class IndexUtil {
     }
 
     public static void forKeyUnsafe(QueryContext ctx, ONode node, String key, List<ONode> result) {
-        ONode n1 = ctx.getChildNodeBy(node, key);
+        ONode n1 = getChildNodeBy(ctx, node, key);
 
         if (n1 != null) {
             if (n1.source == null) {
@@ -70,7 +70,7 @@ public class IndexUtil {
             idx += node.getArray().size();
         }
 
-        ONode n1 = ctx.getChildNodeAt(node, idx);
+        ONode n1 = getChildNodeAt(ctx, node, idx);
 
         if (n1 != null) {
             if (n1.source == null) {
@@ -78,6 +78,22 @@ public class IndexUtil {
             }
 
             result.add(n1);
+        }
+    }
+
+    private static ONode getChildNodeBy(QueryContext ctx, ONode node, String key) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            return node.getOrNew(key);
+        } else {
+            return node.getObjectUnsafe().get(key);
+        }
+    }
+
+    private static ONode getChildNodeAt(QueryContext ctx, ONode node, int idx) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            return node.getOrNew(idx);
+        } else {
+            return node.get(idx);
         }
     }
 }

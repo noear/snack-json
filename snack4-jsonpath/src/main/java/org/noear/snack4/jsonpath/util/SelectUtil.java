@@ -28,7 +28,7 @@ public class SelectUtil {
     private static void collectRecursive(ONode node, Consumer<ONode> consumer) {
         if (node.isArray()) {
             int idx = 0;
-            for (ONode n1 : node.getArray()) {
+            for (ONode n1 : node.getArrayUnsafe()) {
                 if (n1.source == null) {
                     n1.source = new PathSource(node, null, idx);
                 }
@@ -39,7 +39,7 @@ public class SelectUtil {
                 collectRecursive(n1, consumer);
             }
         } else if (node.isObject()) {
-            for (Map.Entry<String, ONode> entry : node.getObject().entrySet()) {
+            for (Map.Entry<String, ONode> entry : node.getObjectUnsafe().entrySet()) {
                 ONode n1 = entry.getValue();
                 if (n1.source == null) {
                     n1.source = new PathSource(node, entry.getKey(), 0);

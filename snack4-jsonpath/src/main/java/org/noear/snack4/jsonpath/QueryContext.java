@@ -64,16 +64,6 @@ public interface QueryContext {
     Options getOptions();
 
     /**
-     * 获取节点的子项
-     */
-    ONode getChildNodeBy(ONode node, String key);
-
-    /**
-     * 获取节点的子项
-     */
-    ONode getChildNodeAt(ONode node, int idx);
-
-    /**
      * 缓存获取
      */
     <T> T cacheIfAbsent(String key, Function<String, ?> mappingFunction);
