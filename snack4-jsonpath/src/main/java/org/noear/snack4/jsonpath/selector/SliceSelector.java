@@ -94,13 +94,20 @@ public class SliceSelector extends AbstractSelector {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
-                doSlice(ctx, n1, results::add);
+                onNext(ctx, n1, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                doSlice(ctx, n1, results::add);
+                onNext(ctx, n1, results::add);
             }
         }
+    }
+
+    @Override
+    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+        doSlice(ctx, node, n1 -> {
+            onComplete(ctx, n1, acceptor);
+        });
     }
 
     private void doSlice(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {

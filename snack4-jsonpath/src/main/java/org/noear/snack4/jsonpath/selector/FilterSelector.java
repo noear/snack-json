@@ -74,7 +74,7 @@ public class FilterSelector extends AbstractSelector {
     }
 
     @Override
-    protected void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
         if (ctx.getMode() == QueryMode.CREATE) {
             if (node.isNull()) {
                 node.asArray().addNew();

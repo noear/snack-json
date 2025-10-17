@@ -15,13 +15,13 @@
  */
 package org.noear.snack4.jsonpath.selector;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
 import org.noear.snack4.jsonpath.util.IndexUtil;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 名称选择器：选择对象的命名子对象（如 $.demo, $['demo']）
@@ -66,12 +66,19 @@ public class NameSelector extends AbstractSelector {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
-                IndexUtil.forKey(ctx, n1, name, results::add);
+                onNext(ctx, n1, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                IndexUtil.forKey(ctx, n1, name, results::add);
+                onNext(ctx, n1, results::add);
             }
         }
+    }
+
+    @Override
+    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+        IndexUtil.forKey(ctx, node, name, n1 -> {
+            onComplete(ctx, n1, acceptor);
+        });
     }
 }

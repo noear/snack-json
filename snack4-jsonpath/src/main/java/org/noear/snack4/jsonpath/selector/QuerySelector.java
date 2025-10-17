@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.jsonpath.selector;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPath;
 import org.noear.snack4.jsonpath.QueryContext;
@@ -60,13 +59,20 @@ public class QuerySelector extends AbstractSelector {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
-                doQuery(ctx, n1, results::add);
+                onNext(ctx, n1, results::add);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                doQuery(ctx, n1, results::add);
+                onNext(ctx, n1, results::add);
             }
         }
+    }
+
+    @Override
+    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+        doQuery(ctx, node, n1 -> {
+            onComplete(ctx, n1, acceptor);
+        });
     }
 
     private void doQuery(QueryContext ctx, ONode n1, Consumer<ONode> acceptor) {

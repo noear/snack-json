@@ -50,12 +50,21 @@ public class WildcardSelector extends AbstractSelector {
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
-            SelectUtil.descendantSelect(currentNodes, false, results::add);
+            SelectUtil.descendantSelect(currentNodes, false, n1 -> {
+                onComplete(ctx, n1, results::add);
+            });
         } else {
             for (ONode n1 : currentNodes) {
-                doWildcard(n1, results::add);
+                onNext(ctx, n1, results::add);
             }
         }
+    }
+
+    @Override
+    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+        doWildcard(node, n1 -> {
+            onComplete(ctx, n1, acceptor);
+        });
     }
 
     private void doWildcard(ONode node, Consumer<ONode> acceptor) {

@@ -4,6 +4,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.QueryContext;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * JsonPath 选择器
@@ -30,4 +31,6 @@ public interface Selector {
      * @param results      结果
      */
     void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results);
+
+    void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor);
 }
