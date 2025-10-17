@@ -2,6 +2,7 @@ package benchmark.snack4.jsonpath;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack4.ONode;
+import org.noear.snack4.jsonpath.JsonPath;
 
 public class SpeedSnack4JsonPathTest {
     @Test
@@ -16,9 +17,11 @@ public class SpeedSnack4JsonPathTest {
         assert tmp.size()==2;
         System.out.println(tmp.pathList());
 
+        JsonPath jsonPath = JsonPath.parse("$..a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..a");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -39,9 +42,11 @@ public class SpeedSnack4JsonPathTest {
         System.out.println(tmp);//打印
         assert tmp.size()==16;
 
+        JsonPath jsonPath = JsonPath.parse("$..*");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..*");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -62,9 +67,11 @@ public class SpeedSnack4JsonPathTest {
         System.out.println(tmp);//打印
         assert tmp.size() == 2;
 
+        JsonPath jsonPath = JsonPath.parse("$.data.list[1,4]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[1,4]");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -85,9 +92,11 @@ public class SpeedSnack4JsonPathTest {
         System.out.println(tmp);//打印
         assert tmp.size() == 3;
 
+        JsonPath jsonPath = JsonPath.parse("$.data.list[1:4]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[1:4]");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -108,9 +117,11 @@ public class SpeedSnack4JsonPathTest {
         System.out.println(tmp);//打印
         assert tmp.getInt() == 2;
 
+        JsonPath jsonPath = JsonPath.parse("$.data.ary2[0].a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[0].a)");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -131,9 +142,11 @@ public class SpeedSnack4JsonPathTest {
         System.out.println(tmp);//打印
         assert tmp.size() == 1;
 
+        JsonPath jsonPath = JsonPath.parse("$..ary2[0].a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..ary2[0].a)");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -156,9 +169,11 @@ public class SpeedSnack4JsonPathTest {
         ONode tmp3 = n.select("$.data.list[?(@ in $..ary2[0].a)]");
         assert tmp3.size() == 1;
 
+        JsonPath jsonPath = JsonPath.parse("$.data.list[?(@ in $..ary2[0].a)]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.list[?(@ in $..ary2[0].a)]");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -178,9 +193,11 @@ public class SpeedSnack4JsonPathTest {
         ONode tmp = n.select("$.data.ary2[1].b.c");
         assert "ddd".equals(tmp.getString());
 
+        JsonPath jsonPath = JsonPath.parse("$.data.ary2[1].b.c");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[1].b.c");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -196,13 +213,15 @@ public class SpeedSnack4JsonPathTest {
         //
         //1.加载json
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
-        long start = System.currentTimeMillis();
 
         ONode tmp = n.select("$.data.ary2[*].b.c");
         assert tmp.size() == 1;
 
+        JsonPath jsonPath = JsonPath.parse("$.data.ary2[*].b.c");
+
+        long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$.data.ary2[*].b.c");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -218,13 +237,15 @@ public class SpeedSnack4JsonPathTest {
         //
         //1.加载json
         ONode n = ONode.ofJson("[{b:{c:1}}, {b:{d:1}}, {b:{c:2}}, {b:{c:23}}]");
-        long start = System.currentTimeMillis();
 
         ONode tmp = n.select("$..b[?(@.c == 12)]");
         assert tmp.size() == 0;
 
+        JsonPath jsonPath = JsonPath.parse("$..b[?(@.c == 12)]");
+
+        long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..b[?(@.c == 12)]");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -250,9 +271,11 @@ public class SpeedSnack4JsonPathTest {
 
         assert tmp1.isValue();
 
+        JsonPath jsonPath = JsonPath.parse("$..c.min()");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$..c.min()");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -269,13 +292,15 @@ public class SpeedSnack4JsonPathTest {
         //1.加载json
         ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
 
-        ONode tmp = n.select("$[?(@.c =~ /.*a+/)]");
+        ONode tmp = n.select("$[?(@.c =~ /a+/)]");
         System.out.println(tmp);
-        assert tmp.size() == 2;
+        assert tmp.size() == 1;
+
+        JsonPath jsonPath = JsonPath.parse("$[?(@.c =~ /a+/)]");
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            n.select("$[?(@.c =~ /a+/)]");
+            jsonPath.select(n);
         }
 
         long times = System.currentTimeMillis() - start;

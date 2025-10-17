@@ -24,9 +24,11 @@ public class SpeedFastjson2JsonPathTest {
         assert tmp instanceof JSONArray;
         assert ((JSONArray)tmp).size() ==2;
 
+        JSONPath jsonPath = JSONPath.of("$..a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$..a");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -49,9 +51,11 @@ public class SpeedFastjson2JsonPathTest {
         assert tmp instanceof JSONArray;
         assert ((JSONArray)tmp).size() ==16;
 
+        JSONPath jsonPath = JSONPath.of("$..*");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$..*");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -74,9 +78,11 @@ public class SpeedFastjson2JsonPathTest {
         assert tmp instanceof JSONArray;
         assert ((JSONArray)tmp).size() ==2;
 
+        JSONPath jsonPath = JSONPath.of("$.data.list[1,4]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.list[1,4]");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -99,10 +105,11 @@ public class SpeedFastjson2JsonPathTest {
         assert tmp instanceof JSONArray;
         assert ((JSONArray)tmp).size() ==3;
 
+        JSONPath jsonPath = JSONPath.of("$.data.list[1:4]");
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.list[1:4]");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -124,10 +131,11 @@ public class SpeedFastjson2JsonPathTest {
         System.out.println(tmp);
         assert tmp instanceof Integer;
 
+        JSONPath jsonPath = JSONPath.of("$.data.ary2[0].a");
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.ary2[0].a");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -149,10 +157,11 @@ public class SpeedFastjson2JsonPathTest {
         System.out.println(tmp);
         assert tmp instanceof Integer;
 
+        JSONPath jsonPath = JSONPath.of("$..ary2[0].a");
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$..ary2[0].a");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -172,9 +181,12 @@ public class SpeedFastjson2JsonPathTest {
 
         JSONPath.eval(obj,"$.data.list[?(@ in $..ary2[0].a)]");
 
+
+        JSONPath jsonPath = JSONPath.of("$.data.list[?(@ in $..ary2[0].a)]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.list[?(@ in $..ary2[0].a)]");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -186,7 +198,7 @@ public class SpeedFastjson2JsonPathTest {
 
     @Test
     public void test5(){
-        //1000000=>422,424,415
+        //1000000=>422,424,415 //165,182,165
         //
         //1.加载json
         String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
@@ -196,9 +208,11 @@ public class SpeedFastjson2JsonPathTest {
         System.out.println(tmp);
         assert tmp instanceof String;
 
+        JSONPath jsonPath = JSONPath.of("$.data.ary2[1].b.c");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.ary2[1].b.c");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -210,7 +224,7 @@ public class SpeedFastjson2JsonPathTest {
 
     @Test
     public void test6(){
-        //1000000=>642,645,660
+        //1000000=>642,645,660  //452,467,464
         //
         //1.加载json
         String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
@@ -221,9 +235,11 @@ public class SpeedFastjson2JsonPathTest {
         assert tmp instanceof JSONArray;
         assert ((JSONArray)tmp).size() ==1;
 
+        JSONPath jsonPath = JSONPath.of("$.data.ary2[*].b.c");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$.data.ary2[*].b.c"); //不支持*
+            jsonPath.eval(obj); //不支持*
         }
 
         long times = System.currentTimeMillis() - start;
@@ -243,9 +259,11 @@ public class SpeedFastjson2JsonPathTest {
 
         JSONPath.eval(obj,"$..b[?(@.c == 12)]");//不支持
 
+        JSONPath jsonPath = JSONPath.of("$..b[?(@.c == 12)]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$..b[?(@.c == 12)]");//不支持
+            jsonPath.eval(obj);//不支持
         }
 
         long times = System.currentTimeMillis() - start;
@@ -265,9 +283,11 @@ public class SpeedFastjson2JsonPathTest {
 
         JSONPath.eval(obj,"$..c.min()");
 
+        JSONPath jsonPath = JSONPath.of("$..c.min()");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$..c.min()");
+            jsonPath.eval(obj);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -285,9 +305,11 @@ public class SpeedFastjson2JsonPathTest {
 
         JSONPath.eval(obj,"$[?(@.c =~ /a+/)]");//不支持
 
+        JSONPath jsonPath = JSONPath.of("$[?(@.c =~ /a+/)]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            JSONPath.eval(obj,"$[?(@.c =~ /a+/)]");//不支持
+            jsonPath.eval(obj);//不支持
         }
 
         long times = System.currentTimeMillis() - start;

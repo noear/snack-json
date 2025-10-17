@@ -21,9 +21,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst.size() ==2;
 
+        JsonPath jsonPath = JsonPath.compile("$..a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$..a");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -44,9 +46,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst.size() == 16;
 
+        JsonPath jsonPath = JsonPath.compile("$..*");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$..*");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -67,9 +71,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst.size() == 2;
 
+        JsonPath jsonPath = JsonPath.compile("$.data.list[1,4]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$.data.list[1,4]");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -91,9 +97,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst.size() == 3;
 
+        JsonPath jsonPath = JsonPath.compile("$.data.list[1:4]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$.data.list[1:4]");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -115,9 +123,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst instanceof Integer;
 
+        JsonPath jsonPath = JsonPath.compile("$.data.ary2[0].a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$.data.ary2[0].a");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -139,9 +149,11 @@ public class SpeedJaywayJsonPathTest {
         System.out.println(rst);
         assert rst.size() == 1;
 
+        JsonPath jsonPath = JsonPath.compile("$..ary2[0].a");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$..ary2[0].a");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -165,10 +177,11 @@ public class SpeedJaywayJsonPathTest {
         JSONArray tmp3 = context.read("$.data.list[?(@ in $..ary2[0].a)]");
         assert tmp3.size() == 1;
 
+        JsonPath jsonPath = JsonPath.compile("$.data.list[?(@ == $..ary2[0].a)]");
 
         long start = System.currentTimeMillis();
         for (int i = 0, len = 1000000; i < len; i++) {
-            context.read("$.data.list[?(@ == $..ary2[0].a)]");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -189,9 +202,11 @@ public class SpeedJaywayJsonPathTest {
         Object tmp = context.read("data.ary2[1].b.c");;
         assert "ddd".equals(tmp);
 
+        JsonPath jsonPath = JsonPath.compile("$.data.ary2[1].b.c");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$.data.ary2[1].b.c");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -212,9 +227,11 @@ public class SpeedJaywayJsonPathTest {
         JSONArray tmp = context.read("$.data.ary2[*].b.c");
         assert tmp.size() == 1;
 
+        JsonPath jsonPath = JsonPath.compile("$.data.ary2[*].b.c");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$.data.ary2[*].b.c");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -235,9 +252,11 @@ public class SpeedJaywayJsonPathTest {
         JSONArray tmp = context.read("$..b[?(@.c == 12)]");
         assert tmp.size() == 0;
 
+        JsonPath jsonPath = JsonPath.compile("$..b[?(@.c == 12)]");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$..b[?(@.c == 12)]");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -258,9 +277,11 @@ public class SpeedJaywayJsonPathTest {
         JSONArray tmp = context.read("$..c");
         assert tmp.size() == 3;
 
+        JsonPath jsonPath = JsonPath.compile("$..c.min()");
+
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$..c.min()");
+            context.read(jsonPath);
         }
 
         long times = System.currentTimeMillis() - start;
@@ -278,12 +299,14 @@ public class SpeedJaywayJsonPathTest {
         String text = ("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");
         ReadContext context = JsonPath.parse(text);
 
-        JSONArray tmp = context.read("$[?(@.c =~ /.*a+/)]");
-        assert tmp.size() == 2;
+        JSONArray tmp = context.read("$[?(@.c =~ /a+/)]");
+        assert tmp.size() == 1;
+
+        JsonPath jsonPath = JsonPath.compile("$[?(@.c =~ /a+/)]");
 
         long start = System.currentTimeMillis();
         for(int i=0,len=1000000; i<len; i++) {
-            context.read("$[?(@.c =~ /a+/)]");//
+            context.read(jsonPath);//
         }
 
         long times = System.currentTimeMillis() - start;
