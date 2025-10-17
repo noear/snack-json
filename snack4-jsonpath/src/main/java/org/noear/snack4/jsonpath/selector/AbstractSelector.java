@@ -13,9 +13,13 @@ import java.util.function.Consumer;
 public abstract class AbstractSelector implements Selector {
     private AbstractSelector next;
 
-    protected void doNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+    protected void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor){
+
+    }
+
+    protected void onComplete(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
         if (next != null) {
-            next.doNext(ctx, node, acceptor);
+            next.onNext(ctx, node, acceptor);
         } else {
             acceptor.accept(node);
         }

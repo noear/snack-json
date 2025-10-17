@@ -64,10 +64,8 @@ public class NameSelector extends AbstractSelector {
     @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
         if (isDescendant) {
-            boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
-
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
-            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
                 IndexUtil.forKey(ctx, n1, name, results::add);
             });
         } else {

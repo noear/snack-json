@@ -41,6 +41,8 @@ public class QueryContextImpl implements QueryContext {
     private boolean expanded;
     private boolean descendant;
 
+    private boolean forJaywayMode;
+
     public QueryContextImpl(ONode root, QueryMode mode) {
         this.root = root;
         this.mode = mode;
@@ -50,6 +52,8 @@ public class QueryContextImpl implements QueryContext {
         } else {
             this.options = Options.DEF_OPTIONS;
         }
+
+        this.forJaywayMode = options.hasFeature(Feature.JsonPath_JaywayMode);
     }
 
     /**
@@ -75,6 +79,11 @@ public class QueryContextImpl implements QueryContext {
     @Override
     public boolean hasFeature(Feature feature) {
         return options.hasFeature(feature);
+    }
+
+    @Override
+    public boolean forJaywayMode() {
+        return forJaywayMode;
     }
 
     @Override

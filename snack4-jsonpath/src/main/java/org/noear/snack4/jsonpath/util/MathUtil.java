@@ -32,7 +32,7 @@ public class MathUtil {
         List<Double> doubleList = new ArrayList<>();
 
         if (ctx.isMultiple()) {
-            if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+            if (ctx.forJaywayMode()) {
                 if (ctx.isDescendant() == false) {
                     //兼容 jayway （这个效果是不太让人理解的）
                     return doubleList;
@@ -57,7 +57,7 @@ public class MathUtil {
                 }
 
                 if (node.isNumber()) {
-                    if (ctx.hasFeature(Feature.JsonPath_JaywayMode) == false) {
+                    if (ctx.forJaywayMode() == false) {
                         doubleList.add(node.getDouble());
                     }
                 }

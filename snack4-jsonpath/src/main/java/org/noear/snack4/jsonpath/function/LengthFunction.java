@@ -47,7 +47,7 @@ public class LengthFunction implements Function {
                 if (n1.isArray()) return ctx.newNode(n1.getArray().size());
                 if (n1.isObject()) return ctx.newNode(n1.getObject().size());
 
-                if (ctx.hasFeature(Feature.JsonPath_JaywayMode) == false) {
+                if (ctx.forJaywayMode() == false) {
                     if (n1.isString()) return ctx.newNode(n1.getString().length());
                 }
             }

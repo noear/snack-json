@@ -34,6 +34,11 @@ public interface QueryContext {
     boolean hasFeature(Feature feature);
 
     /**
+     * Jayway 兼容模式
+     */
+    boolean forJaywayMode();
+
+    /**
      * 是否多输出（前面执行过 `..x` 或 `*` 或 `[?]`）
      */
     boolean isMultiple();

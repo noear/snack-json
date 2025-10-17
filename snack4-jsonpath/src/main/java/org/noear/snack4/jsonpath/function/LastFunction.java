@@ -41,7 +41,7 @@ public class LastFunction implements Function {
 
         if (arg0.getArray().size() > 0) {
             if (ctx.isMultiple()) {
-                if (ctx.hasFeature(Feature.JsonPath_JaywayMode)) {
+                if (ctx.forJaywayMode()) {
                     List<ONode> results = new ArrayList<>();
 
                     for (ONode n1 : arg0.getArray()) {

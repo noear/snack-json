@@ -57,32 +57,38 @@ public class FilterSelector extends AbstractSelector {
         return false;
     }
 
+    @Override
     public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
-        boolean forJayway = ctx.hasFeature(Feature.JsonPath_JaywayMode);
-
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
-            SelectUtil.descendantSelect(currentNodes, !forJayway, (n1) -> {
+            SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
                 if (expression.test(n1, ctx)) {
-                    results.add(n1);
+                    onComplete(ctx, n1, results::add);
                 }
             });
         } else {
-            if (ctx.getMode() == QueryMode.CREATE && currentNodes.size() == 1) {
-                ONode n1 = currentNodes.get(0);
-
-                if (n1.isNull()) {
-                    n1.asArray().addNew();
-                }
+            for (ONode node : currentNodes) {
+                onNext(ctx, node, results::add);
             }
+        }
+    }
 
-            for (ONode n1 : currentNodes) {
-                if (forJayway) {
-                    flattenResolveJayway(ctx, n1, results::add);
-                } else {
-                    flattenResolveIetf(ctx, n1, results::add);
-                }
+    @Override
+    protected void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
+        if (ctx.getMode() == QueryMode.CREATE) {
+            if (node.isNull()) {
+                node.asArray().addNew();
             }
+        }
+
+        if (ctx.forJaywayMode()) {
+            flattenResolveJayway(ctx, node, n1 -> {
+                onComplete(ctx, n1, acceptor);
+            });
+        } else {
+            flattenResolveIetf(ctx, node, n1 -> {
+                onComplete(ctx, n1, acceptor);
+            });
         }
     }
 
