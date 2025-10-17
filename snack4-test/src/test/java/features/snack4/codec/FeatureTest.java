@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
+import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.json.JsonParseException;
 
 import java.math.BigInteger;
@@ -422,9 +423,17 @@ public class FeatureTest {
     }
 
     @Test
-    public void Write_BooleanAsNumber(){
-        BoolBean  bean = new BoolBean();
+    public void Write_BooleanAsNumber() {
+        BoolBean bean = new BoolBean();
         String json = ONode.ofBean(bean, Feature.Write_BooleanAsNumber).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":1}", json);
+    }
+
+    @Test
+    public void Write_BooleanAsNumber2() {
+        BoolBean2 bean = new BoolBean2();
+        String json = ONode.ofBean(bean).toJson();
         System.out.println(json);
         Assertions.assertEquals("{\"a\":1}", json);
     }
@@ -475,6 +484,11 @@ public class FeatureTest {
     }
 
     static class BoolBean {
+        Boolean a = true;
+    }
+
+    static class BoolBean2 {
+        @ONodeAttr(features = Feature.Write_BooleanAsNumber)
         Boolean a = true;
     }
 }

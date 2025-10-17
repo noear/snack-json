@@ -28,7 +28,7 @@ import org.noear.snack4.codec.ObjectEncoder;
 public class BooleanEncoder implements ObjectEncoder<Boolean> {
     @Override
     public ONode encode(EncodeContext ctx, Boolean value, ONode target) {
-        if (ctx.getOptions().hasFeature(Feature.Write_BooleanAsNumber)) {
+        if (ctx.hasFeature(Feature.Write_BooleanAsNumber)) {
             return target.setValue(value ? 1 : 0);
         }
 

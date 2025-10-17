@@ -15,6 +15,7 @@
  */
 package org.noear.snack4.codec;
 
+import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.codec.util.TypeWrap;
@@ -59,5 +60,15 @@ public class DecodeContext<T> {
 
     public Type getGenericType() {
         return genericType;
+    }
+
+    public boolean hasFeature(Feature feature) {
+        if (attr != null) {
+            if (attr.hasFeature(feature)) {
+                return true;
+            }
+        }
+
+        return options.hasFeature(feature);
     }
 }
