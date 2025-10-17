@@ -95,7 +95,11 @@ public class JsonWriter {
                 }
                 break;
             case Boolean:
-                writer.write(node.getBoolean() ? "true" : "false");
+                if (opts.hasFeature(Feature.Write_BooleanAsNumber)) {
+                    writer.write(node.getBoolean() ? "1" : "0");
+                } else {
+                    writer.write(node.getBoolean() ? "true" : "false");
+                }
                 break;
             case Null:
             case Undefined:

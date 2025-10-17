@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.snack4.ONode;
 import org.noear.snack4.codec.decode.*;
 import org.noear.snack4.codec.encode.*;
 import org.noear.snack4.codec.create.*;
@@ -277,7 +276,10 @@ public class CodecLib {
 
         addEncoder(ZonedDateTime.class, new ZonedDateTimeEncoder());
 
-        addEncoder(Duration.class, (c,v,t)->t.setValue(v.toString()));
+        addEncoder(Boolean.class, new BooleanEncoder());
+        addEncoder(Boolean.TYPE, new BooleanEncoder());
+
+        addEncoder(Duration.class, (c, v, t) -> t.setValue(v.toString()));
         addEncoder(File.class, (c, v, t) -> t.setValue(v.getPath()));
 
         addEncoder(LongAdder.class, (c, v, t) -> t.setValue(v.longValue()));
@@ -286,10 +288,6 @@ public class CodecLib {
         addEncoder(URL.class, (c, v, t) -> t.setValue(v.toString()));
         addEncoder(URI.class, (c, v, t) -> t.setValue(v.toString()));
         addEncoder(Class.class, (c, v, t) -> t.setValue(v.getName()));
-
-        ObjectEncoder<Boolean> be = (c, v, t) -> t.setValue(v);
-        addEncoder(Boolean.class, be);
-        addEncoder(Boolean.TYPE, be);
 
         addEncoder(UUID.class, (ctx, value, target) -> target.setValue(value.toString()));
     }

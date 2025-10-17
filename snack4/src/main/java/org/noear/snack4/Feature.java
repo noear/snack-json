@@ -113,6 +113,11 @@ public enum Feature {
     Write_UnquotedFieldNames,
 
     /**
+     * 写入时使用单引号
+     */
+    Write_UseSingleQuotes,
+
+    /**
      * 写入 null
      */
     Write_Nulls,
@@ -160,11 +165,6 @@ public enum Feature {
     Write_PrettyFormat,
 
     /**
-     * 写入时使用单引号
-     */
-    Write_UseSingleQuotes,
-
-    /**
      * 写入时名字使用小蛇风格
      */
     Write_UseSnakeStyle,
@@ -178,6 +178,11 @@ public enum Feature {
      * 写入时枚举使用 toString
      */
     Write_EnumUsingToString,
+
+    /**
+     * 写入布尔时转为数字
+     * */
+    Write_BooleanAsNumber,
 
     /**
      * 写入类名
@@ -210,6 +215,11 @@ public enum Feature {
     Write_UseDateFormat,
 
     /**
+     * 写入数字类型
+     */
+    Write_NumberTypeSuffix,
+
+    /**
      * 写入数字时使用字符串模式
      */
     Write_NumbersAsString,
@@ -218,11 +228,6 @@ public enum Feature {
      * 写入长整型时使用字符串模式
      */
     Write_BigNumbersAsString,
-
-    /**
-     * 写入数字类型
-     */
-    Write_NumberTypeSuffix,
 
     /**
      * 写入长整型时使用字符串模式

@@ -421,6 +421,14 @@ public class FeatureTest {
         Assertions.assertEquals("{\"a\":1,\"b\":2L,\"c\":3.0F,\"d\":4.0D}", json);
     }
 
+    @Test
+    public void Write_BooleanAsNumber(){
+        BoolBean  bean = new BoolBean();
+        String json = ONode.ofBean(bean, Feature.Write_BooleanAsNumber).toJson();
+        System.out.println(json);
+        Assertions.assertEquals("{\"a\":1}", json);
+    }
+
     static class NumberBean {
         private int a = 1;
         private long b = 2;
@@ -464,5 +472,9 @@ public class FeatureTest {
         public String toString() {
             return "Membership-" + ordinal();
         }
+    }
+
+    static class BoolBean {
+        Boolean a = true;
     }
 }
