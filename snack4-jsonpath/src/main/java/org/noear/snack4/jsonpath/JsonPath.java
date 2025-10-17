@@ -69,7 +69,7 @@ public class JsonPath {
 
         for (Segment seg : segments) {
             currentNodes = seg.resolve(ctx, currentNodes);
-            ctx.multipleOf(seg);
+            ctx.tailafter(seg);
         }
 
         return new QueryResult(ctx, currentNodes);

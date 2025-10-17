@@ -40,7 +40,6 @@ public class QueryContextImpl implements QueryContext {
     private boolean multiple;
     private boolean expanded;
     private boolean descendant;
-    private boolean inFilter;
 
     public QueryContextImpl(ONode root, QueryMode mode) {
         this.root = root;
@@ -53,22 +52,24 @@ public class QueryContextImpl implements QueryContext {
         }
     }
 
-    public void multipleOf(Segment seg) {
-        if(seg instanceof DescendantSegment) {
+    /**
+     * 跟踪（执行之后）
+     */
+    protected void tailafter(Segment seg) {
+        if (seg instanceof DescendantSegment) {
+            //后代片段
             descendant = true;
         }
 
         if (seg instanceof FuncSegment) {
+            //函数片段
             multiple = false;
         } else {
+            //其它片段
             multiple = multiple || seg.isMultiple();
         }
 
         expanded = expanded || seg.isExpanded();
-    }
-
-    public void setInFilter(boolean inFilter) {
-        this.inFilter = inFilter;
     }
 
     @Override
@@ -89,11 +90,6 @@ public class QueryContextImpl implements QueryContext {
     @Override
     public boolean isDescendant() {
         return descendant;
-    }
-
-    @Override
-    public boolean isInFilter() {
-        return inFilter;
     }
 
     @Override
