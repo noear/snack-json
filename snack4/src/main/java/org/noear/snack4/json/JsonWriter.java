@@ -53,6 +53,9 @@ public class JsonWriter {
     private int depth = 0;
     private StringBuilder stringBuilder;
 
+    private final boolean Write_BrowserCompatible;
+    private final boolean Write_UseRawBackslash;
+
     private StringBuilder getStringBuilder() {
         if (stringBuilder == null) {
             stringBuilder = new StringBuilder(32);
@@ -67,6 +70,9 @@ public class JsonWriter {
 
         this.writer = writer;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+
+        Write_BrowserCompatible = opts.hasFeature(Feature.Write_BrowserCompatible);
+        Write_UseRawBackslash = opts.hasFeature(Feature.Write_UseRawBackslash);
     }
 
     public void write(ONode node) throws IOException {
@@ -218,7 +224,7 @@ public class JsonWriter {
 
             //2.对转义符处理
             if (c == '\\') {
-                if (opts.hasFeature(Feature.Write_UseRawBackslash)) {
+                if (Write_UseRawBackslash) {
                     writer.write('\\');
                 } else {
                     writer.write("\\\\");
@@ -243,7 +249,7 @@ public class JsonWriter {
             }
 
             //4.对非 asc 码处理
-            if (c > 127 && opts.hasFeature(Feature.Write_BrowserCompatible)) {
+            if (c > 127 && Write_BrowserCompatible) {
                 writeEscapeChar(c);
             } else {
                 writer.write(c);
