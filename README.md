@@ -282,7 +282,7 @@ ONode.ofBean(user).toJson();
 
 ONode.ofJson("{}").toBean(User.class);
 ONode.ofJson("[{},{}]").toBean((new ArrayList<User>(){}).getClass()); //泛型
-ONode.ofJson("[{},{}]").toBean((new TypeRef<List<User>>(){}).getType()); //泛型
+ONode.ofJson("[{},{}]").toBean(new TypeRef<List<User>>(){}); //泛型
 
 //快捷方式
 String json = ONode.serialize(user);
