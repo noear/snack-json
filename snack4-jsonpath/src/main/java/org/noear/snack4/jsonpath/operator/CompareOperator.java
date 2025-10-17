@@ -44,9 +44,9 @@ public class CompareOperator implements Operator {
         if (rightNode.isNull()) {
             //右侧为 null
             return compareNull(leftNode);
-        } else if(leftNode.isNull()) {
+        } else if (leftNode.isNull()) {
             //左侧为 null
-            if(ctx.getMode() == QueryMode.CREATE){
+            if (ctx.getMode() == QueryMode.CREATE) {
                 if (type.hasEq()) {
                     leftNode.fill(rightNode);
                     return true;
@@ -58,10 +58,10 @@ public class CompareOperator implements Operator {
 
         if (leftNode.getType() == rightNode.getType()) {
             if (leftNode.isString()) {
-                return compareString(leftNode, rightNode);
+                return compareString(leftNode.getValueAs(), rightNode.getValueAs());
             } else if (leftNode.isNumber()) {
                 //都是数字
-                return compareNumber(leftNode.getDouble(), rightNode.getDouble());
+                return compareNumber(leftNode.getValueAs(), rightNode.getValueAs());
             } else if (leftNode.isNull()) {
                 return compareNumber(0, 0);
             } else {
@@ -94,40 +94,46 @@ public class CompareOperator implements Operator {
         }
     }
 
-    private boolean compareString(ONode a, ONode b) {
+    private boolean compareString(String a, String b) {
+        int cmp = a.compareTo(b);
+
         switch (type) {
             case EQ:
-                return Objects.equals(a.getString(), b.getString());
+                return cmp == 0;
             case NEQ:
-                return !Objects.equals(a.getString(), b.getString());
+                return cmp != 0;
             case GT:
-                return Objects.compare(a.getString(), b.getString(), String::compareTo) > 0;
-            case LT:
-                return Objects.compare(a.getString(), b.getString(), String::compareTo) < 0;
+                return cmp > 0;
             case GTE:
-                return Objects.compare(a.getString(), b.getString(), String::compareTo) >= 0;
+                return cmp >= 0;
+            case LT:
+                return cmp < 0;
             case LTE:
-                return Objects.compare(a.getString(), b.getString(), String::compareTo) <= 0;
-
+                return cmp <= 0;
             default:
                 throw new JsonPathException("Unsupported operator for string: " + type.getCode());
         }
     }
 
-    private boolean compareNumber(double a, double b) {
+    private boolean compareNumber(Number a0, Number b0) {
+        double a = a0.doubleValue();
+        double b = b0.doubleValue();
+
+        int cmp = Double.compare(a, b);
+
         switch (type) {
             case EQ:
-                return a == b;
+                return cmp == 0;
             case NEQ:
-                return a != b;
+                return cmp != 0;
             case GT:
-                return a > b;
-            case LT:
-                return a < b;
+                return cmp > 0;
             case GTE:
-                return a >= b;
+                return cmp >= 0;
+            case LT:
+                return cmp < 0;
             case LTE:
-                return a <= b;
+                return cmp <= 0;
             default:
                 throw new JsonPathException("Unsupported operator for number: " + type.getCode());
         }
