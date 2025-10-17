@@ -111,14 +111,14 @@ Filter selector syntax reference:
 
 IETF JSONPath (RFC 9535) Standard definition operators (supported)
 
-| Operator  | Description                                              | Examples        |   
-|-----------|----------------------------------------------------------|-----------------|
-| `==`      | left is equal to right (note that 1 is not equal to '1') | `$[?(@a == 1)]` |  
-| `!=`      | left is not equal to right                               | `$[?(@a != 1)]` |  
-| `<`       | left is less than right                                  | `$[?(@a < 1)]`  |  
-| `<=`      | left is less or equal to right                           | `$[?(@a <= 1)]` |  
-| `>`       | left is greater than right                               | `$[?(@a > 1)]`  |  
-| `>=`      | left is greater than or equal to right                   | `$[?(@a >= 1)]` |  
+| Operator  | Description                                              | Examples         |   
+|-----------|----------------------------------------------------------|------------------|
+| `==`      | left is equal to right (note that 1 is not equal to '1') | `$[?(@.a == 1)]` |  
+| `!=`      | left is not equal to right                               | `$[?(@.a != 1)]`  |  
+| `<`       | left is less than right                                  | `$[?(@.a < 1)]`   |  
+| `<=`      | left is less or equal to right                           | `$[?(@.a <= 1)]`  |  
+| `>`       | left is greater than right                               | `$[?(@.a > 1)]`   |  
+| `>=`      | left is greater than or equal to right                   | `$[?(@.a >= 1)]`  |  
 
 jayway.jsonpath Increment operator (supported)
 
