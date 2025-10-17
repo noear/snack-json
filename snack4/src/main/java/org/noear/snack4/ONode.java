@@ -230,16 +230,6 @@ public final class ONode {
         return this;
     }
 
-    /**
-     * 重命名
-     *
-     */
-    public ONode rename(String oldName, String newName) {
-        ONode tmp = remove(oldName);
-        getObject().put(newName, tmp);
-        return this;
-    }
-
     public Short getShort() {
         return getShort((short) 0);
     }
@@ -345,6 +335,15 @@ public final class ONode {
 
     public ONode remove(String key) {
         return getObject().remove(key);
+    }
+
+    public ONode rename(String oldName, String newName) {
+        ONode tmp = remove(oldName);
+        if (tmp != null) {
+            getObject().put(newName, tmp);
+        }
+
+        return this;
     }
 
     public ONode setValue(Object value) {
