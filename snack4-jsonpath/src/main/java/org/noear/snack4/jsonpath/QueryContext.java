@@ -49,11 +49,6 @@ public interface QueryContext {
     boolean isDescendant();
 
     /**
-     * 是否在过滤器中
-     */
-    boolean isInFilter();
-
-    /**
      * 查询根节点
      */
     ONode getRoot();

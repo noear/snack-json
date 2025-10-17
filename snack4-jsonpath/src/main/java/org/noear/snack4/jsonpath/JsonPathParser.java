@@ -31,7 +31,7 @@ public class JsonPathParser {
      * 解析
      * */
     public static JsonPath parse(String path) {
-        return new JsonPathParser(path).doCompile();
+        return new JsonPathParser(path).doParse();
     }
 
     private final String path;
@@ -50,7 +50,7 @@ public class JsonPathParser {
         segments.add(segment);
     }
 
-    private JsonPath doCompile() {
+    private JsonPath doParse() {
         position = 1; //Skip $, @
 
         while (position < path.length()) {

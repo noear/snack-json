@@ -19,7 +19,6 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.util.SelectUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -100,13 +99,8 @@ public class FunctionHolder {
             }
         }
 
-        QueryContextImpl ctx0 = (QueryContextImpl) (ctx2 == null ? ctx : ctx2);
+        QueryContext ctx0 = (ctx2 == null ? ctx : ctx2);
 
-        try {
-            ctx0.setInFilter(true);
-            return func.apply(ctx0, argNodes);
-        } finally {
-            ctx0.setInFilter(false);
-        }
+        return func.apply(ctx0, argNodes);
     }
 }
