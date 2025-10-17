@@ -61,10 +61,14 @@ public class BeanEncoder {
 
     private final Map<Object, Object> visited;
 
+    private final boolean Write_Nulls;
+
     private BeanEncoder(Object value, Options opts) {
         this.source0 = value;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
         this.visited = new IdentityHashMap<>();
+
+        Write_Nulls = opts.hasFeature(Feature.Write_Nulls);
     }
 
     /**
@@ -90,7 +94,11 @@ public class BeanEncoder {
     // 值转ONode处理
     private ONode encodeValueToNode(Object value, ONodeAttrHolder attr) throws Exception {
         if (value == null) {
-            return new ONode(opts, null);
+            if (Write_Nulls) {
+                return new ONode(opts, null);
+            } else {
+                return null;
+            }
         }
 
         if (value instanceof ONode) {
@@ -222,7 +230,7 @@ public class BeanEncoder {
 
                 //托底控制
                 if (propValue == null) {
-                    if (opts.hasFeature(Feature.Write_Nulls) == false
+                    if (Write_Nulls == false
                             && property.getAttr().hasFeature(Feature.Write_Nulls) == false) {
                         return null;
                     }
@@ -280,7 +288,10 @@ public class BeanEncoder {
 
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 ONode valueNode = encodeValueToNode(entry.getValue(), null);
-                tmp.set(String.valueOf(entry.getKey()), valueNode);
+
+                if (valueNode != null) {
+                    tmp.set(String.valueOf(entry.getKey()), valueNode);
+                }
             }
             return tmp;
         } finally {

@@ -6,6 +6,8 @@
 * 添加 ONodeAttr:ignore 注解属性支持
 * 添加 Write_BooleanAsNumber 新特性
 * 添加 DecodeContext:hasFeature, EncodeContext:hasFeature 新特性
+* 完善 Write_Nulls 对 Map 输出的控制
+* 优化 Write_BrowserCompatible 写入性能
 
 ### 4.0.0
 
