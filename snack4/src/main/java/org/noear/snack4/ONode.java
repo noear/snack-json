@@ -241,7 +241,7 @@ public final class ONode {
     }
 
     public Short getShort() {
-        return getShort((short)0);
+        return getShort((short) 0);
     }
 
     public Short getShort(Short def) {
@@ -332,7 +332,7 @@ public final class ONode {
     }
 
     public ONode getOrNew(String key) {
-        return getObject().computeIfAbsent(key, k -> new ONode(options));
+        return getObject().computeIfAbsent(key, k -> new ONode(options, null));
     }
 
     public ONode getOrNull(String key) {
@@ -378,7 +378,7 @@ public final class ONode {
     public ONode set(String key, Object value) {
         ONode oNode;
         if (value == null) {
-            oNode = new ONode(null);
+            oNode = new ONode(options, null);
         } else if (value instanceof ONode) {
             oNode = (ONode) value;
         } else if (value instanceof Collection) {
@@ -435,7 +435,7 @@ public final class ONode {
             int count = index + 1 - size;
 
             for (int i = 0; i < count; i++) {
-                last = new ONode(options);
+                last = new ONode(options, null);
                 if (thenApply != null) {
                     thenApply.accept(last);
                 }
@@ -500,7 +500,7 @@ public final class ONode {
     public ONode addNew() {
         asArray();
 
-        ONode oNode = new ONode(options);
+        ONode oNode = new ONode(options, null);
         getArray().add(oNode);
         return oNode;
     }
