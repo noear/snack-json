@@ -57,6 +57,10 @@ public class JsonReader {
 
     private StringBuilder stringBuilder;
 
+    private final boolean Read_AllowComment;
+    private final boolean Read_DisableUnquotedKeys;
+    private final boolean Read_DisableSingleQuotes;
+
     private StringBuilder getStringBuilder() {
         if (stringBuilder == null) {
             stringBuilder = new StringBuilder(32);
@@ -75,6 +79,10 @@ public class JsonReader {
 
         this.state = new ParserState(reader);
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+
+        this.Read_AllowComment = this.opts.hasFeature(Feature.Read_AllowComment);
+        this.Read_DisableUnquotedKeys = this.opts.hasFeature(Feature.Read_DisableUnquotedKeys);
+        this.Read_DisableSingleQuotes = this.opts.hasFeature(Feature.Read_DisableSingleQuotes);
     }
 
     public ONode read() throws IOException {
@@ -83,7 +91,7 @@ public class JsonReader {
             ONode node = parseValue();
             state.skipWhitespace();
 
-            if (opts.hasFeature(Feature.Read_AllowComment)) {
+            if (Read_AllowComment) {
                 state.skipComments();
             }
 
@@ -99,7 +107,7 @@ public class JsonReader {
     private ONode parseValue() throws IOException {
         state.skipWhitespace();
 
-        if (opts.hasFeature(Feature.Read_AllowComment)) {
+        if (Read_AllowComment) {
             state.skipComments();
         }
 
@@ -107,7 +115,7 @@ public class JsonReader {
 
         if (c == '{') return parseObject();
         if (c == '[') return parseArray();
-        if (c == '"' || (opts.hasFeature(Feature.Read_DisableSingleQuotes) == false && c == '\'')) {
+        if (c == '"' || (Read_DisableSingleQuotes == false && c == '\'')) {
             String str = parseString();
 
             if (opts.hasFeature(Feature.Read_UnwrapJsonString)) {
@@ -210,7 +218,7 @@ public class JsonReader {
 
     private String parseKey() throws IOException {
         String key;
-        if (opts.hasFeature(Feature.Read_DisableUnquotedKeys) == false) {
+        if (Read_DisableUnquotedKeys == false) {
             char c = state.peekChar();
             if (c != '"' && c != '\'') {
                 key = parseUnquotedString();
@@ -302,7 +310,7 @@ public class JsonReader {
 
     private String parseString() throws IOException {
         char quoteChar = state.nextChar();
-        if (quoteChar != '"' && !(opts.hasFeature(Feature.Read_DisableSingleQuotes) == false && quoteChar == '\'')) {
+        if (quoteChar != '"' && !(Read_DisableSingleQuotes == false && quoteChar == '\'')) {
             throw state.error("Expected string to start with a quote");
         }
 
