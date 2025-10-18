@@ -76,7 +76,7 @@ public class JsonPathParser {
     private void resolveDot() {
         position++;
         if (position < path.length() && path.charAt(position) == '.') {
-            addSegment(new DescendantSegment());
+            addSegment(DescendantSegment.getInstance());
 
             while (position < path.length()) {
                 skipWhitespace();

@@ -26,6 +26,12 @@ import java.util.List;
  * @since 4.0
  */
 public class DescendantSegment extends AbstractSegment {
+    private static final DescendantSegment instance = new DescendantSegment();
+
+    public static DescendantSegment getInstance() {
+        return instance;
+    }
+
     @Override
     public String toString() {
         return "..";

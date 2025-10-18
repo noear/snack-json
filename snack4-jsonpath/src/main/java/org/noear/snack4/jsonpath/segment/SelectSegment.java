@@ -49,7 +49,7 @@ public class SelectSegment extends AbstractSegment {
 
                 char ch = chunk.charAt(0);
                 if (ch == '*') {
-                    selector = new WildcardSelector();
+                    selector = WildcardSelector.getInstance();
                 } else if (ch == '$' || ch == '@') {
                     selector = new QuerySelector(chunk);
                 } else if (ch == '?') {

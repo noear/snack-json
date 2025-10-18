@@ -31,6 +31,12 @@ import java.util.function.Consumer;
  * @since 4.0
  */
 public class WildcardSelector implements Selector {
+    private static final WildcardSelector instance = new WildcardSelector();
+
+    public static WildcardSelector getInstance() {
+        return instance;
+    }
+
     @Override
     public String toString() {
         return "*";
