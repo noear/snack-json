@@ -51,17 +51,15 @@ public class JsonWriter {
     private final Options opts;
     private final Writer writer;
     private int depth = 0;
-    private StringBuilder stringBuilder;
+
+    private final StringBuilder stringBuilder;
 
     private final boolean Write_BrowserCompatible;
     private final boolean Write_UseRawBackslash;
+    private final boolean Write_UseSnakeStyle;
 
     private StringBuilder getStringBuilder() {
-        if (stringBuilder == null) {
-            stringBuilder = new StringBuilder(32);
-        } else {
-            stringBuilder.setLength(0);
-        }
+        stringBuilder.setLength(0);
         return stringBuilder;
     }
 
@@ -73,6 +71,13 @@ public class JsonWriter {
 
         this.Write_BrowserCompatible = this.opts.hasFeature(Feature.Write_BrowserCompatible);
         this.Write_UseRawBackslash = this.opts.hasFeature(Feature.Write_UseRawBackslash);
+        this.Write_UseSnakeStyle = opts.hasFeature(Feature.Write_UseSnakeStyle);
+
+        if (Write_UseSnakeStyle) {
+            this.stringBuilder = new StringBuilder(32);
+        } else {
+            this.stringBuilder = null;
+        }
     }
 
     public void write(ONode node) throws IOException {
@@ -130,8 +135,7 @@ public class JsonWriter {
             }
             writeIndentation();
 
-            String key = opts.hasFeature(Feature.Write_UseSnakeStyle) ?
-                    toSnakeStyle(entry.getKey()) : entry.getKey();
+            String key = Write_UseSnakeStyle ? toSnakeStyle(entry.getKey()) : entry.getKey();
             writeKey(key);
             writer.write(':');
             if (opts.hasFeature(Feature.Write_PrettyFormat)) {

@@ -55,18 +55,14 @@ public class JsonReader {
     private final Options opts;
     private final ParserState state;
 
-    private StringBuilder stringBuilder;
+    private final StringBuilder stringBuilder;
 
     private final boolean Read_AllowComment;
     private final boolean Read_DisableUnquotedKeys;
     private final boolean Read_DisableSingleQuotes;
 
     private StringBuilder getStringBuilder() {
-        if (stringBuilder == null) {
-            stringBuilder = new StringBuilder(32);
-        } else {
-            stringBuilder.setLength(0);
-        }
+        stringBuilder.setLength(0);
         return stringBuilder;
     }
 
@@ -79,6 +75,8 @@ public class JsonReader {
 
         this.state = new ParserState(reader);
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
+
+        this.stringBuilder = new StringBuilder(32);
 
         this.Read_AllowComment = this.opts.hasFeature(Feature.Read_AllowComment);
         this.Read_DisableUnquotedKeys = this.opts.hasFeature(Feature.Read_DisableUnquotedKeys);
