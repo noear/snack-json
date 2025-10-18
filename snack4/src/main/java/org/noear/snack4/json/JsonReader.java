@@ -60,6 +60,8 @@ public class JsonReader {
     private final boolean Read_AllowComment;
     private final boolean Read_DisableUnquotedKeys;
     private final boolean Read_DisableSingleQuotes;
+    private final boolean Read_UnwrapJsonString;
+    private final boolean Read_ConvertSnakeToCamel;
 
     private StringBuilder getStringBuilder() {
         stringBuilder.setLength(0);
@@ -81,6 +83,8 @@ public class JsonReader {
         this.Read_AllowComment = this.opts.hasFeature(Feature.Read_AllowComment);
         this.Read_DisableUnquotedKeys = this.opts.hasFeature(Feature.Read_DisableUnquotedKeys);
         this.Read_DisableSingleQuotes = this.opts.hasFeature(Feature.Read_DisableSingleQuotes);
+        this.Read_UnwrapJsonString = this.opts.hasFeature(Feature.Read_UnwrapJsonString);
+        this.Read_ConvertSnakeToCamel = this.opts.hasFeature(Feature.Read_ConvertSnakeToCamel);
     }
 
     public ONode read() throws IOException {
@@ -116,7 +120,7 @@ public class JsonReader {
         if (c == '"' || (Read_DisableSingleQuotes == false && c == '\'')) {
             String str = parseString();
 
-            if (opts.hasFeature(Feature.Read_UnwrapJsonString)) {
+            if (Read_UnwrapJsonString) {
                 if (str.length() > 1) {
                     char c1 = str.charAt(0);
                     char c2 = str.charAt(str.length() - 1);
@@ -180,7 +184,7 @@ public class JsonReader {
     }
 
     private ONode parseObject() throws IOException {
-        Map<String, ONode> map = new LinkedHashMap<>();
+        Map<String, ONode> map = new LinkedHashMap<>(16);
         state.expect('{');
         while (true) {
             state.skipWhitespace();
@@ -228,7 +232,7 @@ public class JsonReader {
         }
 
         // 如果启用了蛇形转驼峰特性，则进行转换
-        if (opts.hasFeature(Feature.Read_ConvertSnakeToCamel)) {
+        if (Read_ConvertSnakeToCamel) {
             key = convertSnakeToCamel(key);
         }
         return key;
@@ -281,7 +285,7 @@ public class JsonReader {
     }
 
     private ONode parseArray() throws IOException {
-        List<ONode> list = new ArrayList<>();
+        List<ONode> list = new ArrayList<>(10);
         state.expect('[');
         while (true) {
             state.skipWhitespace();
@@ -530,12 +534,25 @@ public class JsonReader {
     }
 
     private ONode parseKeyword(String expect, Object value) throws IOException {
-        for (int i = 0; i < expect.length(); i++) {
-            char c = state.nextChar();
-            if (c != expect.charAt(i)) {
+        // 优化：批量比较
+        int expectLength = expect.length();
+
+        // 确保缓冲区有足够数据
+        if (state.bufferPosition + expectLength > state.bufferLimit) {
+            if (!state.fillBuffer()) {
+                throw state.error("Unexpected end of input in keyword");
+            }
+        }
+
+        // 批量比较
+        for (int i = 0; i < expectLength; i++) {
+            if (state.buffer[state.bufferPosition + i] != expect.charAt(i)) {
                 throw state.error("Unexpected keyword: expected '" + expect + "'");
             }
         }
+
+        // 一次性前进位置
+        state.bufferPosition += expectLength;
         return new ONode(opts, value);
     }
 
