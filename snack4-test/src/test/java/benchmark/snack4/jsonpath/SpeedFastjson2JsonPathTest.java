@@ -67,7 +67,7 @@ public class SpeedFastjson2JsonPathTest {
 
     @Test
     public void test3(){
-        //1000000=>577,524,419  //218,209,205
+        //1000000=>577,524,419  //218,209,228
         //
         //1.加载json
         String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();
@@ -94,7 +94,7 @@ public class SpeedFastjson2JsonPathTest {
 
     @Test
     public void test4(){
-        //1000000=>332,367,391  //163,185,185
+        //1000000=>332,367,391  //163,196,185
         //
         //1.加载json
         String text = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}").toJson();

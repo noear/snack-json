@@ -48,7 +48,7 @@ public class FunctionHolder {
 
         Objects.requireNonNull(func, "The function not found: " + funcName);
 
-        this.args = new ArrayList<>();
+        this.args = new ArrayList<>(argsStr.size());
 
         for (String arg : argsStr) {
             if (arg.length() > 0) {
@@ -68,7 +68,7 @@ public class FunctionHolder {
     }
 
     public ONode apply(QueryContext ctx, List<ONode> currentNodes) {
-        List<ONode> argNodes = new ArrayList<>();
+        List<ONode> argNodes = new ArrayList<>(args.size() + 1);
 
         argNodes.add(ctx.newNode(currentNodes));
 
@@ -80,7 +80,7 @@ public class FunctionHolder {
     }
 
     public ONode apply(QueryContext ctx, ONode node) {
-        List<ONode> argNodes = new ArrayList<>();
+        List<ONode> argNodes = new ArrayList<>(args.size());
 
         QueryContext ctx2 = null;
 

@@ -32,14 +32,16 @@ import java.util.List;
  */
 public class SelectSegment extends AbstractSegment {
     private final String description;
-    private List<Selector> selectors = new ArrayList<>();
+    private final List<Selector> selectors;
     private boolean isMultiple;
     private boolean isExpanded;
 
     public SelectSegment(String description) {
-        this.description = description;
-
         List<String> chunks = SelectUtil.splitSelectors(description);
+
+        this.description = description;
+        this.selectors = new ArrayList<>(chunks.size());
+
 
         for (String chunk : chunks) {
             if (chunk.length() > 0) {
@@ -91,14 +93,10 @@ public class SelectSegment extends AbstractSegment {
 
     @Override
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
-        List<ONode> result = new ArrayList<>();
+        List<ONode> result = new ArrayList<>(Math.min(8, currentNodes.size()));
 
-        if (selectors.size() == 1) {
-            selectors.get(0).select(ctx, isDescendant(), currentNodes, result::add);
-        } else {
-            for (Selector selector : selectors) {
-                selector.select(ctx, isDescendant(), currentNodes, result::add);
-            }
+        for (Selector selector : selectors) {
+            selector.select(ctx, isDescendant(), currentNodes, result::add);
         }
 
         return result;
