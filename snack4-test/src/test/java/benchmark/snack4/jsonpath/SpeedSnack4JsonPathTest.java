@@ -287,7 +287,7 @@ public class SpeedSnack4JsonPathTest {
 
     @Test
     public void test9(){
-        //1000000=>444,423,429 //955,1035,1017
+        //1000000=>444,423,429 //955,1035,873
         //
         //1.加载json
         ONode n = ONode.ofJson("[{c:'aaaa'}, {b:'cccc'}, {c:'cccaa'}]");

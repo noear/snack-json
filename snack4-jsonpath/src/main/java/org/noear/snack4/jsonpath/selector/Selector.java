@@ -28,9 +28,6 @@ public interface Selector {
      *
      * @param currentNodes 当前节点
      * @param ctx          查询上下文
-     * @param results      结果
      */
-    void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results);
-
-    void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor);
+    void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, Consumer<ONode> acceptor);
 }

@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class FilterSelector extends AbstractSelector {
+public class FilterSelector implements Selector {
     private final String expr;
     private final Expression expression;
 
@@ -58,37 +58,28 @@ public class FilterSelector extends AbstractSelector {
     }
 
     @Override
-    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, Consumer<ONode> acceptor) {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
                 if (expression.test(n1, ctx)) {
-                    onComplete(ctx, n1, results::add);
+                    acceptor.accept(n1);
                 }
             });
         } else {
             for (ONode node : currentNodes) {
-                onNext(ctx, node, results::add);
-            }
-        }
-    }
+                if (ctx.getMode() == QueryMode.CREATE) {
+                    if (node.isNull()) {
+                        node.asArray().addNew();
+                    }
+                }
 
-    @Override
-    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
-        if (ctx.getMode() == QueryMode.CREATE) {
-            if (node.isNull()) {
-                node.asArray().addNew();
+                if (ctx.forJaywayMode()) {
+                    flattenResolveJayway(ctx, node, acceptor);
+                } else {
+                    flattenResolveIetf(ctx, node, acceptor);
+                }
             }
-        }
-
-        if (ctx.forJaywayMode()) {
-            flattenResolveJayway(ctx, node, n1 -> {
-                onComplete(ctx, n1, acceptor);
-            });
-        } else {
-            flattenResolveIetf(ctx, node, n1 -> {
-                onComplete(ctx, n1, acceptor);
-            });
         }
     }
 

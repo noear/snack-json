@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class IndexSelector extends AbstractSelector {
+public class IndexSelector implements Selector {
     private final String expr;
 
     private int index;
@@ -57,23 +57,16 @@ public class IndexSelector extends AbstractSelector {
     }
 
     @Override
-    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, Consumer<ONode> acceptor) {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
-                onNext(ctx, n1, results::add);
+                IndexUtil.forIndex(ctx, n1, index, acceptor);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                onNext(ctx, n1, results::add);
+                IndexUtil.forIndex(ctx, n1, index, acceptor);
             }
         }
-    }
-
-    @Override
-    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
-        IndexUtil.forIndex(ctx, node, index, n1 -> {
-            onComplete(ctx, n1, acceptor);
-        });
     }
 }

@@ -15,7 +15,6 @@
  */
 package org.noear.snack4.jsonpath.selector;
 
-import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.jsonpath.JsonPathException;
 import org.noear.snack4.jsonpath.QueryContext;
@@ -32,7 +31,7 @@ import java.util.function.Consumer;
  * @author noear 2025/10/11 created
  * @since 4.0
  */
-public class SliceSelector extends AbstractSelector {
+public class SliceSelector implements Selector {
     //start:end:step
     private final String expr;
 
@@ -86,7 +85,7 @@ public class SliceSelector extends AbstractSelector {
     }
 
     @Override
-    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, List<ONode> results) {
+    public void select(QueryContext ctx, boolean isDescendant, List<ONode> currentNodes, Consumer<ONode> acceptor) {
         if (step == 0) {
             return;
         }
@@ -94,20 +93,13 @@ public class SliceSelector extends AbstractSelector {
         if (isDescendant) {
             //后代（IETF JSONPath (RFC 9535)：包括“自己”和“后代”）
             SelectUtil.descendantSelect(currentNodes, !ctx.forJaywayMode(), (n1) -> {
-                onNext(ctx, n1, results::add);
+                doSlice(ctx, n1, acceptor);
             });
         } else {
             for (ONode n1 : currentNodes) {
-                onNext(ctx, n1, results::add);
+                doSlice(ctx, n1, acceptor);
             }
         }
-    }
-
-    @Override
-    public void onNext(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {
-        doSlice(ctx, node, n1 -> {
-            onComplete(ctx, n1, acceptor);
-        });
     }
 
     private void doSlice(QueryContext ctx, ONode node, Consumer<ONode> acceptor) {

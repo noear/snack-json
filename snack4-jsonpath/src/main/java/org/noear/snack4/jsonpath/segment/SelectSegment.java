@@ -93,8 +93,12 @@ public class SelectSegment extends AbstractSegment {
     public List<ONode> resolve(QueryContext ctx, List<ONode> currentNodes) {
         List<ONode> result = new ArrayList<>();
 
-        for (Selector selector : selectors) {
-            selector.select(ctx, isDescendant(), currentNodes, result);
+        if (selectors.size() == 1) {
+            selectors.get(0).select(ctx, isDescendant(), currentNodes, result::add);
+        } else {
+            for (Selector selector : selectors) {
+                selector.select(ctx, isDescendant(), currentNodes, result::add);
+            }
         }
 
         return result;
