@@ -1,4 +1,10 @@
 
+### 4.0.2
+
+* 调整 ONode:nodeType,getType 合并为 `type()` 与 `options()` 保持相同风格
+* 调整 QueryContextImpl:multipleOf 更名为 tailafter 
+* 移除 QueryContext:isInFilter （没用了）
+* 优化 DescendantSegment，WildcardSelector 改为单例
 
 ### 4.0.1
 
