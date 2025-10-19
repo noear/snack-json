@@ -99,8 +99,14 @@ public class FunctionHolder {
             }
         }
 
-        QueryContext ctx0 = (ctx2 == null ? ctx : ctx2);
 
-        return func.apply(ctx0, argNodes);
+        QueryContextImpl ctx0 = (QueryContextImpl) (ctx2 == null ? ctx : ctx2);
+
+        try {
+            ctx0.setFiltered(true);
+            return func.apply(ctx0, argNodes);
+        } finally {
+            ctx0.setFiltered(false);
+        }
     }
 }

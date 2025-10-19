@@ -39,6 +39,11 @@ public interface QueryContext {
     boolean forJaywayMode();
 
     /**
+     * 在过滤器中的
+     */
+    boolean isFiltered();
+
+    /**
      * 是否多输出（前面执行过 `..x` 或 `*` 或 `[?]`）
      */
     boolean isMultiple();

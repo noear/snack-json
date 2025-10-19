@@ -42,6 +42,7 @@ public class QueryContextImpl implements QueryContext {
     private boolean descendant;
 
     private boolean forJaywayMode;
+    private boolean filtered;
 
     public QueryContextImpl(ONode root, QueryMode mode) {
         this.root = root;
@@ -84,6 +85,15 @@ public class QueryContextImpl implements QueryContext {
     @Override
     public boolean forJaywayMode() {
         return forJaywayMode;
+    }
+
+    @Override
+    public boolean isFiltered() {
+        return filtered;
+    }
+
+    public void setFiltered(boolean filtered) {
+        this.filtered = filtered;
     }
 
     @Override
