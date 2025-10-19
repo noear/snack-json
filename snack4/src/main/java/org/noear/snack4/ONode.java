@@ -73,6 +73,10 @@ public final class ONode {
         this.options = opts == null ? Options.DEF_OPTIONS : opts;
     }
 
+    public DataType type() {
+        return type;
+    }
+
     public Options options() {
         return options;
     }
@@ -80,10 +84,6 @@ public final class ONode {
     public ONode options(Options opts) {
         options = opts;
         return this;
-    }
-
-    public DataType nodeType() {
-        return type;
     }
 
     // Getters and Setters
@@ -530,10 +530,6 @@ public final class ONode {
             this.value = null;
             this.type = DataType.Null;
         }
-    }
-
-    public DataType getType() {
-        return type;
     }
 
     public boolean hasKey(String key) {

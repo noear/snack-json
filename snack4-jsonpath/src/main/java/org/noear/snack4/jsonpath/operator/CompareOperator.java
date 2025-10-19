@@ -56,7 +56,7 @@ public class CompareOperator implements Operator {
             return compareNull(rightNode);
         }
 
-        if (leftNode.getType() == rightNode.getType()) {
+        if (leftNode.type() == rightNode.type()) {
             if (leftNode.isString()) {
                 return compareString(leftNode.getValueAs(), rightNode.getValueAs());
             } else if (leftNode.isNumber()) {

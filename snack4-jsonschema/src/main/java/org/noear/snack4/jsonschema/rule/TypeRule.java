@@ -44,7 +44,7 @@ public class TypeRule implements ValidationRule {
 
     @Override
     public void validate(ONode data) throws JsonSchemaException {
-        String actualType = DataType.getTypeName(data.getType());
+        String actualType = DataType.getTypeName(data.type());
         if (!allowedTypes.contains(actualType)) {
             throw new JsonSchemaException("Type mismatch. Expected: " + allowedTypes + ", Actual: " + actualType);
         }

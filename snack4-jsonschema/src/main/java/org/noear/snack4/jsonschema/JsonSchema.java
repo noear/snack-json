@@ -301,9 +301,9 @@ public class JsonSchema {
 
     // 深度比较方法（完整实现）
     private boolean deepEquals(ONode a, ONode b) {
-        if (a.getType() != b.getType()) return false;
+        if (a.type() != b.type()) return false;
 
-        switch (a.getType()) {
+        switch (a.type()) {
             case Null: return true;
             case Boolean: return a.getBoolean() == b.getBoolean();
             case Number:
@@ -335,7 +335,7 @@ public class JsonSchema {
     // 异常处理
     private JsonSchemaException typeMismatch(String expected, ONode actual, PathTracker path) {
         return new JsonSchemaException("Expected type " + expected + " but got " +
-                DataType.getTypeName(actual.getType()) + " at " + path.currentPath());
+                DataType.getTypeName(actual.type()) + " at " + path.currentPath());
     }
 
     // 预编译相关实现

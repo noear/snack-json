@@ -14,15 +14,15 @@ public class ExistsTest {
     public void test1() {
         ONode oNode = new ONode();
         assert oNode.select("$.user").isNull();
-        assert oNode.select("$.user").nodeType() == DataType.Undefined;
+        assert oNode.select("$.user").type() == DataType.Undefined;
 
         ONode oNode2 = ONode.ofJson("{user:1}");
         assert oNode2.select("$.user").isNull() == false;
-        assert oNode2.select("$.user").nodeType() != DataType.Null;
+        assert oNode2.select("$.user").type() != DataType.Null;
 
         ONode oNode3 = ONode.ofJson("{user:null}");
         assert oNode3.select("$.user").isNull();
-        assert oNode3.select("$.user").nodeType() == DataType.Null;
+        assert oNode3.select("$.user").type() == DataType.Null;
     }
 
     @Test

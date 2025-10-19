@@ -81,7 +81,7 @@ public class JsonWriter {
     }
 
     public void write(ONode node) throws IOException {
-        switch (node.getType()) {
+        switch (node.type()) {
             case Object:
                 writeObject(node.getObject());
                 break;

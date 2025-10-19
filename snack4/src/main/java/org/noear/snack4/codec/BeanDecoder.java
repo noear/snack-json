@@ -292,7 +292,7 @@ public class BeanDecoder {
                 }
             }
         } else {
-            throw new CodecException("The type of node " + node.getType() + " cannot be converted to collection.");
+            throw new CodecException("The type of node " + node.type() + " cannot be converted to collection.");
         }
 
         return coll;
@@ -333,7 +333,7 @@ public class BeanDecoder {
 
             return map;
         } else {
-            throw new CodecException("The type of node " + node.getType() + " cannot be converted to map.");
+            throw new CodecException("The type of node " + node.type() + " cannot be converted to map.");
         }
     }
 
