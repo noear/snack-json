@@ -28,7 +28,8 @@ import org.noear.snack4.util.Asserts;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.text.ParseException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -138,65 +139,6 @@ public final class ONode {
         return (T) value;
     }
 
-    public Boolean getBoolean() {
-        return getBoolean(false);
-    }
-
-    public Boolean getBoolean(Boolean def) {
-        if (isBoolean()) {
-            return (Boolean) value;
-        } else if (isEmpty()) {
-            return def;
-        } else if (isString()) {
-            return Boolean.parseBoolean((String) value);
-        } else if (isNumber()) {
-            return getNumber().longValue() > 0;
-        } else {
-            throw new SnackException("Not supported for automatic conversion");
-        }
-    }
-
-    public Number getNumber() {
-        return (Number) value;
-    }
-
-    public Number getNumber(Number def) {
-        if (value == null) {
-            return def;
-        } else {
-            return (Number) value;
-        }
-    }
-
-    public String getString() {
-        if (isString()) {
-            return (String) value;
-        } else if (isNull()) {
-            if (options.hasFeature(Feature.Write_NullStringAsEmpty)) {
-                return "";
-            } else {
-                return null;
-            }
-        } else {
-            return String.valueOf(value);
-        }
-    }
-
-    public Date getDate() {
-        if (isDate()) {
-            return (Date) value;
-        } else if (isNumber()) {
-            return new Date(getNumber().longValue());
-        } else if (isString()) {
-            try {
-                return DateUtil.parse(getString());
-            } catch (ParseException ex) {
-                throw new SnackException(ex);
-            }
-        } else {
-            throw new SnackException("Not supported for automatic conversion");
-        }
-    }
 
     public List<ONode> getArray() {
         asArray();
@@ -236,6 +178,76 @@ public final class ONode {
         return this;
     }
 
+
+    public Boolean getBoolean() {
+        return getBoolean(false);
+    }
+
+    public Boolean getBoolean(Boolean def) {
+        if (isBoolean()) {
+            return (Boolean) value;
+        } else if (isNumber()) {
+            return getNumber().longValue() > 0;
+        } else if (isString()) {
+            String str = getValueAs();
+            if (str.length() > 0) {
+                return Boolean.parseBoolean((String) value);
+            } else {
+                return false;
+            }
+        } else {
+            return def;
+        }
+    }
+
+    public Number getNumber() {
+        return (Number) value;
+    }
+
+    public Number getNumber(Number def) {
+        if (value == null) {
+            return def;
+        } else {
+            return (Number) value;
+        }
+    }
+
+    public String getString() {
+        if (isString()) {
+            return (String) value;
+        } else if (isNumber()) {
+            if (value instanceof BigInteger) {
+                return value.toString();
+            } else if (value instanceof BigDecimal) {
+                return ((BigDecimal) value).toPlainString();
+            } else {
+                return String.valueOf(value);
+            }
+        } else if (isObject() || isArray()) {
+            return toJson();
+        } else if (isNull()) {
+            if (options.hasFeature(Feature.Write_NullStringAsEmpty)) {
+                return "";
+            } else {
+                return null;
+            }
+        } else {
+            return String.valueOf(value);
+        }
+    }
+
+    public Date getDate() {
+        if (isDate()) {
+            return (Date) value;
+        } else if (isNumber()) {
+            return new Date(getNumber().longValue());
+        } else if (isString()) {
+            return DateUtil.parseTry(getString());
+        } else {
+            return null;
+        }
+    }
+
     public Short getShort() {
         return getShort((short) 0);
     }
@@ -248,7 +260,7 @@ public final class ONode {
         } else if (isString()) {
             return Short.parseShort(getString());
         } else {
-            throw new SnackException("Not supported for automatic conversion");
+            return def;
         }
     }
 
@@ -263,8 +275,10 @@ public final class ONode {
             return def;
         } else if (isString()) {
             return Integer.parseInt(getString());
+        } else if (isBoolean()) {
+            return getBoolean() ? 1 : 0;
         } else {
-            throw new SnackException("Not supported for automatic conversion");
+            return def;
         }
     }
 
@@ -279,8 +293,12 @@ public final class ONode {
             return def;
         } else if (isString()) {
             return Long.parseLong(getString());
+        } else if (isBoolean()) {
+            return getBoolean() ? 1L : 0L;
+        } else if (isDate()) {
+            return getDate().getTime();
         } else {
-            throw new SnackException("Not supported for automatic conversion");
+            return def;
         }
     }
 
@@ -295,8 +313,10 @@ public final class ONode {
             return def;
         } else if (isString()) {
             return Float.parseFloat(getString());
+        } else if (isBoolean()) {
+            return getBoolean() ? 1F : 0F;
         } else {
-            throw new SnackException("Not supported for automatic conversion");
+            return def;
         }
     }
 
@@ -311,8 +331,10 @@ public final class ONode {
             return def;
         } else if (isString()) {
             return Double.parseDouble(getString());
+        } else if (isBoolean()) {
+            return getBoolean() ? 1D : 0D;
         } else {
-            throw new SnackException("Not supported for automatic conversion");
+            return def;
         }
     }
 
@@ -811,6 +833,31 @@ public final class ONode {
     }
 
     ///
+    ///
+    ///
+    public static boolean hasNestedJson(String str) {
+        if (str == null) {
+            return false;
+        }
+
+        String trimmed = str.trim();
+
+        if (trimmed.isEmpty()) {
+            return false;
+        }
+
+        char first = trimmed.charAt(0);
+        char last = trimmed.charAt(trimmed.length() - 1);
+
+        // 检查首尾字符
+        if (!((first == '{' && last == '}') || (first == '[' && last == ']'))) {
+            return false;
+        }
+
+        // 简单检查引号数量（应该是偶数）
+        long quoteCount = trimmed.chars().filter(ch -> ch == '"').count();
+        return quoteCount % 2 == 0;
+    }
 
     public static String serialize(Object object, Feature... features) {
         if (Asserts.isEmpty(features)) {

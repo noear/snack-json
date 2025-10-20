@@ -17,6 +17,7 @@ package org.noear.snack4.codec.util;
 
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
+import org.noear.snack4.SnackException;
 import org.noear.snack4.codec.DecodeContext;
 import org.noear.snack4.codec.CodecException;
 import org.noear.snack4.util.Asserts;
@@ -63,6 +64,17 @@ public class DateUtil {
     public static final String FORMAT_9 = "HH时mm分ss秒";
     public static final String FORMAT_8_a = "HH:mm:ss";
     public static final String FORMAT_8_b = "yyyyMMdd";
+
+    /**
+     * 解析时间
+     */
+    public static Date parseTry(String val) throws SnackException {
+        try {
+            return DateUtil.parse(val);
+        } catch (ParseException ex) {
+            throw new SnackException(ex);
+        }
+    }
 
     /**
      * 解析时间
