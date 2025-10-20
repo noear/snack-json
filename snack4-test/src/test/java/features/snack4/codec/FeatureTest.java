@@ -409,7 +409,7 @@ public class FeatureTest {
     @Test
     public void Write_BigNumbersAsString() {
         NumberBean bean = new NumberBean();
-        String json = ONode.ofBean(bean, Feature.Write_BigNumbersAsString).toJson();
+        String json = ONode.ofBean(bean, Feature.Write_DoubleAsString, Feature.Write_LongAsString).toJson();
         System.out.println(json);
         Assertions.assertEquals("{\"a\":1,\"b\":\"2\",\"c\":3.0,\"d\":\"4.0\"}", json);
     }

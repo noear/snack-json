@@ -20,11 +20,11 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.util.IoUtil;
-import org.noear.snack4.util.Asserts;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -176,15 +176,25 @@ public class JsonWriter {
     }
 
     private void writeNumber(Number num) throws IOException {
-        if (opts.hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(num)) {
-            writer.write('"' + num.toString() + '"');
+        if (opts.hasFeature(Feature.Write_DoubleAsString) && num instanceof Double) {
+            writer.write('"');
+            writer.write(num.toString());
+            writer.write('"');
             return;
         }
 
         if (opts.hasFeature(Feature.Write_LongAsString) && num instanceof Long) {
-            writer.write('"' + num.toString() + '"');
+            writer.write('"');
+            writer.write(num.toString());
+            writer.write('"');
             return;
+        }
 
+        if(opts.hasFeature(Feature.Write_BigDecimalAsPlain) && num instanceof BigDecimal) {
+            writer.write('"');
+            writer.write(((BigDecimal) num).toPlainString());
+            writer.write('"');
+            return;
         }
 
         writer.write(num.toString());

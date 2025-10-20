@@ -216,13 +216,13 @@ public final class ONode {
         if (isString()) {
             return (String) value;
         } else if (isNumber()) {
-            if (value instanceof BigInteger) {
-                return value.toString();
-            } else if (value instanceof BigDecimal) {
-                return ((BigDecimal) value).toPlainString();
-            } else {
-                return String.valueOf(value);
+            if (value instanceof BigDecimal) {
+                if (options.hasFeature(Feature.Write_BigDecimalAsPlain)) {
+                    return ((BigDecimal) value).toPlainString();
+                }
             }
+
+            return value.toString();
         } else if (isObject() || isArray()) {
             return toJson();
         } else if (isNull()) {

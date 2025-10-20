@@ -232,12 +232,18 @@ public enum Feature {
     /**
      * 写入长整型时使用字符串模式
      */
-    Write_BigNumbersAsString,
+    Write_LongAsString,
 
     /**
-     * 写入长整型时使用字符串模式
+     * 写入双精度浮点数时使用字符串模式
      */
-    Write_LongAsString,
+    Write_DoubleAsString,
+
+    /**
+     * 写入大数时使用字符串模式
+     */
+    Write_BigDecimalAsPlain,
+
 
     /**
      * IETF_RFC_9535 兼容模式（默认）

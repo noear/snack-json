@@ -19,7 +19,8 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.codec.EncodeContext;
 import org.noear.snack4.codec.ObjectPatternEncoder;
-import org.noear.snack4.util.Asserts;
+
+import java.math.BigDecimal;
 
 /**
  *
@@ -39,12 +40,16 @@ public class _NumberPatternEncoder implements ObjectPatternEncoder<Number> {
                 return target.setValue(value.toString());
             }
 
-            if (ctx.getAttr().hasFeature(Feature.Write_BigNumbersAsString) && Asserts.isBigNumber(value)) {
+            if (ctx.getAttr().hasFeature(Feature.Write_DoubleAsString) && value instanceof Double) {
                 return target.setValue(value.toString());
             }
 
             if (ctx.getAttr().hasFeature(Feature.Write_LongAsString) && value instanceof Long) {
                 return target.setValue(value.toString());
+            }
+
+            if (ctx.getAttr().hasFeature(Feature.Write_BigDecimalAsPlain) && value instanceof BigDecimal) {
+                return target.setValue(((BigDecimal) value).toPlainString());
             }
         }
 

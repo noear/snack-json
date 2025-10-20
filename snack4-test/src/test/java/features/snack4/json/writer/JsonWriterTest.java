@@ -186,7 +186,7 @@ public class JsonWriterTest {
     @Test
     public void testWriteBigNumberMode() throws IOException {
         ONode node = new ONode(1234567890123456789L);
-        Options opts = Options.of(Feature.Write_BigNumbersAsString);
+        Options opts = Options.of(Feature.Write_LongAsString);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("\"1234567890123456789\"", writer.toString());

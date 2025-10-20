@@ -1,9 +1,11 @@
 
 ### 4.0.2
 
+* 添加 Write_BigDecimalAsPlain 特性
 * 调整 ONode:nodeType,getType 合并为 `type()` 与 `options()` 保持相同风格
 * 调整 QueryContext:isInFilter 更名为 `isFiltered()`
-* 优化 执行效率
+* 调整 Write_BigNumbersAsString 更名为 Write_DoubleAsString
+* 优化 与 snack3 的效果兼容性
 
 ### 4.0.1
 

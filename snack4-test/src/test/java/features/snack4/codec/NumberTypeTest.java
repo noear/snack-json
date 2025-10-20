@@ -17,7 +17,7 @@ public class NumberTypeTest {
 
     @Test
     public void case1(){
-        Options options = Options.of().addFeatures(Feature.Write_BigNumbersAsString);
+        Options options = Options.of().addFeatures(Feature.Write_DoubleAsString, Feature.Write_LongAsString);
 
         Map<String, Object> data = new HashMap<>();
         data.put("a", 1);
