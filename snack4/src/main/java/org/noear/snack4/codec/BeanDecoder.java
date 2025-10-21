@@ -15,10 +15,11 @@
  */
 package org.noear.snack4.codec;
 
+import org.noear.eggg.*;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.annotation.ONodeAttrHolder;
+import org.noear.snack4.codec.util.EgggAttachment;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.util.Asserts;
 
@@ -73,7 +74,7 @@ public class BeanDecoder {
     }
 
     public <T> T decode() {
-        TypeWrap typeWrap = TypeWrap.from(targetType0);
+        TypeWrap typeWrap = EgggUtil.getTypeWrap(targetType0);
 
 
         try {
@@ -87,7 +88,7 @@ public class BeanDecoder {
     }
 
     // 类型转换核心
-    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr) throws Exception {
+    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, EgggAttachment attr) throws Exception {
         if (node.isNull()) {
             return null;
         }
@@ -137,7 +138,7 @@ public class BeanDecoder {
                     throw new CodecException("can not convert bean to type: " + typeWrap.getType());
                 }
 
-                ConstrWrap constrWrap = typeWrap.getConstrWrap();
+                ConstrWrap constrWrap = typeWrap.getClassWrap().getConstrWrap();
                 if (constrWrap == null) {
                     throw new CodecException("Create instance failed: " + typeWrap.getType().getName());
                 }
@@ -147,7 +148,7 @@ public class BeanDecoder {
                 } else {
                     if (constrWrap.isSecurity() == false //有参数
                             && opts.hasFeature(Feature.Write_AllowParameterizedConstructor) == false //不支持参数
-                            && ClassWrap.from(typeWrap).isLikeRecordClass() == false)  //不像记录类
+                            && typeWrap.getClassWrap().isLikeRecordClass() == false)  //不像记录类
                     {
                         throw new CodecException("Parameterized constructor are not allowed: " + typeWrap.getType());
                     }
@@ -173,7 +174,7 @@ public class BeanDecoder {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseSetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
-        ClassWrap classWrap = ClassWrap.from(typeWrap);
+        ClassWrap classWrap = typeWrap.getClassWrap();
 
         if (useOnlySetter) {
             //只能用 setter （以数据为主，支持 Read_FailOnUnknownProperties）
@@ -182,13 +183,13 @@ public class BeanDecoder {
                     continue;
                 }
 
-                if (typeWrap.getConstrWrap() != null) {
-                    if (typeWrap.getConstrWrap().hasParam(kv.getKey())) {
+                if (classWrap.getConstrWrap() != null) {
+                    if (classWrap.getConstrWrap().hasParamWrapByAlias(kv.getKey())) {
                         continue;
                     }
                 }
 
-                PropertyWrap propertyWrap = classWrap.getPropertyWrap(kv.getKey());
+                PropertyWrap propertyWrap = classWrap.getPropertyWrapByAlias(kv.getKey());
 
                 if (propertyWrap != null) {
                     if (propertyWrap.getSetterWrap() != null) {
@@ -201,9 +202,9 @@ public class BeanDecoder {
             }
         } else {
             //允许用 setter （以类为主，支持 flat）
-            for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWraps().entrySet()) {
-                if (typeWrap.getConstrWrap() != null) {
-                    if (typeWrap.getConstrWrap().hasParam(kv.getKey())) {
+            for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWrapsForAlias().entrySet()) {
+                if (classWrap.getConstrWrap() != null) {
+                    if (classWrap.getConstrWrap().hasParamWrapByAlias(kv.getKey())) {
                         continue;
                     }
                 }
@@ -217,7 +218,7 @@ public class BeanDecoder {
                     property = propertyWrap.getFieldWrap();
                 }
 
-                if (property == null || property.getAttr().isDecode() == false) {
+                if (property == null || property.isTransient() || property.<EgggAttachment>getAttachment().isDecode() == false) {
                     continue;
                 }
 
@@ -229,19 +230,19 @@ public class BeanDecoder {
     }
 
     private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Exception {
-        ONode oNode = (property.getAttr().isFlat() ? node : node.get(property.getNodeName()));
+        ONode oNode = (property.<EgggAttachment>getAttachment().isFlat() ? node : node.get(property.getAlias()));
 
         if (oNode != null && !oNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
             Object exisValue = property.getValue(target);
             Object propValue = null;
 
-            if (property.getAttr().getDecoder() != null) {
-                propValue = property.getAttr()
+            if (property.<EgggAttachment>getAttachment().getDecoder() != null) {
+                propValue = property.<EgggAttachment>getAttachment()
                         .getDecoder()
-                        .decode(new DecodeContext(opts, property.getAttr(), exisValue, property.getTypeWrap()), oNode);
+                        .decode(new DecodeContext(opts, property.getAttachment(), exisValue, property.getTypeWrap()), oNode);
             } else {
-                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getAttr());
+                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getAttachment());
             }
 
             property.setValue(target, propValue);
@@ -265,7 +266,7 @@ public class BeanDecoder {
             } else if (coll == Collections.EMPTY_SET) {
                 coll = new HashSet();
             }
-            TypeWrap elementTypeWrap = TypeWrap.from(elementType);
+            TypeWrap elementTypeWrap = EgggUtil.getTypeWrap(elementType);
 
             for (ONode n1 : node.getArray()) {
                 //填充集合时，元素为新创建的，所以 target 传 null
@@ -283,7 +284,7 @@ public class BeanDecoder {
 
             // string 支持自动转数组
             String[] strArray = node.toString().split(",");
-            TypeWrap elementTypeWrap = TypeWrap.from(elementType);
+            TypeWrap elementTypeWrap = EgggUtil.getTypeWrap(elementType);
 
             for (String str : strArray) {
                 Object item = decodeValueFromNode(new ONode(opts, str), elementTypeWrap, null, null);
@@ -308,8 +309,8 @@ public class BeanDecoder {
                 valueType = targetTypeWrap.getActualTypeArguments()[1];
             }
 
-            TypeWrap keyTypeWrap = TypeWrap.from(keyType);
-            TypeWrap valueTypeWrap = TypeWrap.from(valueType);
+            TypeWrap keyTypeWrap = EgggUtil.getTypeWrap(keyType);
+            TypeWrap valueTypeWrap = EgggUtil.getTypeWrap(valueType);
 
             Map map = null;
             if (target != Collections.EMPTY_MAP) {
@@ -359,10 +360,10 @@ public class BeanDecoder {
         Object[] argsV = new Object[constrWrap.getParamCount()];
 
         for (int j = 0; j < argsV.length; j++) {
-            ParamWrap p = constrWrap.getParamAry().get(j);
-            if (node.hasKey(p.getNodeName())) {
-                ONodeAttrHolder attr = p.getAttr();
-                Object val = decodeValueFromNode(node.get(p.getNodeName()), p.getTypeWrap(), null, attr);
+            ParamWrap p = constrWrap.getParamWrapAry().get(j);
+            if (node.hasKey(p.getAlias())) {
+                EgggAttachment attr = p.getAttachment();
+                Object val = decodeValueFromNode(node.get(p.getAlias()), p.getTypeWrap(), null, attr);
                 argsV[j] = val;
             } else {
                 argsV[j] = null;
@@ -419,18 +420,18 @@ public class BeanDecoder {
                 if (clz == null) {
                     throw new CodecException("Unsupported type, class: " + typeStr);
                 } else {
-                    return TypeWrap.from(clz);
+                    return EgggUtil.getTypeWrap(clz);
                 }
             }
         }
 
         if (def.getType() == Object.class) {
             if (oRef.isObject()) {
-                return TypeWrap.from(LinkedHashMap.class);
+                return EgggUtil.getTypeWrap(LinkedHashMap.class);
             }
 
             if (oRef.isArray()) {
-                return TypeWrap.from(ArrayList.class);
+                return EgggUtil.getTypeWrap(ArrayList.class);
             }
         }
 

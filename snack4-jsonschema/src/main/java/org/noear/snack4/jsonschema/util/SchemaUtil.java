@@ -15,11 +15,12 @@
  */
 package org.noear.snack4.jsonschema.util;
 
+import org.noear.eggg.FieldWrap;
+import org.noear.eggg.TypeWrap;
 import org.noear.snack4.ONode;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.util.ClassWrap;
-import org.noear.snack4.codec.util.FieldWrap;
-import org.noear.snack4.codec.util.TypeWrap;
+import org.noear.snack4.codec.util.EgggAttachment;
+import org.noear.snack4.codec.util.EgggUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.lang.reflect.*;
@@ -363,8 +364,9 @@ public class SchemaUtil {
 
         schemaNode.getOrNew("properties").then(propertiesNode -> {
             propertiesNode.asObject();
+           TypeWrap typeWrap =  EgggUtil.getTypeWrap(clazz);
 
-            for (Map.Entry<String, FieldWrap> entry : ClassWrap.from(TypeWrap.from(clazz)).getFieldWraps().entrySet()) {
+            for (Map.Entry<String, FieldWrap> entry : typeWrap.getClassWrap().getFieldWrapsForName().entrySet()) {
                 PropertyDesc fp = propertyOf(entry.getValue().getField());
 
                 if (fp != null) {

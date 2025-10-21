@@ -45,38 +45,4 @@ public class ClassUtil {
             throw new SnackException("Instantiation failed: " + clz.getName(), e);
         }
     }
-
-    private static Class<?> recordClass;
-
-    /**
-     * 是否为 Record 类
-     */
-    public static boolean isRecordClass(Class<?> clazz) {
-        if (JavaUtil.JAVA_MAJOR_VERSION < 17) {
-            return false;
-        }
-
-        if (clazz == null) {
-            return false;
-        }
-
-        // 1. Record 类是 final 的
-        if (!Modifier.isFinal(clazz.getModifiers())) {
-            return false;
-        }
-
-        try {
-            // 2. 通过 isAssignableFrom 检测
-            if (recordClass == null) {
-                recordClass = Class.forName("java.lang.Record");
-            }
-
-            return recordClass.isAssignableFrom(clazz);
-
-        } catch (ClassNotFoundException e) {
-            return false;
-        } catch (NoClassDefFoundError e) {
-            return false;
-        }
-    }
 }

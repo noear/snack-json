@@ -21,6 +21,7 @@ import org.noear.snack4.SnackException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Enum 包装器
@@ -29,6 +30,20 @@ import java.util.Map;
  * @since 4.0
  */
 public class EnumWrap {
+    private static Map<String, EnumWrap> enumCached = new ConcurrentHashMap<>();
+
+    public static EnumWrap from(Class<?> clz) {
+        String key = clz.getName();
+        EnumWrap val = enumCached.get(key);
+        if (val == null) {
+            val = new EnumWrap(clz);
+            enumCached.put(key, val);
+        }
+
+        return val;
+    }
+
+
     protected final Map<String, Enum> enumMap = new HashMap<>();
     protected final Map<String, Enum> enumCustomMap = new HashMap<>();
 

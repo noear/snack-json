@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.annotation;
+package org.noear.snack4.codec.util;
 
 import org.noear.snack4.Feature;
+import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
-import org.noear.snack4.codec.util.ClassUtil;
-import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.time.ZoneId;
@@ -32,8 +31,8 @@ import java.util.TimeZone;
  * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class ONodeAttrHolder {
-    private String name;
+public class EgggAttachment {
+    private String alias;
     private String description;
 
     private String format;
@@ -47,9 +46,9 @@ public class ONodeAttrHolder {
     private ObjectDecoder decoder;
     private long featuresValue;
 
-    public ONodeAttrHolder(ONodeAttr attrAnno, boolean isTransient) {
+    public EgggAttachment(ONodeAttr attrAnno, String realName) {
         if (attrAnno != null) {
-            name = attrAnno.name();
+            alias = attrAnno.name();
             description = attrAnno.description();
 
             format = attrAnno.format();
@@ -79,14 +78,13 @@ public class ONodeAttrHolder {
             featuresValue = Feature.addFeatures(0L, attrAnno.features());
         }
 
-        if (isTransient) {
-            encode = false;
-            decode = false;
+        if(Asserts.isEmpty(alias)){
+            alias = realName;
         }
     }
 
-    public String getName() {
-        return name;
+    public String getAlias() {
+        return alias;
     }
 
     public String getDescription() {
