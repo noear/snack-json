@@ -21,7 +21,7 @@ import org.noear.eggg.PropertyWrap;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.codec.util.EgggAttachment;
+import org.noear.snack4.codec.util.EgggAttach;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.util.Asserts;
 
@@ -95,7 +95,7 @@ public class BeanEncoder {
     }
 
     // 值转ONode处理
-    private ONode encodeValueToNode(Object value, EgggAttachment attr) throws Exception {
+    private ONode encodeValueToNode(Object value, EgggAttach attr) throws Exception {
         if (value == null) {
             if (Write_Nulls) {
                 return new ONode(opts, null);
@@ -175,15 +175,15 @@ public class BeanEncoder {
                     continue;
                 }
 
-                EgggAttachment attachment = property.getAttachment();
-                if (property.isTransient() || attachment.isEncode() == false) {
+                EgggAttach attach = property.getAttach();
+                if (property.isTransient() || attach.isEncode() == false) {
                     continue;
                 }
 
                 ONode propertyNode = encodeBeanPropertyToNode(bean, property);
 
                 if (propertyNode != null) {
-                    if (attachment.isFlat()) {
+                    if (attach.isFlat()) {
                         if (propertyNode.isObject()) {
                             tmp.setAll(propertyNode.getObject());
                         }
@@ -203,27 +203,27 @@ public class BeanEncoder {
         Object propValue = property.getValue(bean);
         ONode propNode = null;
 
-        EgggAttachment attachment = property.getAttachment();
+        EgggAttach attach = property.getAttach();
 
-        if (attachment.getEncoder() != null) {
-            propNode = attachment.getEncoder().encode(new EncodeContext(opts, attachment), propValue, new ONode(opts));
+        if (attach.getEncoder() != null) {
+            propNode = attach.getEncoder().encode(new EncodeContext(opts, attach), propValue, new ONode(opts));
         } else {
             if (propValue == null) {
                 //分类控制
                 if (property.getTypeWrap().isList()) {
-                    if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || attachment.hasFeature(Feature.Write_NullListAsEmpty))) {
+                    if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || attach.hasFeature(Feature.Write_NullListAsEmpty))) {
                         propValue = new ArrayList<>();
                     }
                 } else if (property.getTypeWrap().isString()) {
-                    if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || attachment.hasFeature(Feature.Write_NullStringAsEmpty))) {
+                    if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || attach.hasFeature(Feature.Write_NullStringAsEmpty))) {
                         propValue = "";
                     }
                 } else if (property.getTypeWrap().isBoolean()) {
-                    if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || attachment.hasFeature(Feature.Write_NullBooleanAsFalse))) {
+                    if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || attach.hasFeature(Feature.Write_NullBooleanAsFalse))) {
                         propValue = false;
                     }
                 } else if (property.getTypeWrap().isNumber()) {
-                    if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || attachment.hasFeature(Feature.Write_NullNumberAsZero))) {
+                    if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || attach.hasFeature(Feature.Write_NullNumberAsZero))) {
                         if (property.getTypeWrap().getType() == Long.class) {
                             propValue = 0L;
                         } else if (property.getTypeWrap().getType() == Double.class) {
@@ -238,21 +238,21 @@ public class BeanEncoder {
 
                 //托底控制
                 if (propValue == null) {
-                    if (Write_Nulls == false && attachment.hasFeature(Feature.Write_Nulls) == false) {
+                    if (Write_Nulls == false && attach.hasFeature(Feature.Write_Nulls) == false) {
                         return null;
                     }
                 }
             }
 
             if (propValue instanceof Date) {
-                if (Asserts.isNotEmpty(attachment.getFormat())) {
-                    String dateStr = attachment.formatDate((Date) propValue);
+                if (Asserts.isNotEmpty(attach.getFormat())) {
+                    String dateStr = attach.formatDate((Date) propValue);
                     propNode = new ONode(opts, dateStr);
                 }
             }
 
             if (propNode == null) {
-                propNode = encodeValueToNode(propValue, attachment);
+                propNode = encodeValueToNode(propValue, attach);
             }
         }
 

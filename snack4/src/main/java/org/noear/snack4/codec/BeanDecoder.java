@@ -19,7 +19,7 @@ import org.noear.eggg.*;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
-import org.noear.snack4.codec.util.EgggAttachment;
+import org.noear.snack4.codec.util.EgggAttach;
 import org.noear.snack4.codec.util.*;
 import org.noear.snack4.util.Asserts;
 
@@ -88,7 +88,7 @@ public class BeanDecoder {
     }
 
     // 类型转换核心
-    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, EgggAttachment attr) throws Exception {
+    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, EgggAttach attr) throws Exception {
         if (node.isNull()) {
             return null;
         }
@@ -218,7 +218,7 @@ public class BeanDecoder {
                     property = propertyWrap.getFieldWrap();
                 }
 
-                if (property == null || property.isTransient() || property.<EgggAttachment>getAttachment().isDecode() == false) {
+                if (property == null || property.isTransient() || property.<EgggAttach>getAttach().isDecode() == false) {
                     continue;
                 }
 
@@ -230,19 +230,19 @@ public class BeanDecoder {
     }
 
     private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Exception {
-        ONode oNode = (property.<EgggAttachment>getAttachment().isFlat() ? node : node.get(property.getAlias()));
+        ONode oNode = (property.<EgggAttach>getAttach().isFlat() ? node : node.get(property.getAlias()));
 
         if (oNode != null && !oNode.isNull()) {
             //深度填充：获取字段当前的值，作为递归调用的 target
             Object exisValue = property.getValue(target);
             Object propValue = null;
 
-            if (property.<EgggAttachment>getAttachment().getDecoder() != null) {
-                propValue = property.<EgggAttachment>getAttachment()
+            if (property.<EgggAttach>getAttach().getDecoder() != null) {
+                propValue = property.<EgggAttach>getAttach()
                         .getDecoder()
-                        .decode(new DecodeContext(opts, property.getAttachment(), exisValue, property.getTypeWrap()), oNode);
+                        .decode(new DecodeContext(opts, property.getAttach(), exisValue, property.getTypeWrap()), oNode);
             } else {
-                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getAttachment());
+                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getAttach());
             }
 
             property.setValue(target, propValue);
@@ -362,7 +362,7 @@ public class BeanDecoder {
         for (int j = 0; j < argsV.length; j++) {
             ParamWrap p = constrWrap.getParamWrapAry().get(j);
             if (node.hasKey(p.getAlias())) {
-                EgggAttachment attr = p.getAttachment();
+                EgggAttach attr = p.getAttachment();
                 Object val = decodeValueFromNode(node.get(p.getAlias()), p.getTypeWrap(), null, attr);
                 argsV[j] = val;
             } else {

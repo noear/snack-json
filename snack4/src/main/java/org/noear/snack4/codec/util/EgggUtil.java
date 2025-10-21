@@ -31,11 +31,11 @@ import java.lang.reflect.*;
  */
 public class EgggUtil {
     private static final Eggg eggg = new Eggg()
-            .withCreatorAnnotationClass(ONodeCreator.class)
-            .withAttachmentHandler(EgggUtil::doAttachmentHandle)
-            .withAliasHandler(EgggAttachment::getAlias);
+            .withCreatorClass(ONodeCreator.class)
+            .withAttachHandler(EgggUtil::doAttachmentHandle)
+            .withAliasHandler(EgggAttach::getAlias);
 
-    private static EgggAttachment doAttachmentHandle(ClassWrap cw, AnnotatedElement e, EgggAttachment ref) {
+    private static EgggAttach doAttachmentHandle(ClassWrap cw, Object h, AnnotatedElement e, EgggAttach ref) {
         ONodeAttr attr = e.getAnnotation(ONodeAttr.class);
 
         if (attr == null && ref != null) {
@@ -43,11 +43,11 @@ public class EgggUtil {
         }
 
         if (e instanceof Field) {
-            return new EgggAttachment(attr, ((Field) e).getName());
+            return new EgggAttach(attr, ((Field) e).getName());
         } else if (e instanceof Method) {
-            return new EgggAttachment(attr, Property.resolvePropertyName(((Method) e).getName()));
+            return new EgggAttach(attr, Property.resolvePropertyName(((Method) e).getName()));
         } else if (e instanceof Parameter) {
-            return new EgggAttachment(attr, ((Parameter) e).getName());
+            return new EgggAttach(attr, ((Parameter) e).getName());
         } else {
             throw new IllegalArgumentException("Unknown element type: " + e);
         }

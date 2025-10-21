@@ -31,7 +31,7 @@ import java.util.TimeZone;
  * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class EgggAttachment {
+public class EgggAttach {
     private String alias;
     private String description;
 
@@ -46,7 +46,7 @@ public class EgggAttachment {
     private ObjectDecoder decoder;
     private long featuresValue;
 
-    public EgggAttachment(ONodeAttr attrAnno, String realName) {
+    public EgggAttach(ONodeAttr attrAnno, String realName) {
         if (attrAnno != null) {
             alias = attrAnno.name();
             description = attrAnno.description();
