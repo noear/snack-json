@@ -19,7 +19,6 @@ import org.noear.eggg.FieldWrap;
 import org.noear.eggg.TypeWrap;
 import org.noear.snack4.ONode;
 import org.noear.snack4.annotation.ONodeAttr;
-import org.noear.snack4.codec.util.EgggAttachment;
 import org.noear.snack4.codec.util.EgggUtil;
 import org.noear.snack4.util.Asserts;
 
@@ -367,6 +366,10 @@ public class SchemaUtil {
            TypeWrap typeWrap =  EgggUtil.getTypeWrap(clazz);
 
             for (Map.Entry<String, FieldWrap> entry : typeWrap.getClassWrap().getFieldWrapsForName().entrySet()) {
+                if(entry.getValue().isStatic()){
+                    continue;
+                }
+
                 PropertyDesc fp = propertyOf(entry.getValue().getField());
 
                 if (fp != null) {
