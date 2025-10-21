@@ -19,6 +19,7 @@ import org.noear.eggg.ClassWrap;
 import org.noear.eggg.Eggg;
 import org.noear.eggg.Property;
 import org.noear.eggg.TypeWrap;
+import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeCreator;
 
@@ -32,10 +33,10 @@ import java.lang.reflect.*;
 public class EgggUtil {
     private static final Eggg eggg = new Eggg()
             .withCreatorClass(ONodeCreator.class)
-            .withAttachHandler(EgggUtil::doAttachmentHandle)
-            .withAliasHandler(EgggAttach::getAlias);
+            .withDigestHandler(EgggUtil::doDigestHandle)
+            .withAliasHandler(ONodeAttrHolder::getAlias);
 
-    private static EgggAttach doAttachmentHandle(ClassWrap cw, Object h, AnnotatedElement e, EgggAttach ref) {
+    private static ONodeAttrHolder doDigestHandle(ClassWrap cw, Object h, AnnotatedElement e, ONodeAttrHolder ref) {
         ONodeAttr attr = e.getAnnotation(ONodeAttr.class);
 
         if (attr == null && ref != null) {
@@ -43,11 +44,11 @@ public class EgggUtil {
         }
 
         if (e instanceof Field) {
-            return new EgggAttach(attr, ((Field) e).getName());
+            return new ONodeAttrHolder(attr, ((Field) e).getName());
         } else if (e instanceof Method) {
-            return new EgggAttach(attr, Property.resolvePropertyName(((Method) e).getName()));
+            return new ONodeAttrHolder(attr, Property.resolvePropertyName(((Method) e).getName()));
         } else if (e instanceof Parameter) {
-            return new EgggAttach(attr, ((Parameter) e).getName());
+            return new ONodeAttrHolder(attr, ((Parameter) e).getName());
         } else {
             throw new IllegalArgumentException("Unknown element type: " + e);
         }

@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.snack4.codec.util;
+package org.noear.snack4.annotation;
 
 import org.noear.snack4.Feature;
-import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.ObjectDecoder;
 import org.noear.snack4.codec.ObjectEncoder;
+import org.noear.snack4.codec.util.ClassUtil;
+import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.util.Asserts;
 
 import java.time.ZoneId;
@@ -31,7 +32,7 @@ import java.util.TimeZone;
  * @author noear 2025/10/8 created
  * @since 4.0
  */
-public class EgggAttach {
+public class ONodeAttrHolder {
     private String alias;
     private String description;
 
@@ -46,7 +47,7 @@ public class EgggAttach {
     private ObjectDecoder decoder;
     private long featuresValue;
 
-    public EgggAttach(ONodeAttr attrAnno, String realName) {
+    public ONodeAttrHolder(ONodeAttr attrAnno, String realName) {
         if (attrAnno != null) {
             alias = attrAnno.name();
             description = attrAnno.description();
