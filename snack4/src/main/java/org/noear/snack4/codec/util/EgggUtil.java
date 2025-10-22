@@ -25,13 +25,21 @@ import java.lang.reflect.*;
 /**
  *
  * @author noear 2025/10/21 created
- *
+ * @since 4.0
  */
 public class EgggUtil {
     private static final Eggg eggg = new Eggg()
             .withCreatorClass(ONodeCreator.class)
             .withDigestHandler(EgggUtil::doDigestHandle)
-            .withAliasHandler(ONodeAttrHolder::getAlias);
+            .withAliasHandler(EgggUtil::doAliasHandle);
+
+    private static String doAliasHandle(ClassWrap cw, Object h, Object digest) {
+        if (digest instanceof ONodeAttrHolder) {
+            return ((ONodeAttrHolder) digest).getAlias();
+        } else {
+            return null;
+        }
+    }
 
     private static ONodeAttrHolder doDigestHandle(ClassWrap cw, Object h, AnnotatedElement e, ONodeAttrHolder ref) {
         ONodeAttr attr = e.getAnnotation(ONodeAttr.class);
@@ -51,6 +59,9 @@ public class EgggUtil {
         }
     }
 
+    /**
+     * 获取类型包装器
+     */
     public static TypeWrap getTypeWrap(Type type) {
         return eggg.getTypeWrap(type);
     }
