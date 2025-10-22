@@ -18,6 +18,7 @@ package org.noear.snack4.codec;
 import org.noear.eggg.ClassWrap;
 import org.noear.eggg.Property;
 import org.noear.eggg.PropertyWrap;
+import org.noear.eggg.TypeWrap;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
@@ -207,26 +208,27 @@ public class BeanEncoder {
             propNode = attr.getEncoder().encode(new EncodeContext(opts, attr), propValue, new ONode(opts));
         } else {
             if (propValue == null) {
+                TypeWrap ptw = property.getTypeWrap();
                 //分类控制
-                if (property.getTypeWrap().isList()) {
+                if (ptw.getType() == List.class) {
                     if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || attr.hasFeature(Feature.Write_NullListAsEmpty))) {
                         propValue = new ArrayList<>();
                     }
-                } else if (property.getTypeWrap().isString()) {
+                } else if (ptw.isString()) {
                     if ((opts.hasFeature(Feature.Write_NullStringAsEmpty) || attr.hasFeature(Feature.Write_NullStringAsEmpty))) {
                         propValue = "";
                     }
-                } else if (property.getTypeWrap().isBoolean()) {
+                } else if (ptw.isBoolean()) {
                     if ((opts.hasFeature(Feature.Write_NullBooleanAsFalse) || attr.hasFeature(Feature.Write_NullBooleanAsFalse))) {
                         propValue = false;
                     }
-                } else if (property.getTypeWrap().isNumber()) {
+                } else if (ptw.isNumber()) {
                     if ((opts.hasFeature(Feature.Write_NullNumberAsZero) || attr.hasFeature(Feature.Write_NullNumberAsZero))) {
-                        if (property.getTypeWrap().getType() == Long.class) {
+                        if (ptw.getType() == Long.class) {
                             propValue = 0L;
-                        } else if (property.getTypeWrap().getType() == Double.class) {
+                        } else if (ptw.getType() == Double.class) {
                             propValue = 0D;
-                        } else if (property.getTypeWrap().getType() == Float.class) {
+                        } else if (ptw.getType() == Float.class) {
                             propValue = 0F;
                         } else {
                             propValue = 0;

@@ -15,10 +15,7 @@
  */
 package org.noear.snack4.codec.util;
 
-import org.noear.eggg.ClassWrap;
-import org.noear.eggg.Eggg;
-import org.noear.eggg.Property;
-import org.noear.eggg.TypeWrap;
+import org.noear.eggg.*;
 import org.noear.snack4.annotation.ONodeAttrHolder;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.annotation.ONodeCreator;
@@ -43,11 +40,11 @@ public class EgggUtil {
             return ref;
         }
 
-        if (e instanceof Field) {
+        if (h instanceof FieldWrap) {
             return new ONodeAttrHolder(attr, ((Field) e).getName());
-        } else if (e instanceof Method) {
+        } else if (h instanceof PropertyMethodWrap) {
             return new ONodeAttrHolder(attr, Property.resolvePropertyName(((Method) e).getName()));
-        } else if (e instanceof Parameter) {
+        } else if (h instanceof ParamWrap) {
             return new ONodeAttrHolder(attr, ((Parameter) e).getName());
         } else {
             return null;
