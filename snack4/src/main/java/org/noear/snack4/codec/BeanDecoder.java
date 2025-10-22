@@ -88,7 +88,7 @@ public class BeanDecoder {
     }
 
     // 类型转换核心
-    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr) throws Exception {
+    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr) throws Throwable {
         if (node.isNull()) {
             return null;
         }
@@ -170,7 +170,7 @@ public class BeanDecoder {
         return target;
     }
 
-    private Object decodeBeanFromNode(ONode node, TypeWrap typeWrap, Object target) throws Exception {
+    private Object decodeBeanFromNode(ONode node, TypeWrap typeWrap, Object target) throws Throwable {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseSetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
@@ -227,7 +227,7 @@ public class BeanDecoder {
         return target;
     }
 
-    private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Exception {
+    private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Throwable {
         ONode oNode = (property.<ONodeAttrHolder>getDigest().isFlat() ? node : node.get(property.getAlias()));
 
         if (oNode != null && !oNode.isNull()) {
@@ -250,7 +250,7 @@ public class BeanDecoder {
 
     //-- 辅助方法 --//
     // 处理List泛型
-    private Collection decodeCollectionFromNode(ONode node, TypeWrap typeWrap, Object target) throws Exception {
+    private Collection decodeCollectionFromNode(ONode node, TypeWrap typeWrap, Object target) throws Throwable {
         Type elementType = Object.class;
         if (typeWrap.isParameterizedType()) {
             elementType = typeWrap.getActualTypeArguments()[0];
@@ -298,7 +298,7 @@ public class BeanDecoder {
     }
 
     // 处理Map泛型
-    private Map decodeMapFromNode(ONode node, TypeWrap targetTypeWrap, Object target) throws Exception {
+    private Map decodeMapFromNode(ONode node, TypeWrap targetTypeWrap, Object target) throws Throwable {
         if (node.isObject()) {
             Type keyType = Object.class;
             Type valueType = Object.class;
@@ -353,7 +353,7 @@ public class BeanDecoder {
         throw new CodecException("Unsupported map key type: " + keyType.getType());
     }
 
-    private Object[] getConstrArgs(ConstrWrap constrWrap, ONode node) throws Exception {
+    private Object[] getConstrArgs(ConstrWrap constrWrap, ONode node) throws Throwable {
         //只有带参数的构造函（像 java record, kotlin data）
         Object[] argsV = new Object[constrWrap.getParamCount()];
 

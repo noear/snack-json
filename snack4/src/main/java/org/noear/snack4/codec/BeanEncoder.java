@@ -96,7 +96,7 @@ public class BeanEncoder {
     }
 
     // 值转ONode处理
-    private ONode encodeValueToNode(Object value, ONodeAttrHolder attr) throws Exception {
+    private ONode encodeValueToNode(Object value, ONodeAttrHolder attr) throws Throwable {
         if (value == null) {
             if (Write_Nulls) {
                 return new ONode(opts, null);
@@ -133,7 +133,7 @@ public class BeanEncoder {
     }
 
     // 对象转ONode核心逻辑
-    private ONode encodeBeanToNode(Object bean) throws Exception {
+    private ONode encodeBeanToNode(Object bean) throws Throwable {
         // 循环引用检测
         if (visited.containsKey(bean)) {
             return null;
@@ -198,7 +198,7 @@ public class BeanEncoder {
         return tmp;
     }
 
-    private ONode encodeBeanPropertyToNode(Object bean, Property property) throws Exception {
+    private ONode encodeBeanPropertyToNode(Object bean, Property property) throws Throwable {
         Object propValue = property.getValue(bean);
         ONode propNode = null;
 
@@ -260,7 +260,7 @@ public class BeanEncoder {
     }
 
     // 处理数组类型
-    private ONode encodeArrayToNode(Object array) throws Exception {
+    private ONode encodeArrayToNode(Object array) throws Throwable {
         ONode tmp = new ONode(opts).asArray();
         int length = Array.getLength(array);
         for (int i = 0; i < length; i++) {
@@ -270,7 +270,7 @@ public class BeanEncoder {
     }
 
     // 处理集合类型
-    private ONode encodeCollectionToNode(Collection<?> collection) throws Exception {
+    private ONode encodeCollectionToNode(Collection<?> collection) throws Throwable {
         ONode tmp = new ONode(opts).asArray();
         for (Object item : collection) {
             tmp.add(encodeValueToNode(item, null));
@@ -279,7 +279,7 @@ public class BeanEncoder {
     }
 
     // 处理Map类型
-    private ONode encodeMapToNode(Map<?, ?> map) throws Exception {
+    private ONode encodeMapToNode(Map<?, ?> map) throws Throwable {
         if (visited.containsKey(map)) {
             return null;
         } else {
