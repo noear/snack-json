@@ -153,21 +153,19 @@ public class BeanEncoder {
 
             ClassWrap classWrap = EgggUtil.getTypeWrap(bean.getClass()).getClassWrap();
 
-            for (Map.Entry<String, PropertyWrap> entry : classWrap.getPropertyWrapsForName().entrySet()) {
-                PropertyWrap propertyWrap = entry.getValue();
+            for (PropertyWrap pw : classWrap.getPropertyWraps()) {
                 final Property property;
-
                 if (useOnlyGetter) {
-                    if (propertyWrap.getGetterWrap() != null) {
-                        property = propertyWrap.getGetterWrap();
+                    if (pw.getGetterWrap() != null) {
+                        property = pw.getGetterWrap();
                     } else {
                         continue;
                     }
                 } else {
-                    if (useGetter && propertyWrap.getGetterWrap() != null) {
-                        property = propertyWrap.getGetterWrap();
+                    if (useGetter && pw.getGetterWrap() != null) {
+                        property = pw.getGetterWrap();
                     } else {
-                        property = propertyWrap.getFieldWrap();
+                        property = pw.getFieldWrap();
                     }
                 }
 

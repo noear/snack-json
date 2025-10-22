@@ -50,7 +50,7 @@ public class EgggUtil {
         } else if (e instanceof Parameter) {
             return new ONodeAttrHolder(attr, ((Parameter) e).getName());
         } else {
-            throw new IllegalArgumentException("Unknown element type: " + e);
+            return null;
         }
     }
 

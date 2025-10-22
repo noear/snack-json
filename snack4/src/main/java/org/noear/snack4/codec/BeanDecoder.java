@@ -202,20 +202,18 @@ public class BeanDecoder {
             }
         } else {
             //允许用 setter （以类为主，支持 flat）
-            for (Map.Entry<String, PropertyWrap> kv : classWrap.getPropertyWrapsForAlias().entrySet()) {
+            for (PropertyWrap pw : classWrap.getPropertyWraps()) {
                 if (classWrap.getConstrWrap() != null) {
-                    if (classWrap.getConstrWrap().hasParamWrapByAlias(kv.getKey())) {
+                    if (classWrap.getConstrWrap().hasParamWrapByAlias(pw.getAlias())) {
                         continue;
                     }
                 }
 
-                PropertyWrap propertyWrap = kv.getValue();
                 final Property property;
-
-                if (useSetter && propertyWrap.getSetterWrap() != null) {
-                    property = propertyWrap.getSetterWrap();
+                if (useSetter && pw.getSetterWrap() != null) {
+                    property = pw.getSetterWrap();
                 } else {
-                    property = propertyWrap.getFieldWrap();
+                    property = pw.getFieldWrap();
                 }
 
                 if (property == null || property.isTransient() || property.<ONodeAttrHolder>getDigest().isDecode() == false) {
