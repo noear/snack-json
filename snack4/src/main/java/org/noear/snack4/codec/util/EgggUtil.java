@@ -33,11 +33,11 @@ public class EgggUtil {
             .withDigestHandler(EgggUtil::doDigestHandle)
             .withAliasHandler(EgggUtil::doAliasHandle);
 
-    private static String doAliasHandle(ClassWrap cw, Object h, Object digest) {
+    private static String doAliasHandle(ClassWrap cw, Object h, Object digest, String ref) {
         if (digest instanceof ONodeAttrHolder) {
             return ((ONodeAttrHolder) digest).getAlias();
         } else {
-            return null;
+            return ref;
         }
     }
 
