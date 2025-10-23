@@ -365,12 +365,12 @@ public class SchemaUtil {
             propertiesNode.asObject();
            TypeWrap typeWrap =  EgggUtil.getTypeWrap(clazz);
 
-            for (Map.Entry<String, FieldWrap> entry : typeWrap.getClassWrap().getFieldWrapsForName().entrySet()) {
-                if(entry.getValue().isStatic()){
+            for (FieldWrap fw : typeWrap.getClassWrap().getFieldWraps()) {
+                if(fw.isStatic()){
                     continue;
                 }
 
-                PropertyDesc fp = propertyOf(entry.getValue().getField());
+                PropertyDesc fp = propertyOf(fw.getField());
 
                 if (fp != null) {
                     propertiesNode.getOrNew(fp.name()).then(paramNode -> {

@@ -1,4 +1,8 @@
 
+### 4.0.3
+
+* 调整 泛型处理切抱为 eggg
+
 ### 4.0.2
 
 * 添加 Write_BigDecimalAsPlain 特性
