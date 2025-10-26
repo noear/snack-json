@@ -74,11 +74,11 @@ public class BeanDecoder {
     }
 
     public <T> T decode() {
-        TypeWrap typeWrap = EgggUtil.getTypeWrap(targetType0);
+        TypeEggg typeEggg = EgggUtil.getTypeEggg(targetType0);
 
 
         try {
-            return (T) decodeValueFromNode(source0, typeWrap, target0, null);
+            return (T) decodeValueFromNode(source0, typeEggg, target0, null);
         } catch (Throwable e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
@@ -88,23 +88,23 @@ public class BeanDecoder {
     }
 
     // 类型转换核心
-    private Object decodeValueFromNode(ONode node, TypeWrap typeWrap, Object target, ONodeAttrHolder attr) throws Throwable {
+    private Object decodeValueFromNode(ONode node, TypeEggg typeEggg, Object target, ONodeAttrHolder attr) throws Throwable {
         if (node.isNull()) {
             return null;
         }
 
         // 优先使用自定义编解码器
         //提前找到@type类型，便于自定义解码器定位
-        typeWrap = confirmNodeType(node, typeWrap);
+        typeEggg = confirmNodeType(node, typeEggg);
 
         // 优先使用自定义编解码器
-        ObjectDecoder decoder = opts.getDecoder(typeWrap.getType());
+        ObjectDecoder decoder = opts.getDecoder(typeEggg.getType());
         if (decoder != null) {
-            return decoder.decode(new DecodeContext(opts, attr, target, typeWrap), node);
+            return decoder.decode(new DecodeContext(opts, attr, target, typeEggg), node);
         }
 
         if (node.isValue()) {
-            if (typeWrap.getType().isInterface() || Modifier.isAbstract(typeWrap.getType().getModifiers())) {
+            if (typeEggg.getType().isInterface() || Modifier.isAbstract(typeEggg.getType().getModifiers())) {
                 if (node.isString() && node.getString().indexOf('.') > 0) {
                     Class<?> clz = opts.loadClass(node.getString());
 
@@ -116,7 +116,7 @@ public class BeanDecoder {
                 }
             }
 
-            if (((Collection.class.isAssignableFrom(typeWrap.getType()) || typeWrap.getType().isArray()) && node.isString()) == false) {
+            if (((Collection.class.isAssignableFrom(typeEggg.getType()) || typeEggg.getType().isArray()) && node.isString()) == false) {
                 return node.getValue();
             }
 
@@ -124,57 +124,57 @@ public class BeanDecoder {
 
         if (target == null) {
             // 如果没有传入 target，则执行原有的创建新对象的逻辑
-            ObjectCreator creator = opts.getCreator(typeWrap.getType());
+            ObjectCreator creator = opts.getCreator(typeEggg.getType());
             if (creator != null) {
-                target = creator.create(opts, node, typeWrap.getType());
+                target = creator.create(opts, node, typeEggg.getType());
             }
 
             if (target == null) {
-                if (typeWrap.getType().isInterface()) {
+                if (typeEggg.getType().isInterface()) {
                     if (node.isEmpty()) {
                         return null;
                     }
 
-                    throw new CodecException("can not convert bean to type: " + typeWrap.getType());
+                    throw new CodecException("can not convert bean to type: " + typeEggg.getType());
                 }
 
-                ConstrWrap constrWrap = typeWrap.getClassWrap().getConstrWrap();
-                if (constrWrap == null) {
-                    throw new CodecException("Create instance failed: " + typeWrap.getType().getName());
+                ConstrEggg constrEggg = typeEggg.getClassEggg().getCreator();
+                if (constrEggg == null) {
+                    throw new CodecException("Create instance failed: " + typeEggg.getType().getName());
                 }
 
-                if (constrWrap.getParamCount() == 0) {
-                    target = constrWrap.newInstance();
+                if (constrEggg.getParamCount() == 0) {
+                    target = constrEggg.newInstance();
                 } else {
-                    if (constrWrap.isSecurity() == false //有参数
+                    if (constrEggg.isSecurity() == false //有参数
                             && opts.hasFeature(Feature.Write_AllowParameterizedConstructor) == false //不支持参数
-                            && typeWrap.getClassWrap().isLikeRecordClass() == false)  //不像记录类
+                            && typeEggg.getClassEggg().isLikeRecordClass() == false)  //不像记录类
                     {
-                        throw new CodecException("Parameterized constructor are not allowed: " + typeWrap.getType());
+                        throw new CodecException("Parameterized constructor are not allowed: " + typeEggg.getType());
                     }
 
-                    Object[] args = getConstrArgs(constrWrap, node);
-                    target = constrWrap.newInstance(args);
+                    Object[] args = getConstrArgs(constrEggg, node);
+                    target = constrEggg.newInstance(args);
                 }
             }
         }
 
         if (target instanceof Map) {
-            target = decodeMapFromNode(node, typeWrap, target);
+            target = decodeMapFromNode(node, typeEggg, target);
         } else if (target instanceof Collection) {
-            target = decodeCollectionFromNode(node, typeWrap, target);
+            target = decodeCollectionFromNode(node, typeEggg, target);
         } else {
-            return decodeBeanFromNode(node, typeWrap, target);
+            return decodeBeanFromNode(node, typeEggg, target);
         }
 
         return target;
     }
 
-    private Object decodeBeanFromNode(ONode node, TypeWrap typeWrap, Object target) throws Throwable {
+    private Object decodeBeanFromNode(ONode node, TypeEggg typeEggg, Object target) throws Throwable {
         boolean useOnlySetter = opts.hasFeature(Feature.Write_OnlyUseSetter);
         boolean useSetter = useOnlySetter || opts.hasFeature(Feature.Write_AllowUseSetter);
 
-        ClassWrap classWrap = typeWrap.getClassWrap();
+        ClassEggg classEggg = typeEggg.getClassEggg();
 
         if (useOnlySetter) {
             //只能用 setter （以数据为主，支持 Read_FailOnUnknownProperties）
@@ -183,17 +183,17 @@ public class BeanDecoder {
                     continue;
                 }
 
-                if (classWrap.getConstrWrap() != null) {
-                    if (classWrap.getConstrWrap().hasParamWrapByAlias(kv.getKey())) {
+                if (classEggg.getCreator() != null) {
+                    if (classEggg.getCreator().hasParamEgggByAlias(kv.getKey())) {
                         continue;
                     }
                 }
 
-                PropertyWrap propertyWrap = classWrap.getPropertyWrapByAlias(kv.getKey());
+                PropertyEggg propertyEggg = classEggg.getPropertyEgggByAlias(kv.getKey());
 
-                if (propertyWrap != null) {
-                    if (propertyWrap.getSetterWrap() != null) {
-                        Property property = propertyWrap.getSetterWrap();
+                if (propertyEggg != null) {
+                    if (propertyEggg.getSetterEggg() != null) {
+                        Property property = propertyEggg.getSetterEggg();
                         decodeBeanPropertyFromNode(node, property, target);
                     }
                 } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
@@ -202,18 +202,18 @@ public class BeanDecoder {
             }
         } else {
             //允许用 setter （以类为主，支持 flat）
-            for (PropertyWrap pw : classWrap.getPropertyWraps()) {
-                if (classWrap.getConstrWrap() != null) {
-                    if (classWrap.getConstrWrap().hasParamWrapByAlias(pw.getAlias())) {
+            for (PropertyEggg pw : classEggg.getPropertyEgggs()) {
+                if (classEggg.getCreator() != null) {
+                    if (classEggg.getCreator().hasParamEgggByAlias(pw.getAlias())) {
                         continue;
                     }
                 }
 
                 final Property property;
-                if (useSetter && pw.getSetterWrap() != null) {
-                    property = pw.getSetterWrap();
+                if (useSetter && pw.getSetterEggg() != null) {
+                    property = pw.getSetterEggg();
                 } else {
-                    property = pw.getFieldWrap();
+                    property = pw.getFieldEggg();
                 }
 
                 if (property == null || property.isTransient() || property.<ONodeAttrHolder>getDigest().isDecode() == false) {
@@ -238,9 +238,9 @@ public class BeanDecoder {
             if (property.<ONodeAttrHolder>getDigest().getDecoder() != null) {
                 propValue = property.<ONodeAttrHolder>getDigest()
                         .getDecoder()
-                        .decode(new DecodeContext(opts, property.getDigest(), exisValue, property.getTypeWrap()), oNode);
+                        .decode(new DecodeContext(opts, property.getDigest(), exisValue, property.getTypeEggg()), oNode);
             } else {
-                propValue = decodeValueFromNode(oNode, property.getTypeWrap(), exisValue, property.getDigest());
+                propValue = decodeValueFromNode(oNode, property.getTypeEggg(), exisValue, property.getDigest());
             }
 
             property.setValue(target, propValue);
@@ -250,10 +250,10 @@ public class BeanDecoder {
 
     //-- 辅助方法 --//
     // 处理List泛型
-    private Collection decodeCollectionFromNode(ONode node, TypeWrap typeWrap, Object target) throws Throwable {
+    private Collection decodeCollectionFromNode(ONode node, TypeEggg typeEggg, Object target) throws Throwable {
         Type elementType = Object.class;
-        if (typeWrap.isParameterizedType()) {
-            elementType = typeWrap.getActualTypeArguments()[0];
+        if (typeEggg.isParameterizedType()) {
+            elementType = typeEggg.getActualTypeArguments()[0];
         }
 
         Collection coll = (Collection) target;
@@ -264,11 +264,11 @@ public class BeanDecoder {
             } else if (coll == Collections.EMPTY_SET) {
                 coll = new HashSet();
             }
-            TypeWrap elementTypeWrap = EgggUtil.getTypeWrap(elementType);
+            TypeEggg elementTypeEggg = EgggUtil.getTypeEggg(elementType);
 
             for (ONode n1 : node.getArray()) {
                 //填充集合时，元素为新创建的，所以 target 传 null
-                Object item = decodeValueFromNode(n1, elementTypeWrap, null, null);
+                Object item = decodeValueFromNode(n1, elementTypeEggg, null, null);
                 if (item != null) {
                     coll.add(item);
                 }
@@ -282,10 +282,10 @@ public class BeanDecoder {
 
             // string 支持自动转数组
             String[] strArray = node.toString().split(",");
-            TypeWrap elementTypeWrap = EgggUtil.getTypeWrap(elementType);
+            TypeEggg elementTypeEggg = EgggUtil.getTypeEggg(elementType);
 
             for (String str : strArray) {
-                Object item = decodeValueFromNode(new ONode(opts, str), elementTypeWrap, null, null);
+                Object item = decodeValueFromNode(new ONode(opts, str), elementTypeEggg, null, null);
                 if (item != null) {
                     coll.add(item);
                 }
@@ -298,17 +298,17 @@ public class BeanDecoder {
     }
 
     // 处理Map泛型
-    private Map decodeMapFromNode(ONode node, TypeWrap targetTypeWrap, Object target) throws Throwable {
+    private Map decodeMapFromNode(ONode node, TypeEggg targetTypeEggg, Object target) throws Throwable {
         if (node.isObject()) {
             Type keyType = Object.class;
             Type valueType = Object.class;
-            if (targetTypeWrap.isParameterizedType()) {
-                keyType = targetTypeWrap.getActualTypeArguments()[0];
-                valueType = targetTypeWrap.getActualTypeArguments()[1];
+            if (targetTypeEggg.isParameterizedType()) {
+                keyType = targetTypeEggg.getActualTypeArguments()[0];
+                valueType = targetTypeEggg.getActualTypeArguments()[1];
             }
 
-            TypeWrap keyTypeWrap = EgggUtil.getTypeWrap(keyType);
-            TypeWrap valueTypeWrap = EgggUtil.getTypeWrap(valueType);
+            TypeEggg keyTypeEggg = EgggUtil.getTypeEggg(keyType);
+            TypeEggg valueTypeEggg = EgggUtil.getTypeEggg(valueType);
 
             Map map = null;
             if (target != Collections.EMPTY_MAP) {
@@ -325,8 +325,8 @@ public class BeanDecoder {
                 }
 
                 //Map 的值是新对象，递归调用时 target 传 null
-                Object k = decodeKey(kv.getKey(), keyTypeWrap);
-                Object v = decodeValueFromNode(kv.getValue(), valueTypeWrap, null, null);
+                Object k = decodeKey(kv.getKey(), keyTypeEggg);
+                Object v = decodeValueFromNode(kv.getValue(), valueTypeEggg, null, null);
                 map.put(k, v);
             }
 
@@ -337,7 +337,7 @@ public class BeanDecoder {
     }
 
     // Map键类型转换
-    private Object decodeKey(String key, TypeWrap keyType) {
+    private Object decodeKey(String key, TypeEggg keyType) {
         if (keyType.getType() == String.class || keyType.getType() == Object.class) return key;
         if (keyType.getType() == Integer.class || keyType.getType() == int.class) return Integer.parseInt(key);
         if (keyType.getType() == Long.class || keyType.getType() == long.class) return Long.parseLong(key);
@@ -353,15 +353,15 @@ public class BeanDecoder {
         throw new CodecException("Unsupported map key type: " + keyType.getType());
     }
 
-    private Object[] getConstrArgs(ConstrWrap constrWrap, ONode node) throws Throwable {
+    private Object[] getConstrArgs(ConstrEggg constrEggg, ONode node) throws Throwable {
         //只有带参数的构造函（像 java record, kotlin data）
-        Object[] argsV = new Object[constrWrap.getParamCount()];
+        Object[] argsV = new Object[constrEggg.getParamCount()];
 
         for (int j = 0; j < argsV.length; j++) {
-            ParamWrap p = constrWrap.getParamWrapAry().get(j);
+            ParamEggg p = constrEggg.getParamEgggAry().get(j);
             if (node.hasKey(p.getAlias())) {
                 ONodeAttrHolder attr = p.getDigest();
-                Object val = decodeValueFromNode(node.get(p.getAlias()), p.getTypeWrap(), null, attr);
+                Object val = decodeValueFromNode(node.get(p.getAlias()), p.getTypeEggg(), null, attr);
                 argsV[j] = val;
             } else {
                 argsV[j] = null;
@@ -374,8 +374,8 @@ public class BeanDecoder {
     /**
      * 确认节点类型
      */
-    private TypeWrap confirmNodeType(ONode oRef, TypeWrap def) {
-        TypeWrap type0 = resolveNodeType(oRef, def);
+    private TypeEggg confirmNodeType(ONode oRef, TypeEggg def) {
+        TypeEggg type0 = resolveNodeType(oRef, def);
 
         if (Throwable.class.isAssignableFrom(type0.getType())) {
             //如果有异常，则异常优先
@@ -396,7 +396,7 @@ public class BeanDecoder {
      * 分析节点类型
      *
      */
-    private TypeWrap resolveNodeType(ONode oRef, TypeWrap def) {
+    private TypeEggg resolveNodeType(ONode oRef, TypeEggg def) {
         if (oRef.isObject()) {
             String typeStr = null;
             if (isReadClassName(oRef)) {
@@ -418,18 +418,18 @@ public class BeanDecoder {
                 if (clz == null) {
                     throw new CodecException("Unsupported type, class: " + typeStr);
                 } else {
-                    return EgggUtil.getTypeWrap(clz);
+                    return EgggUtil.getTypeEggg(clz);
                 }
             }
         }
 
         if (def.getType() == Object.class) {
             if (oRef.isObject()) {
-                return EgggUtil.getTypeWrap(LinkedHashMap.class);
+                return EgggUtil.getTypeEggg(LinkedHashMap.class);
             }
 
             if (oRef.isArray()) {
-                return EgggUtil.getTypeWrap(ArrayList.class);
+                return EgggUtil.getTypeEggg(ArrayList.class);
             }
         }
 

@@ -15,10 +15,10 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.eggg.ClassWrap;
+import org.noear.eggg.ClassEggg;
 import org.noear.eggg.Property;
-import org.noear.eggg.PropertyWrap;
-import org.noear.eggg.TypeWrap;
+import org.noear.eggg.PropertyEggg;
+import org.noear.eggg.TypeEggg;
 import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
@@ -152,21 +152,21 @@ public class BeanEncoder {
             boolean useOnlyGetter = opts.hasFeature(Feature.Read_OnlyUseGetter);
             boolean useGetter = useOnlyGetter || opts.hasFeature(Feature.Read_AllowUseGetter);
 
-            ClassWrap classWrap = EgggUtil.getTypeWrap(bean.getClass()).getClassWrap();
+            ClassEggg classEggg = EgggUtil.getTypeEggg(bean.getClass()).getClassEggg();
 
-            for (PropertyWrap pw : classWrap.getPropertyWraps()) {
+            for (PropertyEggg pw : classEggg.getPropertyEgggs()) {
                 final Property property;
                 if (useOnlyGetter) {
-                    if (pw.getGetterWrap() != null) {
-                        property = pw.getGetterWrap();
+                    if (pw.getGetterEggg() != null) {
+                        property = pw.getGetterEggg();
                     } else {
                         continue;
                     }
                 } else {
-                    if (useGetter && pw.getGetterWrap() != null) {
-                        property = pw.getGetterWrap();
+                    if (useGetter && pw.getGetterEggg() != null) {
+                        property = pw.getGetterEggg();
                     } else {
-                        property = pw.getFieldWrap();
+                        property = pw.getFieldEggg();
                     }
                 }
 
@@ -208,7 +208,7 @@ public class BeanEncoder {
             propNode = attr.getEncoder().encode(new EncodeContext(opts, attr), propValue, new ONode(opts));
         } else {
             if (propValue == null) {
-                TypeWrap ptw = property.getTypeWrap();
+                TypeEggg ptw = property.getTypeEggg();
                 //分类控制
                 if (ptw.getType() == List.class) {
                     if ((opts.hasFeature(Feature.Write_NullListAsEmpty) || attr.hasFeature(Feature.Write_NullListAsEmpty))) {

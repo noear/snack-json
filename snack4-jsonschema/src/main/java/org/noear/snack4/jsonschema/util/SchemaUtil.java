@@ -15,8 +15,7 @@
  */
 package org.noear.snack4.jsonschema.util;
 
-import org.noear.eggg.FieldWrap;
-import org.noear.eggg.TypeWrap;
+import org.noear.eggg.*;
 import org.noear.snack4.ONode;
 import org.noear.snack4.annotation.ONodeAttr;
 import org.noear.snack4.codec.util.EgggUtil;
@@ -363,9 +362,9 @@ public class SchemaUtil {
 
         schemaNode.getOrNew("properties").then(propertiesNode -> {
             propertiesNode.asObject();
-           TypeWrap typeWrap =  EgggUtil.getTypeWrap(clazz);
+           TypeEggg typeEggg =  EgggUtil.getTypeEggg(clazz);
 
-            for (FieldWrap fw : typeWrap.getClassWrap().getFieldWraps()) {
+            for (FieldEggg fw : typeEggg.getClassEggg().getAllFieldEgggs()) {
                 if(fw.isStatic()){
                     continue;
                 }

@@ -33,7 +33,7 @@ public class EgggUtil {
             .withDigestHandler(EgggUtil::doDigestHandle)
             .withAliasHandler(EgggUtil::doAliasHandle);
 
-    private static String doAliasHandle(ClassWrap cw, Object h, Object digest, String ref) {
+    private static String doAliasHandle(ClassEggg cw, Object h, Object digest, String ref) {
         if (digest instanceof ONodeAttrHolder) {
             return ((ONodeAttrHolder) digest).getAlias();
         } else {
@@ -41,18 +41,18 @@ public class EgggUtil {
         }
     }
 
-    private static ONodeAttrHolder doDigestHandle(ClassWrap cw, Object h, AnnotatedElement e, ONodeAttrHolder ref) {
+    private static ONodeAttrHolder doDigestHandle(ClassEggg cw, Object h, AnnotatedElement e, ONodeAttrHolder ref) {
         ONodeAttr attr = e.getAnnotation(ONodeAttr.class);
 
         if (attr == null && ref != null) {
             return ref;
         }
 
-        if (h instanceof FieldWrap) {
+        if (h instanceof FieldEggg) {
             return new ONodeAttrHolder(attr, ((Field) e).getName());
-        } else if (h instanceof PropertyMethodWrap) {
+        } else if (h instanceof PropertyMethodEggg) {
             return new ONodeAttrHolder(attr, Property.resolvePropertyName(((Method) e).getName()));
-        } else if (h instanceof ParamWrap) {
+        } else if (h instanceof ParamEggg) {
             return new ONodeAttrHolder(attr, ((Parameter) e).getName());
         } else {
             return null;
@@ -62,7 +62,7 @@ public class EgggUtil {
     /**
      * 获取类型包装器
      */
-    public static TypeWrap getTypeWrap(Type type) {
-        return eggg.getTypeWrap(type);
+    public static TypeEggg getTypeEggg(Type type) {
+        return eggg.getTypeEggg(type);
     }
 }

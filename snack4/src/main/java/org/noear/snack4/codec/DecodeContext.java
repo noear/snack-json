@@ -15,7 +15,7 @@
  */
 package org.noear.snack4.codec;
 
-import org.noear.eggg.TypeWrap;
+import org.noear.eggg.TypeEggg;
 import org.noear.snack4.Feature;
 import org.noear.snack4.Options;
 import org.noear.snack4.annotation.ONodeAttrHolder;
@@ -34,12 +34,12 @@ public class DecodeContext<T> {
     private final Class<?> type;
     private final Type genericType;
 
-    public DecodeContext(Options options, ONodeAttrHolder attr, T target, TypeWrap typeWrap) {
+    public DecodeContext(Options options, ONodeAttrHolder attr, T target, TypeEggg typeEggg) {
         this.options = options;
         this.attr = attr;
         this.target = target;
-        this.type = typeWrap.getType();
-        this.genericType = typeWrap.getGenericType();
+        this.type = typeEggg.getType();
+        this.genericType = typeEggg.getGenericType();
     }
 
     public Options getOptions() {
