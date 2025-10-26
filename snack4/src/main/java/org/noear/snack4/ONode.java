@@ -29,7 +29,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -670,6 +669,15 @@ public final class ONode {
         return toBean(Object.class);
     }
 
+    /**
+     * @deprecated 4.0
+     *
+     */
+    @Deprecated
+    public <T> T toData() {
+        return toBean();
+    }
+
     public String toJson() {
         try {
             return JsonWriter.write(this, options);
@@ -746,7 +754,11 @@ public final class ONode {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        if (options.hasFeature(Feature.Node_ToStringUseJson)) {
+            return toJson();
+        } else {
+            return String.valueOf(value);
+        }
     }
 
 
