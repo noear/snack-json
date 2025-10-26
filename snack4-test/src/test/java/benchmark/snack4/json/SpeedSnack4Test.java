@@ -164,11 +164,11 @@ public class SpeedSnack4Test {
         String json = ONode.ofBean(group, Feature.Write_ClassName, Feature.Write_BrowserCompatible).toJson();
         System.out.println(json);
 
-        ONode.ofJson(json).toBean(UserGroupModel.class);
+        ONode.ofJson(json, Feature.Read_AutoType).toBean(UserGroupModel.class);
 
         long start = System.currentTimeMillis();
         for (int i = 0, len = 100000; i < len; i++) {
-            ONode.ofJson(json).toBean(UserGroupModel.class);
+            ONode.ofJson(json, Feature.Read_AutoType).toBean(UserGroupModel.class);
         }
         long times = System.currentTimeMillis() - start;
 
