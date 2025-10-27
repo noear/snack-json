@@ -63,7 +63,7 @@ jdk8 based. Support: Json Dom construction, encoding and decoding, fetching, Jso
 Snach-jsonpath draws on the design of `Javascript` where all variables are declared with `var` and `Xml dom` where everything is `Node`. Everything underneath it is represented by an `ONode`, which stands for `One node` and can be converted to any type.
 
 * It emphasizes the ability to build and manipulate the document tree
-* High performance `Json path` queries (much faster than `jayway.jsonpath`), Compatible with `jayway.jsonpath` and [IETF JSONPath (RFC 9535)](https://www.rfc-editor.org/rfc/rfc9535.html) standards (Switch with `optoins`). Delivering a robust JsonPath experience for the next decade.
+* High performance `Json path` queries (much faster than `jayway.jsonpath`), Compatible with `jayway.jsonpath` and [IETF JSONPath (RFC 9535)](https://www.rfc-editor.org/rfc/rfc9535.html) standards (Switch with `optoins`). Provide a next-generation JsonPath experience.
 * Supports `Json Schema` validation
 * Support some 'json5' features (keyless fields, comments, etc...)
 * Prefer no-argument constructors + field codec (reduces the risk of triggering actions by injection)
