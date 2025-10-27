@@ -33,27 +33,27 @@ public class EgggUtil {
             .withDigestHandler(EgggUtil::doDigestHandle)
             .withAliasHandler(EgggUtil::doAliasHandle);
 
-    private static String doAliasHandle(ClassEggg cw, Object h, Object digest, String ref) {
-        if (digest instanceof ONodeAttrHolder) {
-            return ((ONodeAttrHolder) digest).getAlias();
+    private static String doAliasHandle(ClassEggg cw, AnnotatedEggg s, String ref) {
+        if (s.getDigest() instanceof ONodeAttrHolder) {
+            return ((ONodeAttrHolder) s.getDigest()).getAlias();
         } else {
             return ref;
         }
     }
 
-    private static ONodeAttrHolder doDigestHandle(ClassEggg cw, Object h, AnnotatedElement e, ONodeAttrHolder ref) {
-        ONodeAttr attr = e.getAnnotation(ONodeAttr.class);
+    private static Object doDigestHandle(ClassEggg cw, AnnotatedEggg s, Object ref) {
+        ONodeAttr attr = s.getElement().getAnnotation(ONodeAttr.class);
 
         if (attr == null && ref != null) {
             return ref;
         }
 
-        if (h instanceof FieldEggg) {
-            return new ONodeAttrHolder(attr, ((Field) e).getName());
-        } else if (h instanceof PropertyMethodEggg) {
-            return new ONodeAttrHolder(attr, Property.resolvePropertyName(((Method) e).getName()));
-        } else if (h instanceof ParamEggg) {
-            return new ONodeAttrHolder(attr, ((Parameter) e).getName());
+        if (s instanceof FieldEggg) {
+            return new ONodeAttrHolder(attr, ((Field) s.getElement()).getName());
+        } else if (s instanceof PropertyMethodEggg) {
+            return new ONodeAttrHolder(attr, Property.resolvePropertyName(((Method) s.getElement()).getName()));
+        } else if (s instanceof ParamEggg) {
+            return new ONodeAttrHolder(attr, ((Parameter) s.getElement()).getName());
         } else {
             return null;
         }
