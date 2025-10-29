@@ -358,7 +358,7 @@ public class BeanDecoder {
         Object[] argsV = new Object[constrEggg.getParamCount()];
 
         for (int j = 0; j < argsV.length; j++) {
-            ParamEggg p = constrEggg.getParamEgggAry().get(j);
+            ParamEggg p = constrEggg.getParamEgggAt(j);
             if (node.hasKey(p.getAlias())) {
                 ONodeAttrHolder attr = p.getDigest();
                 Object val = decodeValueFromNode(node.get(p.getAlias()), p.getTypeEggg(), null, attr);
