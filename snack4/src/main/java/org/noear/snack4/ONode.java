@@ -754,11 +754,7 @@ public final class ONode {
 
     @Override
     public String toString() {
-        if (options.hasFeature(Feature.Node_ToStringUseJson)) {
-            return toJson();
-        } else {
-            return String.valueOf(value);
-        }
+        return toJson();
     }
 
 

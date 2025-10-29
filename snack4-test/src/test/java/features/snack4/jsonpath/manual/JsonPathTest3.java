@@ -290,7 +290,7 @@ public class JsonPathTest3 {
         String json = "{\"result\":[]}";
 
         ONode oNode = ONode.ofJson(json).select("$.result[*].amount.max()");
-        System.out.println(oNode.toString());
+        System.out.println(oNode.toJson());
 
         assert oNode.getLong() == 0L;
 

@@ -49,7 +49,7 @@ public class JsonPathQueryTest {
     public void getFilterAndRightExpressionTest() throws Exception {
         ONode n = ONode.ofJson("{code:1,msg:'Hello world',data:{list:[1,2,3,4,5], ary2:[{a:2},{a:3,b:{c:'ddd'}}]}}");
 
-        System.out.println(n.select("$..ary2[0].a").toString());
+        System.out.println(n.select("$..ary2[0].a").toJson());
 
         ONode tmp = n.select("$.data.list[?(@ in $..ary2[0].a)]");
         assertEquals(1, tmp.size());

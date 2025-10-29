@@ -245,12 +245,6 @@ public enum Feature {
     Write_BigDecimalAsPlain,
 
     /**
-     * 节点 toString 时使用 json
-     * */
-    Node_ToStringUseJson,
-
-
-    /**
      * IETF_RFC_9535 兼容模式（默认）
      */
     JsonPath_IETF_RFC_9535,

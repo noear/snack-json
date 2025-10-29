@@ -45,8 +45,8 @@ public class MatchFunction implements Function {
         }
 
         if (arg0.getArray().size() > 0) {
-            String arg0Str = arg0.get(0).toString();
-            String arg1Str = arg1.toString();
+            String arg0Str = arg0.get(0).getString();
+            String arg1Str = arg1.getString();
 
             Pattern pattern = RegexUtil.parse(arg1Str);
             boolean found = pattern.matcher(arg0Str).matches(); //与 SearchFunc 的区别就在这儿

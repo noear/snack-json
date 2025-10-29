@@ -267,7 +267,7 @@ public class JsonPathCompatibleTest6 {
         String json = "{\"result\":[]}";
 
         ONode oNode = ONode.ofJson(json).select("$.result[*].amount.sum()");
-        System.out.println(oNode.toString());
+        System.out.println(oNode.toJson());
 
         assert oNode.getLong() == 0L;
     }
@@ -277,7 +277,7 @@ public class JsonPathCompatibleTest6 {
         String json = "{\"result\":[]}";
 
         ONode oNode = ONode.ofJson(json).select("$.result[*].amount.min()");
-        System.out.println(oNode.toString());
+        System.out.println(oNode.toJson());
 
         assert oNode.getLong() == 0L;
     }
@@ -287,7 +287,7 @@ public class JsonPathCompatibleTest6 {
         String json = "{\"result\":[]}";
 
         ONode oNode = ONode.ofJson(json).select("$.result[*].amount.max()");
-        System.out.println(oNode.toString());
+        System.out.println(oNode.toJson());
 
         assert oNode.getLong() == 0L;
 

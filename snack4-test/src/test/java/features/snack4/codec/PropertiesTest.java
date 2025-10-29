@@ -37,7 +37,7 @@ public class PropertiesTest {
         properties.put("id", "3");
 
         UserModel rst = ONode.ofBean(properties, Feature.Write_AllowUseSetter).toBean(UserModel.class);
-        String json = ONode.ofBean(rst, Feature.Node_ToStringUseJson).toString();
+        String json = ONode.ofBean(rst).toJson();
         System.out.println(json);
 
         assert json.equals("{\"id\":3,\"aaa\":[1,2]}");

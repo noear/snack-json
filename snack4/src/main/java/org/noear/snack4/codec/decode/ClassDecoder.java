@@ -27,6 +27,6 @@ import org.noear.snack4.codec.ObjectDecoder;
 public class ClassDecoder implements ObjectDecoder<Class> {
     @Override
     public Class decode(DecodeContext ctx, ONode node) {
-        return ctx.getOptions().loadClass(node.toString());
+        return ctx.getOptions().loadClass(node.getString());
     }
 }

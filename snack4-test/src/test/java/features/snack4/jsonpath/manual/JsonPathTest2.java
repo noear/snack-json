@@ -149,7 +149,7 @@ public class JsonPathTest2 {
         ONode oNode = ONode.ofJson(str);
         ONode select = oNode.select("$.data_list[0]._widget_1634621669273");
 
-        System.out.println(select.toString());
+        System.out.println(select.toJson());
 
         assert select.isObject();
         assert "".equals(select.get("value").getValue());
