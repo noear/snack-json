@@ -66,6 +66,8 @@ public class BeanEncoder {
     private final Map<Object, Object> visited;
 
     private final boolean Write_Nulls;
+    private final boolean onlyUseGetter;
+    private final boolean allowUseGetter;
 
     private BeanEncoder(Object value, Options opts) {
         this.source0 = value;
@@ -73,6 +75,8 @@ public class BeanEncoder {
         this.visited = new IdentityHashMap<>();
 
         this.Write_Nulls = this.opts.hasFeature(Feature.Write_Nulls);
+        this.onlyUseGetter = this.opts.hasFeature(Feature.Read_OnlyUseGetter);
+        this.allowUseGetter = onlyUseGetter || this.opts.hasFeature(Feature.Read_AllowUseGetter);
     }
 
     /**
@@ -149,25 +153,16 @@ public class BeanEncoder {
                 tmp.set(opts.getTypePropertyName(), bean.getClass().getName());
             }
 
-            boolean useOnlyGetter = opts.hasFeature(Feature.Read_OnlyUseGetter);
-            boolean useGetter = useOnlyGetter || opts.hasFeature(Feature.Read_AllowUseGetter);
-
             ClassEggg classEggg = EgggUtil.getTypeEggg(bean.getClass()).getClassEggg();
 
             for (PropertyEggg pw : classEggg.getPropertyEgggs()) {
                 final Property property;
-                if (useOnlyGetter) {
-                    if (pw.getGetterEggg() != null) {
-                        property = pw.getGetterEggg();
-                    } else {
-                        continue;
-                    }
+                if (onlyUseGetter) {
+                    property = pw.getGetterEggg();
+                } else if (allowUseGetter && pw.getGetterEggg() != null) {
+                    property = pw.getGetterEggg();
                 } else {
-                    if (useGetter && pw.getGetterEggg() != null) {
-                        property = pw.getGetterEggg();
-                    } else {
-                        property = pw.getFieldEggg();
-                    }
+                    property = pw.getFieldEggg();
                 }
 
                 if (property == null) {

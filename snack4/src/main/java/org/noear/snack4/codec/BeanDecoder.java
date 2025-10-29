@@ -63,19 +63,17 @@ public class BeanDecoder {
     private final Object target0;
 
     private final Options opts;
-    private final Map<Object, Object> visited;
-    private final boolean useOnlySetter;
-    private final boolean useSetter;
+    private final boolean onlyUseSetter;
+    private final boolean allowUseSetter;
 
     private BeanDecoder(ONode source, Type type, Object target, Options opts) {
         this.source0 = source;
         this.targetType0 = type;
         this.target0 = target;
         this.opts = opts == null ? Options.DEF_OPTIONS : opts;
-        this.visited = new IdentityHashMap<>();
 
-        this.useOnlySetter = this.opts.hasFeature(Feature.Write_OnlyUseSetter);
-        this.useSetter = useOnlySetter || this.opts.hasFeature(Feature.Write_AllowUseSetter);
+        this.onlyUseSetter = this.opts.hasFeature(Feature.Write_OnlyUseSetter);
+        this.allowUseSetter = onlyUseSetter || this.opts.hasFeature(Feature.Write_AllowUseSetter);
     }
 
     public <T> T decode() {
@@ -219,9 +217,9 @@ public class BeanDecoder {
 
     private void decodeBeanPropertyFromNode(ONode node, PropertyEggg pe, Object target) throws Throwable {
         final Property property;
-        if (useOnlySetter) {
+        if (onlyUseSetter) {
             property = pe.getSetterEggg();
-        } else if (useSetter && pe.getSetterEggg() != null) {
+        } else if (allowUseSetter && pe.getSetterEggg() != null) {
             property = pe.getSetterEggg();
         } else {
             property = pe.getFieldEggg();
