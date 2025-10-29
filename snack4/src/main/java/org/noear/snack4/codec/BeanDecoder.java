@@ -176,10 +176,12 @@ public class BeanDecoder {
     }
 
     private Object decodeBeanFromNode(ONode node, TypeEggg typeEggg, Object target) throws Throwable {
+        boolean failOnUnknownProperties = opts.hasFeature(Feature.Write_FailOnUnknownProperties);
+
         ClassEggg classEggg = typeEggg.getClassEggg();
 
-        if (useOnlySetter) {
-            //只能用 setter （以数据为主，才能支持 Read_FailOnUnknownProperties）
+        if (failOnUnknownProperties) {
+            //以数据为主，才能支持 Read_FailOnUnknownProperties
             for (Map.Entry<String, ONode> kv : node.getObject().entrySet()) {
                 if (kv.getKey().startsWith(opts.getTypePropertyName())) {
                     continue;
@@ -194,16 +196,13 @@ public class BeanDecoder {
                 PropertyEggg pe = classEggg.getPropertyEgggByAlias(kv.getKey());
 
                 if (pe != null) {
-                    if (pe.getSetterEggg() != null) {
-                        Property property = pe.getSetterEggg();
-                        decodeBeanPropertyFromNode(node, property, target);
-                    }
-                } else if (opts.hasFeature(Feature.Write_FailOnUnknownProperties)) {
+                    decodeBeanPropertyFromNode(node, pe, target);
+                } else {
                     throw new CodecException("Unknown property : " + kv.getKey());
                 }
             }
         } else {
-            //允许用 setter （以类为主，才能支持 flat）
+            //以类为主，才能支持 flat
             for (PropertyEggg pe : classEggg.getPropertyEgggs()) {
                 if (classEggg.getCreator() != null) {
                     if (classEggg.getCreator().hasParamEgggByAlias(pe.getAlias())) {
@@ -211,21 +210,27 @@ public class BeanDecoder {
                     }
                 }
 
-                final Property property;
-                if (useSetter && pe.getSetterEggg() != null) {
-                    property = pe.getSetterEggg();
-                } else {
-                    property = pe.getFieldEggg();
-                }
-
-                decodeBeanPropertyFromNode(node, property, target);
+                decodeBeanPropertyFromNode(node, pe, target);
             }
         }
 
         return target;
     }
 
-    private void decodeBeanPropertyFromNode(ONode node, Property property, Object target) throws Throwable {
+    private void decodeBeanPropertyFromNode(ONode node, PropertyEggg pe, Object target) throws Throwable {
+        final Property property;
+        if (useOnlySetter) {
+            property = pe.getSetterEggg();
+        } else if (useSetter && pe.getSetterEggg() != null) {
+            property = pe.getSetterEggg();
+        } else {
+            property = pe.getFieldEggg();
+        }
+
+        decodeBeanPropertyFromNode0(node, property, target);
+    }
+
+    private void decodeBeanPropertyFromNode0(ONode node, Property property, Object target) throws Throwable {
         if (property == null || property.isTransient() || property.<ONodeAttrHolder>getDigest().isDecode() == false) {
             return;
         }
