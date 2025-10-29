@@ -29,7 +29,7 @@ public class Test2 {
         ONode select = oNode.get("resultData");
 
         //::之里做一次string解析；
-        JSONObject parse = JSONObject.parseObject(select.toString());
+        JSONObject parse = JSONObject.parseObject(select.toJson());
 
         ONode strToJsonPrse = select.fill(parse);
 
@@ -44,7 +44,7 @@ public class Test2 {
         ONode select = oNode.get("resultData");
 
         //::之里做一次string解析；
-        JSONObject parse = JSONObject.parseObject(select.toString());
+        JSONObject parse = JSONObject.parseObject(select.toJson());
 
         //代码，到这一部就可以了  // ONode 是个 树形结构，子节点变了。。。整个树就会变了。
         select.fill(parse);

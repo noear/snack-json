@@ -243,7 +243,7 @@ public class JsonReader {
             return snakeCase;
         }
 
-        StringBuilder result = getStringBuilder();
+        StringBuilder sb = getStringBuilder();
         boolean toUpperCase = false;
         boolean firstChar = true;
 
@@ -255,21 +255,21 @@ public class JsonReader {
                 toUpperCase = true;
             } else {
                 if (toUpperCase) {
-                    result.append(Character.toUpperCase(c));
+                    sb.append(Character.toUpperCase(c));
                     toUpperCase = false;
                 } else {
                     // 第一个字符保持小写，其他字符保持原样
                     if (firstChar) {
-                        result.append(Character.toLowerCase(c));
+                        sb.append(Character.toLowerCase(c));
                     } else {
-                        result.append(c);
+                        sb.append(c);
                     }
                 }
                 firstChar = false;
             }
         }
 
-        return result.toString();
+        return sb.toString();
     }
 
     private String parseUnquotedString() throws IOException {

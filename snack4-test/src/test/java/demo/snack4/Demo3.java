@@ -48,7 +48,7 @@ public class Demo3 {
     public void demo2() {
         String jsonNumber = ONode.ofBean(100).toJson();       // 100
         String jsonBoolean = ONode.ofBean(false).toJson();    // false
-        String jsonString = ONode.ofBean("String").toString(); //"String"
+        String jsonString = ONode.ofBean("String").toJson(); //"String"
 
         assertEquals(jsonNumber, "100");
         assertEquals(jsonBoolean, "false");

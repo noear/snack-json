@@ -248,7 +248,7 @@ class JsonReaderOptionsAndFeaturesTest {
         }
         json.append("}");
 
-        System.out.println(json.toString());
+        System.out.println(json);
         JsonReader reader = new JsonReader(new StringReader(json.toString()));
         assertDoesNotThrow(() -> reader.read());
     }

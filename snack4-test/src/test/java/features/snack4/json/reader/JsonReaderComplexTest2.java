@@ -56,7 +56,7 @@ class JsonReaderComplexTest2 {
             if (i < 999) json.append(", ");
         }
         json.append("]]");
-        System.out.println(json.toString());
+        System.out.println(json);
         ONode node = JsonReader.read(json.toString());
 
         // 验证外层数组
