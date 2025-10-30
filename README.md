@@ -76,7 +76,7 @@ Snach-jsonpath draws on the design of `Javascript` where all variables are decla
 | `org.noear:snack4-jsonschema`       | Provides `json schema` validation support  |  
 
 
-### JSONPath syntax reference([IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html)))
+### JSONPath syntax reference ( [IETF JSONPath (RFC 9535)](https://www.rfc-editor.org/rfc/rfc9535.html) )
 
 | Syntax Element    | Description                                                                |
 |-------------------|----------------------------------------------------------------------------|

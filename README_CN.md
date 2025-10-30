@@ -76,7 +76,7 @@ Snack-Jsonpath 借鉴了 `Javascript` 所有变量由 `var` 申明，及 `Xml do
 | `org.noear:snack4-jsonschema` | 提供 `json schema` 校验支持  |  
 
 
-### JSONPath 语法参考（[IETF JSONPath (RFC 9535)]((https://www.rfc-editor.org/rfc/rfc9535.html))）
+### JSONPath 语法参考（ [IETF JSONPath (RFC 9535)](https://www.rfc-editor.org/rfc/rfc9535.html) ）
 
 | 语法元素              | 描述                           |
 |-------------------|------------------------------|
