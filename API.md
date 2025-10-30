@@ -92,7 +92,7 @@
 -toJson()     -> String                 //转为json string
 -toBean()     -> Object 			    //转为数据结构体（Map,List,Value）
 -toBean(type) -> T        //转为java object（clz=Object.class：自动输出类型）
-
+-toData()     -> Object   //兼容 snack3
 
 //填充操作
 -fill(source:Object)       -> self:ONode  //填充 bean 到当前节点
