@@ -19,6 +19,7 @@ import org.noear.snack4.Feature;
 import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.json.util.IoUtil;
+import org.noear.snack4.json.util.NameUtil;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -62,6 +63,7 @@ public class JsonReader {
     private final boolean Read_DisableSingleQuotes;
     private final boolean Read_UnwrapJsonString;
     private final boolean Read_ConvertSnakeToCamel;
+    private final boolean Read_ConvertCamelToSnake;
 
     private StringBuilder getStringBuilder() {
         stringBuilder.setLength(0);
@@ -85,6 +87,7 @@ public class JsonReader {
         this.Read_DisableSingleQuotes = this.opts.hasFeature(Feature.Read_DisableSingleQuotes);
         this.Read_UnwrapJsonString = this.opts.hasFeature(Feature.Read_UnwrapJsonString);
         this.Read_ConvertSnakeToCamel = this.opts.hasFeature(Feature.Read_ConvertSnakeToCamel);
+        this.Read_ConvertCamelToSnake = this.opts.hasFeature(Feature.Read_ConvertCamelToSnake);
     }
 
     public ONode read() throws IOException {
@@ -233,43 +236,12 @@ public class JsonReader {
 
         // 如果启用了蛇形转驼峰特性，则进行转换
         if (Read_ConvertSnakeToCamel) {
-            key = convertSnakeToCamel(key);
+            key = NameUtil.toSmlCamelStyle(getStringBuilder(), key);
+        } else if (Read_ConvertCamelToSnake) {
+            key = NameUtil.toSmlSnakeStyle(getStringBuilder(), key);
         }
+
         return key;
-    }
-
-    private String convertSnakeToCamel(String snakeCase) {
-        if (snakeCase == null || snakeCase.isEmpty()) {
-            return snakeCase;
-        }
-
-        StringBuilder sb = getStringBuilder();
-        boolean toUpperCase = false;
-        boolean firstChar = true;
-
-        for (int i = 0; i < snakeCase.length(); i++) {
-            char c = snakeCase.charAt(i);
-
-            if (c == '_') {
-                // 下划线标记下一个字符需要大写
-                toUpperCase = true;
-            } else {
-                if (toUpperCase) {
-                    sb.append(Character.toUpperCase(c));
-                    toUpperCase = false;
-                } else {
-                    // 第一个字符保持小写，其他字符保持原样
-                    if (firstChar) {
-                        sb.append(Character.toLowerCase(c));
-                    } else {
-                        sb.append(c);
-                    }
-                }
-                firstChar = false;
-            }
-        }
-
-        return sb.toString();
     }
 
     private String parseUnquotedString() throws IOException {

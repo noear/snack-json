@@ -20,6 +20,7 @@ import org.noear.snack4.ONode;
 import org.noear.snack4.Options;
 import org.noear.snack4.codec.util.DateUtil;
 import org.noear.snack4.json.util.IoUtil;
+import org.noear.snack4.json.util.NameUtil;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -57,6 +58,7 @@ public class JsonWriter {
     private final boolean Write_BrowserCompatible;
     private final boolean Write_UseRawBackslash;
     private final boolean Write_UseSnakeStyle;
+    private final boolean Write_UseCamelStyle;
 
     private StringBuilder getStringBuilder() {
         stringBuilder.setLength(0);
@@ -72,8 +74,9 @@ public class JsonWriter {
         this.Write_BrowserCompatible = this.opts.hasFeature(Feature.Write_BrowserCompatible);
         this.Write_UseRawBackslash = this.opts.hasFeature(Feature.Write_UseRawBackslash);
         this.Write_UseSnakeStyle = this.opts.hasFeature(Feature.Write_UseSnakeStyle);
+        this.Write_UseCamelStyle = this.opts.hasFeature(Feature.Write_UseCamelStyle);
 
-        if (Write_UseSnakeStyle) {
+        if (Write_UseSnakeStyle || Write_UseCamelStyle) {
             this.stringBuilder = new StringBuilder(32);
         } else {
             this.stringBuilder = null;
@@ -135,7 +138,16 @@ public class JsonWriter {
             }
             writeIndentation();
 
-            String key = Write_UseSnakeStyle ? toSnakeStyle(entry.getKey()) : entry.getKey();
+            final String key;
+            if (Write_UseSnakeStyle) {
+                key = NameUtil.toSmlSnakeStyle(getStringBuilder(), entry.getKey());
+            } else if (Write_UseCamelStyle) {
+                key = NameUtil.toSmlCamelStyle(getStringBuilder(), entry.getKey());
+            } else {
+                key = entry.getKey();
+            }
+
+
             writeKey(key);
             writer.write(':');
             if (opts.hasFeature(Feature.Write_PrettyFormat)) {
@@ -190,7 +202,7 @@ public class JsonWriter {
             return;
         }
 
-        if(opts.hasFeature(Feature.Write_BigDecimalAsPlain) && num instanceof BigDecimal) {
+        if (opts.hasFeature(Feature.Write_BigDecimalAsPlain) && num instanceof BigDecimal) {
             writer.write('"');
             writer.write(((BigDecimal) num).toPlainString());
             writer.write('"');
@@ -278,21 +290,5 @@ public class JsonWriter {
         writer.append(IoUtil.DIGITS[(c >>> 8) & 15]);
         writer.append(IoUtil.DIGITS[(c >>> 4) & 15]);
         writer.append(IoUtil.DIGITS[c & 15]);
-    }
-
-    private String toSnakeStyle(String camelName) {
-        StringBuilder sb = getStringBuilder();
-        for (int i = 0; i < camelName.length(); i++) {
-            char c = camelName.charAt(i);
-            if (Character.isUpperCase(c)) {
-                if (i > 0) {
-                    sb.append('_');
-                }
-                sb.append(Character.toLowerCase(c));
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
     }
 }

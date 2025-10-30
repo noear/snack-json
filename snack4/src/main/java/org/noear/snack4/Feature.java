@@ -53,9 +53,14 @@ public enum Feature {
 
 
     /**
-     * 读取时小蛇转为驼峰风格
+     * 读取时小蛇转为小驼峰风格
      */
     Read_ConvertSnakeToCamel,
+
+    /**
+     * 读取时小驼峰转为小蛇风格
+     */
+    Read_ConvertCamelToSnake,
 
     /**
      * 读取时自动展开行内JSON字符串 (如 {"data": "{\"id\":1}"} )
@@ -173,6 +178,11 @@ public enum Feature {
      * 写入时名字使用小蛇风格
      */
     Write_UseSnakeStyle,
+
+    /**
+     * 写入时名字使用小骆峰风格
+     */
+    Write_UseCamelStyle,
 
     /**
      * 写入时枚举使用名称（默认使用名称）
