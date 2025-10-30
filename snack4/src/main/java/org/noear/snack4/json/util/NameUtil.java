@@ -32,10 +32,23 @@ public class NameUtil {
             char c = originName.charAt(i);
 
             if (Character.isUpperCase(c)) {
-                if (i > 0 && originName.charAt(i - 1) != '_') {
-                    buf.append('_');
+                // 1. 如果不是第一个字符
+                if (i > 0) {
+                    char prevC = originName.charAt(i - 1);
+
+                    // 2. 检查前一个字符是否为下划线。如果是，不加下划线。
+                    if (prevC != '_') {
+                        // 3. 核心优化：处理连续大写字母 (缩写词)
+                        // 只有当前一个字符是小写 (prevC 是 'a'-'z')，或者
+                        // 它是缩写词的最后一个大写字母 (下一个字符存在且是小写) 时，才添加下划线。
+                        if (Character.isLowerCase(prevC) ||
+                                (i + 1 < originName.length() && Character.isLowerCase(originName.charAt(i + 1)))) {
+                            buf.append('_');
+                        }
+                    }
                 }
 
+                // 统一转换为小写
                 buf.append(Character.toLowerCase(c));
             } else {
                 buf.append(c);
@@ -54,20 +67,27 @@ public class NameUtil {
             return originName;
         }
 
-        originName = originName.toLowerCase();
-
-        boolean nextCharToUpper = false;
         buf.setLength(0);
+        boolean nextCharToUpper = false;
+        boolean firstChar = true; // 新增标记，用于控制首字母小写
 
         for (char c : originName.toCharArray()) {
             if (c == '_') {
                 nextCharToUpper = true;
             } else {
-                if (nextCharToUpper) {
+                if (firstChar) {
+                    // 确保首个有效字符是小写
+                    buf.append(Character.toLowerCase(c));
+                    firstChar = false;
+                    nextCharToUpper = false; // 无论原先是否为 true，首字母后都重置
+                } else if (nextCharToUpper) {
+                    // 遇到下划线后的字符，转大写
                     buf.append(Character.toUpperCase(c));
                     nextCharToUpper = false;
                 } else {
-                    buf.append(c);
+                    // 其他字符，转小写 (保持原样，因为我们依赖 toLowerCase() 后的输入或保持原样)
+                    // 为了鲁棒性，此处改为转小写，防止如 "user_ID" 这种非标准输入导致 "userID"
+                    buf.append(Character.toLowerCase(c));
                 }
             }
         }
