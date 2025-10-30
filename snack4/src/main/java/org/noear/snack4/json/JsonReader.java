@@ -86,8 +86,8 @@ public class JsonReader {
         this.Read_DisableUnquotedKeys = this.opts.hasFeature(Feature.Read_DisableUnquotedKeys);
         this.Read_DisableSingleQuotes = this.opts.hasFeature(Feature.Read_DisableSingleQuotes);
         this.Read_UnwrapJsonString = this.opts.hasFeature(Feature.Read_UnwrapJsonString);
-        this.Read_ConvertSnakeToCamel = this.opts.hasFeature(Feature.Read_ConvertSnakeToCamel);
-        this.Read_ConvertCamelToSnake = this.opts.hasFeature(Feature.Read_ConvertCamelToSnake);
+        this.Read_ConvertSnakeToCamel = this.opts.hasFeature(Feature.Read_ConvertSnakeToSmlCamel);
+        this.Read_ConvertCamelToSnake = this.opts.hasFeature(Feature.Read_ConvertCamelToSmlSnake);
     }
 
     public ONode read() throws IOException {

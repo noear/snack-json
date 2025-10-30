@@ -67,7 +67,7 @@ public class FeatureTest {
 
     @Test
     public void Read_ConvertSnakeToCamel() {
-        assert ONode.ofJson("{user_info:'1'}", Feature.Read_ConvertSnakeToCamel)
+        assert ONode.ofJson("{user_info:'1'}", Feature.Read_ConvertSnakeToSmlCamel)
                 .get("userInfo").isString();
 
         assert ONode.ofJson("{user_info:'1'}")
@@ -76,7 +76,7 @@ public class FeatureTest {
 
     @Test
     public void Read_UnwrapJsonString() {
-        assert ONode.ofJson("{user_info:'{a:1,b:2}'}", Feature.Read_ConvertSnakeToCamel, Feature.Read_UnwrapJsonString)
+        assert ONode.ofJson("{user_info:'{a:1,b:2}'}", Feature.Read_ConvertSnakeToSmlCamel, Feature.Read_UnwrapJsonString)
                 .get("userInfo").isObject();
 
         assert ONode.ofJson("{user_info:'{a:1,b:2}'}")
@@ -328,7 +328,7 @@ public class FeatureTest {
         System.out.println(json);
         Assertions.assertEquals("{\"userId\":1}", json);
 
-        json = ONode.ofBean(data, Feature.Write_UseSnakeStyle).toJson();
+        json = ONode.ofBean(data, Feature.Write_UseSmlSnakeStyle).toJson();
         System.out.println(json);
         Assertions.assertEquals("{\"user_id\":1}", json);
     }

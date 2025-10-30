@@ -161,7 +161,7 @@ public class JsonWriterTest {
     public void testWriteUseSnakeStyle() throws IOException {
         ONode node = new ONode();
         node.set("firstName", new ONode("John"));
-        Options opts = Options.of(Feature.Write_UseSnakeStyle);
+        Options opts = Options.of(Feature.Write_UseSmlSnakeStyle);
         StringWriter writer = new StringWriter();
         new JsonWriter(opts, writer).write(node);
         assertEquals("{\"first_name\":\"John\"}", writer.toString());
@@ -170,7 +170,7 @@ public class JsonWriterTest {
     @Test
     public void testConvertSnakeToCamel() throws IOException {
         StringReader reader = new StringReader("{\"first_name\":\"John\"}");
-        ONode oNode = new JsonReader(reader, Options.of(Feature.Read_ConvertSnakeToCamel)).read();
+        ONode oNode = new JsonReader(reader, Options.of(Feature.Read_ConvertSnakeToSmlCamel)).read();
         assertEquals("{\"firstName\":\"John\"}", oNode.toJson());
     }
 

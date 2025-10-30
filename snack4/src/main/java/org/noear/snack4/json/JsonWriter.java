@@ -73,8 +73,8 @@ public class JsonWriter {
 
         this.Write_BrowserCompatible = this.opts.hasFeature(Feature.Write_BrowserCompatible);
         this.Write_UseRawBackslash = this.opts.hasFeature(Feature.Write_UseRawBackslash);
-        this.Write_UseSnakeStyle = this.opts.hasFeature(Feature.Write_UseSnakeStyle);
-        this.Write_UseCamelStyle = this.opts.hasFeature(Feature.Write_UseCamelStyle);
+        this.Write_UseSnakeStyle = this.opts.hasFeature(Feature.Write_UseSmlSnakeStyle);
+        this.Write_UseCamelStyle = this.opts.hasFeature(Feature.Write_UseSmlCamelStyle);
 
         if (Write_UseSnakeStyle || Write_UseCamelStyle) {
             this.stringBuilder = new StringBuilder(32);
