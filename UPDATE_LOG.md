@@ -1,4 +1,16 @@
 
+### 4.0.6
+
+* 调整 Read_ConvertSnakeToCamel 特性更名为 Read_ConvertSnakeToSmlCamel
+* 调整 Write_UseSnakeStyle 特性更名为 Write_UseSmlSnakeStyle
+* 添加 Read_ConvertCamelToSmlSnake 特性
+* 添加 Write_UseSmlCamelStyle 特性
+* eggg 升为 1.0.2
+
+### 4.0.5
+
+* eggg 升为 1.0.1
+
 ### 4.0.4
 
 * 优化 与 snack3 的效果兼容性
